@@ -1,0 +1,88 @@
+<head>
+  <meta charset="utf-8">
+  <title>login</title>
+  <link href="login.css">
+    <style>
+        .background {
+            background-color: lightgrey;
+            width: 100%;
+            height: 100%;
+            margin: -8px;
+            padding: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-form {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px grey;
+            text-align: center;
+            width: 15%;
+            height: auto;
+            padding: 20px 40px;
+        }
+
+        label {
+            margin-top: 15px;
+            color: grey;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        input {
+            border-color: cornflowerblue;
+            background-color: white;
+            height: 30px;
+            padding: 10px;
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        .form-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        button {
+            width: 100%;
+            height: 40px;
+            text-align: center;
+            background-color: cornflowerblue;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        p {
+            color: gray;
+            text-align: center;
+            margin-bottom: 0 !important;
+            margin-top: 5px !important;
+            font-size: 13px;
+            cursor: pointer;
+        }
+    </style>
+ </head>
+<body>
+    <div class="background">
+        <div class="login-form">
+            <img src="./image/logo.png" alt="типо лого">
+            <div class="form-item">
+                <label for="login-input">Логин</label>
+                <input type="text" id="login-input">
+
+            </div>
+            <div class="form-item">
+                <label for="login-pass">Пароль</label>
+                <input type="password" id="login-pass">
+            </div>
+            <button>Войти</button>
+            <p>Забыл пароль?</p>
+        </div>
+    </div>
+
+</body>
