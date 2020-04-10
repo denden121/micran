@@ -15,6 +15,6 @@ def login(request):
     print(password)
     user = authenticate(username=username, password=password)
     if user is not None:
-        return HttpResponse('success')
+        return HttpResponse(f'{user.first_name,user.last_name,user.email}')
     else:
         return HttpResponse('fail')
