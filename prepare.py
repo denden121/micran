@@ -8,7 +8,7 @@ data = handle.readlines()
 handle.close()
 
 
-handle = open("docker-compose.yamlx", "w")
+handle = open("docker-compose.yaml", "w")
 for i in data:
     i = i.replace("{PATH}",path)
     handle.write(i) 
