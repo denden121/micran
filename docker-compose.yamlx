@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  db:
+    build: ./db
+    tty: true
+    
+    volumes: 
+      - {PATH}/db:/var/lib/postgresql/data
+
+  
+  
+  
+  server:
+    build: ./server
+    tty: true
+    volumes:
+      - {PATH}/server:/usr/src/server/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+#    command: ls 
+    command: sh /usr/src/server/run.sh
+
+
+
+
+  client:
+    build: ./client
+    tty: true
+    volumes:
+      - {PATH}/client:/usr/src/project/
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    command: sh /usr/src/project/run.sh    
+
+
+    
+
+#docker-compose up -d
