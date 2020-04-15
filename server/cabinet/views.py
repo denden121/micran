@@ -5,8 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 from json import dumps
 from django.contrib.auth.decorators import login_required
-
-
+from .models import Profile
+from django.contrib.auth.models import User
 
 @csrf_exempt
 def authentication(request):
@@ -22,10 +22,10 @@ def authentication(request):
 
 @csrf_exempt
 def cabinet(request):
-    user = request.user
-    print(user.password)
     if request.user.is_authenticated:
-        return HttpResponse("Succes")
+        profile = Profile.objects.filter(user=request.user)
+        fields = 'group' #Вводим нужные поля
+        return HttpResponse(profile.values(fields))
     else:
         return HttpResponse("Fail")
 
