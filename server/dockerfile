@@ -6,11 +6,13 @@ RUN mkdir -p /usr/src/server/
 WORKDIR /usr/src/server/
 
 
-RUN apt-get update 
+RUN apt-get update
 RUN pip3 install django psycopg2
 RUN apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev -y
 RUN pip3 install django-auth-ldap 
-
+RUN pip install djangorestframework
+RUN pip install markdown       # Markdown support for the browsable API.
+RUN pip install django-filter
 #RUN pip3 install Pillow
 
 
