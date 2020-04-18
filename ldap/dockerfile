@@ -1,0 +1,10 @@
+FROM dinkel/openldap:latest
+
+
+ENV LDAP_ORGANISATION="micran"
+
+ENV SLAPD_DOMAIN="mi-cran.org"
+ENV SLAPD_PASSWORD="12345678z"
+
+
+
