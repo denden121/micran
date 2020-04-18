@@ -8,4 +8,3 @@ ENV PGDATA=/var/lib/postgresql/data/pgdata
 ENV PGPASSWORD="12345678z"
 
 
-
