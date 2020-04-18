@@ -1,14 +1,17 @@
 version: '3'
 
 services:
-  db:
+  db2:
     build: ./db
     tty: true
     
     volumes: 
-      - {PATH}/db:/var/lib/postgresql/data
+      - {PATH}/db:/var/lib/postgresql
+    ports:
+      - "5432:5432"
 
-  
+
+
   
   
   server:
@@ -19,7 +22,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - db2
 #    command: ls 
     command: sh /usr/src/server/run.sh
 
@@ -34,7 +37,7 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - db
+      - db2
     command: sh /usr/src/project/run.sh    
 
 
