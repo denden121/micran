@@ -6,9 +6,9 @@ services:
     tty: true
     
     volumes: 
-      - C:/python/micran2/db/data:/var/lib/postgresql
+      -  /home/yura/Documents/python/work/micran/db/data:/var/lib/postgresql
     ports:
-      - "5432:5432"
+      - "5430:5432"
 
 
   
@@ -16,7 +16,7 @@ services:
     build: ./server
     tty: true
     volumes:
-      - C:/python/micran2/server:/usr/src/server/
+      -  /home/yura/Documents/python/work/micran/server:/usr/src/server/
     ports:
       - "8000:8000"
     depends_on:
@@ -31,7 +31,7 @@ services:
     build: ./client
     tty: true
     volumes:
-      - C:/python/micran2/client:/usr/src/project/
+      - /home/yura/Documents/python/work/micran/client:/usr/src/project/
     ports:
       - "5000:5000"
     depends_on:
