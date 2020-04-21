@@ -13,7 +13,7 @@ SECRET_KEY = 'k+y%ss&0pz#*^8kt@dak42!&ms-&udwb=rl_=fe*w==+a=9y_*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 LOGIN_REDIRECT_URL = '/admin'
 LOGIN_URL = '/login'
 
@@ -63,17 +63,22 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'report',
+#         'USER' : 'micran',
+#         'PASSWORD' : '12345678z',
+#         'HOST' : 'db2',
+#         'PORT' : 5432,
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'report',
-        'USER' : 'micran',
-        'PASSWORD' : '12345678z',
-        'HOST' : 'db2',
-        'PORT' : 5432,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
