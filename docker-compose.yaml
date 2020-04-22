@@ -7,7 +7,11 @@ services:
     
     volumes: 
 <<<<<<< HEAD
+<<<<<<< HEAD
       -  /home/yura/Documents/python/work/micran/db/data:/var/lib/postgresql
+=======
+      -  /home/yura/Documents/python/work/micran_demo/micran/db/data:/var/lib/postgresql
+>>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
 =======
       -  /home/yura/Documents/python/work/micran_demo/micran/db/data:/var/lib/postgresql
 >>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
@@ -20,7 +24,11 @@ services:
     tty: true
     volumes:
 <<<<<<< HEAD
+<<<<<<< HEAD
       -  /home/yura/Documents/python/work/micran/server:/usr/src/server/
+=======
+      -  /home/yura/Documents/python/work/micran_demo/micran/server:/usr/src/server/
+>>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
 =======
       -  /home/yura/Documents/python/work/micran_demo/micran/server:/usr/src/server/
 >>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
@@ -39,7 +47,11 @@ services:
     tty: true
     volumes:
 <<<<<<< HEAD
+<<<<<<< HEAD
       - /home/yura/Documents/python/work/micran/client:/usr/src/project/
+=======
+      - /home/yura/Documents/python/work/micran_demo/micran/client:/usr/src/project/
+>>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
 =======
       - /home/yura/Documents/python/work/micran_demo/micran/client:/usr/src/project/
 >>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
