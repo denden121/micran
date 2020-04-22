@@ -6,9 +6,9 @@ services:
     tty: true
     
     volumes: 
-      -  /home/den/WebstormProjects/micran/db/data:/var/lib/postgresql
+      -  /home/yura/Documents/python/work/micran_demo/micran/db/data:/var/lib/postgresql
     ports:
-      - "5432:5432"
+      - "5430:5432"
 
 
   
@@ -16,7 +16,7 @@ services:
     build: ./server
     tty: true
     volumes:
-      -  /home/den/WebstormProjects/micran/server:/usr/src/server/
+      -  /home/yura/Documents/python/work/micran_demo/micran/server:/usr/src/server/
     ports:
       - "8000:8000"
     depends_on:
@@ -31,9 +31,9 @@ services:
     build: ./client
     tty: true
     volumes:
-      - /home/den/WebstormProjects/micran/client:/usr/src/project/
+      - /home/yura/Documents/python/work/micran_demo/micran/client:/usr/src/project/
     ports:
-      - "5000:5000"
+      - "3000:3000"
     depends_on:
       - db2
     command: sh /usr/src/project/run.sh    

@@ -7,15 +7,12 @@ WORKDIR /usr/src/project/
 
 RUN apt-get update -y
 RUN apt install npm -y
-RUN npm install -g create-reate-app
+RUN npm install create-react-app
 RUN npm install react-router-dom
 RUN npm install axios
-Run npm install router
-
-# npm run start
 
 
-EXPOSE 5000
+EXPOSE 3000
 CMD ["sh","/usr/src/project/run.sh"]
 
 
