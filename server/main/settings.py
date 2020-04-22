@@ -27,9 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cabinet',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -63,16 +65,27 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'report',
-#         'USER' : 'micran',
-#         'PASSWORD' : '12345678z',
-#         'HOST' : 'db2',
-#         'PORT' : 5432,
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'report',
+        'USER' : 'micran',
+        'PASSWORD' : '12345678z',
+        'HOST' : 'db2',
+        'PORT' : 5432,
+    }
+}
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOW_METHODS = [
+#     'DELETE',
+#     'GET',
+#     'OPTIONS',
+#     'PATCH',
+#     'POST',
+#     'PUT',
+# ]
 
 
 # Password validation
