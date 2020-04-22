@@ -8,6 +8,7 @@ WORKDIR /usr/src/server/
 
 RUN apt-get update
 RUN pip3 install django psycopg2
+RUN pip3 install django-cors-headers
 RUN apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev -y
 RUN pip3 install django-auth-ldap 
 RUN pip install djangorestframework

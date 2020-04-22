@@ -1,1 +1,2 @@
-echo "well done"
+ls
+npm run start
