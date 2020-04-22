@@ -6,7 +6,11 @@ services:
     tty: true
     
     volumes: 
+<<<<<<< HEAD
       -  /home/yura/Documents/python/work/micran/db/data:/var/lib/postgresql
+=======
+      -  /home/yura/Documents/python/work/micran_demo/micran/db/data:/var/lib/postgresql
+>>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
     ports:
       - "5430:5432"
 
@@ -15,7 +19,11 @@ services:
     build: ./server
     tty: true
     volumes:
+<<<<<<< HEAD
       -  /home/yura/Documents/python/work/micran/server:/usr/src/server/
+=======
+      -  /home/yura/Documents/python/work/micran_demo/micran/server:/usr/src/server/
+>>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
     ports:
       - "8000:8000"
     depends_on:
@@ -30,9 +38,13 @@ services:
     build: ./client
     tty: true
     volumes:
+<<<<<<< HEAD
       - /home/yura/Documents/python/work/micran/client:/usr/src/project/
+=======
+      - /home/yura/Documents/python/work/micran_demo/micran/client:/usr/src/project/
+>>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
     ports:
-      - "5000:5000"
+      - "3000:3000"
     depends_on:
       - db2
     command: sh /usr/src/project/run.sh    
