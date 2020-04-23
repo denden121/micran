@@ -1,0 +1,82 @@
+form{
+    position: absolute;
+    width: 300px;
+    height: 399px;
+    left: 533px;
+    top: 100px;
+    background: #fff;
+    box-Shadow: 2px 2px 2px rgba(0,0,0,.5);
+    padding: 15px;
+    border-Radius:5px;
+    mix-blend-mode: normal;
+    overflow: hidden;
+    border: 1px solid #c6c7cc;
+    overflow: hidden;
+
+}
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+input{
+    border-Radius: 5px;
+    margin:0;
+}  
+
+.accountInfo {
+    padding: 20px 20px 0 20px;
+  }
+
+.accountInfo label {
+    color: black;
+    display: block;
+    font-weight: lighter;
+    margin-bottom: 70px;
+}  
+
+.accountInfo input {
+    background: #fff;
+    border: 1px solid #c6c7cc;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+    color: #636466;
+    padding: 6px;
+    margin-top: 6px;
+    width: 100%;
+  }
+
+.accountAction .btn {
+    position: absolute;
+    background: #11BCD3;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    font-weight: lighter;
+    left: 35px;
+    padding: 5px 93px;
+  }
+
+  .accountAction label {
+    position: absolute;
+    color: #7c7c80;
+    font-size: 12px;
+    float: left;
+    left:35px;
+    top: 270px;
+  }  
+
+button{    
+    position: center;
+    left:35px;
+    top:300px;
+    width: 228px;
+    height: 40px;    
+    background: #11BCD3;
+    border: 1px solid #11BCD3;
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+}
+

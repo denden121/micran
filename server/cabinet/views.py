@@ -26,3 +26,26 @@ def logout_view(request):
         return HttpResponse("Succes")
     else:
         return HttpResponse("Already logged out")
+
+@csrf_exempt
+def test(request):
+    if request.method == 'POST':
+        return HttpResponse("POST")
+    if request.method == 'GET':
+        return HttpResponse("GET")
+
+@csrf_exempt
+def test_1(request):
+#     print('fdsfdfsdfdsfdsfds')
+    if request.method == 'POST':
+        print(request.POST)
+#         return HttpResponse(request.POST)
+#         print(request.body)
+#         print(request.content_params)
+#         print(request.META)
+#         print(request.headers)
+#         password = request.POST.password
+#         print(username,password)
+#         return HttpResponse(dumps({'username':username,'password':password}))
+    if request.method == 'GET':
+        return HttpResponse("GET")

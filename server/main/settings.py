@@ -13,7 +13,7 @@ SECRET_KEY = 'k+y%ss&0pz#*^8kt@dak42!&ms-&udwb=rl_=fe*w==+a=9y_*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1']
 LOGIN_REDIRECT_URL = '/admin'
 LOGIN_URL = '/login'
 
@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cabinet',
     'corsheaders',
+    'rest_framework',
+        'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
