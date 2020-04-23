@@ -5,20 +5,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 from json import dumps
 from django.contrib.auth.decorators import login_required
-from .models import Profile
+from .models import Profile, Project
 from django.contrib.auth.models import User
 
-@csrf_exempt
-def authentication(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    csrf_token = get_token(request)
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return HttpResponse({'first_name': user.username, ' last_name': user.last_name, 'email': user.email})
-    else:
-        return HttpResponse('fail')
 
 @csrf_exempt
 def cabinet(request):
