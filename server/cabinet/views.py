@@ -7,7 +7,11 @@ from json import dumps
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Project
 from django.contrib.auth.models import User
-
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 @csrf_exempt
 def cabinet(request):
@@ -34,18 +38,8 @@ def test(request):
     if request.method == 'GET':
         return HttpResponse("GET")
 
-@csrf_exempt
+# @ensure_csrf_cookie
 def test_1(request):
-#     print('fdsfdfsdfdsfdsfds')
-    if request.method == 'POST':
-        print(request.POST)
-#         return HttpResponse(request.POST)
-#         print(request.body)
-#         print(request.content_params)
-#         print(request.META)
-#         print(request.headers)
-#         password = request.POST.password
-#         print(username,password)
-#         return HttpResponse(dumps({'username':username,'password':password}))
-    if request.method == 'GET':
-        return HttpResponse("GET")
+    if request.method =='POST':
+        return HttpResponse('KLKLKLKLLK')
+    return HttpResponse()

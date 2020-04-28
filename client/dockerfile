@@ -7,9 +7,11 @@ WORKDIR /usr/src/project/
 
 RUN apt-get update -y
 RUN apt install npm -y
-# RUN npm install create-react-app
-# RUN npm install react-router-dom
-# RUN npm install axios
+RUN npm install create-react-app
+RUN npm install react-router-dom
+RUN npm install axios
+RUN npm i js-cookie
+
 
 
 EXPOSE 3000

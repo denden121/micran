@@ -17,6 +17,8 @@ ALLOWED_HOSTS = ['127.0.0.1']
 LOGIN_REDIRECT_URL = '/admin'
 LOGIN_URL = '/login'
 
+CORS_ORIGIN_ALLOW_ALL= True
+
 # Application definition
 
 INSTALLED_APPS = [
