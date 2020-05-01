@@ -38,7 +38,7 @@ def test(request):
     if request.method == 'GET':
         return HttpResponse("GET")
 
-# @ensure_csrf_cookie
+@ensure_csrf_cookie
 def test_1(request):
     if request.method =='POST':
         return HttpResponse('KLKLKLKLLK')
