@@ -34,12 +34,11 @@ def test(request):
     if request.method == 'GET':
         return HttpResponse("GET")
 
-@csrf_exempt
 def test_1(request):
 #     print('fdsfdfsdfdsfdsfds')
     if request.method == 'POST':
         print(request.POST)
-#         return HttpResponse(request.POST)
+        return HttpResponse(request.POST)
 #         print(request.body)
 #         print(request.content_params)
 #         print(request.META)
