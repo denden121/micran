@@ -1,0 +1,72 @@
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from 'react';\nimport './App.css';\nimport Auth from './Auth/Auth'\nimport axios from 'axios'\nclass App extends Component{\n\n    async authHandler() {\n        let urlencoded = new URLSearchParams();\n        urlencoded.append(\"username\", \"first\");\n        urlencoded.append(\"password\", \"w8$jdP#u7LMFRJn\");\n        let requestOptions = {\n            method: 'POST',\n            body: urlencoded,\n            redirect: 'follow'\n        };\n        fetch(\"http://127.0.0.1:8000/test1/\", requestOptions)\n            // .then(response => response.text())\n            .then(result => console.log(result.date))\n    }\n    render() {\n        return (\n            <div className=\"App\">\n                <Auth authHandler={this.authHandler}/>\n            </div>\n        );\n    }\n}\n\nexport default App;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/App.js	(revision 1483504d6eefe99003bd1e2ad7eaac863a453ee1)
++++ client/src/App.js	(date 1587652697545)
+@@ -1,18 +1,38 @@
+ import React, {Component} from 'react';
+ import './App.css';
+ import Auth from './Auth/Auth'
+-import axios from 'axios'
++// import axios from 'axios'
++import * as jQuery from "core-js-pure/internals/string-trim";
+ class App extends Component{
+-
++    getCookie(name) {
++        let cookieValue = null;
++        if (document.cookie && document.cookie !== '') {
++            let cookies = document.cookie.split(';');
++            for (let i = 0; i < cookies.length; i++) {
++                let cookie = jQuery.trim(cookies[i]);
++                if (cookie.substring(0, name.length + 1) === (name + '=')) {
++                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
++                    break;
++                }
++            }
++        }
++        return cookieValue;
++    }
+     async authHandler() {
++        let csrftoken = this.getCookie('csrftoken');
+         let urlencoded = new URLSearchParams();
+         urlencoded.append("username", "first");
+         urlencoded.append("password", "w8$jdP#u7LMFRJn");
+-        let requestOptions = {
++        let requestOptions = {credentials: 'include',
+             method: 'POST',
+-            body: urlencoded,
+-            redirect: 'follow'
+-        };
++            mode: 'same-origin',
++            headers: {
++            'Accept': 'application/json',
++                'Content-Type': 'application/json',
++                'X-CSRFToken': csrftoken
++            },
++            body:urlencoded
++        }
+         fetch("http://127.0.0.1:8000/test1/", requestOptions)
+             // .then(response => response.text())
+             .then(result => console.log(result.date))
+Index: server/cabinet/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.shortcuts import render, redirect\nfrom django.http import HttpResponse\nfrom django.contrib.auth import authenticate, login, logout\nfrom django.views.decorators.csrf import csrf_exempt\nfrom django.middleware.csrf import get_token\nfrom json import dumps\nfrom django.contrib.auth.decorators import login_required\nfrom .models import Profile, Project\nfrom django.contrib.auth.models import User\n\n\n@csrf_exempt\ndef cabinet(request):\n    if request.user.is_authenticated:\n        profile = Profile.objects.filter(user=request.user)\n        fields = 'group' #Вводим нужные поля\n        return HttpResponse(profile.values(fields))\n    else:\n        return HttpResponse(\"Fail\")\n\n\n@csrf_exempt\ndef logout_view(request):\n    if request.user.is_authenticated:\n        logout(request)\n        return HttpResponse(\"Succes\")\n    else:\n        return HttpResponse(\"Already logged out\")\n\n@csrf_exempt\ndef test(request):\n    if request.method == 'POST':\n        return HttpResponse(\"POST\")\n    if request.method == 'GET':\n        return HttpResponse(\"GET\")\n\n@csrf_exempt\ndef test_1(request):\n#     print('fdsfdfsdfdsfdsfds')\n    if request.method == 'POST':\n        print(request.POST)\n#         return HttpResponse(request.POST)\n#         print(request.body)\n#         print(request.content_params)\n#         print(request.META)\n#         print(request.headers)\n#         password = request.POST.password\n#         print(username,password)\n#         return HttpResponse(dumps({'username':username,'password':password}))\n    if request.method == 'GET':\n        return HttpResponse(\"GET\")
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- server/cabinet/views.py	(revision 1483504d6eefe99003bd1e2ad7eaac863a453ee1)
++++ server/cabinet/views.py	(date 1587652716257)
+@@ -34,7 +34,7 @@
+     if request.method == 'GET':
+         return HttpResponse("GET")
+ 
+-@csrf_exempt
++
+ def test_1(request):
+ #     print('fdsfdfsdfdsfdsfds')
+     if request.method == 'POST':

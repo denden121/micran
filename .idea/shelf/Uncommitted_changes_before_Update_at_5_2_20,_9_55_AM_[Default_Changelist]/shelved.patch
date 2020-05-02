@@ -1,0 +1,101 @@
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from 'react';\nimport './App.css';\nimport Auth from './Auth/Auth'\nimport Cookies from 'js-cookie'\nimport axios from 'axios'\n\nclass App extends Component{\n    authHandler() {\n        let requestOptions1 = {\n            method: 'GET',\n        };\n        // // let temp;\n        axios.get(\"http://127.0.0.1:8000/test1/\",  {withCredentials: true})\n            .then(response => console.log(response))\n            .then(response => {\n                // Cookies.set('sessionid', response.headers['sessionid']);\n                // Cookies.set('csrftoken', response.headers['csrftoken']);\n            })\n        axios.post(\"http://127.0.0.1:8000/test1/\")\n            .then(response => console.log(response))\n            .then(response => {\n                // Cookies.set('sessionid', response.headers['sessionid']);\n                // Cookies.set('csrftoken', response.headers['csrftoken']);\n            })\n\n        console.log(document.cookie)\n        // console.log(document.cookie)\n        // console.log(document.cookie)\n        // let csrftoken = Cookies.get('csrftoken')\n        // let myHeaders = new Headers();\n        // myHeaders.append(\"Content-Type\", \"application/x-www-form-urlencoded\");\n        // myHeaders.append(\"HTTP_X_CSRFTOKEN\", csrftoken);\n        // myHeaders.append(\"Content-Type\", \"application/x-www-form-urlencoded\");\n        // myHeaders.append(\"Cookie\", \"sessionid=w2n75sjwpjxzj1dy5hcpk7p20im00vwj; csrftoken=N6ufgbcKbSnq14DH3pJsIMVm6FIhqB6AvLelvGevrLbpPDTesgdhwggxZzk12xZH\");\n        // let urlencoded = new URLSearchParams();\n        // urlencoded.append(\"username\", \"first\");\n        // urlencoded.append(\"password\", \"w8$jdP#u7LMFRJn\");\n        // let requestOptions = {\n        //     credentials: 'include',\n            // method: 'POST',\n            // headers:myHeaders,\n            // headers: {\n            //     'Accept': 'application/json',\n            //     'Content-Type': 'application/json',\n            //     'X-CSRFToken': csrftoken\n            // },\n            // body: urlencoded,\n            // redirect: 'follow'\n        // };\n\n        // fetch(\"http://127.0.0.1:8000/test1/\", requestOptions)\n        //     .then(response => response.text())\n            // .then(result => console.log(result.date))\n    }\n    render() {\n        return (\n            <div className=\"App\">\n                <Auth authHandler={this.authHandler}/>\n            </div>\n        );\n    }\n}\n\nexport default App;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/App.js	(revision a05a4f66081deefc1f42206f2270c5ed4ad2f0f9)
++++ client/src/App.js	(date 1588325213000)
+@@ -6,24 +6,39 @@
+ 
+ class App extends Component{
+     authHandler() {
+-        let requestOptions1 = {
+-            method: 'GET',
+-        };
++        const response = fetch("http://127.0.0.1:8000/test1/",
++            {
++                method: 'POST',
++                body: JSON.stringify({
++                    name:'dasdasd '
++                    // Other body stuff
++                }),
++                headers: {
++                    'X-Api-Key': API_KEY,
++                    'Content-Type': 'application/json'
++                    // Other possible headers
++                }
++            }
++        );
++        // let requestOptions1 = {
++            // method: 'GET',
++        // };
+         // // let temp;
+-        axios.get("http://127.0.0.1:8000/test1/",  {withCredentials: true})
+-            .then(response => console.log(response))
+-            .then(response => {
++        // axios.get("http://127.0.0.1:8000/test1/",null,  {withCredentials: true})
++            // .then(response =>console.log(response))
++            // .then(response => {
++                // console.log(response['x-access-token'])
+                 // Cookies.set('sessionid', response.headers['sessionid']);
+                 // Cookies.set('csrftoken', response.headers['csrftoken']);
+-            })
++            // })
+         axios.post("http://127.0.0.1:8000/test1/")
+             .then(response => console.log(response))
+             .then(response => {
+-                // Cookies.set('sessionid', response.headers['sessionid']);
+-                // Cookies.set('csrftoken', response.headers['csrftoken']);
++                Cookies.set('sessionid', response.headers['sessionid']);
++                Cookies.set('csrftoken', response.headers['csrftoken']);
+             })
+ 
+-        console.log(document.cookie)
++        // console.log(document.cookie)
+         // console.log(document.cookie)
+         // console.log(document.cookie)
+         // let csrftoken = Cookies.get('csrftoken')
+Index: server/main/settings.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\n\n# Build paths inside the project like this: os.path.join(BASE_DIR, ...)\nBASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n\n\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = 'k+y%ss&0pz#*^8kt@dak42!&ms-&udwb=rl_=fe*w==+a=9y_*'\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS = ['127.0.0.1']\nLOGIN_REDIRECT_URL = '/admin'\nLOGIN_URL = '/login'\n\n\n# Application definition\n\nINSTALLED_APPS = [\n    'django.contrib.admin',\n    'django.contrib.auth',\n    'django.contrib.contenttypes',\n    'django.contrib.sessions',\n    'django.contrib.messages',\n    'django.contrib.staticfiles',\n    'cabinet',\n    'corsheaders',\n    'rest_framework',\n    'rest_framework.authtoken',\n]\n\nMIDDLEWARE = [\n    'corsheaders.middleware.CorsMiddleware',\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    'django.middleware.csrf.CsrfViewMiddleware',\n    'django.contrib.auth.middleware.AuthenticationMiddleware',\n    'django.contrib.messages.middleware.MessageMiddleware',\n    'django.middleware.clickjacking.XFrameOptionsMiddleware',\n]\n\nROOT_URLCONF = 'main.urls'\n\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',\n                'django.template.context_processors.request',\n                'django.contrib.auth.context_processors.auth',\n                'django.contrib.messages.context_processors.messages',\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = 'main.wsgi.application'\n\n\n# Database\n# https://docs.djangoproject.com/en/3.0/ref/settings/#databases\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.sqlite3',\n        'NAME': 'db.sqlite3',\n    }\n}\n\nCORS_ALLOW_CREDENTIALS = True\nCORS_ORIGIN_ALLOW_ALL= True\nCORS_ALLOW_HEADERS = [\n    'accept',\n    'accept-encoding',\n    'authorization',\n    'content-type',\n    'dnt',\n    'origin',\n    'user-agent',\n    'x-csrftoken',\n    'x-requested-with',\n    'Access-Control-Allow-Headers',\n    'Access-Control-Allow-Credentials',\n]\n\n\n# Password validation\n# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',\n    },\n    {\n        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',\n    },\n]\n\n\n# Internationalization\n# https://docs.djangoproject.com/en/3.0/topics/i18n/\n\nLANGUAGE_CODE = 'en-us'\n\nTIME_ZONE = 'UTC'\n\nUSE_I18N = True\n\nUSE_L10N = True\n\nUSE_TZ = True\n\nAUTHENTICATION_BACKENDS = (\n        'django.contrib.auth.backends.ModelBackend',\n    )\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/3.0/howto/static-files/\n\nSTATIC_URL = '/static/'\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- server/main/settings.py	(revision a05a4f66081deefc1f42206f2270c5ed4ad2f0f9)
++++ server/main/settings.py	(date 1588316479743)
+@@ -77,19 +77,19 @@
+ 
+ CORS_ALLOW_CREDENTIALS = True
+ CORS_ORIGIN_ALLOW_ALL= True
+-CORS_ALLOW_HEADERS = [
+-    'accept',
+-    'accept-encoding',
+-    'authorization',
+-    'content-type',
+-    'dnt',
+-    'origin',
+-    'user-agent',
+-    'x-csrftoken',
+-    'x-requested-with',
+-    'Access-Control-Allow-Headers',
+-    'Access-Control-Allow-Credentials',
+-]
++# CORS_ALLOW_HEADERS = [
++#     'accept',
++#     'accept-encoding',
++#     'authorization',
++#     'content-type',
++#     'dnt',
++#     'origin',
++#     'user-agent',
++#     'x-csrftoken',
++#     'x-requested-with',
++#     'Access-Control-Allow-Headers:Content-Type,*',
++#     'Access-Control-Allow-Credentials',
++# ]
+ 
+ 
+ # Password validation
