@@ -1,8 +1,5 @@
 import React from "react";
 import './Auth.css';
-// import CSRFToken from '../CSRFToken.js';
-// import DjangoCSRFToken from 'django-react-csrftoken'
-
 
 const Auth= (props)=>{
     return(
@@ -17,8 +14,6 @@ const Auth= (props)=>{
                     </label>
                 </fieldset>
                 <fieldset className="accountAction">
-                    {/*<CSRFToken />*/}
-                    {/*<DjangoCSRFToken/>*/}
                     <button onClick={props.authHandler}>Войти</button>
                         <label>
                             <input type="checkbox" name="remember"/> Запомнить
