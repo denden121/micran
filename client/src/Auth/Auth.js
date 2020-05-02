@@ -1,7 +1,7 @@
 import React from "react";
 import './Auth.css';
 // import CSRFToken from '../CSRFToken.js';
-import DjangoCSRFToken from 'django-react-csrftoken'
+// import DjangoCSRFToken from 'django-react-csrftoken'
 
 
 const Auth= (props)=>{

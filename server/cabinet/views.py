@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from rest_framework_simplejwt.authentication import JWTAuthentication 
 
 @csrf_exempt
 def cabinet(request):
@@ -34,6 +35,12 @@ def logout_view(request):
 @csrf_exempt
 def test(request):
     if request.method == 'POST':
+        token = request.POST['token']
+        validated_token = JWTAuthentication().get_validated_token(token)
+        user = JWTAuthentication().get_user(validated_token)
+        if user:
+            print(user)
+            return HttpResponse("SSSS")    
         return HttpResponse("POST")
     if request.method == 'GET':
         return HttpResponse("GET")
