@@ -16,10 +16,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 @csrf_exempt
 def cabinet(request):
-    if request.user.is_authenticated:
-        profile = Profile.objects.filter(user=request.user)
-        fields = 'group' #Вводим нужные поля
-        return HttpResponse(profile.values(fields))
+    token = request.POST['token']
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if user:
+        profile = Profile.objects.filter(user=user)
+        return HttpResponse(profile.values('group', 'sex', 'subdivision', 'birth_date', 'position', 'experience', 'shift', 'part_time_job', 'lateness'))
     else:
         return HttpResponse("Fail")
 
@@ -32,18 +34,6 @@ def logout_view(request):
     else:
         return HttpResponse("Already logged out")
 
-@csrf_exempt
-def test(request):
-    if request.method == 'POST':
-        token = request.POST['token']
-        validated_token = JWTAuthentication().get_validated_token(token)
-        user = JWTAuthentication().get_user(validated_token)
-        if user:
-            print(user)
-            return HttpResponse("SSSS")    
-        return HttpResponse("POST")
-    if request.method == 'GET':
-        return HttpResponse("GET")
 
 @ensure_csrf_cookie
 def test_1(request):

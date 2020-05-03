@@ -7,6 +7,5 @@ urlpatterns = [
     path('cabinet/', views.cabinet),
     path('logout/', views.logout_view),
     # path('login/', obtain_auth_token),
-    path('test/', views.test),
     path('test1/',views.test_1)
 ]

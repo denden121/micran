@@ -12,7 +12,7 @@ class Profile(models.Model):
     shift = models.CharField(max_length=30, blank=False)
     part_time_job = models.CharField(max_length=30, blank=False)
     group = models.CharField(max_length=30, blank=False)
-    lateness = models.TimeField(max_length=30, blank=False)
+    lateness = models.CharField(max_length=30, blank=False)
 
     def __str__(self):
         return self.user.username
