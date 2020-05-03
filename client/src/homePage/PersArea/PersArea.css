@@ -1,0 +1,55 @@
+img{
+    position: absolute;
+    width: 220px;
+    height: 104px;
+    left: 18px;
+    top: 17px;
+}
+
+.Header{
+    position: absolute;
+    width: 100%;
+    height: 0px;
+    top: 97px;
+    border: 1px solid #D1CECE;
+}
+
+.Panel{
+    position: absolute;
+    width: 250px;
+    top: 180px;
+    border: 1px solid #D1CECE
+}
+
+label{
+    position: absolute;
+    width: 546px;
+    height: 42px;
+    left: 85px;
+    top: 59px;
+    font-weight: 300;
+    font-size: 26px;
+    line-height: 42px;
+    text-align: center;
+    color: #000000;
+}
+
+button{
+    position: absolute;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    left: 1300px;
+    top: 59px;
+}
+
+/*.PersData{
+    position: absolute;
+    left: 174px;
+    top: 109px;
+    width:500px;
+    background: #B9B5B5;
+    border: 0.25px solid #B9B5B5;
+    box-sizing: border-box;
+}*/

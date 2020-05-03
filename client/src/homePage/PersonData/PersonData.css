@@ -1,0 +1,158 @@
+.container{
+    position: absolute;
+    left: 248px;
+    top: 114px;
+    width: 1050px;
+    height: 520px;
+    background-color: #EEEBEB;
+}
+
+.container>.birthDate{
+    position: absolute;
+    left: 45px;
+    top:36px;
+    font-size: 17px;
+}
+.birthDate>.birth{
+    position:absolute;
+    left: 160px;
+    top:2px;
+    width: 150px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+
+}
+
+.container>.sex{
+    position: absolute;
+    left: 590px;
+    top: 36px;
+    font-size: 17px;
+}
+
+.sex>.se{
+    position:absolute;
+    left: 65px;
+    top:2px;
+    width: 150px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+
+.container>.work{
+    position: absolute;
+    left: 45px;
+    top: 96px;
+    font-size: 17px;
+}
+.work>.dolzh{
+    position:absolute;
+    left: 160px;
+    top:6px;
+    width: 600px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+.container>.stazh{
+    position: absolute;
+    left: 45px;
+    top: 176px;
+    font-size: 17px;
+}
+
+.stazh>.st{
+    position:absolute;
+    left: 160px;
+    top:2px;
+    width: 150px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+
+.container>.smena{
+    position: absolute;
+    left: 590px;
+    top: 176px;
+    font-size: 17px;
+}
+
+.smena>.sm{
+    position:absolute;
+    left: 65px;
+    top:2px;
+    width: 150px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+
+.container>.date{
+    position: absolute;
+    left: 45px;
+    top: 236px;
+    font-size: 17px;
+}
+
+.date>.datetr{
+    position:absolute;
+    left: 160px;
+    top:8px;
+    width: 150px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+
+.container>.late{
+    position: absolute;
+    left: 45px;
+    top: 316px;
+    font-size: 17px;
+}
+
+.late>.latetime{
+    position:absolute;
+    left: 160px;
+    top:6px;
+    width: 150px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+
+.container>.sovmes{
+    position: absolute;
+    left: 45px;
+    top: 396px;
+    font-size: 17px;
+}
+
+.sovmes>.sov{
+    position:absolute;
+    left: 160px;
+    top:2px;
+    width: 600px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+.container>.groupps{
+    position: absolute;
+    left: 45px;
+    top: 456px;
+    font-size: 17px;
+}
+
+.groupps>.grup{
+    position:absolute;
+    left: 160px;
+    top:2px;
+    width: 600px;
+    height: 25px;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
