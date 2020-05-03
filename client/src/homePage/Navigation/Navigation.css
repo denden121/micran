@@ -1,0 +1,42 @@
+.project{
+    position: absolute;
+    left: 58px;
+    top: 214px;
+}
+.otchet{
+    position: absolute;
+    left: 58px;
+    top: 254px;
+}
+.zarplata{
+    position: absolute;
+    left: 58px;
+    top: 294px;
+
+}
+
+.otpusk{
+    position: absolute;
+    left: 58px;
+    top: 334px;
+}
+.reestrproj{
+    position: absolute;
+    left: 58px;
+    top: 374px;
+}
+.time{
+    position: absolute;
+    left: 58px;
+    top: 414px;
+}
+.kalendar{
+    position: absolute;
+    left: 58px;
+    top: 454px;
+}
+.help{
+    position: absolute;
+    left: 58px;
+    top: 494px;
+}
