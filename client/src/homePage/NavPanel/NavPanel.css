@@ -1,5 +1,39 @@
-h6{
+img{
+    position: absolute;
+    width:15%;
+    top:1.5%;
+}
+
+.Panel>hr{
+    position: absolute;
+    width: 250px;
+    top: 180px;
+    border: 1px solid #D1CECE
+}
+.Panel{
+    position: absolute;
+    width: 546px;
+    height: 42px;
+    left: 85px;
+    top: 59px;
+    font-weight: 300;
+    font-size: 26px;
+    line-height: 42px;
+    text-align: center;
+    color: #000000;
+}
+
+.Panel>.Exit>.Ex{
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    left: 1349px;
+    top: 90px;
+    cursor: pointer;
+}
+
+/*div{
     position: absolute;
     left:38px;
     top: 154px;
-}
+}*/
