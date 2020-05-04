@@ -14,6 +14,7 @@ RUN pip3 install django-auth-ldap
 RUN pip install djangorestframework
 RUN pip install markdown       # Markdown support for the browsable API.
 RUN pip install django-filter
+RUN pip install djangorestframework_simplejwt
 #RUN pip3 install Pillow
 
 
