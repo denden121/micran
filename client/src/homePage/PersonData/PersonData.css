@@ -1,24 +1,24 @@
 .container{
     position: absolute;
-    left: 248px;
-    top: 114px;
-    width: 1050px;
-    height: 520px;
+    left: 16.5%;
+    top: 15.95%;
+    width: 75%;
+    height: 100%;
     background-color: #EEEBEB;
 }
 
 .container>.birthDate{
     position: absolute;
-    left: 45px;
-    top:36px;
+    left: 4.5%;
+    top:5%;
     font-size: 17px;
 }
 .birthDate>.birth{
     position:absolute;
-    left: 160px;
-    top:2px;
-    width: 150px;
-    height: 25px;;
+    left: 136%;
+    top:0.05%;
+    width: 125%;
+    height: 130%;;
     background-color:rgba(17, 188, 211, 0.4);
     border-radius: 5px;
 
@@ -26,17 +26,17 @@
 
 .container>.sex{
     position: absolute;
-    left: 590px;
-    top: 36px;
+    left: 50%;
+    top: 5%;
     font-size: 17px;
 }
 
 .sex>.se{
     position:absolute;
-    left: 65px;
-    top:2px;
-    width: 150px;
-    height: 25px;;
+    left: 220%;
+    top:0.05%;
+    width: 400%;
+    height: 130%;;
     background-color:rgba(17, 188, 211, 0.4);
     border-radius: 5px;
 }

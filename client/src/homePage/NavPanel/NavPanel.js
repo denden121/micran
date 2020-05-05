@@ -9,7 +9,7 @@ const NavPanel =(props)=>{
                 {/*<img src={Logo} alt="Logo"></img>*/}
             </div>
             <div className="Panel">
-                <hr/>
+
                 {props.name}
                  <div className="Exit">
                      <button className={"Ex"}>Выйти</button>
