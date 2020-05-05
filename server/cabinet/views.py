@@ -1,42 +1,69 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
-from django.middleware.csrf import get_token
-from json import dumps
-from django.contrib.auth.decorators import login_required
-from .models import Profile, Project
+from .models import Profile, Project, Report
 from django.contrib.auth.models import User
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
-from django.middleware.csrf import get_token
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework_simplejwt.authentication import JWTAuthentication 
 
 @csrf_exempt
-def cabinet(request):
-    token = request.POST['token']
+def cabinet_view(request,user_id):
+    token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
-    if user:
+    if user and user.id == user_id or user.is_staff:
         profile = Profile.objects.filter(user=user)
         return HttpResponse(profile.values('group', 'sex', 'subdivision', 'birth_date', 'position', 'experience', 'shift', 'part_time_job', 'lateness'))
     else:
         return HttpResponse("Fail")
 
+@csrf_exempt
+def all_report_view(request, user_id):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if request.method == "GET":
+        if user_id != user.id and not user.is_staff:
+            return HttpResponse("You dont have permissions")
+        reports = Report.objects.filter(user=user_id)
+        return HttpResponse(reports.values())
+    elif request.method == "POST":
+        if user_id != user.id:
+            return HttpResponse("You dont have permissions")
+        name = request.POST['name']
+        project = request.POST['project']
+        text = request.POST['text']
+        hour = request.POST['hour']
+        project = Project.objects.get(name=project)
+        profile = Profile.objects.get(user=user)
+        if project:
+            new_report = Report.objects.create(name = name, project = project, text = text, hour = hour, user=profile)
+            new_report.save()
+            return HttpResponse("Succesfull")
+        return HttpResponse("FUCK")
+        
 
 @csrf_exempt
-def logout_view(request):
-    if request.user.is_authenticated:
-        logout(request)
-        return HttpResponse("Succes")
-    else:
-        return HttpResponse("Already logged out")
-
-
-@ensure_csrf_cookie
-def test_1(request):
-    if request.method =='POST':
-        return HttpResponse('KLKLKLKLLK')
-    return HttpResponse()
+def report_view(request, user_id, report_id):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if user_id != user.id and not user.is_staff:
+        return HttpResponse("You dont have permissions")
+    if request.method == "GET":
+        report = Report.objects.get(user=user_id, id=report_id)
+        return HttpResponse(report.name)
+    elif request.method == "POST":
+        if user_id != user.id:
+            return HttpResponse("You dont have permissions")
+        
+        new_report = Report.objects.filter(id = report_id)
+        if 'name' in request.POST:
+            name = request.POST['name']
+            new_report.update(name = name)
+        if 'text' in request.POST:
+            text = request.POST['text']
+            new_report.update(text = text)
+        if 'hour' in request.POST:
+            hour = request.POST['hour']
+            new_report.update(hour = hour)
+        return HttpResponse("Succesfull")

@@ -28,8 +28,6 @@ class Project(models.Model):
         return self.name
 
 
-
-
 class Report(models.Model):
     name = models.CharField(max_length=50, blank=True)
     user = models.ForeignKey('Profile', related_name='creator', on_delete=models.CASCADE)

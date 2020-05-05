@@ -1,11 +1,9 @@
 from django.urls import path, include
-# from rest_framework.authtoken.views import obtain_auth_token
 
 from . import views
 
 urlpatterns = [
-    path('cabinet/', views.cabinet),
-    path('logout/', views.logout_view),
-    # path('login/', obtain_auth_token),
-    path('test1/',views.test_1)
+    path('cabinet/<int:user_id>/', views.cabinet_view),
+    path('cabinet/<int:user_id>/reports/', views.all_report_view),
+    path('cabinet/<int:user_id>/reports/<int:report_id>', views.report_view),
 ]
