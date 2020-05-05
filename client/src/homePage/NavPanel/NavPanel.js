@@ -2,7 +2,7 @@ import React from 'react'
 import './NavPanel.css'
 // import Logo from "../PersArea/micran.png";
 
-const NavPanel =()=>{
+const NavPanel =(props)=>{
     return(
         <div>
             <div className="Logo">
@@ -10,7 +10,7 @@ const NavPanel =()=>{
             </div>
             <div className="Panel">
                 <hr/>
-                    Личный кабинет
+                {props.name}
                  <div className="Exit">
                      <button className={"Ex"}>Выйти</button>
                  </div>

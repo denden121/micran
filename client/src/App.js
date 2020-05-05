@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth from './Auth/Auth'
-// import PersArea from "./homePage/PersArea";
+//import Auth from './Auth/Auth'
+import PersArea from "./homePage/PersArea";
 
 import axios from 'axios'
 
@@ -40,14 +40,15 @@ class App extends Component{
         })
         // console.log(this.state.password)
     }
+
     render() {
         return ( 
-            <div className = "App" >
-               <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
-            </div >
-            // <div className={App}>
-            //     <PersArea/>
-            // </div>
+           // <div className = "App" >
+             //  <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
+            //</div >
+             <div className={App}>
+                 <PersArea/>
+             </div>
         );
     }
 }

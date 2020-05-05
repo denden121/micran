@@ -25,13 +25,17 @@ img{
 
 .Panel>.Exit>.Ex{
     position: absolute;
-    width: 36px;
-    height: 36px;
+    width: 70px;
+    height: 26px;
     left: 1349px;
-    top: 90px;
+    top: 5px;
     cursor: pointer;
-}
 
+}
+.Panel>.Exit>.Ex:hover {
+    background-size: 100% 100%;
+    color: #27323A;
+}
 /*div{
     position: absolute;
     left:38px;

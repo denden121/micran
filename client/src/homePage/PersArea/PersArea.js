@@ -9,7 +9,7 @@ const PersArea =()=>{
     return(
         <div>
 
-            <NavPanel/>
+            <NavPanel name={"Личный кабинет"}/>
             <div>
                 <Navigation/>
             </div>
