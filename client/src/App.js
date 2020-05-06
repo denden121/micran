@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import './App.css';
-//import Auth from './Auth/Auth'
-import PersArea from "./homePage/PersArea";
+import Auth from './Auth/Auth'
+// import PersArea from "./homePage/PersArea";
+//
+// import axios from 'axios'
 
-import axios from 'axios'
 
-
-class App extends Component{
+class  App extends Component{
     state = {
         login:'',
         password:'',
+        valigForm:false,
+        token:'',
         cabinet:{}
     }
-    authHandler = ()=>{
-        console.log(this.state.login)
-        console.log(this.state.password)
+    authHandler = () =>{
         let formdata = new FormData();
         formdata.append("username", this.state.login);
         formdata.append("password",this.state.password);
@@ -23,9 +23,11 @@ class App extends Component{
             body: formdata,
             redirect: 'follow'
         };
-        axios("http://127.0.0.1:8000/token/", requestOptions)
+        fetch("http://127.0.0.1:8000/token/", requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
+            .then(result => this.setState({token: result.split(',')[1].split(':')[1].replace('"', '').replace('"', '').replace('}', '')}))
+            .catch(() => this.setState({token:''}));
+        // console.log(this.state.token)
     }
     changeLogin = (event) =>{//считываем логин
         this.setState({
@@ -43,12 +45,12 @@ class App extends Component{
 
     render() {
         return ( 
-           // <div className = "App" >
-             //  <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
-            //</div >
-             <div className={App}>
-                 <PersArea/>
-             </div>
+           <div className = 'App' >
+               <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
+           </div >
+             // <div className={App}>
+             //     <PersArea/>
+             // </div>
         );
     }
 }
