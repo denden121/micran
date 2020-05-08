@@ -3,7 +3,7 @@ import './App.css';
 import Auth from './Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
-// import PersArea from "./homePage/PersArea";
+import PersArea from "./homePage/PersArea";
 
 class  App extends Component{
     state = {
@@ -29,26 +29,38 @@ class  App extends Component{
         if(this.state.token ==='') {
             alert('incorect')
         }
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization",this.state.token);
+
+        var requestOptions1 = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/cabinet/2/", requestOptions1)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        console.log(this.state.cabinet)
     }
     render() {
         const temp = () =>{
-            return(<div>
-                <h1>Hello</h1>
-            </div>)
+            return < PersArea date = {this.state.cabinet} />;
         }
-        const tempAuth = ()=>{
+        const tempAuth =()=> {
             if (this.state.token !== '') {
-                return <Redirect to = '/temp'/>
+                return <Redirect to = '/cabinet'/>
             }else {
                 return <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin}
                              changePassword = {this.changePassword}/>;
             }
         };
-        return ( 
+        return (
            <div className = 'App' >
-               <Route path='/' exact component={tempAuth} />
                <Switch>
-                   <Route path='/temp' exact component={temp}/>
+                   <Route path='/' exact component = {tempAuth} />
+                   <Route path='/cabinet' exact component={temp}/>
                    <Redirect to = '/temp'/>
                </Switch>
            </div >

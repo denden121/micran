@@ -1,15 +1,15 @@
 import React from 'react'
 import './PersonData.css'
 
-const PersonData =()=>{
+const PersonData =(props)=>{
     return(
         <div className="container">
             <div className="birthDate">
                 Дата рождения
                 <div className="birth">
+
                 </div>
             </div>
-
             <div className="sex">
                 Пол
                 <div className="se"></div>

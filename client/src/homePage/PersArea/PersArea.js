@@ -5,7 +5,7 @@ import Navigation from '../Navigation/Navigation'
 import PersonData from '../PersonData/PersonData'
 
 
-const PersArea =()=>{
+const PersArea =(props)=>{
     return(
         <div>
 
@@ -18,7 +18,7 @@ const PersArea =()=>{
                 <hr className="Header"/>
             </div>
             <div>
-                <PersonData/>
+                <PersonData date = {props.date}/>
             </div>
         </div>
     )
