@@ -3,7 +3,7 @@ import './PersonData.css'
 
 const PersonData =()=>{
     return(
-        <div className="container">
+        <div className="cont">
             <div className="birthDate">
                 Дата рождения
                 <div className="birth">
@@ -12,7 +12,8 @@ const PersonData =()=>{
 
             <div className="sex">
                 Пол
-                <div className="se"></div>
+                <div className="se">
+                </div>
             </div>
 
             <div className="work">

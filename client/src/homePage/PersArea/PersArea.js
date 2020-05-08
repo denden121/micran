@@ -17,9 +17,11 @@ const PersArea =()=>{
             <div>
                 <hr className="Header"/>
             </div>
-            <div>
+
+            <div className="container">
                 <PersonData/>
             </div>
+
         </div>
     )
 }

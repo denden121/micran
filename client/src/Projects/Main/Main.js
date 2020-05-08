@@ -1,23 +1,26 @@
-
 import React from "react";
-
+import "./Main.css"
 
 const Main =()=>{
     return(
         <div className="container">
             <div className="projName">
-                <select size="3" multiple name="proj[]">
-                    <option disabled>Выберите проект</option>
-                    <option value="Проект №1">Проект №1</option>
-                    <option selected value="Проект №2">Проект №2</option>
-                    <option value="Проект №3">Проект №3</option>
-                    <option value="Проект №4">Проект №4</option>
+                Название проекта
+                <select className="list1">
+                    <option>Выберите из списка</option>
+                    <option>Проект №1</option>
+                    <option>Проект №2</option>
+                    <option>Проект №3</option>
+                    <option>Проект №4</option>
+                    <option>Проект №5</option>
                 </select>
             </div>
 
             <div className="Kurator">
                 Куратор
-                <div className="nameK">Куратор</div>
+                <div className="nameK">
+
+                </div>
             </div>
 
             <div className="status">
@@ -27,12 +30,14 @@ const Main =()=>{
 
             <div className="start">
                 Начало
-                <div className="sta"></div>
+                <div className="sta">
+                </div>
             </div>
 
             <div className="end">
                 Завершение
-                <div className="en"></div>
+                <div className="en">
+                </div>
             </div>
 
 

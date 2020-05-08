@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 //import Auth from './Auth/Auth'
 import PersArea from "./homePage/PersArea";
-//import Main from "./Projects/Main/Main"
+import Main from "./Projects/Main/Main"
 
 import axios from 'axios'
 
@@ -48,7 +48,7 @@ class App extends Component{
              //  <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
             //</div >
              <div className={App}>
-                 <PersArea/>
+                 <Main/>
              </div>
         );
     }
