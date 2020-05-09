@@ -1,47 +1,38 @@
-.container{
+.birthDate{
     position: absolute;
-    left: 248px;
-    top: 114px;
-    width: 1050px;
-    height: 520px;
-    background-color: #EEEBEB;
-}
-
-.container>.birthDate{
-    position: absolute;
-    left: 45px;
-    top:36px;
+    left: 4%;
+    top:5%;
     font-size: 17px;
 }
 .birthDate>.birth{
     position:absolute;
-    left: 160px;
-    top:2px;
-    width: 150px;
-    height: 25px;;
+    left: 136%;
+    top:0.05%;
+    width: 125%;
+    height: 130%;;
     background-color:rgba(17, 188, 211, 0.4);
     border-radius: 5px;
 
 }
 
-.container>.sex{
+.cont>.sex{
     position: absolute;
-    left: 590px;
-    top: 36px;
+    left: 50%;
+    top: 5%;
     font-size: 17px;
 }
 
 .sex>.se{
     position:absolute;
-    left: 65px;
-    top:2px;
-    width: 150px;
-    height: 25px;;
+    left: 220%;
+    top:0.05%;
+    width: 400%;
+    height: 130%;;
     background-color:rgba(17, 188, 211, 0.4);
     border-radius: 5px;
 }
 
-.container>.work{
+.cont>.work{
     position: absolute;
     left: 45px;
     top: 96px;
@@ -56,7 +47,7 @@
     background-color:rgba(17, 188, 211, 0.4);
     border-radius: 5px;
 }
-.container>.stazh{
+.cont>.stazh{
     position: absolute;
     left: 45px;
     top: 176px;
@@ -73,7 +64,7 @@
     border-radius: 5px;
 }
 
-.container>.smena{
+.cont>.smena{
     position: absolute;
     left: 590px;
     top: 176px;
@@ -90,7 +81,7 @@
     border-radius: 5px;
 }
 
-.container>.date{
+.cont>.date{
     position: absolute;
     left: 45px;
     top: 236px;
@@ -107,7 +98,7 @@
     border-radius: 5px;
 }
 
-.container>.late{
+.cont>.late{
     position: absolute;
     left: 45px;
     top: 316px;
@@ -124,7 +115,7 @@
     border-radius: 5px;
 }
 
-.container>.sovmes{
+.cont>.sovmes{
     position: absolute;
     left: 45px;
     top: 396px;
@@ -140,7 +131,7 @@
     background-color:rgba(17, 188, 211, 0.4);
     border-radius: 5px;
 }
-.container>.groupps{
+.cont>.groupps{
     position: absolute;
     left: 45px;
     top: 456px;

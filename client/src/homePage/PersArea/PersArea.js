@@ -9,7 +9,7 @@ const PersArea =()=>{
     return(
         <div>
 
-            <NavPanel/>
+            <NavPanel name={"Личный кабинет"}/>
             <div>
                 <Navigation/>
             </div>
@@ -17,9 +17,11 @@ const PersArea =()=>{
             <div>
                 <hr className="Header"/>
             </div>
-            <div>
+
+            <div className="container">
                 <PersonData/>
             </div>
+
         </div>
     )
 }

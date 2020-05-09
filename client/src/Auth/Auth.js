@@ -3,13 +3,14 @@ import './Auth.css';
 
 const Auth= (props)=>{
     return(
+
         < div className="classes.Auth">
             <fieldset className="accountInfo">
                 <label>Имя пользователя
-                     <input onChange={props.changeLogin} type="text" id='userlogin' ></input>
+                     <input type="text" id = 'input-login' />
                 </label>
                 <label>Пароль
-                     <input onChange={props.changePassword} type="password" ></input>
+                     <input id = 'input-password' type="password" />
                 </label>
             </fieldset>
             <fieldset className="accountAction">
