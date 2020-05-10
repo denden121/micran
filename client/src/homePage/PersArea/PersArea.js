@@ -3,6 +3,7 @@ import './PersArea.css'
 import NavPanel from '../NavPanel/NavPanel'
 import Navigation from '../Navigation/Navigation'
 import PersonData from '../PersonData/PersonData'
+//import Report from '../Report/report'
 
 
 const PersArea =()=>{

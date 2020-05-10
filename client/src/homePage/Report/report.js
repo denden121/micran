@@ -1,7 +1,7 @@
 import React from "react";
-import "./Main.css"
+import "./report.css"
 
-const Main =()=>{
+const Report =()=>{
     return(
         <div className="container">
             <div className="projName">
@@ -23,22 +23,34 @@ const Main =()=>{
                 </div>
             </div>
 
-            <div className="status">
-                Статус
-                <div className="process">В процессе</div>
-            </div>
 
-            <div className="start">
+            <div className="ProjStart">
                 Начало
-                <div className="sta">
-                </div>
+                <input type="date" id="start" className="proj-start"
+                       value="2020-03-22"
+                       min="2018-01-01" max="2020-12-31"/>
             </div>
 
-            <div className="end">
+            <div className="ProjEnd">
                 Завершение
-                <div className="en">
-                </div>
+                <input type="date" id="end" className="proj-end"
+                       value="2020-05-15"
+                       min="2018-01-01" max="2020-12-31"/>
             </div>
+
+            <div className="UseTime">
+                Потраченное
+                <br/>время
+                <input className="time" placeholder={"Введите количество часов"}/>
+
+            </div>
+
+            <div className="Repr">
+                Отчет
+                <textarea className="rep"/>
+            </div>
+
+
 
 
 
@@ -49,4 +61,4 @@ const Main =()=>{
     )
 }
 
-export default Main;
+export default Report;
