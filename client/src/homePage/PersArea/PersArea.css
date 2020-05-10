@@ -10,7 +10,14 @@
 
 
 
-
+.container{
+    position: absolute;
+    left: 16.5%;
+    top: 15.95%;
+    width: 75%;
+    height: 100%;
+    background-color: #EEEBEB;
+}
 
 /*.PersData{
     position: absolute;

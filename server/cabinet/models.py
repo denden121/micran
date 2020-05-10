@@ -21,7 +21,6 @@ class Project(models.Model):
     name = models.CharField(max_length=50, blank=True)
     participants = models.ManyToManyField('Profile', related_name='participants', blank=True, default=None)
     tasks = models.CharField(max_length=500, blank=True)
-    lifespan = models.DurationField(blank=True)
     is_done = models.BooleanField(blank=True, default=False)
     
     def __str__(self):
