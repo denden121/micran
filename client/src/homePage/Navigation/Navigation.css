@@ -1,42 +1,42 @@
 .project{
     position: absolute;
-    left: 58px;
-    top: 214px;
+    left: 5%;
+    top: 21%;
 }
 .otchet{
     position: absolute;
-    left: 58px;
-    top: 254px;
+    left: 5%;
+    top: 27%;
 }
 .zarplata{
     position: absolute;
-    left: 58px;
-    top: 294px;
+    left: 5%;
+    top: 33%;
 
 }
 
 .otpusk{
     position: absolute;
-    left: 58px;
-    top: 334px;
+    left: 5%;
+    top: 39%;
 }
 .reestrproj{
     position: absolute;
-    left: 58px;
-    top: 374px;
+    left: 5%;
+    top: 45%;
 }
 .time{
     position: absolute;
-    left: 58px;
-    top: 414px;
+    left: 5%;
+    top: 51%;
 }
 .kalendar{
     position: absolute;
-    left: 58px;
-    top: 454px;
+    left: 5%;
+    top: 57%;
 }
 .help{
     position: absolute;
-    left: 58px;
-    top: 494px;
+    left: 5%;
+    top: 63%;
 }
