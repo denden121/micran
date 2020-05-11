@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Profile, Project, Report
 from django.contrib.auth.models import User
+from django.core import serializers
 from json import dumps
 from rest_framework_simplejwt.authentication import JWTAuthentication 
 
@@ -12,12 +13,9 @@ def cabinet_view(request,user_id):
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
     if user and user.id == user_id or user.is_staff:
-        profile = Profile.objects.get(user=user)
-        data = {'sex': profile.sex, 'subdivision': profile.subdivision, 'birth_date': str(profile.birth_date),
-        'position': profile.position, 'experience': profile.experience, 'shift': profile.shift,
-        'part_time_job': profile.part_time_job, 'group': profile.group, 'lateness': profile.lateness}
-        print(type(data))
-        return HttpResponse(dumps(data))
+        profile = Profile.objects.filter(user=user)
+        data = serializers.serialize('json', profile)
+        return HttpResponse(data)
     else:
         return HttpResponse("Fail")
 
@@ -30,8 +28,9 @@ def all_report_view(request, user_id):
         if user_id != user.id and not user.is_staff:
             return HttpResponse("You dont have permissions")
         reports = Report.objects.filter(user=user_id)
-        data = [dumps(reports[i].values()) for i in range(len(reports))]
+        data = serializers.serialize('json', reports)
         return HttpResponse(data)
+
     elif request.method == "POST":
         if user_id != user.id:
             return HttpResponse("You dont have permissions")
@@ -56,8 +55,9 @@ def report_view(request, user_id, report_id):
     if user_id != user.id and not user.is_staff:
         return HttpResponse("You dont have permissions")
     if request.method == "GET":
-        report = Report.objects.get(user=user_id, id=report_id)
-        return HttpResponse(report.name)
+        report = Report.objects.filter(user=user_id, id=report_id)
+        data = serializers.serialize('json', report)
+        return HttpResponse(data)
     elif request.method == "POST":
         if user_id != user.id:
             return HttpResponse("You dont have permissions")
@@ -88,7 +88,8 @@ def all_projects_view(request, user_id):
         if user_id != user.id and not user.is_staff:
             return HttpResponse("You dont have permissions")
         projects = Project.objects.filter(participants=user_id)
-        return HttpResponse(projects.values())
+        data = serializers.serialize('json', projects)
+        return HttpResponse(data)
 
     elif request.method == "POST":
         if user_id != user.id:
@@ -114,7 +115,8 @@ def project_view(request, user_id, project_id):
         return HttpResponse("You dont have permissions")
     if request.method == "GET":
         project = Project.objects.filter(participants=user_id, id=project_id)
-        return HttpResponse(project.values())
+        data = serializers.serialize('json', project)
+        return HttpResponse(data)
     elif request.method == "POST":
         if user_id != user.id:
             return HttpResponse("You dont have permissions")
