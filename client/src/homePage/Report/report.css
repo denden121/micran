@@ -1,0 +1,93 @@
+.projName{
+    position: absolute;
+    left: 4%;
+    top: 7%;
+    font-size: 17px
+}
+.list1{
+    position: absolute;
+    left: 136%;
+    height:125%;
+    width: 290%;
+    top:2%;
+    font-size: 17px;
+}
+.Kurator{
+    position: absolute;
+    left: 4%;
+    top: 16%;
+    font-size: 17px;
+}
+.Kurator>.nameK{
+    position: absolute;
+    left: 310%;
+    top:9%;
+    width: 655%;
+    height: 130%;;
+    background-color:rgba(17, 188, 211, 0.4);
+    border-radius: 5px;
+}
+
+.ProjStart{
+    position: absolute;
+    left: 4%;
+    top: 27%;
+    font-size: 17px;
+}
+.proj-start{
+    position: absolute;
+    left: 340%;
+    top: 1%;
+    background: #FFFFFF;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+}
+
+.ProjEnd{
+    position: absolute;
+    left: 36%;
+    top: 27%
+}
+
+.proj-end{
+    position: absolute;
+    left: 124%;
+    background: #FFFFFF;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+}
+
+.UseTime{
+    position: absolute;
+    left: 4%;
+    top: 38%;
+}
+.time{
+    position: absolute;
+    left: 205%;
+    top: 1%;
+    background: #FFFFFF;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+    height: 70%;
+    width: 200%;
+    text-align: center;
+}
+
+.Repr{
+    position: absolute;
+    left: 4%;
+    top: 49%;
+}
+
+.rep{
+    position: absolute;
+    left: 470%;
+    top: 1%;
+    background: #FFFFFF;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+    height: 500%;
+    width: 950%;
+
+}
