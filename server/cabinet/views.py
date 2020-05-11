@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Profile, Project, Report
 from django.contrib.auth.models import User
+from json import dumps
 from rest_framework_simplejwt.authentication import JWTAuthentication 
 
 @csrf_exempt
@@ -11,8 +12,12 @@ def cabinet_view(request,user_id):
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
     if user and user.id == user_id or user.is_staff:
-        profile = Profile.objects.filter(user=user)
-        return HttpResponse(profile.values('group', 'sex', 'subdivision', 'birth_date', 'position', 'experience', 'shift', 'part_time_job', 'lateness'))
+        profile = Profile.objects.get(user=user)
+        data = {'sex': profile.sex, 'subdivision': profile.subdivision, 'birth_date': str(profile.birth_date),
+        'position': profile.position, 'experience': profile.experience, 'shift': profile.shift,
+        'part_time_job': profile.part_time_job, 'group': profile.group, 'lateness': profile.lateness}
+        print(type(data))
+        return HttpResponse(dumps(data))
     else:
         return HttpResponse("Fail")
 
@@ -25,7 +30,8 @@ def all_report_view(request, user_id):
         if user_id != user.id and not user.is_staff:
             return HttpResponse("You dont have permissions")
         reports = Report.objects.filter(user=user_id)
-        return HttpResponse(reports.values())
+        data = [dumps(reports[i].values()) for i in range(len(reports))]
+        return HttpResponse(data)
     elif request.method == "POST":
         if user_id != user.id:
             return HttpResponse("You dont have permissions")
