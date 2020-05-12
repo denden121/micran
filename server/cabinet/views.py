@@ -20,6 +20,17 @@ def cabinet_view(request,user_id):
         return HttpResponse("Fail")
 
 @csrf_exempt
+def cabinet_view_without_id(request):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if user:
+        profile = Profile.objects.filter(user=user)
+        return redirect(str(user.id) + '/')
+    else:
+        return HttpResponse("Fail")
+
+@csrf_exempt
 def all_report_view(request, user_id):
     token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
