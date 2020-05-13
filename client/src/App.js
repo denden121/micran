@@ -1,55 +1,73 @@
 import React, { Component } from 'react';
 import './App.css';
-//import Auth from './Auth/Auth'
+import Auth from './Auth/Auth'
+import {Route} from 'react-router-dom'
+import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./homePage/PersArea";
-//import Main from "./Projects/Main/Main"
+import Report from "./homePage/Report/Report";
 
-import axios from 'axios'
-
-
-class App extends Component{
+class  App extends Component{
     state = {
-        login:'',
-        password:'',
+        token:'',
         cabinet:{}
     }
-    authHandler = ()=>{
-        console.log(this.state.login)
-        console.log(this.state.password)
+    authHandler = async () =>{
+        let login = document.getElementById("input-login").value
+        let password = document.getElementById("input-password").value
         let formdata = new FormData();
-        formdata.append("username", this.state.login);
-        formdata.append("password",this.state.password);
+        formdata.append("username", login);
+        formdata.append("password", password);
         let requestOptions = {
             method: 'POST',
             body: formdata,
             redirect: 'follow'
         };
-        axios("http://127.0.0.1:8000/token/", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-    }
-    changeLogin = (event) =>{//считываем логин
-        this.setState({
-            login:event.target.value
-        })
-        // console.log(this.state.login)
-        // console.log(event.target.value)
-    }
-    changePassword = (event) =>{//считываем пароль
-        this.setState({
-            password:event.target.value
-        })
-        // console.log(this.state.password)
-    }
+        await fetch("http://127.0.0.1:8000/token/", requestOptions)
+            .then(response => response.json())
+            .then(result =>console.log(this.setState({token:result.access})))
+        // .then(response => response.text())
+            // .then(result => this.setState({token: result.split(',')[1].split(':')[1].replace('"', '').replace('"', '').replace('}', '')}))
+            .catch(() => this.setState({token:''}));
+        // console.log(this.state.token)
+        if(this.state.token ==='') {
+            alert('incorect')
+        }
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization",this.state.token);
+        // console.log(this.state.token)
+        var requestOptions1 = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
 
+        fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
+            .then(response =>response.json())
+            .then(result => this.setState({cabinet:result[0].fields}))
+            .catch(error => console.log('error', error));
+        // console.log(this.state.cabinet)
+    }
     render() {
-        return ( 
-           // <div className = "App" >
-             //  <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
-            //</div >
-             <div className={App}>
-                 <PersArea/>
-             </div>
+        const temp = () =>{
+            return < PersArea date = {this.state.cabinet} />;
+        }
+        const tempAuth =()=> {
+            if (this.state.token !== '') {
+                return <Redirect to = '/cabinet'/>
+            }else {
+                return <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin}
+                             changePassword = {this.changePassword}/>;
+            }
+        };
+        return (
+           <div className = 'App' >
+               <Switch>
+                   <Route path='/' exact component = {tempAuth} />
+                   <Route path='/cabinet' exact component={temp}/>
+                   <Route path ='/cabinet/report' exact component={Report}/>
+                   <Redirect to = '/temp'/>
+               </Switch>
+           </div >
         );
     }
 }
