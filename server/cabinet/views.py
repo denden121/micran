@@ -38,14 +38,14 @@ def all_report_view(request, user_id):
     if request.method == "GET":
         if user_id != user.id and not user.is_staff:
             return HttpResponse("You dont have permissions")
-        reports = Report.objects.filter(user=user_id)
+        reports = Report.objects.filter(creator_id=user_id)
         data = serializers.serialize('json', reports)
         return HttpResponse(data)
 
     elif request.method == "POST":
         if user_id != user.id:
             return HttpResponse("You dont have permissions")
-        name = request.POST['name']
+        # name = request.POST['name']
         project = request.POST['project']
         text = request.POST['text']
         curator = request.POST['curator']
@@ -54,7 +54,7 @@ def all_report_view(request, user_id):
         profile = Profile.objects.get(user=user)
         #curator_profile = Profile.objects.get(user=curator)
         if project:
-            new_report = Report.objects.create(name = name, project = project, text = text, hour = hour, user=profile, curator = curator)
+            new_report = Report.objects.create(project = project, text = text, hour = hour, creator_id=profile, curator = curator)
             new_report.save()
             return HttpResponse("Succesfull")
         return HttpResponse("Something went wrong")
@@ -76,9 +76,9 @@ def report_view(request, user_id, report_id):
             return HttpResponse("You dont have permissions")
      
         new_report = Report.objects.filter(id = report_id)
-        if 'name' in request.POST:
-            name = request.POST['name']
-            new_report.update(name = name)
+        # if 'name' in request.POST:
+            # name = request.POST['name']
+            # new_report.update(name = name)
         if 'text' in request.POST:
             text = request.POST['text']
             new_report.update(text = text)
