@@ -5,6 +5,7 @@ import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./homePage/PersArea";
 import Report from "./homePage/Report/Report";
+import LookMain from "./homePage/lookReport/lookMain/lookMain";
 
 class  App extends Component{
     state = {
@@ -63,6 +64,7 @@ class  App extends Component{
                    <Route path='/' exact component = {funcAuth} />
                    <Route path='/cabinet' exact component={funcPersArea}/>
                    <Route path ='/cabinet/report' exact component={Report}/>
+                   <Route path='/cabinet/look' exact component={LookMain}/>
                    <Redirect to = '/temp'/>
                </Switch>
            </div >
