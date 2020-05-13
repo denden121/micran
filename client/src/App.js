@@ -4,6 +4,7 @@ import Auth from './Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./homePage/PersArea";
+import Report from "./homePage/Report/Report";
 
 class  App extends Component{
     state = {
@@ -22,8 +23,10 @@ class  App extends Component{
             redirect: 'follow'
         };
         await fetch("http://127.0.0.1:8000/token/", requestOptions)
-            .then(response => response.text())
-            .then(result => this.setState({token: result.split(',')[1].split(':')[1].replace('"', '').replace('"', '').replace('}', '')}))
+            .then(response => response.json())
+            .then(result =>console.log(this.setState({token:result.access})))
+        // .then(response => response.text())
+            // .then(result => this.setState({token: result.split(',')[1].split(':')[1].replace('"', '').replace('"', '').replace('}', '')}))
             .catch(() => this.setState({token:''}));
         // console.log(this.state.token)
         if(this.state.token ==='') {
@@ -31,18 +34,18 @@ class  App extends Component{
         }
         var myHeaders = new Headers();
         myHeaders.append("Authorization",this.state.token);
-
+        // console.log(this.state.token)
         var requestOptions1 = {
             method: 'POST',
             headers: myHeaders,
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:8000/cabinet/2/", requestOptions1)
-            .then(response => response.text())
-            .then(result => console.log(result))
+        fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
+            .then(response =>response.json())
+            .then(result => this.setState({cabinet:result[0].fields}))
             .catch(error => console.log('error', error));
-        console.log(this.state.cabinet)
+        // console.log(this.state.cabinet)
     }
     render() {
         const temp = () =>{
@@ -61,6 +64,7 @@ class  App extends Component{
                <Switch>
                    <Route path='/' exact component = {tempAuth} />
                    <Route path='/cabinet' exact component={temp}/>
+                   <Route path ='/cabinet/report' exact component={Report}/>
                    <Redirect to = '/temp'/>
                </Switch>
            </div >

@@ -6,10 +6,9 @@ import PersonData from '../PersonData/PersonData'
 //import Report from '../Report/report'
 
 
-const PersArea =()=>{
+const PersArea =(props)=>{
     return(
         <div>
-
             <NavPanel name={"Личный кабинет"}/>
             <div>
                 <Navigation/>
@@ -18,9 +17,8 @@ const PersArea =()=>{
             <div>
                 <hr className="Header"/>
             </div>
-
             <div className="container">
-                <PersonData/>
+                <PersonData data = {props.date} />
             </div>
 
         </div>

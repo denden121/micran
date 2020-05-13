@@ -7,12 +7,12 @@ const PersonData =(props)=>{
             <div className="birthDate">
                 Дата рождения
                 <div className="birth">
-
                 </div>
             </div>
             <div className="sex">
                 Пол
                 <div className="se">
+                    {props.data.sex}
                 </div>
             </div>
 
@@ -20,6 +20,7 @@ const PersonData =(props)=>{
                 Подразделение,
                 <br />Должность
                 <div className="dolzh">
+
                 </div>
             </div>
             <div className="stazh">
