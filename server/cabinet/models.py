@@ -26,13 +26,14 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
-
 class Report(models.Model):
     name = models.CharField(max_length=50, blank=True)
     user = models.ForeignKey('Profile', related_name='creator', on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.CASCADE)
+    #project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.CASCADE)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
+    project = models.CharField(max_length=50, blank=True)
+    curator = models.CharField(max_length=50, blank=True, default=None)
 
     def __str__(self):
         return self.name

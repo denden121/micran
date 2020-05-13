@@ -48,11 +48,13 @@ def all_report_view(request, user_id):
         name = request.POST['name']
         project = request.POST['project']
         text = request.POST['text']
+        curator = request.POST['curator']
         hour = request.POST['hour']
-        project = Project.objects.get(name=project)
+        #project = Project.objects.get(name=project)
         profile = Profile.objects.get(user=user)
+        #curator_profile = Profile.objects.get(user=curator)
         if project:
-            new_report = Report.objects.create(name = name, project = project, text = text, hour = hour, user=profile)
+            new_report = Report.objects.create(name = name, project = project, text = text, hour = hour, user=profile, curator = curator)
             new_report.save()
             return HttpResponse("Succesfull")
         return HttpResponse("Something went wrong")
