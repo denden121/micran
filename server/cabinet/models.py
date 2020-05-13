@@ -19,7 +19,7 @@ class Profile(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=50, blank=True)
-    participants = models.CharField(max_length=500, blank=True)
+    participants = models.ManyToManyField('Profile', blank=True)
     tasks = models.CharField(max_length=500, blank=True)
     is_done = models.BooleanField(blank=True, default=False)
     
