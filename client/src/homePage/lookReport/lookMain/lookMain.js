@@ -4,22 +4,28 @@ import Active from "./activeReport/active";
 class  LookMain extends Component {
     state = {
         projects: [
-            {
-                reps:[
-                    {text: 'Проект №1'},
-                    {text: 'Проект №2'}
-                ]
-            }
+
+            {name: 'Проект №1', curs:"Василий", time:20},
+            {name: 'Проект №2', curs:"Всеволод",time:30}
+
         ]
     }
     render(){
         return(
             <div>
-                <Active
-                    reps={this.state.projects[0].reps}
-                />
+                {this.state.projects.map((project, index) =>{
+                    return(
+                        <Active
+                            key={index}
+                            name={project.name}
+                            curs={project.curs}
+                            time={project.time}
+                        />
+                    )
+                })}
             </div>
         )
     }
+
 }
 export default LookMain
