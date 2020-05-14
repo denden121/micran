@@ -68,7 +68,7 @@ class Report extends Component{
                     {/*           min="2018-01-01" max="2020-12-31"/>*/}
                     {/*</div>*/}
 
-                    <div className="UseTime">
+                    <div className="UseTime" align={"left"}>
                         Потраченное<br/>
                         время
                         <input className="time" id = "count_hours" placeholder={"Введите количество часов"}/>
