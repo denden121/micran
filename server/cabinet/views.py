@@ -42,12 +42,15 @@ def all_report_view(request, user_id):
         data = serializers.serialize('json', reports)
         return HttpResponse(data)
 
-
 @csrf_exempt
-def add_report_view(request):
+def all_report_view_without_id(request):
     token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
+    if request.method == "GET":
+        reports = Report.objects.filter(creator_id=user.id)
+        data = serializers.serialize('json', reports)
+        return HttpResponse(data)
     if request.method == "POST":
         # name = request.POST['name']
         project = request.POST['project']
@@ -61,8 +64,7 @@ def add_report_view(request):
             new_report = Report.objects.create(project = project, text = text, hour = hour, creator_id=profile, curator = curator)
             new_report.save()
             return HttpResponse("Succesfull")
-        return HttpResponse("Something went wrong")
-        
+        return HttpResponse("Something went wrong")        
 
 @csrf_exempt
 def report_view(request, user_id, report_id):
