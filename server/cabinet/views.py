@@ -7,6 +7,13 @@ from django.core import serializers
 from django.contrib.auth import authenticate, login
 from json import dumps
 from rest_framework_simplejwt.authentication import JWTAuthentication 
+from django.contrib.auth import logout
+
+
+@csrf_exempt
+def logout_view(request):
+    logout(request)
+    return HttpResponse("Succesfull")
 
 @csrf_exempt
 def cabinet_view(request,user_id):
