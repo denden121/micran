@@ -10,6 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 @csrf_exempt
 def cabinet_view(request,user_id):
     token = request.headers.get('Authorization')
+    print(token)
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
     if user and user.id == user_id or user.is_staff:
