@@ -99,6 +99,33 @@ def report_view(request, user_id, report_id):
         return HttpResponse("Succesfull")
 
 @csrf_exempt
+def report_view_without_id(request, report_id):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if request.method == "GET":
+        report = Report.objects.filter(user=user.id, id=report_id)
+        data = serializers.serialize('json', report)
+        return HttpResponse(data)
+    elif request.method == "POST":
+        new_report = Report.objects.filter(id = report_id)
+        # if 'name' in request.POST:
+            # name = request.POST['name']
+            # new_report.update(name = name)
+        if 'text' in request.POST:
+            text = request.POST['text']
+            new_report.update(text = text)
+        if 'hour' in request.POST:
+            hour = request.POST['hour']
+            new_report.update(hour = hour)
+        return HttpResponse("Succesfull")
+
+    elif request.method == "DELETE":
+        report = Report.objects.get(user=user.id, id=report_id)
+        report.delete()
+        return HttpResponse("Succesfull")
+
+@csrf_exempt
 def all_projects_view(request, user_id):
     token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
@@ -111,10 +138,14 @@ def all_projects_view(request, user_id):
         return HttpResponse(data)
 
 @csrf_exempt
-def add_projects_view(request):
+def all_projects_view_without_id(request):
     token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
+    if user and request.method == "GET":
+        projects = Project.objects.filter(participants=user.id)
+        data = serializers.serialize('json', projects)
+        return HttpResponse(data)
     if user and request.method == "POST":
         name = request.POST['name']
         tasks = request.POST['tasks']
@@ -164,5 +195,38 @@ def project_view(request, user_id, project_id):
 
     elif request.method == "DELETE":
         project = Project.objects.get(participants=user_id, id=project_id)
+        project.delete()
+        return HttpResponse("Succesfull")
+
+@csrf_exempt
+def project_view_without_id(request, project_id):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if request.method == "GET":
+        project = Project.objects.filter(participants=user.id, id=project_id)
+        data = serializers.serialize('json', project)
+        return HttpResponse(data)
+    elif request.method == "POST":
+        new_project = Project.objects.filter(id = project_id)
+        if 'name' in request.POST:
+            name = request.POST['name']
+            new_project.update(name = name)
+        if 'tasks' in request.POST:
+            tasks = request.POST['tasks']
+            new_project.update(tasks = tasks)
+        if 'status' in request.POST:
+            status = request.POST['status']
+            new_project.update(is_done = status)
+        if 'users' in request.POST:
+            participants = request.POST['users'].split()
+            participants = [(User.objects.get(username=participant)) for participant in participants]
+            profiles = [Profile.objects.get(user=participant) for participant in participants]
+            if profiles:
+                [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
+        return HttpResponse("Succesfull")
+
+    elif request.method == "DELETE":
+        project = Project.objects.get(participants=user.id, id=project_id)
         project.delete()
         return HttpResponse("Succesfull")
