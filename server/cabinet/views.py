@@ -42,9 +42,16 @@ def all_report_view(request, user_id):
         data = serializers.serialize('json', reports)
         return HttpResponse(data)
 
-    elif request.method == "POST":
-        if user_id != user.id:
-            return HttpResponse("You dont have permissions")
+@csrf_exempt
+def all_report_view_without_id(request):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if request.method == "GET":
+        reports = Report.objects.filter(creator_id=user.id)
+        data = serializers.serialize('json', reports)
+        return HttpResponse(data)
+    if request.method == "POST":
         # name = request.POST['name']
         project = request.POST['project']
         text = request.POST['text']
@@ -57,8 +64,7 @@ def all_report_view(request, user_id):
             new_report = Report.objects.create(project = project, text = text, hour = hour, creator_id=profile, curator = curator)
             new_report.save()
             return HttpResponse("Succesfull")
-        return HttpResponse("Something went wrong")
-        
+        return HttpResponse("Something went wrong")        
 
 @csrf_exempt
 def report_view(request, user_id, report_id):
@@ -104,17 +110,21 @@ def all_projects_view(request, user_id):
         data = serializers.serialize('json', projects)
         return HttpResponse(data)
 
-    elif request.method == "POST":
-        if user_id != user.id:
-            return HttpResponse("You dont have permissions")
+@csrf_exempt
+def add_projects_view(request):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if user and request.method == "POST":
         name = request.POST['name']
         tasks = request.POST['tasks']
         participants = request.POST['users'].split()
-        profiles = [Profile.objects.filter(user=participant) for participant in participants]
+        participants = [(User.objects.get(username=participant)) for participant in participants]
+        profiles = [Profile.objects.get(user=participant) for participant in participants]
         if profiles:
             new_project = Project.objects.create(name = name, tasks = tasks)
             new_project.save()
-            [new_project.participants.add(profiles[i].values('id')) for i in range(len(profiles))]
+            [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
             return HttpResponse("Succesfull")
         return HttpResponse("Something went wrong")
         
@@ -145,9 +155,11 @@ def project_view(request, user_id, project_id):
             status = request.POST['status']
             new_project.update(is_done = status)
         if 'users' in request.POST:
-            new_project = Project.objects.get(id = project_id)
             participants = request.POST['users'].split()
-            new_project.participants.set(participants)
+            participants = [(User.objects.get(username=participant)) for participant in participants]
+            profiles = [Profile.objects.get(user=participant) for participant in participants]
+            if profiles:
+                [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
         return HttpResponse("Succesfull")
 
     elif request.method == "DELETE":
