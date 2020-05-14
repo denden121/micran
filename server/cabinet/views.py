@@ -42,9 +42,13 @@ def all_report_view(request, user_id):
         data = serializers.serialize('json', reports)
         return HttpResponse(data)
 
-    elif request.method == "POST":
-        if user_id != user.id:
-            return HttpResponse("You dont have permissions")
+
+@csrf_exempt
+def add_report_view(request):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if request.method == "POST":
         # name = request.POST['name']
         project = request.POST['project']
         text = request.POST['text']
@@ -104,9 +108,12 @@ def all_projects_view(request, user_id):
         data = serializers.serialize('json', projects)
         return HttpResponse(data)
 
-    elif request.method == "POST":
-        if user_id != user.id:
-            return HttpResponse("You dont have permissions")
+@csrf_exempt
+def add_projects_view(request):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    if user and request.method == "POST":
         name = request.POST['name']
         tasks = request.POST['tasks']
         participants = request.POST['users'].split()
