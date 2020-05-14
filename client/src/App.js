@@ -12,7 +12,6 @@ class  App extends Component{
         token:'',
         cabinet:{}
     }
-
     //обработка кнопки для авторизации
     authHandler = async () =>{
         let login = document.getElementById("input-login").value
@@ -29,9 +28,9 @@ class  App extends Component{
         await fetch("http://127.0.0.1:8000/token/", requestOptions)
             .then(response => response.json())
             .then(result =>console.log(this.setState({token:result.access})))
-            .catch(() => this.setState({token:''}));
-        if(this.state.token ==='') {
-            alert('incorect')
+            .catch(error => this.setState({token:''}));
+        if(this.state.token ===undefined) {
+            alert('incorrect')
         }
         let myHeaders = new Headers();
         myHeaders.append("Authorization",this.state.token);
@@ -46,8 +45,34 @@ class  App extends Component{
             .then(result => this.setState({cabinet:result[0].fields}))
             .catch(error => console.log('error', error));
     }
+    sendReport=()=>{
+        const hours = document.getElementById("count_hours").value
+        const report = document.getElementById("report_text").value
+        const nameProject = document.getElementById("name_project_text").value
+        const curator = document.getElementById("curator_name").value
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", this.state.token);
+        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        let urlencoded = new URLSearchParams();
+        urlencoded.append("project", nameProject);
+        urlencoded.append("text", report);
+        urlencoded.append("curator",curator );
+        urlencoded.append("hour", hours);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/cabinet/reports/", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    }
     render() {
-        const funcPersArea = () =>{
+         const funcPersArea = () =>{
             return < PersArea date = {this.state.cabinet} />;
         }
         const funcAuth =()=> {
@@ -58,12 +83,15 @@ class  App extends Component{
                              changePassword = {this.changePassword}/>;
             }
         };
+        const funcReport= () =>{
+            return <Report sendReport = {this.sendReport}/>
+        }
         return (
            <div className = 'App' >
                <Switch>
                    <Route path='/' exact component = {funcAuth} />
                    <Route path='/cabinet' exact component={funcPersArea}/>
-                   <Route path ='/cabinet/report' exact component={Report}/>
+                   <Route path ='/cabinet/report' exact component={funcReport}/>
                    <Route path='/cabinet/look' exact component={LookMain}/>
                    <Redirect to = '/temp'/>
                </Switch>
