@@ -1,0 +1,38 @@
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { Component } from 'react';\nimport './App.css';\n//import Auth from './Auth/Auth'\nimport PersArea from \"./homePage/PersArea\";\n\nimport axios from 'axios'\n\n\nclass App extends Component{\n    state = {\n        login:'',\n        password:'',\n        cabinet:{}\n    }\n    authHandler = ()=>{\n        console.log(this.state.login)\n        console.log(this.state.password)\n        let formdata = new FormData();\n        formdata.append(\"username\", this.state.login);\n        formdata.append(\"password\",this.state.password);\n        let requestOptions = {\n            method: 'POST',\n            body: formdata,\n            redirect: 'follow'\n        };\n        axios(\"http://127.0.0.1:8000/token/\", requestOptions)\n            .then(response => response.text())\n            .then(result => console.log(result))\n    }\n    changeLogin = (event) =>{//считываем логин\n        this.setState({\n            login:event.target.value\n        })\n        // console.log(this.state.login)\n        // console.log(event.target.value)\n    }\n    changePassword = (event) =>{//считываем пароль\n        this.setState({\n            password:event.target.value\n        })\n        // console.log(this.state.password)\n    }\n\n    render() {\n        return ( \n           // <div className = \"App\" >\n             //  <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>\n            //</div >\n             <div className={App}>\n                 <PersArea/>\n             </div>\n        );\n    }\n}\n\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/App.js	(revision 6b18897e568299e64819c650911062a377e398f4)
++++ client/src/App.js	(date 1588704682541)
+@@ -1,7 +1,7 @@
+ import React, { Component } from 'react';
+ import './App.css';
+-//import Auth from './Auth/Auth'
+-import PersArea from "./homePage/PersArea";
++import Auth from './Auth/Auth'
++//import PersArea from "./homePage/PersArea";
+ 
+ import axios from 'axios'
+ 
+@@ -43,12 +43,12 @@
+ 
+     render() {
+         return ( 
+-           // <div className = "App" >
+-             //  <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
+-            //</div >
+-             <div className={App}>
+-                 <PersArea/>
+-             </div>
++            <div className = "App" >
++                   <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin} changePassword = {this.changePassword}/>
++            </div >
++             //<div className={App}>
++               //  <PersArea/>
++             //</div>
+         );
+     }
+ }
