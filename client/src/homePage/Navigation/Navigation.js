@@ -9,7 +9,7 @@ class Nav extends React.Component{
                     <a href="/project">Проекты</a>
                 </nav>
                 <nav className="otchet">
-                    <a href="/otchet">Отчеты</a>
+                    <a href="/otchet">Просмотреть отчеты</a>
                 </nav>
                 <nav className="zarplata">
                     <a href="/zarplata">Зарплата</a>

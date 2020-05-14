@@ -43,13 +43,13 @@ class Report extends Component{
                         {/*    <option>Проект №4</option>*/}
                         {/*    <option>Проект №5</option>*/}
                         {/*</select>*/}
-                        <input  id = "name_project"/>
+                        <input  className = "name_project"/>
                     </div>
 
                     <div className="Kurator">
                         Куратор
-                        <div className="nameK">
-                            <input id = "curator" />
+                        <div>
+                            <input className= "curator" />
                         </div>
                     </div>
 
@@ -69,8 +69,8 @@ class Report extends Component{
                     {/*</div>*/}
 
                     <div className="UseTime">
-                        Потраченное
-                        <br/>время
+                        Потраченное<br/>
+                        время
                         <input className="time" id = "count_hours" placeholder={"Введите количество часов"}/>
 
                     </div>
