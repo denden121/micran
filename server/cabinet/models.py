@@ -17,6 +17,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 class Project(models.Model):
     name = models.CharField(max_length=50, blank=True)
     participants = models.ManyToManyField('Profile', blank=True)
