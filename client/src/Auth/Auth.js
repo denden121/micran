@@ -4,7 +4,7 @@ import './Auth.css';
 const Auth= (props)=>{
     return(
 
-        < div className="classes.Auth">
+        < div className="classesAuth">
             <fieldset className="accountInfo">
                 <label>Имя пользователя
                      <input type="text" id = 'input-login' />

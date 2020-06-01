@@ -1,0 +1,289 @@
+Index: client/src/homePage/Report/Report.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\nimport \"./Report.css\"\n\nconst Report =()=>{\n    return(\n        <div className=\"container\">\n            <div className=\"projName\">\n                Название проекта\n                <select className=\"list1\">\n                    <option>Выберите из списка</option>\n                    <option>Проект №1</option>\n                    <option>Проект №2</option>\n                    <option>Проект №3</option>\n                    <option>Проект №4</option>\n                    <option>Проект №5</option>\n                </select>\n            </div>\n\n            <div className=\"Kurator\">\n                Куратор\n                <div className=\"nameK\">\n\n                </div>\n            </div>\n\n\n            <div className=\"ProjStart\">\n                Начало\n                <input type=\"date\" id=\"start\" className=\"proj-start\"\n                       value=\"2020-03-22\"\n                       min=\"2018-01-01\" max=\"2020-12-31\"/>\n            </div>\n\n            <div className=\"ProjEnd\">\n                Завершение\n                <input type=\"date\" id=\"end\" className=\"proj-end\"\n                       value=\"2020-05-15\"\n                       min=\"2018-01-01\" max=\"2020-12-31\"/>\n            </div>\n\n            <div className=\"UseTime\">\n                Потраченное\n                <br/>время\n                <input className=\"time\" placeholder={\"Введите количество часов\"}/>\n\n            </div>\n\n            <div className=\"Repr\">\n                Отчет\n                <textarea className=\"rep\"/>\n            </div>\n\n\n\n\n\n\n\n\n        </div>\n    )\n}\n\nexport default Report;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/homePage/Report/Report.js	(revision 55d74b53cc8b76f67181d159de52a6f1be889b33)
++++ client/src/homePage/Report/Report.js	(date 1589377603022)
+@@ -1,64 +1,70 @@
+-import React from "react";
++import React, {Component} from "react";
+ import "./Report.css"
++import ActiveProj from "./activeProj/activeProj";
++
++class Report extends Component {
+ 
+-const Report =()=>{
+-    return(
+-        <div className="container">
+-            <div className="projName">
+-                Название проекта
+-                <select className="list1">
+-                    <option>Выберите из списка</option>
+-                    <option>Проект №1</option>
+-                    <option>Проект №2</option>
+-                    <option>Проект №3</option>
+-                    <option>Проект №4</option>
+-                    <option>Проект №5</option>
+-                </select>
+-            </div>
++    state = {
++        projects: [
++            {
++                names: [
++                    {text: 'Проект №1'},
++                    {text: 'Проект №2'},
++                    {text: 'Проект №3'},
++                    {text: 'Проект №4'}
++                ]
++            }
++        ]
++    }
++
++    render() {
++        return (
++            <div className="container">
++
++                <div>
++                    <ActiveProj
++                        names={this.state.projects[0].names}
++                    />
++                </div>
+ 
+-            <div className="Kurator">
+-                Куратор
+-                <div className="nameK">
++                <div className="Kurator">
++                    Куратор
++                    <div className="nameK">
+ 
+-                </div>
+-            </div>
++                    </div>
++                </div>
+ 
+ 
+-            <div className="ProjStart">
+-                Начало
+-                <input type="date" id="start" className="proj-start"
+-                       value="2020-03-22"
+-                       min="2018-01-01" max="2020-12-31"/>
+-            </div>
++                <div className="ProjStart">
++                    Начало
++                    <input type="date" id="start" className="proj-start"
++                           value="2020-03-22"
++                           min="2018-01-01" max="2020-12-31"/>
++                </div>
+ 
+-            <div className="ProjEnd">
+-                Завершение
+-                <input type="date" id="end" className="proj-end"
+-                       value="2020-05-15"
+-                       min="2018-01-01" max="2020-12-31"/>
+-            </div>
++                <div className="ProjEnd">
++                    Завершение
++                    <input type="date" id="end" className="proj-end"
++                           value="2020-05-15"
++                           min="2018-01-01" max="2020-12-31"/>
++                </div>
+ 
+-            <div className="UseTime">
+-                Потраченное
+-                <br/>время
+-                <input className="time" placeholder={"Введите количество часов"}/>
++                <div className="UseTime">
++                    Потраченное
++                    <br/>время
++                    <input className="time" placeholder={"Введите количество часов"}/>
+ 
+-            </div>
++                </div>
+ 
+-            <div className="Repr">
+-                Отчет
+-                <textarea className="rep"/>
+-            </div>
++                <div className="Repr">
++                    Отчет
++                    <textarea className="rep"/>
++                </div>
+ 
+ 
+-
+-
+-
+-
+-
+-
+-        </div>
+-    )
++            </div>
++        )
++    }
+ }
+ 
+ export default Report;
+\ No newline at end of file
+Index: client/src/homePage/Report/activeProj/porjItem/projItem.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/homePage/Report/activeProj/porjItem/projItem.js	(date 1589377085176)
++++ client/src/homePage/Report/activeProj/porjItem/projItem.js	(date 1589377085176)
+@@ -0,0 +1,11 @@
++import React from 'react'
++
++const ProjItem = props =>{
++    return(
++        <option>
++            {props.name.text}
++        </option>
++    )
++}
++
++export default ProjItem
+\ No newline at end of file
+Index: client/src/homePage/Report/activeProj/activeProj.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/homePage/Report/activeProj/activeProj.js	(date 1589377275255)
++++ client/src/homePage/Report/activeProj/activeProj.js	(date 1589377275255)
+@@ -0,0 +1,14 @@
++import React from 'react'
++import './activeProj.css'
++import ProjList from "./projList/projList";
++
++const ActiveProj = props =>(
++
++    <div className="projName">
++        <ProjList
++            names={props.names}
++        />
++    </div>
++)
++
++export default ActiveProj
+\ No newline at end of file
+Index: client/src/homePage/Report/activeProj/projList/projList.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/homePage/Report/activeProj/projList/projList.js	(date 1589377142979)
++++ client/src/homePage/Report/activeProj/projList/projList.js	(date 1589377142979)
+@@ -0,0 +1,15 @@
++import React from 'react'
++import ProjItem from "../porjItem/projItem";
++
++const ProjList = props => (
++   <select>
++    {props.names.map((name, index)=>{
++        return(
++            <ProjItem
++                name={name}
++            />
++        )
++        })}
++   </select>
++)
++export default ProjList
+\ No newline at end of file
+Index: client/src/homePage/Report/activeProj/activeProj.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/homePage/Report/activeProj/activeProj.css	(date 1589374138227)
++++ client/src/homePage/Report/activeProj/activeProj.css	(date 1589374138227)
+@@ -0,0 +1,14 @@
++.projName{
++    position: absolute;
++    left: 4%;
++    top: 7%;
++    font-size: 17px
++}
++.list1 {
++    position: absolute;
++    left: 136%;
++    height: 125%;
++    width: 290%;
++    top: 2%;
++    font-size: 17px;
++}
+\ No newline at end of file
+Index: client/src/Auth/Auth.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\";\nimport './Auth.css';\n\nconst Auth= (props)=>{\n    return(\n\n        < div className=\"classes.Auth\">\n            <fieldset className=\"accountInfo\">\n                <label>Имя пользователя\n                     <input type=\"text\" id = 'input-login' />\n                </label>\n                <label>Пароль\n                     <input id = 'input-password' type=\"password\" />\n                </label>\n            </fieldset>\n            <fieldset className=\"accountAction\">\n                <button onClick={props.authHandler}>Войти</button>\n                    {/*<label>*/}\n                    {/*    <input type=\"checkbox\" name=\"remember\"/> Запомнить*/}\n                    {/*</label>*/}\n            </fieldset>\n        </div>\n    )\n}\nexport default Auth;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/Auth/Auth.js	(revision 55d74b53cc8b76f67181d159de52a6f1be889b33)
++++ client/src/Auth/Auth.js	(date 1589373220908)
+@@ -4,7 +4,7 @@
+ const Auth= (props)=>{
+     return(
+ 
+-        < div className="classes.Auth">
++        < div className="classesAuth">
+             <fieldset className="accountInfo">
+                 <label>Имя пользователя
+                      <input type="text" id = 'input-login' />
+Index: client/src/Auth/Auth.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>form{\n    position: absolute;\n    width: 300px;\n    height: 399px;\n    left: 533px;\n    top: 100px;\n    background: #fff;\n    box-Shadow: 2px 2px 2px rgba(0,0,0,.5);\n    padding: 15px;\n    border-Radius:5px;\n    mix-blend-mode: normal;\n    overflow: hidden;\n    border: 1px solid #c6c7cc;\n    overflow: hidden;\n\n}\nfieldset {\n    border: 0;\n    margin: 0;\n    padding: 0;\n  }\n\ninput{\n    border-Radius: 5px;\n    margin:0;\n}  \n\n.accountInfo {\n    padding: 20px 20px 0 20px;\n  }\n\n.accountInfo label {\n    color: black;\n    display: block;\n    font-weight: lighter;\n    margin-bottom: 70px;\n}  \n\n.accountInfo input {\n    background: #fff;\n    border: 1px solid #c6c7cc;\n    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);\n    color: #636466;\n    padding: 6px;\n    margin-top: 6px;\n    width: 100%;\n  }\n\n.accountAction .btn {\n    position: absolute;\n    background: #11BCD3;\n    border: 0;\n    color: #fff;\n    cursor: pointer;\n    font-weight: lighter;\n    left: 35px;\n    padding: 5px 93px;\n  }\n\n  .accountAction label {\n    position: absolute;\n    color: #7c7c80;\n    font-size: 12px;\n    float: left;\n    left:35px;\n    top: 270px;\n  }  \n\nbutton{    \n    position: center;\n    left:35px;\n    top:300px;\n    width: 228px;\n    height: 40px;    \n    background: #11BCD3;\n    border: 1px solid #11BCD3;\n    box-sizing: border-box;\n    border-radius: 8px;\n    color: #fff;\n    text-align: center;\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/Auth/Auth.css	(revision 55d74b53cc8b76f67181d159de52a6f1be889b33)
++++ client/src/Auth/Auth.css	(date 1589373296044)
+@@ -1,11 +1,12 @@
+-form{
++.classesAuth{
++    justify-content: center;
+     position: absolute;
+     width: 300px;
+     height: 399px;
+     left: 533px;
+     top: 100px;
+     background: #fff;
+-    box-Shadow: 2px 2px 2px rgba(0,0,0,.5);
++
+     padding: 15px;
+     border-Radius:5px;
+     mix-blend-mode: normal;
+Index: client/src/homePage/Report/Report.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.projName{\n    position: absolute;\n    left: 4%;\n    top: 7%;\n    font-size: 17px\n}\n.list1{\n    position: absolute;\n    left: 136%;\n    height:125%;\n    width: 290%;\n    top:2%;\n    font-size: 17px;\n}\n.Kurator{\n    position: absolute;\n    left: 4%;\n    top: 16%;\n    font-size: 17px;\n}\n.Kurator>.nameK{\n    position: absolute;\n    left: 310%;\n    top:9%;\n    width: 655%;\n    height: 130%;;\n    background-color:rgba(17, 188, 211, 0.4);\n    border-radius: 5px;\n}\n\n.ProjStart{\n    position: absolute;\n    left: 4%;\n    top: 27%;\n    font-size: 17px;\n}\n.proj-start{\n    position: absolute;\n    left: 340%;\n    top: 1%;\n    background: #FFFFFF;\n    border: 1px solid rgba(17, 188, 211, 0.81);\n    border-radius: 5px;\n}\n\n.ProjEnd{\n    position: absolute;\n    left: 36%;\n    top: 27%\n}\n\n.proj-end{\n    position: absolute;\n    left: 124%;\n    background: #FFFFFF;\n    border: 1px solid rgba(17, 188, 211, 0.81);\n    border-radius: 5px;\n}\n\n.UseTime{\n    position: absolute;\n    left: 4%;\n    top: 38%;\n}\n.time{\n    position: absolute;\n    left: 205%;\n    top: 1%;\n    background: #FFFFFF;\n    border: 1px solid rgba(17, 188, 211, 0.81);\n    border-radius: 5px;\n    height: 70%;\n    width: 200%;\n    text-align: center;\n}\n\n.Repr{\n    position: absolute;\n    left: 4%;\n    top: 49%;\n}\n\n.rep{\n    position: absolute;\n    left: 470%;\n    top: 1%;\n    background: #FFFFFF;\n    border: 1px solid rgba(17, 188, 211, 0.81);\n    border-radius: 5px;\n    height: 500%;\n    width: 950%;\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/homePage/Report/Report.css	(revision 55d74b53cc8b76f67181d159de52a6f1be889b33)
++++ client/src/homePage/Report/Report.css	(date 1589374138195)
+@@ -1,17 +1,3 @@
+-.projName{
+-    position: absolute;
+-    left: 4%;
+-    top: 7%;
+-    font-size: 17px
+-}
+-.list1{
+-    position: absolute;
+-    left: 136%;
+-    height:125%;
+-    width: 290%;
+-    top:2%;
+-    font-size: 17px;
+-}
+ .Kurator{
+     position: absolute;
+     left: 4%;

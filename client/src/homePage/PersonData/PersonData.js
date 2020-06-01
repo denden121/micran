@@ -1,7 +1,7 @@
 import React from 'react'
 import './PersonData.css'
 
-const PersonData =()=>{
+const PersonData =(props)=>{
     return(
         <div className="cont">
             <div className="birthDate">
@@ -9,10 +9,10 @@ const PersonData =()=>{
                 <div className="birth">
                 </div>
             </div>
-
             <div className="sex">
                 Пол
                 <div className="se">
+                    {props.data.sex}
                 </div>
             </div>
 
@@ -20,6 +20,7 @@ const PersonData =()=>{
                 Подразделение,
                 <br />Должность
                 <div className="dolzh">
+
                 </div>
             </div>
             <div className="stazh">
