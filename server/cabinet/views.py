@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from .models import Profile, Project, Report
 from django.contrib.auth.models import User
 from django.core import serializers
@@ -16,7 +16,7 @@ def logout_view(request):
     return HttpResponse("Success")
 
 
-@csrf_exempt
+@ensure_csrf_cookie
 def cabinet_view(request, user_id='default'):
     if user_id == 'default':
         if not request.user.is_authenticated:
