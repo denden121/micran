@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth from './Auth/Auth'
+import Auth from './Components/Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
-import PersArea from "./homePage/PersArea";
-import Report from "./homePage/Report/Report";
-import LookMain from "./homePage/lookReport/lookMain/lookMain";
+import PersArea from "./Components/homePage/PersArea";
+import Report from "./Components/homePage/Report/Report";
+import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
 
 class  App extends Component{
     state = {
@@ -91,9 +91,9 @@ class  App extends Component{
                <Switch>
                    <Route path='/' exact component = {funcAuth} />
                    <Route path='/cabinet' exact component={funcPersArea}/>
-                   <Route path ='/cabinet/report' exact component={funcReport}/>
-                   <Route path='/cabinet/look' exact component={LookMain}/>
-                   <Redirect to = '/temp'/>
+                   {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
+                   {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
+                   <Redirect to = '/cabinet'/>
                </Switch>
            </div >
         );
