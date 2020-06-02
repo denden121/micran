@@ -44,7 +44,7 @@ def cabinet_view(request, user_id='default'):
             return HttpResponse("Permission denied")
 
 
-@csrf_exempt
+@ensure_csrf_cookie
 def all_report_view(request, user_id='default'):
     if user_id == 'default':
         if request.user.is_authenticated:
