@@ -16,7 +16,6 @@ def logout_view(request):
     return HttpResponse("Success")
 
 
-@ensure_csrf_cookie
 def cabinet_view(request, user_id='default'):
     if user_id == 'default':
         if not request.user.is_authenticated:
