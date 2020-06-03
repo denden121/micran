@@ -21,16 +21,14 @@ def cabinet_view(request, user_id='default'):
             user = get_user_jwt(request)
             if user:
                 return redirect(str(user.id) + '/')
-            else:
-                return HttpResponse('Error')
+            return HttpResponse('Error')
     else:
         user = get_user_JWT(request)
         if user and (user.id == user_id or user.is_staff):
             profile = Profile.objects.filter(user=user)
             data = serializers.serialize('json', profile)
             return HttpResponse(data)
-        else:
-            return HttpResponse("Permission denied")
+        return HttpResponse("Permission denied")
 
 
 def all_report_view(request, user_id='default'):
