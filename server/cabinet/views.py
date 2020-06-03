@@ -5,7 +5,6 @@ from .models import Profile, Project, Report
 from django.contrib.auth.models import User
 from django.core import serializers
 from django.contrib.auth import authenticate, login
-from json import dumps
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
@@ -16,6 +15,7 @@ def get_user_jwt(request):
     return user
 
 
+@csrf_exempt
 def cabinet_view(request, user_id='default'):
     if user_id == 'default':
             user = get_user_jwt(request)
@@ -31,6 +31,7 @@ def cabinet_view(request, user_id='default'):
         return HttpResponse("Permission denied")
 
 
+@csrf_exempt
 def all_report_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
@@ -68,6 +69,7 @@ def all_report_view(request, user_id='default'):
         return HttpResponse("Authentication error")
 
 
+@csrf_exempt
 def report_view(request, report_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
@@ -107,6 +109,7 @@ def report_view(request, report_id, user_id='default'):
         return HttpResponse("Authentication error")
 
 
+@csrf_exempt
 def all_projects_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
@@ -142,6 +145,7 @@ def all_projects_view(request, user_id='default'):
         return HttpResponse("Authentication error")
 
 
+@csrf_exempt
 def project_view(request, project_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
