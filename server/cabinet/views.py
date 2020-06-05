@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from .models import Profile, Project, Report
 from django.contrib.auth.models import User
 from django.core import serializers
-from django.contrib.auth import authenticate, login
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
@@ -14,8 +13,12 @@ def get_user_jwt(request):
     user = JWTAuthentication().get_user(validated_token)
     return user
 
+# def get_access(access_lvl, action):
+#     if access_lvl >= num:
+        # do it
 
-@csrf_exempt
+
+# @csrf_exempt
 def cabinet_view(request, user_id='default'):
     if user_id == 'default':
             user = get_user_jwt(request)
