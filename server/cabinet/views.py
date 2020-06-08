@@ -5,6 +5,9 @@ from .models import Profile, Project, Report
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .forms import ProjectForm, ReportForm
+import simplejson as json
+
 
 
 def get_user_jwt(request):
@@ -55,38 +58,35 @@ def register_view(request):
 def all_report_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
+        profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
                 reports = Report.objects.filter(creator_id=user.id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
             if request.method == "POST":
-                # name = request.POST['name']
-                project = request.POST['project']
-                text = request.POST['text']
-                curator = request.POST['curator']
-                hour = request.POST['hour']
-                # project = Project.objects.get(name=project)
-                profile = Profile.objects.get(user=user)
-                # curator_profile = Profile.objects.get(user=curator)
-                if project:
-                    new_report = Report.objects.create(project=project, text=text, hour=hour, creator_id=profile,
-                                                       curator=curator)
-                    new_report.save()
+                form = ReportForm(request.POST)
+                if form.is_valid():
+                    report = form.save(commit=False)
+                    report.creator_id = profile
+                    report.save()
                     return HttpResponse("Success")
-                return HttpResponse("Something went wrong")
-        return HttpResponse("Authentication error")
-    else:
-        user = get_user_jwt(request)
-        if user:
-            if request.method == "GET":
-                if user_id != user.id and not user.is_staff:
-                    return HttpResponse("You don't have permissions")
-                reports = Report.objects.filter(creator_id=user_id)
-                data = serializers.serialize('json', reports)
-                return HttpResponse(data)
+                print(report.cleaned_data)
+                return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
-        return HttpResponse("Authentication error")
+    #
+    #     return HttpResponse("Authentication error")
+    # else:
+    #     user = get_user_jwt(request)
+    #     if user:
+    #         if request.method == "GET":
+    #             if user_id != user.id and not user.is_staff:
+    #                 return HttpResponse("You don't have permissions")
+    #             reports = Report.objects.filter(creator_id=user_id)
+    #             data = serializers.serialize('json', reports)
+    #             return HttpResponse(data)
+    #         return HttpResponse("Method not allowed")
+    #     return HttpResponse("Authentication error")
 
 
 @csrf_exempt
