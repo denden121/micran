@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from .models import Profile, Project, Report
@@ -15,24 +15,40 @@ def get_user_jwt(request):
 
 
 # def get_access(access_lvl, action):
+#     actions = ['create_user', 'make_reports', 'check_reports', 'check_others_users',
+#               'check_reports', 'create_projects', 'base_actions']
 #     if access_lvl >= num:
 # do it
 
 
-# @csrf_exempt
+@csrf_exempt
 def cabinet_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
-        if user:
-            return redirect(str(user.id) + '/')
-        return HttpResponse('Error')
+        profile = get_object_or_404(Profile, user=user)
+        print(profile)
+        return redirect('register/')
+        return redirect(str(user.id) + '/')
     else:
-        user = get_user_JWT(request)
+        user = get_user_jwt(request)
         if user and (user.id == user_id or user.is_staff):
             profile = Profile.objects.filter(user=user)
             data = serializers.serialize('json', profile)
             return HttpResponse(data)
         return HttpResponse("Permission denied")
+
+
+@csrf_exempt
+def register_view(request):
+    if request.method == 'POST':
+        user = get_user_jwt(request)
+        return HttpResponse('Success')
+        if user:
+            field = request.POST('field')
+            new_profile = Profile.objects.create(user=user, field=field)
+            new_profile.save()
+            return HttpResponse('Success')
+    return HttpResponse('Method not allowed')
 
 
 @csrf_exempt
