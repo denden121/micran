@@ -14,7 +14,7 @@ class ReportForm(forms.ModelForm):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = '__all__'
+        exclude = ['participants']
 
 
 # class ReportForm(forms.ModelForm):

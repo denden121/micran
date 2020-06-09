@@ -139,15 +139,13 @@ def all_projects_view(request, user_id='default'):
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
             if request.method == "POST":
-                name = request.POST['name']
-                tasks = request.POST['tasks']
-                participants = request.POST['users'].split()
+                form = ProjectForm(request.POST)
+                participants = request.POST['participants'].split()
                 participants = [(User.objects.get(username=participant)) for participant in participants]
                 profiles = [Profile.objects.get(user=participant) for participant in participants]
-                if profiles:
-                    new_project = Project.objects.create(name=name, tasks=tasks)
-                    new_project.save()
-                    [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
+                if profiles and form.is_valid():
+                    project = form.save()
+                    [project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
                     return HttpResponse("Success")
                 return HttpResponse("Something went wrong")
             return HttpResponse("Method not allowed")
