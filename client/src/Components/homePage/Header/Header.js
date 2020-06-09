@@ -1,8 +1,8 @@
 import React from 'react'
-import './NavPanel.css'
+import './Header.css'
 // import Logo from "../PersArea/micran.png";
 
-const NavPanel =(props)=>{
+const Header =(props)=>{
     return(
         <div>
             <div className="Logo">
@@ -23,4 +23,4 @@ const NavPanel =(props)=>{
 
     )
 }
-export default NavPanel
+export default Header

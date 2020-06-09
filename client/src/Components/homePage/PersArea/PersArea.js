@@ -1,6 +1,6 @@
 import React from 'react';
 import './PersArea.css'
-import NavPanel from '../NavPanel/NavPanel'
+import Header from '../Header/Header'
 import Navigation from '../Navigation/Navigation'
 import PersonData from '../PersonData/PersonData'
 //import Report from '../Report/report'
@@ -9,11 +9,11 @@ import PersonData from '../PersonData/PersonData'
 const PersArea =(props)=>{
     return(
         <div>
-            <NavPanel name={"Личный кабинет"}/>
+            <Header name={"Личный кабинет"}/>
             <div>
                 <Navigation/>
             </div>
-
+            
             <div>
                 <hr className="Header"/>
             </div>
