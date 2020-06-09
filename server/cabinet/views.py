@@ -5,7 +5,7 @@ from .models import Profile, Project, Report
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .forms import ProjectForm, ReportForm
+from .forms import ProjectForm, ReportForm, UserForm, ProfileForm
 import simplejson as json
 
 
@@ -45,11 +45,13 @@ def cabinet_view(request, user_id='default'):
 def register_view(request):
     if request.method == 'POST':
         user = get_user_jwt(request)
-        return HttpResponse('Success')
-        if user:
-            field = request.POST('field')
-            new_profile = Profile.objects.create(user=user, field=field)
-            new_profile.save()
+        form_user = UserForm(request.POST)
+        form_profile = ProfileForm(request.POST)
+        if form_user.is_valid() and form_profile.is_valid():
+            form_user.save()
+            profile = form_profile.save()
+            profile.user = user
+
             return HttpResponse('Success')
     return HttpResponse('Method not allowed')
 
