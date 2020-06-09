@@ -53,7 +53,7 @@ const Report=(props)=>{
                 </div>
 
                 <div>
-                    <button onClick={props.sendReport}>Отправить</button>
+                   {/* <button onClick={props.sendReport}>Отправить</button>*/}
                 </div>
             </div>
         </div>

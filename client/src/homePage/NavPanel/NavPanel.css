@@ -1,8 +1,4 @@
-img{
-    position: absolute;
-    width:15%;
-    top:1.5%;
-}
+
 
 .Panel>hr{
     position: absolute;
@@ -31,10 +27,6 @@ img{
     top: 30%;
     cursor: pointer;
 
-}
-.Panel>.Exit>.Ex:hover {
-    background-size: 100% 100%;
-    color: #27323A;
 }
 /*div{
     position: absolute;

@@ -12,7 +12,7 @@ const NavPanel =(props)=>{
 
                 {props.name}
                  <div className="Exit">
-                     <button className={"Ex"}>Выйти</button>
+                    
                  </div>
 
             </div>

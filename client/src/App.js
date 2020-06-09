@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth from './Auth/Auth'
+import Auth1 from './Auth1/Auth1'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./homePage/PersArea";
@@ -79,7 +79,7 @@ class  App extends Component{
             if (this.state.token !== '') {
                 return <Redirect to = '/cabinet'/>
             }else {
-                return <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin}
+                return <Auth1 authHandler = {this.authHandler} changeLogin = {this.changeLogin}
                              changePassword = {this.changePassword}/>;
             }
         };
