@@ -74,19 +74,19 @@ def all_report_view(request, user_id='default'):
                 print(report.cleaned_data)
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
-    #
-    #     return HttpResponse("Authentication error")
-    # else:
-    #     user = get_user_jwt(request)
-    #     if user:
-    #         if request.method == "GET":
-    #             if user_id != user.id and not user.is_staff:
-    #                 return HttpResponse("You don't have permissions")
-    #             reports = Report.objects.filter(creator_id=user_id)
-    #             data = serializers.serialize('json', reports)
-    #             return HttpResponse(data)
-    #         return HttpResponse("Method not allowed")
-    #     return HttpResponse("Authentication error")
+
+        return HttpResponse("Authentication error")
+    else:
+        user = get_user_jwt(request)
+        if user:
+            if request.method == "GET":
+                if user_id != user.id and not user.is_staff:
+                    return HttpResponse("You don't have permissions")
+                reports = Report.objects.filter(creator_id=user_id)
+                data = serializers.serialize('json', reports)
+                return HttpResponse(data)
+            return HttpResponse("Method not allowed")
+        return HttpResponse("Authentication error")
 
 
 @csrf_exempt
@@ -183,8 +183,8 @@ def project_view(request, project_id, user_id='default'):
                 if 'status' in request.POST:
                     status = request.POST['status']
                     new_project.update(is_done=status)
-                if 'users' in request.POST:
-                    participants = request.POST['users'].split()
+                if 'participants' in request.POST:
+                    participants = request.POST['participants'].split()
                     participants = [(User.objects.get(username=participant)) for participant in participants]
                     profiles = [Profile.objects.get(user=participant) for participant in participants]
                     if profiles:
