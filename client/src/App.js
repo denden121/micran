@@ -14,16 +14,19 @@ class  App extends Component{
     }
     //обработка кнопки для авторизации
     authHandler = async () =>{
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         let login = document.getElementById("input-login").value
         let password = document.getElementById("input-password").value
         console.log(login,password)
-        let formdata = new FormData();
-        formdata.append("username", login);
-        formdata.append("password", password);
+        let urlencoded = new URLSearchParams();
+        urlencoded.append("username", login);
+        urlencoded.append("password", password);
         let requestOptions = {
             method: 'POST',
-            body: formdata,
-            redirect: 'follow'
+            body: urlencoded,
+            redirect: 'follow',
+            headers:myHeaders
         };
         //проверка логина и пароля
         await fetch("http://127.0.0.1:8000/token/", requestOptions)
