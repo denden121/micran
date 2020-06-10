@@ -5,6 +5,9 @@ from .models import Profile, Project, Report
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .forms import ProjectForm, ReportForm, UserForm, ProfileForm
+import simplejson as json
+
 
 
 def get_user_jwt(request):
@@ -26,8 +29,6 @@ def cabinet_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
         profile = get_object_or_404(Profile, user=user)
-        print(profile)
-        return redirect('register/')
         return redirect(str(user.id) + '/')
     else:
         user = get_user_jwt(request)
@@ -40,14 +41,18 @@ def cabinet_view(request, user_id='default'):
 
 @csrf_exempt
 def register_view(request):
-    if request.method == 'POST':
-        user = get_user_jwt(request)
-        return HttpResponse('Success')
-        if user:
-            field = request.POST('field')
-            new_profile = Profile.objects.create(user=user, field=field)
-            new_profile.save()
-            return HttpResponse('Success')
+    user = get_user_jwt(request)
+    if not hasattr(user, 'profile'):
+        Profile.objects.create(user=user)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=user.profile)
+        print(form.errors)
+        if form.is_valid():
+            update = form.save(commit=False)
+            update.user = user
+            update.save()
+            return HttpResponse("Success")
+        return HttpResponse("Something went wrong")
     return HttpResponse('Method not allowed')
 
 
@@ -55,26 +60,23 @@ def register_view(request):
 def all_report_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
+        profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
                 reports = Report.objects.filter(creator_id=user.id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
             if request.method == "POST":
-                # name = request.POST['name']
-                project = request.POST['project']
-                text = request.POST['text']
-                curator = request.POST['curator']
-                hour = request.POST['hour']
-                # project = Project.objects.get(name=project)
-                profile = Profile.objects.get(user=user)
-                # curator_profile = Profile.objects.get(user=curator)
-                if project:
-                    new_report = Report.objects.create(project=project, text=text, hour=hour, creator_id=profile,
-                                                       curator=curator)
-                    new_report.save()
+                form = ReportForm(request.POST)
+                if form.is_valid():
+                    report = form.save(commit=False)
+                    report.creator_id = profile
+                    report.save()
                     return HttpResponse("Success")
-                return HttpResponse("Something went wrong")
+                print(report.cleaned_data)
+                return HttpResponse("Fail")
+            return HttpResponse("Method not allowed")
+
         return HttpResponse("Authentication error")
     else:
         user = get_user_jwt(request)
@@ -139,15 +141,13 @@ def all_projects_view(request, user_id='default'):
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
             if request.method == "POST":
-                name = request.POST['name']
-                tasks = request.POST['tasks']
-                participants = request.POST['users'].split()
+                form = ProjectForm(request.POST)
+                participants = request.POST['participants'].split()
                 participants = [(User.objects.get(username=participant)) for participant in participants]
                 profiles = [Profile.objects.get(user=participant) for participant in participants]
-                if profiles:
-                    new_project = Project.objects.create(name=name, tasks=tasks)
-                    new_project.save()
-                    [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
+                if profiles and form.is_valid():
+                    project = form.save()
+                    [project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
                     return HttpResponse("Success")
                 return HttpResponse("Something went wrong")
             return HttpResponse("Method not allowed")
@@ -185,8 +185,8 @@ def project_view(request, project_id, user_id='default'):
                 if 'status' in request.POST:
                     status = request.POST['status']
                     new_project.update(is_done=status)
-                if 'users' in request.POST:
-                    participants = request.POST['users'].split()
+                if 'participants' in request.POST:
+                    participants = request.POST['participants'].split()
                     participants = [(User.objects.get(username=participant)) for participant in participants]
                     profiles = [Profile.objects.get(user=participant) for participant in participants]
                     if profiles:
