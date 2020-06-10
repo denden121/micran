@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth1 from './Auth1/Auth1'
+import Auth from './Components/Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./Components/homePage/PersArea";
 import Report from "./Components/homePage/Report/Report";
 import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
-import Registration from "./ Registration/registration"
 
 class  App extends Component{
     state = {
@@ -15,11 +14,11 @@ class  App extends Component{
     }
     //обработка кнопки для авторизации
     authHandler = async () =>{
-        let login = document.getElementById("input-login").value
-        let password = document.getElementById("input-password").value
+        // let login = document.getElementById("input-login").value
+        // let password = document.getElementById("input-password").value
         let formdata = new FormData();
-        formdata.append("username", login);
-        formdata.append("password", password);
+        formdata.append("username", 'admin');
+        formdata.append("password", 'admin');
         let requestOptions = {
             method: 'POST',
             body: formdata,
@@ -73,32 +72,36 @@ class  App extends Component{
             .catch(error => console.log('error', error));
     }
     render() {
-         const funcPersArea = () =>{
-            return < PersArea date = {this.state.cabinet} />;
-        }
-        const funcAuth =()=> {
-            if (this.state.token !== '') {
-                return <Redirect to = '/cabinet'/>
-            }else {
-                return <Auth1 authHandler = {this.authHandler} changeLogin = {this.changeLogin}
-                             changePassword = {this.changePassword}/>;
-            }
-        };
-        const funcReport= () =>{
-            return <Report sendReport = {this.sendReport}/>
-        }
-        return (
-           <div className = 'App' >
-               <Switch>
-                   <Route path='/' exact component = {funcAuth} />
-                   <Route path='/cabinet' exact component={funcPersArea}/>
-                   {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
-                   {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
-                   <Redirect to = '/cabinet'/>
-                   
-               </Switch>
-           </div >
-        );
+        //  const funcPersArea = () =>{
+        //     return < PersArea date = {this.state.cabinet} />;
+        // }
+        // const funcAuth =()=> {
+        //     if (this.state.token !== '') {
+        //         return <Redirect to = '/cabinet'/>
+        //     }else {
+        //         return <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin}
+        //                      changePassword = {this.changePassword}/>;
+        //     }
+        // };
+        // const funcReport= () =>{
+        //     return <Report sendReport = {this.sendReport}/>
+        // }
+        // return (
+        //    <div className = 'App' >
+        //        <Switch>
+        //            <Route path='/' exact component = {funcAuth} />
+        //            <Route path='/cabinet' exact component={funcPersArea}/>
+        //            {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
+        //            {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
+        //            <Redirect to = '/cabinet'/>
+        //        </Switch>
+        //    </div >
+        // );
+        return(
+            <div>
+                <button onClick={authHandler}>Войти</button>
+            </div>
+        )
     }
 }
 
