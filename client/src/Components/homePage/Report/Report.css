@@ -1,0 +1,68 @@
+.projName{
+    position:absolute;
+    left: 4%;
+    top: 5%;
+}
+
+.name_project{
+    position: absolute;
+    left: 110%;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+}
+
+
+.Kurator{
+    position: absolute;
+    left: 4%;
+    top: 16%;
+    font-size: 17px;
+}
+.curator {
+    position: absolute;
+    left: 234%;
+    top: 13%;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+}
+
+.UseTime{
+    position: absolute;
+    left: 4%;
+    top: 25%;
+}
+.time{
+    position: absolute;
+    left: 153%;
+    top: 1%;
+    background: #FFFFFF;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+    height: 70%;
+    width: 200%;
+    text-align: center;
+}
+
+.Repr{
+    position: absolute;
+    left: 4%;
+    top: 37%;
+}
+
+.rep{
+    position: absolute;
+    left: 350%;
+    top: 1%;
+    background: #FFFFFF;
+    border: 1px solid rgba(17, 188, 211, 0.81);
+    border-radius: 5px;
+    height: 500%;
+    width: 950%;
+
+}
+
+/*button{
+    position: absolute;
+    left: 17%;
+    top:59%
+}*/
