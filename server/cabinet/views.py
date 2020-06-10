@@ -42,7 +42,7 @@ def cabinet_view(request, user_id='default'):
 @csrf_exempt
 def register_view(request):
     user = get_user_jwt(request)
-    if not user.profile:
+    if not hasattr(user, 'profile'):
         Profile.objects.create(user=user)
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=user.profile)
