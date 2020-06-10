@@ -71,15 +71,14 @@ def all_report_view(request, user_id='default'):
                 return HttpResponse(data)
             if request.method == "POST":
                 form = ReportForm(request.POST)
+                print(form.errors)
                 if form.is_valid():
                     report = form.save(commit=False)
                     report.creator_id = profile
                     report.save()
                     return HttpResponse("Success")
-                print(report.cleaned_data)
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
-
         return HttpResponse("Authentication error")
     else:
         user = get_user_jwt(request)
@@ -98,26 +97,15 @@ def all_report_view(request, user_id='default'):
 def report_view(request, report_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
+        report = Report.objects.get(creator_id_id=user.id, id=report_id)
         if user:
             if request.method == "GET":
-                report = Report.objects.filter(user=user.id, id=report_id)
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
             elif request.method == "POST":
-                new_report = Report.objects.filter(id=report_id)
-                # if 'name' in request.POST:
-                # name = request.POST['name']
-                # new_report.update(name = name)
-                if 'text' in request.POST:
-                    text = request.POST['text']
-                    new_report.update(text=text)
-                if 'hour' in request.POST:
-                    hour = request.POST['hour']
-                    new_report.update(hour=hour)
-                return HttpResponse("Success")
-            elif request.method == "DELETE":
-                report = Report.objects.get(user=user.id, id=report_id)
-                report.delete()
+                form = ReportForm(request.POST, request.FILES, instance=report)
+                if form.is_valid():
+                    update = form.save()
                 return HttpResponse("Success")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
@@ -174,30 +162,21 @@ def project_view(request, project_id, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET":
-                project = Project.objects.filter(participants=user.id, id=project_id)
+                project = Project.objects.filter(id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
             elif request.method == "POST":
-                new_project = Project.objects.filter(id=project_id)
-                if 'name' in request.POST:
-                    name = request.POST['name']
-                    new_project.update(name=name)
-                if 'tasks' in request.POST:
-                    tasks = request.POST['tasks']
-                    new_project.update(tasks=tasks)
-                if 'status' in request.POST:
-                    status = request.POST['status']
-                    new_project.update(is_done=status)
-                if 'participants' in request.POST:
+                project = Project.objects.get(id=project_id)
+                form = ProjectForm(request.POST, request.FILES, instance=project)
+                if form.is_valid():
+                    update = form.save(commit=False)
                     participants = request.POST['participants'].split()
                     participants = [(User.objects.get(username=participant)) for participant in participants]
                     profiles = [Profile.objects.get(user=participant) for participant in participants]
-                    if profiles:
-                        [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
-                return HttpResponse("Success")
-            elif request.method == "DELETE":
-                project = Project.objects.get(participants=request.user.id, id=project_id)
-                project.delete()
+                    if profiles and form.is_valid():
+                        project = form.save()
+                        [project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
+                        return HttpResponse("Success")
                 return HttpResponse("Success")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
