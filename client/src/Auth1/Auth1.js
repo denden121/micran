@@ -8,18 +8,18 @@ const Auth1 =(props)=>{
     return(
         
        <div className="container-fluid">
-           <form className="form-signin">
+           <div className="form-signin">
                
                <img src={picture} alt="" className="img-fluid"></img>
               
                
                 <div className="form-froup">
-                    <label>Имя пользователя</label>
+                    <label className="Label">Имя пользователя</label>
                         <input type="text" className="form-control form-control-lg" id="input-login"/>
                 </div>
 
                 <div className="form-froup">
-                    <label>Пароль</label>
+                    <label className="Label">Пароль</label>
                         <input type="password" className="form-control form-control-lg" id="input-password"/>
                         
                 </div>
@@ -32,10 +32,11 @@ const Auth1 =(props)=>{
                     
                 </div>
                 
-                <button type="submit" className="btn btn-lg btn-primary" >Войти</button>           
+                <button type="submit" className="btn btn-lg btn-primary">Войти</button>  
+
+               
                 
-                
-           </form>
+           </div>
        </div>
     )
 }
