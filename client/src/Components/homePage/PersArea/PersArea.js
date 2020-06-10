@@ -18,7 +18,7 @@ const PersArea =(props)=>{
                 <hr className="Header"/>
             </div>
             <div className="container">
-                <PersonData data = {props.date} />
+                <PersonData/>
             </div>
 
         </div>
