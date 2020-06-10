@@ -28,8 +28,11 @@ def get_user_jwt(request):
 def cabinet_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
-        profile = get_object_or_404(Profile, user=user)
-        return redirect(str(user.id) + '/')
+        if not hasattr(user, 'profile'):
+            return HttpResponse("Profile indefined")
+        profile = Profile.objects.filter(user=user)
+        data = serializers.serialize('json', profile)
+        return HttpResponse(data)
     else:
         user = get_user_jwt(request)
         if user and (user.id == user_id or user.is_staff):
