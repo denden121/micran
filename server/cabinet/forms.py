@@ -20,7 +20,7 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user']
+        exclude = ['user','lateness']
 
 
 class ProjectForm(forms.ModelForm):

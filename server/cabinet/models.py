@@ -12,15 +12,15 @@ class Group(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    sex = models.CharField(max_length=5, blank=False)
-    subdivision = models.CharField(max_length=30, blank=False)
-    birth_date = models.DateField(null=True, blank=False)
-    position = models.CharField(max_length=30, blank=False)
+    sex = models.CharField(max_length=5, blank=True)
+    subdivision = models.CharField(max_length=30, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    position = models.CharField(max_length=30, blank=True)
     experience = models.FloatField(blank=False, default='0.0')
-    shift = models.CharField(max_length=30, blank=False)
-    part_time_job = models.CharField(max_length=30, blank=False)
-    lateness = models.CharField(max_length=30, blank=False)
-    group = models.ForeignKey('Group', on_delete=models.PROTECT, blank=True, default='None')
+    shift = models.CharField(max_length=30, blank=True)
+    part_time_job = models.CharField(max_length=30, blank=True)
+    lateness = models.CharField(max_length=30, blank=True)
+    # group = models.ForeignKey('Group', on_delete=models.PROTECT, blank=True, default='None')
 
     def __str__(self):
         return self.user.username

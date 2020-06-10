@@ -29,8 +29,6 @@ def cabinet_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
         profile = get_object_or_404(Profile, user=user)
-        print(profile)
-        return redirect('register/')
         return redirect(str(user.id) + '/')
     else:
         user = get_user_jwt(request)
@@ -43,16 +41,18 @@ def cabinet_view(request, user_id='default'):
 
 @csrf_exempt
 def register_view(request):
-    if request.method == 'POST':
-        user = get_user_jwt(request)
-        form_user = UserForm(request.POST)
-        form_profile = ProfileForm(request.POST)
-        if form_user.is_valid() and form_profile.is_valid():
-            form_user.save()
-            profile = form_profile.save()
-            profile.user = user
-
-            return HttpResponse('Success')
+    user = get_user_jwt(request)
+    if not user.profile:
+        Profile.objects.create(user=user)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=user.profile)
+        print(form.errors)
+        if form.is_valid():
+            update = form.save(commit=False)
+            update.user = user
+            update.save()
+            return HttpResponse("Success")
+        return HttpResponse("Something went wrong")
     return HttpResponse('Method not allowed')
 
 
