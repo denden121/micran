@@ -14,7 +14,7 @@ class ReportForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['first_name', 'last_name']
 
 
 class ProfileForm(forms.ModelForm):

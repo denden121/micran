@@ -54,6 +54,10 @@ def register_view(request):
             update = form.save(commit=False)
             update.user = user
             update.save()
+        form = UserForm(request.POST, request.FILES, instance=user)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
             return HttpResponse("Success")
         return HttpResponse("Something went wrong")
     return HttpResponse('Method not allowed')
