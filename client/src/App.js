@@ -35,9 +35,9 @@ class  App extends Component{
             .catch(error => this.setState({token:''}));
         console.log(this.state.token)
         localStorage.setItem('token',this.state.token)
-        // if(this.state.token ===undefined) {
-        //     alert('incorrect')
-        // }
+        if(this.state.token ===undefined) {
+            alert('incorrect')
+        }
         // let myHeaders = new Headers();
         // myHeaders.append("Authorization",this.state.token);
         // let requestOptions1 = {
@@ -79,10 +79,15 @@ class  App extends Component{
     }*/
     render() {
          const funcPersArea = () =>{
-            return < PersArea date = {this.state.cabinet} />;
+             if(this.state.token !== ''&& this.state.token !== undefined) {
+                 return < PersArea date={this.state.cabinet}/>;
+             }
+             else{
+                 return <Redirect to = '/'/>
+             }
         }
         const funcAuth =()=> {
-            if (this.state.token !== '') {
+            if (this.state.token !== ''&& this.state.token !== undefined) {
                 return <Redirect to = '/cabinet'/>
             }else {
                 return <Auth1 authHandler = {this.authHandler}/>;
