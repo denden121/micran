@@ -1,0 +1,66 @@
+Index: client/src/Components/homePage/PersArea/PersArea.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport './PersArea.css'\r\nimport Header from '../Header/Header'\r\nimport Navigation from '../Navigation/Navigation'\r\nimport PersonData from '../PersonData/PersonData'\r\n//import Report from '../Report/report'\r\n\r\n\r\nconst PersArea =(props)=>{\r\n    return(\r\n        <div>\r\n            <Header name={\"Личный кабинет\"}/>\r\n            <div>\r\n                <Navigation/>\r\n            </div>\r\n            \r\n            <div>\r\n                <hr className=\"Header\"/>\r\n            </div>\r\n            <div className=\"container\">\r\n                <PersonData data = {props.date} />\r\n            </div>\r\n\r\n        </div>\r\n    )\r\n}\r\n\r\nexport default PersArea;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/Components/homePage/PersArea/PersArea.js	(revision f76e2148bc574b5776b6f22f4d449952b8f0b05a)
++++ client/src/Components/homePage/PersArea/PersArea.js	(date 1591172787708)
+@@ -6,23 +6,31 @@
+ //import Report from '../Report/report'
+ 
+ 
+-const PersArea =(props)=>{
+-    return(
+-        <div>
+-            <Header name={"Личный кабинет"}/>
+-            <div>
+-                <Navigation/>
+-            </div>
+-            
+-            <div>
+-                <hr className="Header"/>
+-            </div>
+-            <div className="container">
+-                <PersonData data = {props.date} />
+-            </div>
++class PersArea extends React.Component{
++    constructor(props) {
++        super(props);
++        this.state = {
++            token: this.props.token
++        }
++    }
++    render() {
++        return (
++            <div>
++                <Header name={"Личный кабинет"}/>
++                <div>
++                    <Navigation/>
++                </div>
++
++                <div>
++                    <hr className="Header"/>
++                </div>
++                <div className="container">
++                    <PersonData data={props.date}/>
++                </div>
+ 
+-        </div>
+-    )
++            </div>
++        )
++    }
+ }
+ 
+ export default PersArea;
+\ No newline at end of file
+Index: client/src/Components/homePage/PersArea/index.js
+===================================================================
+--- client/src/Components/homePage/PersArea/index.js	(revision f76e2148bc574b5776b6f22f4d449952b8f0b05a)
++++ client/src/Components/homePage/PersArea/index.js	(revision f76e2148bc574b5776b6f22f4d449952b8f0b05a)
+@@ -1,2 +0,0 @@
+-import PersArea from "./PersArea";
+-export default PersArea;
+\ No newline at end of file

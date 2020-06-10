@@ -1,0 +1,268 @@
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { Component } from 'react';\r\nimport './App.css';\r\nimport Auth from './Components/Auth/Auth'\r\nimport {Route} from 'react-router-dom'\r\nimport {Redirect,Switch} from 'react-router-dom'\r\nimport PersArea from \"./Components/homePage/PersArea\";\r\nimport Report from \"./Components/homePage/Report/Report\";\r\nimport LookMain from \"./Components/homePage/lookReport/lookMain/lookMain\";\r\n\r\nclass  App extends Component{\r\n    state = {\r\n        token:'',\r\n        cabinet:{}\r\n    }\r\n    //обработка кнопки для авторизации\r\n    authHandler = async () =>{\r\n        // let login = document.getElementById(\"input-login\").value\r\n        // let password = document.getElementById(\"input-password\").value\r\n        let formdata = new FormData();\r\n        formdata.append(\"username\", 'admin');\r\n        formdata.append(\"password\", 'admin');\r\n        let requestOptions = {\r\n            method: 'POST',\r\n            body: formdata,\r\n            redirect: 'follow'\r\n        };\r\n        //проверка логина и пароля\r\n        await fetch(\"http://127.0.0.1:8000/token/\", requestOptions)\r\n            .then(response => response.json())\r\n            .then(result =>console.log(this.setState({token:result.access})))\r\n            .catch(error => this.setState({token:''}));\r\n        if(this.state.token ===undefined) {\r\n            alert('incorrect')\r\n        }\r\n        let myHeaders = new Headers();\r\n        myHeaders.append(\"Authorization\",this.state.token);\r\n        let requestOptions1 = {\r\n            method: 'POST',\r\n            headers: myHeaders,\r\n            redirect: 'follow'\r\n        };\r\n        //запрос на получение данных для личного кабинета\r\n        fetch(\"http://127.0.0.1:8000/cabinet/1/\", requestOptions1)\r\n            .then(response =>response.json())\r\n            .then(result => this.setState({cabinet:result[0].fields}))\r\n            .catch(error => console.log('error', error));\r\n    }\r\n    sendReport=()=>{\r\n        const hours = document.getElementById(\"count_hours\").value\r\n        const report = document.getElementById(\"report_text\").value\r\n        const nameProject = document.getElementById(\"name_project_text\").value\r\n        const curator = document.getElementById(\"curator_name\").value\r\n        let myHeaders = new Headers();\r\n        myHeaders.append(\"Authorization\", this.state.token);\r\n        // myHeaders.append(\"Content-Type\", \"application/x-www-form-urlencoded\");\r\n        let urlencoded = new URLSearchParams();\r\n        urlencoded.append(\"project\", nameProject);\r\n        urlencoded.append(\"text\", report);\r\n        urlencoded.append(\"curator\",curator );\r\n        urlencoded.append(\"hour\", hours);\r\n\r\n        const requestOptions = {\r\n            method: 'POST',\r\n            headers: myHeaders,\r\n            body: urlencoded,\r\n            redirect: 'follow'\r\n        };\r\n\r\n        fetch(\"http://127.0.0.1:8000/cabinet/reports/\", requestOptions)\r\n            .then(response => response.text())\r\n            .then(result => console.log(result))\r\n            .catch(error => console.log('error', error));\r\n    }\r\n    render() {\r\n        //  const funcPersArea = () =>{\r\n        //     return < PersArea date = {this.state.cabinet} />;\r\n        // }\r\n        // const funcAuth =()=> {\r\n        //     if (this.state.token !== '') {\r\n        //         return <Redirect to = '/cabinet'/>\r\n        //     }else {\r\n        //         return <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin}\r\n        //                      changePassword = {this.changePassword}/>;\r\n        //     }\r\n        // };\r\n        // const funcReport= () =>{\r\n        //     return <Report sendReport = {this.sendReport}/>\r\n        // }\r\n        // return (\r\n        //    <div className = 'App' >\r\n        //        <Switch>\r\n        //            <Route path='/' exact component = {funcAuth} />\r\n        //            <Route path='/cabinet' exact component={funcPersArea}/>\r\n        //            {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}\r\n        //            {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}\r\n        //            <Redirect to = '/cabinet'/>\r\n        //        </Switch>\r\n        //    </div >\r\n        // );\r\n        return(\r\n            <div>\r\n                <button onClick={authHandler}>Войти</button>\r\n            </div>\r\n        )\r\n    }\r\n}\r\n\r\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/App.js	(revision 7097d2aae57a1403c5a7f65e61dd4d6361abebc6)
++++ client/src/App.js	(date 1591253624978)
+@@ -8,17 +8,19 @@
+ import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
+ 
+ class  App extends Component{
+-    state = {
+-        token:'',
+-        cabinet:{}
++    constructor(props) {
++        super(props);
++        this.state = {
++            token: null
++        }
+     }
+     //обработка кнопки для авторизации
+     authHandler = async () =>{
+-        // let login = document.getElementById("input-login").value
+-        // let password = document.getElementById("input-password").value
++        let login = document.getElementById("input-login").value
++        let password = document.getElementById("input-password").value
+         let formdata = new FormData();
+-        formdata.append("username", 'admin');
+-        formdata.append("password", 'admin');
++        formdata.append("username", login);
++        formdata.append("password", password);
+         let requestOptions = {
+             method: 'POST',
+             body: formdata,
+@@ -29,79 +31,73 @@
+             .then(response => response.json())
+             .then(result =>console.log(this.setState({token:result.access})))
+             .catch(error => this.setState({token:''}));
+-        if(this.state.token ===undefined) {
++        if(this.state.token ===null  || this.state.token ==='') {
+             alert('incorrect')
+         }
+-        let myHeaders = new Headers();
+-        myHeaders.append("Authorization",this.state.token);
+-        let requestOptions1 = {
+-            method: 'POST',
+-            headers: myHeaders,
+-            redirect: 'follow'
+-        };
++        // let myHeaders = new Headers();
++        // myHeaders.append("Authorization",this.state.token);
++        // let requestOptions1 = {
++        //     method: 'POST',
++        //     headers: myHeaders,
++        //     redirect: 'follow'
++        // };
+         //запрос на получение данных для личного кабинета
+-        fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
+-            .then(response =>response.json())
+-            .then(result => this.setState({cabinet:result[0].fields}))
+-            .catch(error => console.log('error', error));
++        // fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
++        //     .then(response =>response.json())
++        //     .then(result => this.setState({cabinet:result[0].fields}))
++        //     .catch(error => console.log('error', error));
+     }
+-    sendReport=()=>{
+-        const hours = document.getElementById("count_hours").value
+-        const report = document.getElementById("report_text").value
+-        const nameProject = document.getElementById("name_project_text").value
+-        const curator = document.getElementById("curator_name").value
+-        let myHeaders = new Headers();
+-        myHeaders.append("Authorization", this.state.token);
+-        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+-        let urlencoded = new URLSearchParams();
+-        urlencoded.append("project", nameProject);
+-        urlencoded.append("text", report);
+-        urlencoded.append("curator",curator );
+-        urlencoded.append("hour", hours);
+-
+-        const requestOptions = {
+-            method: 'POST',
+-            headers: myHeaders,
+-            body: urlencoded,
+-            redirect: 'follow'
+-        };
+-
+-        fetch("http://127.0.0.1:8000/cabinet/reports/", requestOptions)
+-            .then(response => response.text())
+-            .then(result => console.log(result))
+-            .catch(error => console.log('error', error));
+-    }
+-    render() {
+-        //  const funcPersArea = () =>{
+-        //     return < PersArea date = {this.state.cabinet} />;
+-        // }
+-        // const funcAuth =()=> {
+-        //     if (this.state.token !== '') {
+-        //         return <Redirect to = '/cabinet'/>
+-        //     }else {
+-        //         return <Auth authHandler = {this.authHandler} changeLogin = {this.changeLogin}
+-        //                      changePassword = {this.changePassword}/>;
+-        //     }
+-        // };
+-        // const funcReport= () =>{
+-        //     return <Report sendReport = {this.sendReport}/>
+-        // }
+-        // return (
+-        //    <div className = 'App' >
+-        //        <Switch>
+-        //            <Route path='/' exact component = {funcAuth} />
+-        //            <Route path='/cabinet' exact component={funcPersArea}/>
+-        //            {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
+-        //            {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
+-        //            <Redirect to = '/cabinet'/>
+-        //        </Switch>
+-        //    </div >
+-        // );
+-        return(
+-            <div>
+-                <button onClick={authHandler}>Войти</button>
+-            </div>
+-        )
++    // sendReport=()=>{
++    //     const hours = document.getElementById("count_hours").value
++    //     const report = document.getElementById("report_text").value
++    //     const nameProject = document.getElementById("name_project_text").value
++    //     const curator = document.getElementById("curator_name").value
++    //     let myHeaders = new Headers();
++    //     myHeaders.append("Authorization", this.state.token);
++    //     // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
++    //     let urlencoded = new URLSearchParams();
++    //     urlencoded.append("project", nameProject);
++    //     urlencoded.append("text", report);
++    //     urlencoded.append("curator",curator );
++    //     urlencoded.append("hour", hours);
++    //
++    //     const requestOptions = {
++    //         method: 'POST',
++    //         headers: myHeaders,
++    //         body: urlencoded,
++    //         redirect: 'follow'
++    //     };
++    //
++    //     fetch("http://127.0.0.1:8000/cabinet/reports/", requestOptions)
++    //         .then(response => response.text())
++    //         .then(result => console.log(result))
++    //         .catch(error => console.log('error', error));
++    // }
++    render() {
++         const funcPersArea = () =>{
++            return <PersArea token = {this.state.token}/>;
++        }
++        const funcAuth = () => {
++            if (this.state.token !== '') {
++                return <Redirect to = '/cabinet'/>
++            }else {
++                return <Auth authHandler = {this.authHandler}/>;
++            }
++        };
++        const funcReport= () =>{
++            return <Report sendReport = {this.sendReport}/>
++        }
++        return (
++           <div className = 'App' >
++                <Switch>
++                    <Route path='/' exact component = {funcAuth} />
++                    <Route path='/cabinet' exact component={funcPersArea}/>
++                    {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
++                    {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
++                    {/*<Redirect to = '/cabinet'/>*/}
++                </Switch>
++            </div >
++        );
+     }
+ }
+ 
+Index: client/src/Components/homePage/PersArea/PersArea.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react';\r\nimport './PersArea.css'\r\nimport Header from '../Header/Header'\r\nimport Navigation from '../Navigation/Navigation'\r\nimport PersonData from '../PersonData/PersonData'\r\n//import Report from '../Report/report'\r\n\r\n\r\nconst PersArea =(props)=>{\r\n    return(\r\n        <div>\r\n            <Header name={\"Личный кабинет\"}/>\r\n            <div>\r\n                <Navigation/>\r\n            </div>\r\n            \r\n            <div>\r\n                <hr className=\"Header\"/>\r\n            </div>\r\n            <div className=\"container\">\r\n                <PersonData data = {props.date} />\r\n            </div>\r\n\r\n        </div>\r\n    )\r\n}\r\n\r\nexport default PersArea;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/Components/homePage/PersArea/PersArea.js	(revision 7097d2aae57a1403c5a7f65e61dd4d6361abebc6)
++++ client/src/Components/homePage/PersArea/PersArea.js	(date 1591253846814)
+@@ -3,26 +3,34 @@
+ import Header from '../Header/Header'
+ import Navigation from '../Navigation/Navigation'
+ import PersonData from '../PersonData/PersonData'
+-//import Report from '../Report/report'
++import Report from '../Report/report'
+ 
+ 
+-const PersArea =(props)=>{
+-    return(
+-        <div>
+-            <Header name={"Личный кабинет"}/>
+-            <div>
+-                <Navigation/>
+-            </div>
+-            
+-            <div>
+-                <hr className="Header"/>
+-            </div>
+-            <div className="container">
+-                <PersonData data = {props.date} />
+-            </div>
+-
+-        </div>
+-    )
++class PersArea extends React.Component{
++    constructor(props) {
++        super(props);
++        this.state = {
++            token: this.props.token
++        }
++        console.log(this.state.token)
++    }
++    render() {
++        return (
++            <div>
++                <Header name={"Личный кабинет"}/>
++                <div>
++                    <Navigation/>
++                </div>
++
++                <div>
++                    <hr className="Header"/>
++                </div>
++                <div className="container">
++                    <PersonData/>
++                </div>
++            </div>
++        )
++    }
+ }
+ 
+ export default PersArea;
+\ No newline at end of file
+Index: client/src/Components/homePage/PersArea/index.js
+===================================================================
+--- client/src/Components/homePage/PersArea/index.js	(revision 7097d2aae57a1403c5a7f65e61dd4d6361abebc6)
++++ client/src/Components/homePage/PersArea/index.js	(revision 7097d2aae57a1403c5a7f65e61dd4d6361abebc6)
+@@ -1,2 +0,0 @@
+-import PersArea from "./PersArea";
+-export default PersArea;
+\ No newline at end of file
+Index: server/cabinet/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.urls import path, include\r\n\r\nfrom . import views\r\n\r\nurlpatterns = [\r\n    path('cabinet/', views.cabinet_view),\r\n    path('cabinet/<int:user_id>/', views.cabinet_view),\r\n\r\n    # reports\r\n    path('cabinet/<int:user_id>/reports/', views.all_report_view),\r\n    path('cabinet/reports/', views.all_report_view),\r\n    path('cabinet/<int:user_id>/report/<int:report_id>', views.report_view),\r\n    path('cabinet/report/<int:report_id>', views.report_view),\r\n    # projects\r\n    path('cabinet/<int:user_id>/projects/', views.all_projects_view),\r\n    path('cabinet/projects/', views.all_projects_view),\r\n    path('cabinet/<int:user_id>/project/<int:project_id>', views.project_view),\r\n    path('cabinet/project/<int:project_id>', views.project_view),\r\n]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- server/cabinet/urls.py	(revision 7097d2aae57a1403c5a7f65e61dd4d6361abebc6)
++++ server/cabinet/urls.py	(date 1591251760035)
+@@ -5,7 +5,7 @@
+ urlpatterns = [
+     path('cabinet/', views.cabinet_view),
+     path('cabinet/<int:user_id>/', views.cabinet_view),
+-
++    path('yura_petux/',views.yura_petux),
+     # reports
+     path('cabinet/<int:user_id>/reports/', views.all_report_view),
+     path('cabinet/reports/', views.all_report_view),
