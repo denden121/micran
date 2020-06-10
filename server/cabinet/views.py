@@ -45,7 +45,7 @@ def cabinet_view(request, user_id='default'):
 
 
 @csrf_exempt
-def all_report_view(request, user_id='default'):
+def all_report_view(regiquest, user_id='default'):
     if user_id == 'default':
         if request.user.is_authenticated:
             if request.method == "GET":
