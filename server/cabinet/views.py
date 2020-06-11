@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from .models import Profile, Project, Report
+from .models import Profile, Project, Report, Action
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -17,19 +17,20 @@ def get_user_jwt(request):
     return user
 
 
-# def get_access(access_lvl, action):
-#     actions = ['create_user', 'make_reports', 'check_reports', 'check_others_users',
-#               'check_reports', 'create_projects', 'base_actions']
-#     if access_lvl >= num:
-# do it
+def get_access(group, action, user):
+    actions = Action.objects.get(group = user.profile.group, action=action)
+    if actions:
+        return True
+    return False
 
 
 @csrf_exempt
 def cabinet_view(request, user_id='default'):
+    user = get_user_jwt(request)
     if user_id == 'default':
         user = get_user_jwt(request)
         if not hasattr(user, 'profile'):
-            return HttpResponse("Profile indefined")
+            return HttpResponse("Profile undefined")
         profile = Profile.objects.filter(user=user)
         data = serializers.serialize('json', profile)
         return HttpResponse(data)
@@ -64,7 +65,7 @@ def register_view(request):
 
 
 @csrf_exempt
-def all_report_view(regiquest, user_id='default'):
+def all_report_view(request, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
         profile = Profile.objects.get(user=user)
@@ -73,7 +74,7 @@ def all_report_view(regiquest, user_id='default'):
                 reports = Report.objects.filter(creator_id=user.id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
-            if request.method == "POST":
+            if request.method == "POST" and get_access(user.profile.group, 'Make_reports', user):
                 form = ReportForm(request.POST)
                 print(form.errors)
                 if form.is_valid():
@@ -88,7 +89,7 @@ def all_report_view(regiquest, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET":
-                if user_id != user.id and not user.is_staff:
+                if user_id != user.id and not get_access(user.profile.group, 'Check_reports', user):
                     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
@@ -106,7 +107,7 @@ def report_view(request, report_id, user_id='default'):
             if request.method == "GET":
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
-            elif request.method == "POST":
+            elif request.method == "POST" and get_access(user.profile.group, 'Make_projects', user):
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 if form.is_valid():
                     update = form.save()
@@ -116,13 +117,11 @@ def report_view(request, report_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if user_id != user and not user.is_staff:
-                return HttpResponse("You don't have permissions")
-            if request.method == "GET":
+            if request.method == "GET" and get_access(user.profile.group, 'Check_projects', user):
                 report = Report.objects.filter(user=user_id, id=report_id)
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
-            return HttpResponse("Method not allowed")
+            return HttpResponse("Access error")
         return HttpResponse("Authentication error")
 
 
@@ -135,7 +134,7 @@ def all_projects_view(request, user_id='default'):
                 projects = Project.objects.filter(participants=user.id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
-            if request.method == "POST":
+            if request.method == "POST" and get_access(user.profile.group, 'Make_projects', user):
                 form = ProjectForm(request.POST)
                 participants = request.POST['participants'].split()
                 participants = [(User.objects.get(username=participant)) for participant in participants]
@@ -150,9 +149,7 @@ def all_projects_view(request, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET":
-                if user_id != user.id and not user.is_staff:
-                    return HttpResponse("You don't have permissions")
+            if request.method == "GET" and get_access(user.profile.group, 'Check_projects', user):
                 projects = Project.objects.filter(participants=user_id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
@@ -169,7 +166,7 @@ def project_view(request, project_id, user_id='default'):
                 project = Project.objects.filter(id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
-            elif request.method == "POST":
+            elif request.method == "POST" and get_access(user.profile.group, 'Make_projects', user):
                 project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
@@ -187,9 +184,7 @@ def project_view(request, project_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if user_id != user.id and not user.is_staff:
-                return HttpResponse("You don't have permissions")
-            if request.method == "GET":
+            if request.method == "GET" and get_access(user.profile.group, 'Check_projects', user):
                 project = Project.objects.filter(participants=user_id, id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
