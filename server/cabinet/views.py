@@ -17,9 +17,9 @@ def get_user_jwt(request):
     return user
 
 
-def get_access(group, action, user):
-    actions = Action.objects.get(group = user.profile.group, action=action)
-    if actions:
+def get_access(action, user):
+    action = Action.objects.get(group = user.profile.group, action=action)
+    if action:
         return True
     return False
 
@@ -27,6 +27,7 @@ def get_access(group, action, user):
 @csrf_exempt
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
+    print(get_access('Make_reports', user))
     if user_id == 'default':
         user = get_user_jwt(request)
         if not hasattr(user, 'profile'):
@@ -74,7 +75,7 @@ def all_report_view(request, user_id='default'):
                 reports = Report.objects.filter(creator_id=user.id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
-            if request.method == "POST" and get_access(user.profile.group, 'Make_reports', user):
+            if request.method == "POST" and get_access('Make_reports', user):
                 form = ReportForm(request.POST)
                 print(form.errors)
                 if form.is_valid():
@@ -89,7 +90,7 @@ def all_report_view(request, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET":
-                if user_id != user.id and not get_access(user.profile.group, 'Check_reports', user):
+                if user_id != user.id and not get_access('Check_reports', user):
                     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
@@ -107,7 +108,7 @@ def report_view(request, report_id, user_id='default'):
             if request.method == "GET":
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
-            elif request.method == "POST" and get_access(user.profile.group, 'Make_projects', user):
+            elif request.method == "POST" and get_access('Make_projects', user):
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 if form.is_valid():
                     update = form.save()
@@ -117,7 +118,7 @@ def report_view(request, report_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access(user.profile.group, 'Check_projects', user):
+            if request.method == "GET" and get_access('Check_projects', user):
                 report = Report.objects.filter(user=user_id, id=report_id)
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
@@ -134,7 +135,7 @@ def all_projects_view(request, user_id='default'):
                 projects = Project.objects.filter(participants=user.id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
-            if request.method == "POST" and get_access(user.profile.group, 'Make_projects', user):
+            if request.method == "POST" and get_access('Make_projects', user):
                 form = ProjectForm(request.POST)
                 participants = request.POST['participants'].split()
                 participants = [(User.objects.get(username=participant)) for participant in participants]
@@ -149,7 +150,7 @@ def all_projects_view(request, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access(user.profile.group, 'Check_projects', user):
+            if request.method == "GET" and get_access('Check_projects', user):
                 projects = Project.objects.filter(participants=user_id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
@@ -166,7 +167,7 @@ def project_view(request, project_id, user_id='default'):
                 project = Project.objects.filter(id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
-            elif request.method == "POST" and get_access(user.profile.group, 'Make_projects', user):
+            elif request.method == "POST" and get_access('Make_projects', user):
                 project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
@@ -184,7 +185,7 @@ def project_view(request, project_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access(user.profile.group, 'Check_projects', user):
+            if request.method == "GET" and get_access('Check_projects', user):
                 project = Project.objects.filter(participants=user_id, id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
