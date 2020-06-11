@@ -1,52 +1,57 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth1 from './Auth1/Auth1'
+import Auth1 from "./Auth1/Auth1";
+// import Auth from './Components/Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./Components/homePage/PersArea";
-import Report from "./Components/homePage/Report/Report";
-import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
-import Registration from "./ Registration/registration"
+// import Report from "./Components/homePage/Report/Report";
+// import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
 
 class  App extends Component{
     state = {
         token:'',
-        cabinet:{}
     }
     //обработка кнопки для авторизации
     authHandler = async () =>{
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         let login = document.getElementById("input-login").value
         let password = document.getElementById("input-password").value
-        let formdata = new FormData();
-        formdata.append("username", login);
-        formdata.append("password", password);
+        console.log(login,password)
+        let urlencoded = new URLSearchParams();
+        urlencoded.append("username", login);
+        urlencoded.append("password", password);
         let requestOptions = {
             method: 'POST',
-            body: formdata,
-            redirect: 'follow'
+            body: urlencoded,
+            redirect: 'follow',
+            headers:myHeaders
         };
         //проверка логина и пароля
         await fetch("http://127.0.0.1:8000/token/", requestOptions)
             .then(response => response.json())
             .then(result =>console.log(this.setState({token:result.access})))
             .catch(error => this.setState({token:''}));
+        console.log(this.state.token)
+        localStorage.setItem('token',this.state.token)
         if(this.state.token ===undefined) {
             alert('incorrect')
         }
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization",this.state.token);
-        let requestOptions1 = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-        //запрос на получение данных для личного кабинета
-        fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
-            .then(response =>response.json())
-            .then(result => this.setState({cabinet:result[0].fields}))
-            .catch(error => console.log('error', error));
+        // let myHeaders = new Headers();
+        // myHeaders.append("Authorization",this.state.token);
+        // let requestOptions1 = {
+        //     method: 'POST',
+        //     headers: myHeaders,
+        //     redirect: 'follow'
+        // };
+        // //запрос на получение данных для личного кабинета
+        // fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
+        //     .then(response =>response.json())
+        //     .then(result => this.setState({cabinet:result[0].fields}))
+        //     .catch(error => console.log('error', error));
     }
-    sendReport=()=>{
+    /*sendReport=()=>{
         const hours = document.getElementById("count_hours").value
         const report = document.getElementById("report_text").value
         const nameProject = document.getElementById("name_project_text").value
@@ -71,22 +76,26 @@ class  App extends Component{
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-    }
+    }*/
     render() {
          const funcPersArea = () =>{
-            return < PersArea date = {this.state.cabinet} />;
+             if(this.state.token !== ''&& this.state.token !== undefined) {
+                 return < PersArea date={this.state.cabinet}/>;
+             }
+             else{
+                 return <Redirect to = '/'/>
+             }
         }
         const funcAuth =()=> {
-            if (this.state.token !== '') {
+            if (this.state.token !== ''&& this.state.token !== undefined) {
                 return <Redirect to = '/cabinet'/>
             }else {
-                return <Auth1 authHandler = {this.authHandler} changeLogin = {this.changeLogin}
-                             changePassword = {this.changePassword}/>;
+                return <Auth1 authHandler = {this.authHandler}/>;
             }
         };
-        const funcReport= () =>{
-            return <Report sendReport = {this.sendReport}/>
-        }
+        // const funcReport= () =>{
+        //     return <Report sendReport = {this.sendReport}/>
+        // }
         return (
            <div className = 'App' >
                {/* <Switch>*/}
@@ -103,6 +112,7 @@ class  App extends Component{
                 </Switch>
            </div >
         );
+
     }
 }
 

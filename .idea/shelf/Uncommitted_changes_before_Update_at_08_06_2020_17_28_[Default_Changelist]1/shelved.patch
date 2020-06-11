@@ -1,0 +1,94 @@
+Index: server/cabinet/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.shortcuts import render, redirect\r\nfrom django.http import HttpResponse, get_object_or_404\r\nfrom django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie\r\nfrom .models import Profile, Project, Report\r\nfrom django.contrib.auth.models import User\r\nfrom django.core import serializers\r\nfrom rest_framework_simplejwt.authentication import JWTAuthentication\r\n\r\n\r\ndef get_user_jwt(request):\r\n    token = request.headers.get('Authorization')\r\n    validated_token = JWTAuthentication().get_validated_token(token)\r\n    user = JWTAuthentication().get_user(validated_token)\r\n    return user\r\n\r\n# def get_access(access_lvl, action):\r\n#     if access_lvl >= num:\r\n        # do it\r\n\r\n\r\n# @csrf_exempt\r\ndef cabinet_view(request, user_id='default'):\r\n    if user_id == 'default':\r\n            user = get_user_jwt(request)\r\n            if user:\r\n                return redirect(str(user.id) + '/')\r\n            return HttpResponse('Error')\r\n    else:\r\n        user = get_user_JWT(request)\r\n        if user and (user.id == user_id or user.is_staff):\r\n            profile = Profile.objects.filter(user=user)\r\n            data = serializers.serialize('json', profile)\r\n            return HttpResponse(data)\r\n        return HttpResponse(\"Permission denied\")\r\n\r\n\r\n@csrf_exempt\r\ndef all_report_view(request, user_id='default'):\r\n    if user_id == 'default':\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if request.method == \"GET\":\r\n                reports = Report.objects.filter(creator_id=user.id)\r\n                data = serializers.serialize('json', reports)\r\n                return HttpResponse(data)\r\n            if request.method == \"POST\":\r\n                # name = request.POST['name']\r\n                project = request.POST['project']\r\n                text = request.POST['text']\r\n                curator = request.POST['curator']\r\n                hour = request.POST['hour']\r\n                # project = Project.objects.get(name=project)\r\n                profile = Profile.objects.get(user=user)\r\n                # curator_profile = Profile.objects.get(user=curator)\r\n                if project:\r\n                    new_report = Report.objects.create(project=project, text=text, hour=hour, creator_id=profile,\r\n                                                       curator=curator)\r\n                    new_report.save()\r\n                    return HttpResponse(\"Success\")\r\n                return HttpResponse(\"Something went wrong\")\r\n        return HttpResponse(\"Authentication error\")\r\n    else:\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if request.method == \"GET\":\r\n                if user_id != user.id and not user.is_staff:\r\n                    return HttpResponse(\"You don't have permissions\")\r\n                reports = Report.objects.filter(creator_id=user_id)\r\n                data = serializers.serialize('json', reports)\r\n                return HttpResponse(data)\r\n            return HttpResponse(\"Method not allowed\")\r\n        return HttpResponse(\"Authentication error\")\r\n\r\n\r\n@csrf_exempt\r\ndef report_view(request, report_id, user_id='default'):\r\n    if user_id == 'default':\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if request.method == \"GET\":\r\n                report = Report.objects.filter(user=user.id, id=report_id)\r\n                data = serializers.serialize('json', report)\r\n                return HttpResponse(data)\r\n            elif request.method == \"POST\":\r\n                new_report = Report.objects.filter(id=report_id)\r\n                # if 'name' in request.POST:\r\n                # name = request.POST['name']\r\n                # new_report.update(name = name)\r\n                if 'text' in request.POST:\r\n                    text = request.POST['text']\r\n                    new_report.update(text=text)\r\n                if 'hour' in request.POST:\r\n                    hour = request.POST['hour']\r\n                    new_report.update(hour=hour)\r\n                return HttpResponse(\"Success\")\r\n            elif request.method == \"DELETE\":\r\n                report = Report.objects.get(user=user.id, id=report_id)\r\n                report.delete()\r\n                return HttpResponse(\"Success\")\r\n            return HttpResponse(\"Method not allowed\")\r\n        return HttpResponse(\"Authentication error\")\r\n    else:\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if user_id != user and not user.is_staff:\r\n                return HttpResponse(\"You don't have permissions\")\r\n            if request.method == \"GET\":\r\n                report = Report.objects.filter(user=user_id, id=report_id)\r\n                data = serializers.serialize('json', report)\r\n                return HttpResponse(data)\r\n            return HttpResponse(\"Method not allowed\")\r\n        return HttpResponse(\"Authentication error\")\r\n\r\n\r\n@csrf_exempt\r\ndef all_projects_view(request, user_id='default'):\r\n    if user_id == 'default':\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if request.method == \"GET\":\r\n                projects = Project.objects.filter(participants=user.id)\r\n                data = serializers.serialize('json', projects)\r\n                return HttpResponse(data)\r\n            if request.method == \"POST\":\r\n                name = request.POST['name']\r\n                tasks = request.POST['tasks']\r\n                participants = request.POST['users'].split()\r\n                participants = [(User.objects.get(username=participant)) for participant in participants]\r\n                profiles = [Profile.objects.get(user=participant) for participant in participants]\r\n                if profiles:\r\n                    new_project = Project.objects.create(name=name, tasks=tasks)\r\n                    new_project.save()\r\n                    [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]\r\n                    return HttpResponse(\"Success\")\r\n                return HttpResponse(\"Something went wrong\")\r\n            return HttpResponse(\"Method not allowed\")\r\n        return HttpResponse(\"Authentication error\")\r\n    else:\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if request.method == \"GET\":\r\n                if user_id != user.id and not user.is_staff:\r\n                    return HttpResponse(\"You don't have permissions\")\r\n                projects = Project.objects.filter(participants=user_id)\r\n                data = serializers.serialize('json', projects)\r\n                return HttpResponse(data)\r\n            return HttpResponse(\"Method not allowed\")\r\n        return HttpResponse(\"Authentication error\")\r\n\r\n\r\n@csrf_exempt\r\ndef project_view(request, project_id, user_id='default'):\r\n    if user_id == 'default':\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if request.method == \"GET\":\r\n                project = Project.objects.filter(participants=user.id, id=project_id)\r\n                data = serializers.serialize('json', project)\r\n                return HttpResponse(data)\r\n            elif request.method == \"POST\":\r\n                new_project = Project.objects.filter(id=project_id)\r\n                if 'name' in request.POST:\r\n                    name = request.POST['name']\r\n                    new_project.update(name=name)\r\n                if 'tasks' in request.POST:\r\n                    tasks = request.POST['tasks']\r\n                    new_project.update(tasks=tasks)\r\n                if 'status' in request.POST:\r\n                    status = request.POST['status']\r\n                    new_project.update(is_done=status)\r\n                if 'users' in request.POST:\r\n                    participants = request.POST['users'].split()\r\n                    participants = [(User.objects.get(username=participant)) for participant in participants]\r\n                    profiles = [Profile.objects.get(user=participant) for participant in participants]\r\n                    if profiles:\r\n                        [new_project.participants.add(profiles[i].user.id) for i in range(len(profiles))]\r\n                return HttpResponse(\"Success\")\r\n            elif request.method == \"DELETE\":\r\n                project = Project.objects.get(participants=request.user.id, id=project_id)\r\n                project.delete()\r\n                return HttpResponse(\"Success\")\r\n            return HttpResponse(\"Method not allowed\")\r\n        return HttpResponse(\"Authentication error\")\r\n    else:\r\n        user = get_user_jwt(request)\r\n        if user:\r\n            if user_id != user.id and not user.is_staff:\r\n                return HttpResponse(\"You don't have permissions\")\r\n            if request.method == \"GET\":\r\n                project = Project.objects.filter(participants=user_id, id=project_id)\r\n                data = serializers.serialize('json', project)\r\n                return HttpResponse(data)\r\n            return HttpResponse(\"Method not allowed\")\r\n        return HttpResponse(\"Authentication error\")\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- server/cabinet/views.py	(revision 2264673e82178c687cbe15c137f784cb40eef434)
++++ server/cabinet/views.py	(date 1591612089228)
+@@ -1,5 +1,5 @@
+-from django.shortcuts import render, redirect
+-from django.http import HttpResponse, get_object_or_404
++from django.shortcuts import render, redirect, get_object_or_404
++from django.http import HttpResponse
+ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+ from .models import Profile, Project, Report
+ from django.contrib.auth.models import User
+@@ -13,20 +13,24 @@
+     user = JWTAuthentication().get_user(validated_token)
+     return user
+ 
++
+ # def get_access(access_lvl, action):
++#     actions = ['create_user', 'make_reports', 'check_reports', 'check_others_users',
++#               'check_reports', 'create_projects', 'base_actions']
+ #     if access_lvl >= num:
+-        # do it
++# do it
+ 
+ 
+-# @csrf_exempt
++@csrf_exempt
+ def cabinet_view(request, user_id='default'):
+     if user_id == 'default':
+-            user = get_user_jwt(request)
+-            if user:
+-                return redirect(str(user.id) + '/')
+-            return HttpResponse('Error')
++        user = get_user_jwt(request)
++        profile = get_object_or_404(Profile, user=user)
++        print(profile)
++        return redirect('register/')
++        return redirect(str(user.id) + '/')
+     else:
+-        user = get_user_JWT(request)
++        user = get_user_jwt(request)
+         if user and (user.id == user_id or user.is_staff):
+             profile = Profile.objects.filter(user=user)
+             data = serializers.serialize('json', profile)
+@@ -34,6 +38,19 @@
+         return HttpResponse("Permission denied")
+ 
+ 
++@csrf_exempt
++def register_view(request):
++    if request.method == 'POST':
++        user = get_user_jwt(request)
++        return HttpResponse('Success')
++        if user:
++            field = request.POST('field')
++            new_profile = Profile.objects.create(user=user, field=field)
++            new_profile.save()
++            return HttpResponse('Success')
++    return HttpResponse('Method not allowed')
++
++
+ @csrf_exempt
+ def all_report_view(request, user_id='default'):
+     if user_id == 'default':
+Index: server/cabinet/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.urls import path, include\r\n\r\nfrom . import views\r\n\r\nurlpatterns = [\r\n    path('cabinet/', views.cabinet_view),\r\n    path('cabinet/<int:user_id>/', views.cabinet_view),\r\n\r\n    # reports\r\n    path('cabinet/<int:user_id>/reports/', views.all_report_view),\r\n    path('cabinet/reports/', views.all_report_view),\r\n    path('cabinet/<int:user_id>/report/<int:report_id>', views.report_view),\r\n    path('cabinet/report/<int:report_id>', views.report_view),\r\n    # projects\r\n    path('cabinet/<int:user_id>/projects/', views.all_projects_view),\r\n    path('cabinet/projects/', views.all_projects_view),\r\n    path('cabinet/<int:user_id>/project/<int:project_id>', views.project_view),\r\n    path('cabinet/project/<int:project_id>', views.project_view),\r\n]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- server/cabinet/urls.py	(revision 2264673e82178c687cbe15c137f784cb40eef434)
++++ server/cabinet/urls.py	(date 1591612089227)
+@@ -5,7 +5,7 @@
+ urlpatterns = [
+     path('cabinet/', views.cabinet_view),
+     path('cabinet/<int:user_id>/', views.cabinet_view),
+-
++    path('cabinet/register', views.register_view),
+     # reports
+     path('cabinet/<int:user_id>/reports/', views.all_report_view),
+     path('cabinet/reports/', views.all_report_view),
+@@ -16,4 +16,4 @@
+     path('cabinet/projects/', views.all_projects_view),
+     path('cabinet/<int:user_id>/project/<int:project_id>', views.project_view),
+     path('cabinet/project/<int:project_id>', views.project_view),
+-]
+\ No newline at end of file
++]

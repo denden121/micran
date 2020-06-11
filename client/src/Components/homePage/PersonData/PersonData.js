@@ -12,7 +12,6 @@ const PersonData =(props)=>{
             <div className="sex">
                 Пол
                 <div className="se">
-                    {props.data.sex}
                 </div>
             </div>
 

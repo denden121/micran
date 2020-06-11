@@ -32,10 +32,7 @@ const Auth1 =(props)=>{
                     
                 </div>
                 
-                <button type="submit" className="btn btn-lg btn-primary">Войти</button>  
-
-               
-                
+                <button onClick={props.authHandler} type="submit" className="btn btn-lg btn-primary">Войти</button>
            </div>
        </div>
     )
