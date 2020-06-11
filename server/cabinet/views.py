@@ -18,16 +18,16 @@ def get_user_jwt(request):
 
 
 def get_access(action, user):
-    action = Action.objects.get(group = user.profile.group, action=action)
-    if action:
-        return True
-    return False
+    try:
+        action = Action.objects.get(group = user.profile.group, action=action)
+    except Action.DoesNotExist:
+        return False
+    return True
 
 
 @csrf_exempt
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
-    print(get_access('Make_reports', user))
     if user_id == 'default':
         user = get_user_jwt(request)
         if not hasattr(user, 'profile'):
