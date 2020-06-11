@@ -4,33 +4,38 @@ import './registration.css'
 
 const Registration =(props)=>{
     return(
-        <div className="container-fluid">
-            <form className="form-registration">
-                <h3>Регистрация</h3>
-                    <div className="form-froup">
-                         <label className="Label">
-                             Имя
-                             <input type="text" className="form-control form-control-lg"/>
-                    </label>
-                    </div>
+       <div className="container-fluid">
+           <form className="form-horizontal">
+               <h5>Регистрация</h5>
 
-                    <div className="form-froup">
-                         <label className="Label">
-                             Фамилия
-                             <input type="text" className="form-control form-control-lg"/>
-                    </label>
-                    </div>
+               <div className="from-group row">
+                   <label className="col-sm-2 col-form-label">Имя</label>
+                   <div className="col-sm-10">
+                       <input type="text" className="form-control"/>
+                   </div>
+               </div>
 
-                    <div className="form-froup">
-                         <label className="Label">
-                             Отчество
-                             <input type="text" className="form-control form-control-lg"/>
-                    </label>
-                    </div>
-                    <button type="submit" className="btn btn-lg btn-primary">Зарегистрироваться</button>  
-            </form>
-        </div>
+               <div className="from-group row">
+                   <label className="col-sm-2 col-form-label">Фамилия</label>
+                   <div className="col-sm-10">
+                       <input type="text" className="form-control"/>
+                   </div>
+               </div>
+
+               <div className="from-group row">
+                   <label className="col-sm-2 col-form-label">Отчество</label>
+                   <div className="col-sm-10">
+                       <input type="text" className="form-control"/>
+                   </div>
+               </div>
+
+               
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+
+           </form>
+       </div>
     )
+        
 }
 
 export default Registration;

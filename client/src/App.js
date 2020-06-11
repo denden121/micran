@@ -89,14 +89,18 @@ class  App extends Component{
         }
         return (
            <div className = 'App' >
-               <Switch>
-                   <Route path='/' exact component = {funcAuth} />
-                   <Route path='/cabinet' exact component={funcPersArea}/>
+               {/* <Switch>*/}
+                {/* <Route path='/' exact component = {funcAuth} />
+                   <Route path='/cabinet' exact component={funcPersArea}/>*/}
                    {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
                    {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
-                   <Redirect to = '/cabinet'/>
+                  {/* <Redirect to = '/cabinet'/>
                    
-               </Switch>
+                </Switch>*/}
+                <Switch>
+                    <Route path='/auth' exact component = {Auth1} />
+                   <Route path='/reg' exact component = {Registration} />
+                </Switch>
            </div >
         );
     }
