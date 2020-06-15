@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth1 from "./Auth/Auth";
+import Auth from "./ Components/Auth/Auth"
 // import Auth from './Components/Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
-import PersArea from "./Components/homePage/PersArea";
+//import PersArea from "./Components/homePage/PersArea";
 // import Report from "./Components/homePage/Report/Report";
 // import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
-import Registration from './ Components/ Registration/registration'
+import Main from "./ Components/ PersonCabinet/MainPage/Main"
 
 class  App extends Component{
     state = {
@@ -85,19 +85,19 @@ class  App extends Component{
             .catch(error => console.log('error', error));
     }*/
     render() {
-         const funcPersArea = () =>{
+         {/*const funcPersArea = () =>{
              if(this.state.token !== ''&& this.state.token !== undefined) {
                  return < PersArea date={this.state.cabinet}/>;
              }
              else{
                  return <Redirect to = '/'/>
              }
-        }
+        }*/}
         const funcAuth =()=> {
             if (this.state.token !== ''&& this.state.token !== undefined) {
                 return <Redirect to = '/cabinet'/>
             }else {
-                return <Auth1 authHandler = {this.authHandler}/>;
+                return <Auth authHandler = {this.authHandler}/>;
             }
         };
         // const funcReport= () =>{
@@ -113,8 +113,9 @@ class  App extends Component{
                   {/* <Redirect to = '/cabinet'/>
                 </Switch>*/}
                 <Switch>
-                    <Route path='/auth' exact component = {Auth1} />
-                    <Route path='/reg' exact component = {Registration} />
+                    <Route path='/auth' exact component = {Auth} />
+                    <Route path='/main' exact component = {Main} />
+                    
                 </Switch>
            </div >
         );
