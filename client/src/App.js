@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth1 from "./Auth1/Auth1";
+import Auth1 from "./Auth/Auth";
 // import Auth from './Components/Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./Components/homePage/PersArea";
 // import Report from "./Components/homePage/Report/Report";
 // import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
+import Registration from './ Components/ Registration/registration'
 
 class  App extends Component{
     state = {
         token:'',
     }
     //обработка кнопки для авторизации
-    authHandler = async () =>{
+    authHandler = async () => {
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
         let login = document.getElementById("input-login").value
         let password = document.getElementById("input-password").value
-        console.log(login,password)
-        let urlencoded = new URLSearchParams();
+        // console.log(login,password)
+
+        let urlencoded = new URLSearchParams();// Добавляем параметры запросы
         urlencoded.append("username", login);
         urlencoded.append("password", password);
         let requestOptions = {
@@ -28,15 +31,19 @@ class  App extends Component{
             redirect: 'follow',
             headers:myHeaders
         };
-        //проверка логина и пароля
-        await fetch("http://127.0.0.1:8000/token/", requestOptions)
+        //проверка логина и пароля(отправка запроса)
+        let sendUrl = "http://127.0.0.1:8000/to ken/"
+        await fetch(sendUrl, requestOptions)
             .then(response => response.json())
             .then(result =>console.log(this.setState({token:result.access})))
             .catch(error => this.setState({token:''}));
-        console.log(this.state.token)
+        // console.log(this.state.token)
         localStorage.setItem('token',this.state.token)
         if(this.state.token ===undefined) {
             alert('incorrect')
+        }
+        else{
+
         }
         // let myHeaders = new Headers();
         // myHeaders.append("Authorization",this.state.token);
@@ -104,11 +111,10 @@ class  App extends Component{
                    {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
                    {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
                   {/* <Redirect to = '/cabinet'/>
-                   
                 </Switch>*/}
                 <Switch>
                     <Route path='/auth' exact component = {Auth1} />
-                   <Route path='/reg' exact component = {Registration} />
+                    <Route path='/reg' exact component = {Registration} />
                 </Switch>
            </div >
         );

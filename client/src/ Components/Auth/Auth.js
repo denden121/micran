@@ -1,9 +1,9 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Auth1.css'
+import './Auth.css'
 import picture from './micran1.png'
 
-const Auth1 =(props)=>{
+const Auth =(props)=>{
     
     return(
         
@@ -38,4 +38,4 @@ const Auth1 =(props)=>{
     )
 }
 
-export default Auth1;
+export default Auth;
