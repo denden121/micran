@@ -5,6 +5,7 @@ import Auth1 from "./Auth1/Auth1";
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./Components/homePage/PersArea";
+import Registration from "./ Registration/registration"
 // import Report from "./Components/homePage/Report/Report";
 // import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
 
@@ -98,18 +99,18 @@ class  App extends Component{
         // }
         return (
            <div className = 'App' >
-               {/* <Switch>*/}
-                {/* <Route path='/' exact component = {funcAuth} />
-                   <Route path='/cabinet' exact component={funcPersArea}/>*/}
+               {/* <Switch>
+                 <Route path='/' exact component = {funcAuth} />
+                   <Route path='/cabinet' exact component={funcPersArea}/>
                    {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
                    {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
-                  {/* <Redirect to = '/cabinet'/>
+                  {/* <Redirect to = '/cabinet'/>*/}
                    
-                </Switch>*/}
+              {/* </Switch>*/}
                 <Switch>
-                    <Route path='/auth' exact component = {Auth1} />
+                    
                    <Route path='/reg' exact component = {Registration} />
-                </Switch>
+               </Switch>
            </div >
         );
 
