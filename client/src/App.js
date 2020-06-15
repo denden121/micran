@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth1 from "./ Components/ Registration/Auth1/Auth1";
+import Auth1 from "./Auth/Auth";
 // import Auth from './Components/Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./Components/homePage/PersArea";
-import Registration from "./ Components/ Registration/Registration/registration"
-import Header from "./Components/homePage/Header/Header"
-import Navigation from "./Components/homePage/Navigation/Navigation"
 // import Report from "./Components/homePage/Report/Report";
 // import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
+import Registration from './ Components/ Registration/registration'
 
 class  App extends Component{
     state = {
@@ -34,7 +32,7 @@ class  App extends Component{
             headers:myHeaders
         };
         //проверка логина и пароля(отправка запроса)
-        let sendUrl = "http://127.0.0.1:8000/token/"
+        let sendUrl = "http://127.0.0.1:8000/to ken/"
         await fetch(sendUrl, requestOptions)
             .then(response => response.json())
             .then(result =>console.log(this.setState({token:result.access})))
@@ -43,6 +41,9 @@ class  App extends Component{
         localStorage.setItem('token',this.state.token)
         if(this.state.token ===undefined) {
             alert('incorrect')
+        }
+        else{
+
         }
         // let myHeaders = new Headers();
         // myHeaders.append("Authorization",this.state.token);
@@ -104,19 +105,16 @@ class  App extends Component{
         // }
         return (
            <div className = 'App' >
-               {/* <Switch>
-                 <Route path='/' exact component = {funcAuth} />
-                   <Route path='/cabinet' exact component={funcPersArea}/>
+               {/* <Switch>*/}
+                {/* <Route path='/' exact component = {funcAuth} />
+                   <Route path='/cabinet' exact component={funcPersArea}/>*/}
                    {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
                    {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
-                  {/* <Redirect to = '/cabinet'/>*/}
-                   
-              {/* </Switch>*/}
+                  {/* <Redirect to = '/cabinet'/>
+                </Switch>*/}
                 <Switch>
                     <Route path='/auth' exact component = {Auth1} />
                     <Route path='/reg' exact component = {Registration} />
-                    <Route path='/head' exact component = {Header} />
-                    <Route path='/nav' exact component = {Navigation} />
                 </Switch>
            </div >
         );
