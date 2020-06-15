@@ -14,13 +14,15 @@ class  App extends Component{
         token:'',
     }
     //обработка кнопки для авторизации
-    authHandler = async () =>{
+    authHandler = async () => {
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
         let login = document.getElementById("input-login").value
         let password = document.getElementById("input-password").value
-        console.log(login,password)
-        let urlencoded = new URLSearchParams();
+        // console.log(login,password)
+
+        let urlencoded = new URLSearchParams();// Добавляем параметры запросы
         urlencoded.append("username", login);
         urlencoded.append("password", password);
         let requestOptions = {
@@ -29,12 +31,13 @@ class  App extends Component{
             redirect: 'follow',
             headers:myHeaders
         };
-        //проверка логина и пароля
-        await fetch("http://127.0.0.1:8000/token/", requestOptions)
+        //проверка логина и пароля(отправка запроса)
+        let sendUrl = "http://127.0.0.1:8000/token/"
+        await fetch(sendUrl, requestOptions)
             .then(response => response.json())
             .then(result =>console.log(this.setState({token:result.access})))
             .catch(error => this.setState({token:''}));
-        console.log(this.state.token)
+        // console.log(this.state.token)
         localStorage.setItem('token',this.state.token)
         if(this.state.token ===undefined) {
             alert('incorrect')
@@ -108,9 +111,9 @@ class  App extends Component{
                    
               {/* </Switch>*/}
                 <Switch>
-                    
-                   <Route path='/reg' exact component = {Registration} />
-               </Switch>
+                    <Route path='/auth' exact component = {Auth1} />
+                    <Route path='/reg' exact component = {Registration} />
+                </Switch>
            </div >
         );
 
