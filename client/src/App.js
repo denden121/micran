@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth1 from "./Auth1/Auth1";
+import Auth1 from "./ Components/ Registration/Auth1/Auth1";
 // import Auth from './Components/Auth/Auth'
 import {Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
 import PersArea from "./Components/homePage/PersArea";
-import Registration from "./ Registration/registration"
+import Registration from "./ Components/ Registration/Registration/registration"
+import Header from "./Components/homePage/Header/Header"
+import Navigation from "./Components/homePage/Navigation/Navigation"
 // import Report from "./Components/homePage/Report/Report";
 // import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
 
@@ -113,6 +115,8 @@ class  App extends Component{
                 <Switch>
                     <Route path='/auth' exact component = {Auth1} />
                     <Route path='/reg' exact component = {Registration} />
+                    <Route path='/head' exact component = {Header} />
+                    <Route path='/nav' exact component = {Navigation} />
                 </Switch>
            </div >
         );
