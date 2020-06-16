@@ -26,6 +26,14 @@ def get_access(action, user):
 
 
 @csrf_exempt
+def check_view(request):
+    user = get_user_jwt(request)
+    if not hasattr(user, 'profile'):
+        return HttpResponse("False")
+    return HttpResponse("True")
+
+
+@csrf_exempt
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
