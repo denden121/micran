@@ -1,4 +1,4 @@
 docker-compose.yaml
 *.sh
-server/main/__pycache__/
-server/blog/__pycache__/
+/server/main/__pycache__
+/server/cabinet/__pycache__
