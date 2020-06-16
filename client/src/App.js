@@ -17,11 +17,9 @@ class  App extends Component{
     authHandler = async () => {
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
         let login = document.getElementById("input-login").value
         let password = document.getElementById("input-password").value
         // console.log(login,password)
-
         let urlencoded = new URLSearchParams();// Добавляем параметры запросы
         urlencoded.append("username", login);
         urlencoded.append("password", password);
@@ -45,6 +43,7 @@ class  App extends Component{
         else{
 
         }
+
         // let myHeaders = new Headers();
         // myHeaders.append("Authorization",this.state.token);
         // let requestOptions1 = {
