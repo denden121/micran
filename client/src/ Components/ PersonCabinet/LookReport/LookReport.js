@@ -1,5 +1,4 @@
 import React from "react"
-import './ProjectsCard.css'
 
 const ProjectsCard =(props)=>{
     return(
