@@ -89,11 +89,6 @@ class  App extends Component {
             .catch(error => console.log('error', error));
         localStorage.setItem('checkReg', 'True')
     }
-
-    logOut = () =>{
-        localStorage.setItem('token','')
-        localStorage.setItem('checkReg','False')
-    }
     render(){
         const funcPersArea = () => {
             let token = localStorage.getItem('token')
