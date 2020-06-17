@@ -7,7 +7,7 @@ import SendReport from "../SendReport/SendReport"
 const Main =(props)=>{
     return(
         <div className="container">
-            <Header/>
+            <Header clickLogOut = {props.clickLogOut}/>
             <Navigation/>
             <SendReport/>
         </div>

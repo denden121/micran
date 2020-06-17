@@ -1,5 +1,6 @@
 import React from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {NavLink} from "react-router-dom";
 
 const Header =(props)=>{
     return(
@@ -8,7 +9,7 @@ const Header =(props)=>{
                 <a className="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Микран</a>
                 <ul className="navbar-nav px-3">
                 <li className="nav-item text-nowrap">
-                    <a className="nav-link" href="#">Выйти</a>
+                    <a onClick={props.clickLogOut} className="nav-link" href="#">Выйти</a>
                 </li>
                 </ul>
             </nav>

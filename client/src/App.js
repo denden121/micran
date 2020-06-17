@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import Auth from "./ Components/Auth/Auth"
-// import Auth from './Components/Auth/Auth'
-import {Route} from 'react-router-dom'
+import {BrowserRouter, Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
-//import PersArea from "./Components/homePage/PersArea";
-// import Report from "./Components/homePage/Report/Report";
-// import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
 import Main from "./ Components/ PersonCabinet/MainPage/Main"
+import Registration from "./ Components/Registration/registration";
+import ReactDOM from "react-dom";
 
-class  App extends Component{
+class  App extends Component {
     state = {
-        token:'',
+        token: '',
     }
     //обработка кнопки для авторизации
     authHandler = async () => {
@@ -27,99 +25,125 @@ class  App extends Component{
             method: 'POST',
             body: urlencoded,
             redirect: 'follow',
-            headers:myHeaders
+            headers: myHeaders
         };
+        console.log(login,password)
         //проверка логина и пароля(отправка запроса)
-        let sendUrl = "http://127.0.0.1:8000/to ken/"
+        let sendUrl = "http://127.0.0.1:8000/token/"
         await fetch(sendUrl, requestOptions)
             .then(response => response.json())
-            .then(result =>console.log(this.setState({token:result.access})))
-            .catch(error => this.setState({token:''}));
-        // console.log(this.state.token)
-        localStorage.setItem('token',this.state.token)
-        if(this.state.token ===undefined) {
+            .then(result => localStorage.setItem('token', result.access))
+            .catch(error => localStorage.setItem('token', ''));
+
+        // console.log('sssss',localStorage.getItem('token'))
+        // console.log(localStorage.getItem('token') === 'undefined')
+        if (localStorage.getItem('token') == 'undefined') {
             alert('incorrect')
-        }
-        else{
+        } else {
+            myHeaders = new Headers();
+            myHeaders.append("Authorization",localStorage.getItem('token'));
 
-        }
+            requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
 
-        // let myHeaders = new Headers();
-        // myHeaders.append("Authorization",this.state.token);
-        // let requestOptions1 = {
-        //     method: 'POST',
-        //     headers: myHeaders,
-        //     redirect: 'follow'
-        // };
-        // //запрос на получение данных для личного кабинета
-        // fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
-        //     .then(response =>response.json())
-        //     .then(result => this.setState({cabinet:result[0].fields}))
-        //     .catch(error => console.log('error', error));
+            await fetch("http://127.0.0.1:8000/check/", requestOptions)
+                .then(response => response.text())
+                .then(result => localStorage.setItem('checkReg',result))
+                .catch(error => console.log('error', error));
+            ReactDOM.render(
+                <BrowserRouter>
+                    <React.StrictMode>
+                        <App/>
+                    </React.StrictMode>
+                </BrowserRouter>,
+                document.getElementById('root')
+            );
+        }
+        console.log('прошел всю кнопку')
+
     }
-    /*sendReport=()=>{
-        const hours = document.getElementById("count_hours").value
-        const report = document.getElementById("report_text").value
-        const nameProject = document.getElementById("name_project_text").value
-        const curator = document.getElementById("curator_name").value
+    sendReg= async ()=> {
         let myHeaders = new Headers();
-        myHeaders.append("Authorization", this.state.token);
-        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        let urlencoded = new URLSearchParams();
-        urlencoded.append("project", nameProject);
-        urlencoded.append("text", report);
-        urlencoded.append("curator",curator );
-        urlencoded.append("hour", hours);
+        let token = localStorage.getItem('token')
+        myHeaders.append("Authorization", token);
 
-        const requestOptions = {
+        let formdata = new FormData();
+        let first_name = document.getElementById('name').value
+        let surname = document.getElementById('surname').value
+        let middle_name = document.getElementById('fatherName').value
+        formdata.append("first_name", first_name);
+        formdata.append("second_name", surname);
+        formdata.append("middle_name", middle_name);
+        let requestOptions = {
             method: 'POST',
             headers: myHeaders,
-            body: urlencoded,
+            body: formdata,
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:8000/cabinet/reports/", requestOptions)
+        await fetch("http://127.0.0.1:8000/cabinet/register/", requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
             .catch(error => console.log('error', error));
-    }*/
-    render() {
-         {/*const funcPersArea = () =>{
-             if(this.state.token !== ''&& this.state.token !== undefined) {
-                 return < PersArea date={this.state.cabinet}/>;
-             }
-             else{
-                 return <Redirect to = '/'/>
-             }
-        }*/}
-        const funcAuth =()=> {
-            if (this.state.token !== ''&& this.state.token !== undefined) {
-                return <Redirect to = '/cabinet'/>
-            }else {
-                return <Auth authHandler = {this.authHandler}/>;
+        localStorage.setItem('checkReg', 'True')
+    }
+
+    logOut = () =>{
+        localStorage.setItem('token','')
+        localStorage.setItem('checkReg','False')
+    }
+    render(){
+        const funcPersArea = () => {
+            let token = localStorage.getItem('token')
+            if (typeof token==='string' && token!=='') {
+                return < Main clickLogOut = {this.logOut}/>;
+            } else {
+                return <Redirect to='/'/>
+            }
+        }
+        const funcAuth = () => {
+            let token = localStorage.getItem('token')
+            let reg = localStorage.getItem('checkReg')
+            console.log(token,reg)
+            console.log(typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True')
+            console.log(localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='')
+            if (typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True') {
+                return <Redirect to='/cabinet'/>
+            }
+            else if( localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='') {
+                return <Redirect to='reg'/>
+            }
+            else{
+                console.log('пошел на авторизацию')
+                return <Auth authHandler={this.authHandler}/>;
             }
         };
-        // const funcReport= () =>{
-        //     return <Report sendReport = {this.sendReport}/>
-        // }
+        const funcReg = () =>{
+            let reg = localStorage.getItem('checkReg')
+            // debugger;
+            if(reg === 'False' ) {
+                return <Registration sendFunc={this.sendReg}/>
+            }
+            else{
+                return <Redirect to='/cabinet'/>;
+            }
+        }
         return (
-           <div className = 'App' >
-               {/* <Switch>*/}
-                {/* <Route path='/' exact component = {funcAuth} />
-                   <Route path='/cabinet' exact component={funcPersArea}/>*/}
-                   {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
-                   {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
-                  {/* <Redirect to = '/cabinet'/>
-                </Switch>*/}
+            <div className='App'>
                 <Switch>
-                    <Route path='/auth' exact component = {Auth} />
-                    <Route path='/main' exact component = {Main} />
-                    
+                    <Route path='/' exact component = {funcAuth}/>
+                    <Route path='/reg' exact component = {funcReg}/>
+                    <Route path='/cabinet' exact component = {funcPersArea}/>
+                    <Redirect to='/cabinet'/>
                 </Switch>
-           </div >
-        );
-
+                {/*<Switch>*/}
+                {/*    <Route path='/auth' exact component = {Auth} />*/}
+                {/*    <Route path='/main' exact component = {Main} />*/}
+                {/*</Switch>*/}
+            </div>
+        )
     }
 }
-
 export default App;
