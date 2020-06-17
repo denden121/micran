@@ -40,8 +40,9 @@ def cabinet_view(request, user_id='default'):
         user = get_user_jwt(request)
         if not hasattr(user, 'profile'):
             return HttpResponse("Profile undefined")
-        profile = Profile.objects.filter(user=user)
-        data = serializers.serialize('json', profile)
+        data_user = serializers.serialize('json', [user], fields=('first_name', 'last_name', 'middle_name'))
+        data_profile = serializers.serialize('json', [user.profile])
+        data = [data_user,data_profile]
         return HttpResponse(data)
     else:
         user = get_user_jwt(request)
