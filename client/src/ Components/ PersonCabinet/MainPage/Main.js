@@ -4,6 +4,7 @@ import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header"
 import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
+import PersonData from "../PersonData/PersonData";
 class Main extends Component{
     logOut = () =>{
         localStorage.setItem('token','')
@@ -14,8 +15,8 @@ class Main extends Component{
         return (
             <div className="container">
                 <Header clickLogOut={this.logOut}/>
-                <Navigation/>
-                <SendReport/>
+                {/*<Navigation/>*/}
+                <PersonData/>
             </div>
         )
     }

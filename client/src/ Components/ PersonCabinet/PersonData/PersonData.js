@@ -11,13 +11,13 @@ class PersonData extends Component{
                             <div className="row">
                                 
                                 <label for="Name">Имя</label>
-                                <input type="text" className="form-control"></input>
+                                <div type="text" className="form-control"></div>
 
                                 <label for="Name">Фамилия</label>
-                                <input type="text" className="form-control"></input>
+                                <div type="text" className="form-control"></div>
 
                                 <label for="Name">Отчество</label>
-                                <input type="text" className="form-control"></input>
+                                <div type="text" className="form-control"></div>
                             </div>
                             
                     </div>
