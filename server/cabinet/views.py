@@ -64,11 +64,12 @@ def register_view(request):
             update = form.save(commit=False)
             update.user = user
             update.save()
-        form = UserForm(request.POST, request.FILES, instance=user)
-        print(form.errors)
-        if form.is_valid():
-            form.save()
-            return HttpResponse("Success")
+            form = UserForm(request.POST, request.FILES, instance=user)
+            print(form.errors)
+            if form.is_valid():
+                form.save()
+                return HttpResponse("Success")
+            return HttpResponse("Something went wrong")
         return HttpResponse("Something went wrong")
     return HttpResponse('Method not allowed')
 
@@ -83,7 +84,8 @@ def all_report_view(request, user_id='default'):
                 reports = Report.objects.filter(creator_id=user.id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
-            if request.method == "POST" and get_access('Make_reports', user):
+            # get_access('Make_reports', user)
+            if request.method == "POST":
                 form = ReportForm(request.POST)
                 print(form.errors)
                 if form.is_valid():
