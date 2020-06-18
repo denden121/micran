@@ -31,17 +31,17 @@ class PersonData extends Component{
                             <div className="row">
                                 <label for="Name">Имя</label>
                                 <div type="text" className="form-control">
-                                    {this.state.cabinet.sex}
+                                    {this.state.cabinet.first_name}
                                 </div>
 
                                 <label for="Name">Фамилия</label>
                                 <div type="text" className="form-control">
-
+                                    {this.state.cabinet.last_name}
                                 </div>
 
                                 <label for="Name">Отчество</label>
                                 <div type="text" className="form-control">
-
+                                    {this.state.cabinet.middle_name}
                                 </div>
                             </div>
                             
