@@ -24,6 +24,8 @@ class Profile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
     experience = models.FloatField(blank=False, default='0.0')
     shift = models.CharField(max_length=30, blank=True)
     part_time_job = models.CharField(max_length=30, blank=True)
