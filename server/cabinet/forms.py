@@ -11,16 +11,16 @@ class ReportForm(forms.ModelForm):
         exclude = ['creator_id']
 
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name']
+# class UserForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = []
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['middle_name']
+        fields = ['middle_name', 'first_name', 'last_name']
 
 
 class ProjectForm(forms.ModelForm):
