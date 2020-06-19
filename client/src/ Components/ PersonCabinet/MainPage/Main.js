@@ -5,7 +5,7 @@ import Header from "../Header/Header"
 import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
-import "./Main.css"
+//import "./Main.css"
 
 class Main extends Component{
     logOut = () =>{
@@ -20,9 +20,9 @@ class Main extends Component{
                     <Header clickLogOut={this.logOut}/>
                 </div>
 
-                <div className='Nav'>
+               {/* <div className='Nav'>
                     <Navigation/>
-                </div>
+        </div>*/}
 
                 <div className="Data">
                     <PersonData/>
