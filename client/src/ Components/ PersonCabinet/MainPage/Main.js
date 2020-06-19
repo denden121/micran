@@ -20,9 +20,9 @@ class Main extends Component{
                     <Header clickLogOut={this.logOut}/>
                 </div>
 
-               {/* <div className='Nav'>
+               <div className='Nav'>
                     <Navigation/>
-        </div>*/}
+        </div>
 
                 <div className="Data">
                     <PersonData/>
