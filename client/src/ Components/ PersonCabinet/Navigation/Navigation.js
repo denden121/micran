@@ -10,7 +10,7 @@ const Navigation =(props)=>{
       <div className="sidebar-sticky">
         <ul className="nav flex-column">
           <li className="nav-item">
-            <a className="nav-link active" href="#">
+            <a className="nav-link active" href="cabinet/profile">
               <span data-feather="home"></span>
                 Отправка отчетов <span className="sr-only">(current)</span>
             </a>
