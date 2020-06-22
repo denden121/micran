@@ -93,7 +93,7 @@ class  App extends Component {
         const funcPersArea = () => {
             let token = localStorage.getItem('token')
             if (typeof token==='string' && token!=='') {
-                return < Main clickLogOut = {this.logOut}/>;
+                return < Main clickLogOut = {this.logOut}/>
             } else {
                 return <Redirect to='/'/>
             }
@@ -131,7 +131,7 @@ class  App extends Component {
                     <Route path='/' exact component = {funcAuth}/>
                     <Route path='/reg' exact component = {funcReg}/>
                     <Route path='/cabinet' exact component = {funcPersArea}/>
-                    <Redirect to='/cabinet'/>
+                    {/*<Redirect to='/cabinet'/>*/}
                 </Switch>
                 {/*<Switch>*/}
                 {/*    <Route path='/auth' exact component = {Auth} />*/}

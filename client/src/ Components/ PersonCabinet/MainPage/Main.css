@@ -4,7 +4,7 @@
     "head head"
     "nav data";
     grid-template-rows: 60px 6fr;
-    grid-template-columns: 1fr  15fr;
+    grid-template-columns: 2fr  14fr;
     
 }
 
