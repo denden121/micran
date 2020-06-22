@@ -6,38 +6,33 @@ services:
     tty: true
     
     volumes: 
-<<<<<<< HEAD
-<<<<<<< HEAD
-      -  /home/yura/Documents/python/work/micran/db/data:/var/lib/postgresql
-=======
-      -  /home/yura/Documents/python/work/micran_demo/micran/db/data:/var/lib/postgresql
->>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
-=======
-      -  /home/yura/Documents/python/work/micran_demo/micran/db/data:/var/lib/postgresql
->>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
+      -  /home/yura/PycharmProjects/micran/db/data:/var/lib/postgresql
     ports:
-      - "5430:5432"
+      - "5432:5432"
+    environment:
+      - TZ=Europe/Stockholm
+    command: >
+       sh -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
+       echo $TZ > /etc/timezone"
+
 
   
   server:
     build: ./server
     tty: true
     volumes:
-<<<<<<< HEAD
-<<<<<<< HEAD
-      -  /home/yura/Documents/python/work/micran/server:/usr/src/server/
-=======
-      -  /home/yura/Documents/python/work/micran_demo/micran/server:/usr/src/server/
->>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
-=======
-      -  /home/yura/Documents/python/work/micran_demo/micran/server:/usr/src/server/
->>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
+      -  /home/yura/PycharmProjects/micran/server:/usr/src/server/
     ports:
       - "8000:8000"
     depends_on:
       - db2
-#    command: ls 
-    command: sh /usr/src/server/run.sh
+#    command: ls
+    command:
+       sh -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
+       echo $TZ > /etc/timezone &&
+       sh /usr/src/server/run.sh"
+    environment:
+      - TZ=Europe/Stockholm
 
 
 
@@ -46,21 +41,20 @@ services:
     build: ./client
     tty: true
     volumes:
-<<<<<<< HEAD
-<<<<<<< HEAD
-      - /home/yura/Documents/python/work/micran/client:/usr/src/project/
-=======
-      - /home/yura/Documents/python/work/micran_demo/micran/client:/usr/src/project/
->>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
-=======
-      - /home/yura/Documents/python/work/micran_demo/micran/client:/usr/src/project/
->>>>>>> 13894bc75daab64ddfdd2d8699d631d22d749fd5
+      - /home/yura/PycharmProjects/micran/client:/usr/src/project/
     ports:
-      - "3000:3000"
+      - "5000:5000"
     depends_on:
       - db2
-    command: sh /usr/src/project/run.sh    
+    command:
+     sh -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
+     echo $TZ > /etc/timezone &&
+     sh /usr/src/project/run.sh"
+    environment:
+      - TZ=Europe/Stockholm
 
+volumes:
+  db2:
 
 
     
