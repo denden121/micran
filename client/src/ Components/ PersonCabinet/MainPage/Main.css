@@ -1,0 +1,21 @@
+.container{
+    display: grid;
+    grid-template-areas: 
+    "head head"
+    "nav data";
+    grid-template-rows: 60px 6fr;
+    grid-template-columns: 2fr  14fr;
+    
+}
+
+.Head{
+    grid-area: head;
+}
+
+.Nav{
+    grid-area: nav;
+}
+
+.Data{
+    grid-area: data;
+}

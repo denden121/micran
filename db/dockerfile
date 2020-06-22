@@ -2,6 +2,7 @@ FROM postgres:latest
 
 
 ENV POSTGRES_USER="micran"
+ENV TZ=America/Los_Angeles
 ENV POSTGRES_PASSWORD="12345678z"
 ENV POSTGRES_DB="report"
 ENV PGDATA=/var/lib/postgresql/data/pgdata

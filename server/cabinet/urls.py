@@ -4,9 +4,9 @@ from . import views
 
 urlpatterns = [
     path('cabinet/', views.cabinet_view),
-    path('logout/', views.logout_view),
     path('cabinet/<int:user_id>/', views.cabinet_view),
-
+    path('check/', views.check_view),
+    path('cabinet/register/', views.register_view),
     # reports
     path('cabinet/<int:user_id>/reports/', views.all_report_view),
     path('cabinet/reports/', views.all_report_view),

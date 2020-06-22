@@ -5,14 +5,16 @@ RUN mkdir -p /usr/src/server/
 
 WORKDIR /usr/src/server/
 
-
+ENV TZ=America/Los_Angeles
 RUN apt-get update
+RUN apt-get install tzdata -y
 RUN pip3 install django psycopg2
 RUN pip3 install django-cors-headers
 RUN apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev -y
 RUN pip3 install django-auth-ldap 
 RUN pip install djangorestframework
 RUN pip install django-filter
+RUN pip install simplejson
 RUN pip install djangorestframework_simplejwt
 #RUN pip3 install Pillow
 
@@ -20,6 +22,7 @@ RUN pip install djangorestframework_simplejwt
 EXPOSE 8000
 
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["ls"]
 CMD ["sh","/usr/src/server/run.sh"]
 
 
