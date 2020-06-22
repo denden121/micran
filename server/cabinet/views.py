@@ -37,14 +37,12 @@ def check_view(request):
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
-        user = get_user_jwt(request)
         if not hasattr(user, 'profile'):
             return HttpResponse("Profile undefined")
         # data_user = serializers.serialize('json', [user])
         data_profile = serializers.serialize('json', [user.profile], fields=('first_name', 'last_name', 'middle_name'))
         return HttpResponse(data_profile)
     else:
-        user = get_user_jwt(request)
         if user and (user.id == user_id or user.is_staff):
             profile = Profile.objects.filter(user=user)
             data = serializers.serialize('json', profile)
@@ -71,8 +69,9 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
+    print(request.POST)
+    user = get_user_jwt(request)
     if user_id == 'default':
-        user = get_user_jwt(request)
         profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
@@ -92,7 +91,6 @@ def all_report_view(request, user_id='default'):
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:
-        user = get_user_jwt(request)
         if user:
             if request.method == "GET":
                 if user_id != user.id and not get_access('Check_reports', user):
