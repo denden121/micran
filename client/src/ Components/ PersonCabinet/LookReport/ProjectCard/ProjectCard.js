@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProjectsCard from "./  ProjectsCard/ProjectsCard"
 
-class SendReport extends Component{
+class Pro extends Component{
 
     state = {
         projects: [
