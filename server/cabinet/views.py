@@ -2,11 +2,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from .models import Profile, Project, Report, Action
+from .models import Profile, Project, Report, Action, Group
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .forms import ProjectForm, ReportForm, ProfileForm
+from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm
 import simplejson as json
 from django.contrib.auth import authenticate
 
@@ -213,3 +213,38 @@ def project_view(request, project_id, user_id='default'):
                 return HttpResponse(data)
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
+
+
+@csrf_exempt
+def group_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            groups = Group.objects.all()
+            data = serializers.serialize('json', groups)
+            return HttpResponse(data)
+        if request.method == "POST":
+            group = GroupForm(request.POST)
+            if group.is_valid():
+                print("FF")
+                update = group.save(commit=False)
+                actions = request.POST['actions'].split()
+                actions = [Action.objects.get(action=action) for action in actions]
+                if actions and group.is_valid():
+                    group = group.save()
+                    [group.available_actions.add(actions[i].action) for i in range(len(actions))]
+                    return HttpResponse("Success")
+
+@csrf_exempt
+def action_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            actions = Action.objects.all()
+            data = serializers.serialize('json', actions)
+            return HttpResponse(data)
+        if request.method == "POST":
+            action = ActionForm(request.POST)
+            if action.is_valid():
+                action.save()
+                return HttpResponse("Success")

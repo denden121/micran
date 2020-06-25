@@ -1,7 +1,6 @@
 from django.urls import path, include
 
 from . import views
-
 urlpatterns = [
     path('cabinet/', views.cabinet_view),
     path('token/', views.token),
@@ -18,4 +17,12 @@ urlpatterns = [
     path('cabinet/projects/', views.all_projects_view),
     path('cabinet/<int:user_id>/project/<int:project_id>', views.project_view),
     path('cabinet/project/<int:project_id>', views.project_view),
+    # roles
+    path('groups/', views.group_view),
+    path('actions/', views.action_view),
 ]
+
+
+
+
+
