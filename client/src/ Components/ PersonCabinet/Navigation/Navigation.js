@@ -4,7 +4,7 @@ import './Navigation.css'
 
 const Navigation =(props)=>{
     return(
-        <div className="container">
+        <div className="container-fluid">
           
             <div class="row">
     <nav className="col-md-2 d-none d-md-block bg-light sidebar">

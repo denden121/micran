@@ -8,6 +8,7 @@ import PersonData from "../PersonData/PersonData";
 import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
+import Projects from "../Projects/Projects"
 class Main extends Component{
     logOut = () =>{
         localStorage.setItem('token','')
@@ -50,22 +51,26 @@ class Main extends Component{
             <div className="container">
                 <div className="Head">
                     <Header clickLogOut={this.logOut}/>
+                    
                 </div>
 
-                <div className='Nav'>
+               {/* <div className='Nav'>
                     <Navigation/>
-                </div>
-
+        </div>*/}
+                   
+                
                 <div className="Data">
+                    
                     {/*<Switch>*/}
-                    <Route path='/cabinet/profile'>
+                   {/* <Route path='/cabinet/profile'>
                         <SendReport send_report={this.send_report}/>
-                    </Route>
+        </Route>*/}
                     {/*    <Route path='/cabinet/send_report' exact component = {()=>{return <SendReport send_report={this.send_report}/>}}/>*/}
                     {/*    <Redirect to='/cabinet'/>*/}
                     {/*</Switch>*/}
                     {/*<SendReport send_report={this.send_report}/>*/}
-                </div>
+                
+            </div>
             </div>
         )
     }
