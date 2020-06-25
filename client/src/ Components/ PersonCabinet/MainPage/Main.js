@@ -9,6 +9,7 @@ import PersonData from "../PersonData/PersonData";
 import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
+import AddGroups from "../AddGroups/AddGroups";
 class Main extends Component{
     logOut = () =>{
         localStorage.setItem('token','')
@@ -58,7 +59,7 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    <BrowseReports />
+                    <AddGroups/>
                     {/*<Switch>*/}
                     {/*<Route path='/cabinet/profile'>*/}
                     {/*    <SendReport send_report={this.send_report}/>*/}
