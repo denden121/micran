@@ -1,0 +1,44 @@
+.Otchet{
+    display: grid;
+    grid-template-areas: 
+    "header header header"
+    "nav article article";
+    grid-template-rows: 60px 1fr 60px;
+    grid-template-columns: 10% 1fr 25%;
+    grid-gap: 10px;
+    height: 100vh;
+    margin: 0;
+}
+
+header, nav, article {
+    padding: 20px;
+    
+    }
+
+#Head{
+    grid-area: header;
+}
+
+#pageReport{
+    grid-area: article;
+}
+
+#pageNav{
+    grid-area: nav;
+}
+
+.card{
+    width: 18rem;
+}
+
+.a,
+.b,
+.c,
+.d{
+    display: inline-block;
+}
+
+.Label1{
+    float: left;
+    font-size: 16px;
+}
