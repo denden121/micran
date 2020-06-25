@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header"
+import BrowseReports from '../BrowseReports/BrowseReports'
 import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
@@ -57,10 +58,11 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
+                    <BrowseReports />
                     {/*<Switch>*/}
-                    <Route path='/cabinet/profile'>
-                        <SendReport send_report={this.send_report}/>
-                    </Route>
+                    {/*<Route path='/cabinet/profile'>*/}
+                    {/*    <SendReport send_report={this.send_report}/>*/}
+                    {/*</Route>*/}
                     {/*    <Route path='/cabinet/send_report' exact component = {()=>{return <SendReport send_report={this.send_report}/>}}/>*/}
                     {/*    <Redirect to='/cabinet'/>*/}
                     {/*</Switch>*/}
