@@ -1,3 +1,4 @@
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
@@ -7,7 +8,7 @@ from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .forms import ProjectForm, ReportForm, ProfileForm
 import simplejson as json
-
+from django.contrib.auth import authenticate
 
 
 def get_user_jwt(request):
@@ -17,12 +18,30 @@ def get_user_jwt(request):
     return user
 
 
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+
 def get_access(action, user):
     try:
         action = Action.objects.get(group = user.profile.group, action=action)
     except Action.DoesNotExist:
         return False
     return True
+
+
+@csrf_exempt
+def token(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user = authenticate(username=username, password=password)
+    token = get_tokens_for_user(user)
+    return HttpResponse(json.dumps(token))
 
 
 @csrf_exempt
@@ -69,7 +88,6 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
-    print(request.POST)
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -85,6 +103,7 @@ def all_report_view(request, user_id='default'):
                 if form.is_valid():
                     report = form.save(commit=False)
                     report.creator_id = profile
+                    print(request.POST)
                     report.save()
                     return HttpResponse("Success")
                 return HttpResponse("Fail")

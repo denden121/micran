@@ -87,3 +87,20 @@ fetch("http://127.0.0.1:8000/cabinet/", requestOptions)
         }
         }
         ]
+
+
+All reports
+get
+[
+    {
+        "model": "cabinet.report",
+        "pk": 1,
+        "fields": {
+            "creator_id": 1,
+            "text": "12213",
+            "hour": 22.0,
+            "project": "sfg",
+            "curator": "gwegw"
+        }
+    }
+]

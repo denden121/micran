@@ -1,38 +1,12 @@
-FROM python:latest
+FROM ubuntu:16.04
 
+WORKDIR /app/server
 
-RUN mkdir -p /usr/src/server/
-
-WORKDIR /usr/src/server/
-
-ENV TZ=America/Los_Angeles
-RUN apt-get update
-RUN apt-get install tzdata -y
-RUN pip3 install django psycopg2
-RUN pip3 install django-cors-headers
-RUN apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev -y
-RUN pip3 install django-auth-ldap 
-RUN pip install djangorestframework
-RUN pip install django-filter
-RUN pip install simplejson
-RUN pip install djangorestframework_simplejwt
-#RUN pip3 install Pillow
-
+COPY requirements.txt /app/server
+RUN apt-get update && apt-get install libsasl2-dev python-dev libldap2-dev libssl-dev -y && apt install python3-pip -y
+RUN pip3 install --upgrade pip -r requirements.txt
+COPY . /app/server
 
 EXPOSE 8000
 
-#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-CMD ["ls"]
-CMD ["sh","/usr/src/server/run.sh"]
-
-
-
-
-#RUN script
-
-#docker run --rm --name web -p 8000:8000 -t -v C:/python/mikran/:/usr/src/project/   django_ldap  
-
-
-
-
-#docker run -it --rm --name openldap -v C:/python/docker2/ldap:/etc/ldap/ -p 389:389            -e DEBUG_LEVEL=1  -e INDEX="index uid eq index cn eq"          -e DOMAIN=my-company.com            -e ORGANIZATION="My Company"   -e PASSWORD=1234567890            mwaeckerlin/openldap
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
