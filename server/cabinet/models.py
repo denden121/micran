@@ -11,7 +11,7 @@ class Action(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=30, blank=True)
-    available_actions = models.ManyToManyField(Action)
+    available_actions = models.ManyToManyField(Action, blank=True)
 
     def __str__(self):
         return self.name

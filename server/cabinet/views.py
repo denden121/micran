@@ -1,13 +1,14 @@
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from .models import Profile, Project, Report, Action
+from .models import Profile, Project, Report, Action, Group
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .forms import ProjectForm, ReportForm, ProfileForm
+from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm
 import simplejson as json
-
+from django.contrib.auth import authenticate
 
 
 def get_user_jwt(request):
@@ -17,12 +18,30 @@ def get_user_jwt(request):
     return user
 
 
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+
 def get_access(action, user):
     try:
         action = Action.objects.get(group = user.profile.group, action=action)
     except Action.DoesNotExist:
         return False
     return True
+
+
+@csrf_exempt
+def token(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user = authenticate(username=username, password=password)
+    token = get_tokens_for_user(user)
+    return HttpResponse(json.dumps(token))
 
 
 @csrf_exempt
@@ -69,7 +88,6 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
-    print(request.POST)
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -85,6 +103,7 @@ def all_report_view(request, user_id='default'):
                 if form.is_valid():
                     report = form.save(commit=False)
                     report.creator_id = profile
+                    print(request.POST)
                     report.save()
                     return HttpResponse("Success")
                 return HttpResponse("Fail")
@@ -194,3 +213,38 @@ def project_view(request, project_id, user_id='default'):
                 return HttpResponse(data)
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
+
+
+@csrf_exempt
+def group_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            groups = Group.objects.all()
+            data = serializers.serialize('json', groups)
+            return HttpResponse(data)
+        if request.method == "POST":
+            group = GroupForm(request.POST)
+            if group.is_valid():
+                print("FF")
+                update = group.save(commit=False)
+                actions = request.POST['actions'].split()
+                actions = [Action.objects.get(action=action) for action in actions]
+                if actions and group.is_valid():
+                    group = group.save()
+                    [group.available_actions.add(actions[i].action) for i in range(len(actions))]
+                    return HttpResponse("Success")
+
+@csrf_exempt
+def action_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            actions = Action.objects.all()
+            data = serializers.serialize('json', actions)
+            return HttpResponse(data)
+        if request.method == "POST":
+            action = ActionForm(request.POST)
+            if action.is_valid():
+                action.save()
+                return HttpResponse("Success")
