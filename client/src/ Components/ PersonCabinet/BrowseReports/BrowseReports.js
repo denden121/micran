@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
-
-
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Header from "../Header/Header"
+import './BrowserReports.css'
 
 class BrowseReports extends React.Component{
     state ={
@@ -24,8 +25,28 @@ class BrowseReports extends React.Component{
     }
     render() {
         return(
-            <div>hello</div>
-        )
+            <div className="container">
+                     <div className="a">
+                         <label className="Label1">Куратор проекта: 
+                         <div id='mentorProject' type="text" className="form-control form-control-lg" placeholder="Введите ФИО куратора"></div>
+                         </label>
+                    </div>
+
+                    <div className="b">
+                        <label className="Label1">Затраченное время: 
+                         <div id = 'spendTime' type="text" className="form-control form-control-lg" placeholder="Введите количество часов"></div>
+                         </label>
+                     </div>
+
+                     <div className="c">
+                         <label className="Label1">Отчет о проделанной работе:
+                        <div id='bodeReport' type="text"className="form-control form-control-lg" placeholder="Введите текст отчета"></div>
+                         </label>   
+                    </div>           
+                
+            </div>
+                
+        )       
     }
 }
 
