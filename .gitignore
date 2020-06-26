@@ -2,3 +2,4 @@ docker-compose.yaml
 *.sh
 /server/main/__pycache__
 /server/cabinet/__pycache__
+/server/db.sqlite3
