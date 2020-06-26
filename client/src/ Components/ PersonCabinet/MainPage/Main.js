@@ -60,7 +60,7 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    <AddGroups/>
+                    <BrowseReports/>
                     {/*<Switch>*/}
                     {/*<Route path='/cabinet/profile'>*/}
                     {/*    <SendReport send_report={this.send_report}/>*/}
