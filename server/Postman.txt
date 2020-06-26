@@ -87,3 +87,61 @@ fetch("http://127.0.0.1:8000/cabinet/", requestOptions)
         }
         }
         ]
+
+
+All reports
+get
+[
+    {
+        "model": "cabinet.report",
+        "pk": 1,
+        "fields": {
+            "creator_id": 1,
+            "text": "12213",
+            "hour": 22.0,
+            "project": "sfg",
+            "curator": "gwegw"
+        }
+    }
+]
+
+Add actions to group
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkzMTM4NjE5LCJqdGkiOiIxYzNjYzAxZjA2ZmU0OTAwYmVkNWE0NDRjZjZmMmY0YiIsInVzZXJfaWQiOjF9.7FlbKP_RzvflZgIuSMS_hcF-gKcQhctZ2ud1uIUJ81I");
+
+var formdata = new FormData();
+formdata.append("actions", "1 2 ");
+formdata.append("name", "Bar2");
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:8000/groups/", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+Add new action
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTkzMTM4NjE5LCJqdGkiOiIxYzNjYzAxZjA2ZmU0OTAwYmVkNWE0NDRjZjZmMmY0YiIsInVzZXJfaWQiOjF9.7FlbKP_RzvflZgIuSMS_hcF-gKcQhctZ2ud1uIUJ81I");
+
+var formdata = new FormData();
+formdata.append("action", "Foo2");
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:8000/actions/", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
