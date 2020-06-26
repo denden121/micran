@@ -9,6 +9,8 @@ WORKDIR /app/frontend
 
 # Add rest of the client code
 COPY . /app/frontend
+RUN npm install
 
 EXPOSE 3000
 
+# sudo docker run -it -p 3000:3000 frontend
