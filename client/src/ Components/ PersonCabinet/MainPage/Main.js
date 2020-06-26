@@ -11,6 +11,7 @@ import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
 import AddGroups from "../AddGroups/AddGroups";
 class Main extends Component{
+    
     logOut = () =>{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
@@ -59,7 +60,7 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    <AddGroups/>
+                    <BrowseReports/>
                     {/*<Switch>*/}
                     {/*<Route path='/cabinet/profile'>*/}
                     {/*    <SendReport send_report={this.send_report}/>*/}
