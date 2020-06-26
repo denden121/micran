@@ -11,6 +11,7 @@ import {Redirect, Route} from "react-router-dom";
 //import Projects from "../Projects/Projects"
 import BrowseReports from "../BrowseReports/BrowseReports";
 class Main extends Component{
+    
     logOut = () =>{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
