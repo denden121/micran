@@ -1,18 +1,14 @@
-FROM ubuntu:latest
+FROM node:14.4.0-stretch
 
+WORKDIR /app/frontend
 
-RUN mkdir -p /usr/src/project/
-WORKDIR /usr/src/project/
+# Install dependencies
+# COPY package.json yarn.lock /app/
 
-ENV TZ=America/Los_Angeles
-RUN apt-get update -y
-RUN apt install npm -y
-RUN npm install create-react-app
-RUN npm install react-router-dom
-RUN npm install axios
-RUN npm i js-cookie
+# RUN npm install
 
-
+# Add rest of the client code
+COPY . /app/frontend
 
 EXPOSE 3000
-CMD ["sh","/usr/src/project/run.sh"]
+

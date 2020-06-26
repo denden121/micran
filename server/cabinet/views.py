@@ -87,7 +87,7 @@ def register_view(request):
 
 
 @csrf_exempt
-def all_report_view(request, user_id='default'):
+def all_report_view(request, user_id='default'): #ПЕРЕДЕЛАТЬ С УЧЕТОМ ПРАВ
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -112,7 +112,7 @@ def all_report_view(request, user_id='default'):
     else:
         if user:
             if request.method == "GET":
-                if user_id != user.id and not get_access('Check_reports', user):
+                if user_id != user.id and not get_access('check_reports', user):
                     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
@@ -122,12 +122,12 @@ def all_report_view(request, user_id='default'):
 
 
 @csrf_exempt
-def report_view(request, report_id, user_id='default'):
+def report_view(request, report_id, user_id='default'): #ПЕРЕДЕЛАТЬ С УЧЕТОМ ПРАВ
     if user_id == 'default':
         user = get_user_jwt(request)
         report = Report.objects.get(creator_id_id=user.id, id=report_id)
         if user:
-            if request.method == "GET":
+            if request.method == "GET" and get_access('check_reports', user):
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
             elif request.method == "POST" and get_access('Make_projects', user):
@@ -140,7 +140,7 @@ def report_view(request, report_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access('Check_projects', user):
+            if request.method == "GET":
                 report = Report.objects.filter(user=user_id, id=report_id)
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
