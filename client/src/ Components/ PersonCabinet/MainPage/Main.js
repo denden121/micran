@@ -2,14 +2,14 @@ import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header"
+import BrowseReports from '../BrowseReports/BrowseReports'
 import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
 import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
-//import Projects from "../Projects/Projects"
-import BrowseReports from "../BrowseReports/BrowseReports";
+import AddGroups from "../AddGroups/AddGroups";
 class Main extends Component{
     
     logOut = () =>{
@@ -51,28 +51,25 @@ class Main extends Component{
     render() {
         return (
             <div className="container">
-                {/*<div className="Head">
+                <div className="Head">
                     <Header clickLogOut={this.logOut}/>
-                    
-        </div>*/}
+                </div>
 
-               {/* <div className='Nav'>
+                <div className='Nav'>
                     <Navigation/>
-        </div>*/}
-                   
-                <BrowseReports/>
-                {/*<div className="Data">*/}
-                    
+                </div>
+
+                <div className="Data">
+                    <AddGroups/>
                     {/*<Switch>*/}
-                   {/* <Route path='/cabinet/profile'>
-                        <SendReport send_report={this.send_report}/>
-        </Route>*/}
+                    {/*<Route path='/cabinet/profile'>*/}
+                    {/*    <SendReport send_report={this.send_report}/>*/}
+                    {/*</Route>*/}
                     {/*    <Route path='/cabinet/send_report' exact component = {()=>{return <SendReport send_report={this.send_report}/>}}/>*/}
                     {/*    <Redirect to='/cabinet'/>*/}
                     {/*</Switch>*/}
                     {/*<SendReport send_report={this.send_report}/>*/}
-                
-            {/*</div>*/}
+                </div>
             </div>
         )
     }
