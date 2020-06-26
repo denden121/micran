@@ -124,9 +124,9 @@ def all_report_view(request, user_id='default'):
 def report_view(request, report_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
-        report = Report.objects.get(creator_id_id=user.id, id=report_id)
+        report = Report.objects.filter(creator_id_id=user.id, id=report_id)
         if user:
-            if request.method == "GET" and get_access('check_reports', user):
+            if request.method == "GET":
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
             elif request.method == "POST":
@@ -139,10 +139,12 @@ def report_view(request, report_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access('check_reports', user):
-                report = Report.objects.filter(user=user_id, id=report_id)
-                data = serializers.serialize('json', report)
-                return HttpResponse(data)
+            if request.method == "GET":
+                if get_access('check_reports', user):
+                    report = Report.objects.filter(user=user_id, id=report_id)
+                    data = serializers.serialize('json', report)
+                    return HttpResponse(data)
+                return HttpResponse("You don't have permissions")
             return HttpResponse("Access error")
         return HttpResponse("Authentication error")
 
@@ -205,7 +207,7 @@ def project_view(request, project_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access('check_projects', user):
+            if request.method == "GET" or get_access('check_projects', user):
                 project = Project.objects.filter(participants=user_id, id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)

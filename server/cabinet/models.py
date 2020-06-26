@@ -10,7 +10,7 @@ class Action(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=30, blank=True)# ДОБАВИТЬ ОПИСАНИЕ
     available_actions = models.ManyToManyField(Action, blank=True)
 
     def __str__(self):
