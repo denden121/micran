@@ -87,7 +87,7 @@ def register_view(request):
 
 
 @csrf_exempt
-def all_report_view(request, user_id='default'): #ПЕРЕДЕЛАТЬ С УЧЕТОМ ПРАВ
+def all_report_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -121,7 +121,7 @@ def all_report_view(request, user_id='default'): #ПЕРЕДЕЛАТЬ С УЧЕ
 
 
 @csrf_exempt
-def report_view(request, report_id, user_id='default'): #ПЕРЕДЕЛАТЬ С УЧЕТОМ ПРАВ
+def report_view(request, report_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
         report = Report.objects.get(creator_id_id=user.id, id=report_id)
@@ -129,7 +129,7 @@ def report_view(request, report_id, user_id='default'): #ПЕРЕДЕЛАТЬ С
             if request.method == "GET" and get_access('check_reports', user):
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
-            elif request.method == "POST" and get_access('Make_projects', user):
+            elif request.method == "POST":
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 if form.is_valid():
                     update = form.save()
@@ -156,7 +156,7 @@ def all_projects_view(request, user_id='default'):
                 projects = Project.objects.filter(participants=user.id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
-            if request.method == "POST" and get_access('Make_projects', user):
+            if request.method == "POST" and get_access('make_projects', user):
                 form = ProjectForm(request.POST)
                 participants = request.POST['participants'].split()
                 participants = [(User.objects.get(username=participant)) for participant in participants]
@@ -171,7 +171,7 @@ def all_projects_view(request, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access('Check_projects', user):
+            if request.method == "GET" and get_access('check_projects', user):
                 projects = Project.objects.filter(participants=user_id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
@@ -188,13 +188,12 @@ def project_view(request, project_id, user_id='default'):
                 project = Project.objects.filter(id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
-            elif request.method == "POST" and get_access('Make_projects', user):
+            elif request.method == "POST" and get_access('make_projects', user):
                 project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
                     update = form.save(commit=False)
-                    participants = request.POST['participants'].split()
-                    participants = [(User.objects.get(username=participant)) for participant in participants]
+                    participants = [(User.objects.get(username=participant)) for participant in request.POST['participants'].split()]
                     profiles = [Profile.objects.get(user=participant) for participant in participants]
                     if profiles and form.is_valid():
                         project = form.save()
@@ -206,7 +205,7 @@ def project_view(request, project_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access('Check_projects', user):
+            if request.method == "GET" and get_access('check_projects', user):
                 project = Project.objects.filter(participants=user_id, id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
@@ -253,6 +252,6 @@ def available_actions(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            actions = Action.objects.all()
-            data = serializers.serialize('json', actions)
+            group = user.profile.group
+            data = serializers.serialize('json', group.available_actions.all())
             return HttpResponse(data)
