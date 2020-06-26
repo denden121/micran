@@ -5,7 +5,7 @@ services:
     build: ./server
     tty: true
     volumes:
-      -  /home/yura/PycharmProjects/micran/server:/usr/src/server/
+      -  ./server:/app/server
     ports:
       - "8000:8000"
     command: python3 manage.py runserver 0.0.0.0:8000
@@ -15,10 +15,11 @@ services:
     build: ./client
     tty: true
     volumes:
-      - /home/yura/PycharmProjects/micran/client:/usr/src/project/
+      - ./client:/app/frontend
+      - /app/frontend/node_modules
     ports:
       - "3000:3000"
-    command:
+    command: npm start
 
     
 
