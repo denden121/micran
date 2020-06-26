@@ -96,7 +96,6 @@ def all_report_view(request, user_id='default'): #ПЕРЕДЕЛАТЬ С УЧЕ
                 reports = Report.objects.filter(creator_id=user.id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
-            # get_access('Make_reports', user)
             if request.method == "POST":
                 form = ReportForm(request.POST)
                 print(form.errors)
@@ -140,7 +139,7 @@ def report_view(request, report_id, user_id='default'): #ПЕРЕДЕЛАТЬ С
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET":
+            if request.method == "GET" and get_access('check_reports', user):
                 report = Report.objects.filter(user=user_id, id=report_id)
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
@@ -248,3 +247,12 @@ def action_view(request):
             if action.is_valid():
                 action.save()
                 return HttpResponse("Success")
+
+@csrf_exempt
+def available_actions(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            actions = Action.objects.all()
+            data = serializers.serialize('json', actions)
+            return HttpResponse(data)
