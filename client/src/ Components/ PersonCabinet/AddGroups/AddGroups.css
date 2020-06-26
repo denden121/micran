@@ -1,6 +1,9 @@
-.main{
-    border:1px solid #3a33d1;
-    text-align: center;
-    width: 60%;
-    height: 1500%;
+.checkBox{
+    display: inline-block;
+    
+}
+
+.Label1{
+    float: left;
+    font-size: 16px;
 }
