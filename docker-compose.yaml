@@ -13,15 +13,15 @@ services:
       - db
 
 
-  client:
-    build: ./client
-    tty: true
-    volumes:
-      - ./client:/app/frontend
-      - /app/frontend/node_modules
-    ports:
-      - "3000:3000"
-    command: npm start
+#  client:
+#    build: ./client
+#    tty: true
+#    volumes:
+#      - ./client:/app/frontend
+#      - /app/frontend/node_modules
+#    ports:
+#      - "3000:3000"
+#    command: npm start
 
   db:
     image: "postgres:13"
