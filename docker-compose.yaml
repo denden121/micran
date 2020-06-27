@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 
 services:
   server:
@@ -9,6 +9,8 @@ services:
     ports:
       - "8000:8000"
     command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
 
 
   client:
@@ -21,6 +23,18 @@ services:
       - "3000:3000"
     command: npm start
 
-    
+  db:
+    image: "postgres:13"
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    volumes:
+    - /app/db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
 
-#docker-compose up -d
+
+
+#docker-compose up --build
