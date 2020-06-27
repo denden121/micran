@@ -27,11 +27,7 @@ const NewReports =(props)=>{
 }
 class BrowseReports extends React.Component{
     state ={
-        reports:{},
-        text:'',
-        hours:'',
-        mentor:'',
-        nameProject:''
+        reports:{}
     }
     async componentDidMount() {
         let myHeaders = new Headers();
@@ -47,7 +43,7 @@ class BrowseReports extends React.Component{
             .then(response => response.json())
             .then(result => this.setState({reports: result}))
             .catch(error => console.log('error', error));
-        console.log(this.state.reports[0].fields.text)
+        // console.log(this.state.reports[0].fields.text)
     }
 
     render() {
