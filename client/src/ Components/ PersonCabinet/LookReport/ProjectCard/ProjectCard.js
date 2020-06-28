@@ -1,29 +1,34 @@
 import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ProjectsCard from "./  ProjectsCard/ProjectsCard"
+import '../LookReport.css'
 
-class Pro extends Component{
-
-    state = {
-        projects: [
-            {number: 1, time: 5},
-            {number: 2, time: 10},
-            {number: 3, time: 20}
-        ]
-    }   
-
-    render() {
-        const projects = this.state.projects
+const ProjectCard =(props)=>{
     return(
-    <div className container-fluid>
-        <strong><h2>Отчет о проделанной работе</h2></strong>
+        <div className="container-fluid" >
+        <div className="Otchet">
+           
+            <div className="pageReport">
+            <div className="card text-left" >
+                <div className="card-body">
+                    <h5 className="card-title">Отчет</h5>
+                       <div className="card-text">
+                       <h6>Название проекта</h6>
+             <div className="projName">{props.project}</div>
+        <h6>Куратор проекта</h6>
+            <div className="supervisor">{props.curator}</div>
+         <h6>Часы</h6>
+            <div className="time">{props.hour}</div>
+        <h6>Текст отчета</h6>
+            <div className="repText">{props.text}</div>
+                       </div>                        
+                </div>
+          </div>
+         </div>               
         
-        <ProjectsCard number={projects[0].number} time={projects[0].time} />
-        <ProjectsCard number={projects[1].number} time={projects[1].time}/>
-        <ProjectsCard number={projects[2].number} time={projects[2].time}/>
+        </div>
     </div>
     )
 }
-}
 
-export default SendReport
+export default ProjectCard;
+

@@ -115,7 +115,6 @@ class  App extends Component {
                 return <Auth authHandler={this.authHandler}/>;
             }
         };
-        
         const funcReg = () =>{
             let reg = localStorage.getItem('checkReg')
             // debugger;
