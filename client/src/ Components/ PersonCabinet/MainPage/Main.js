@@ -6,13 +6,13 @@ import BrowseReports from '../BrowseReports/BrowseReports'
 import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
-import "./Main.css" 
+import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
 import AddGroups from "../AddGroups/AddGroups";
 
+import Projects from "../Projects/Projects"
 class Main extends Component{
-    
     logOut = () =>{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
@@ -61,13 +61,18 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    {/* <BrowseReports/> */}
+                    {/*<Switch>*/}
+                    <Route path='/cabinet/profile'>
+                        <SendReport send_report={this.send_report}/>
+                    </Route>
+                    {/*    <Route path='/cabinet/send_report' exact component = {()=>{return <SendReport send_report={this.send_report}/>}}/>*/}
+                    {/*    <Redirect to='/cabinet'/>*/}
+                    {/*</Switch>*/}
                     {/*<SendReport send_report={this.send_report}/>*/}
-                    <AddGroups/>
                 </div>
             </div>
         )
     }
 }
 
-export default Main
+export default Main;
