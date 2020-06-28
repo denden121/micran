@@ -1,62 +1,40 @@
-version: '3'
+version: '3.2'
 
 services:
-  db2:
-    build: ./db
-    tty: true
-    
-    volumes: 
-      -  /home/yura/PycharmProjects/micran/db/data:/var/lib/postgresql
-    ports:
-      - "5432:5432"
-    environment:
-      - TZ=Europe/Stockholm
-    command: >
-       sh -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
-       echo $TZ > /etc/timezone"
-
-
-  
   server:
     build: ./server
     tty: true
     volumes:
-      -  /home/yura/PycharmProjects/micran/server:/usr/src/server/
+      -  ./server:/app/server
     ports:
       - "8000:8000"
+    command: python3 manage.py runserver 0.0.0.0:8000
     depends_on:
-      - db2
-#    command: ls
-    command:
-       sh -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
-       echo $TZ > /etc/timezone &&
-       sh /usr/src/server/run.sh"
-    environment:
-      - TZ=Europe/Stockholm
-
-
+      - db
 
 
   client:
     build: ./client
     tty: true
     volumes:
-      - /home/yura/PycharmProjects/micran/client:/usr/src/project/
+      - ./client:/app/frontend
+      - /app/frontend/node_modules
     ports:
-      - "5000:5000"
-    depends_on:
-      - db2
-    command:
-     sh -c "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime &&
-     echo $TZ > /etc/timezone &&
-     sh /usr/src/project/run.sh"
+      - "3000:3000"
+    command: npm start
+
+  db:
+    image: "postgres:13"
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    volumes:
+    - /app/db
     environment:
-      - TZ=Europe/Stockholm
-
-volumes:
-  db2:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
 
 
-    
 
-#docker-compose up -d
+#docker-compose up --build

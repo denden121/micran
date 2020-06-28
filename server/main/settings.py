@@ -1,6 +1,47 @@
 import os
 from datetime import timedelta
 
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+
+
+
+# Baseline configuration.
+AUTH_LDAP_SERVER_URI = "ldap://ldap.micran.ru:389"
+
+AUTH_LDAP_BIND_DN = "cn=django-agent,dc=localnet,dc=micran"
+AUTH_LDAP_BIND_PASSWORD = "phlebotinum"
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    "ou=People,dc=localnet,dc=micran", ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
+)
+
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    "ou=django,ou=groups,dc=example,dc=com",
+    ldap.SCOPE_SUBTREE,
+    "(objectClass=groupOfNames)",
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
+
+# Simple group restrictions
+AUTH_LDAP_REQUIRE_GROUP = "cn=enabled,ou=django,ou=groups,dc=example,dc=com"
+AUTH_LDAP_DENY_GROUP = "cn=disabled,ou=django,ou=groups,dc=example,dc=com"
+
+# Populate the Django user from the LDAP directory.
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail",
+}
+
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_active": "cn=active,ou=django,ou=groups,dc=example,dc=com",
+    "is_staff": "cn=staff,ou=django,ou=groups,dc=example,dc=com",
+    "is_superuser": "cn=superuser,ou=django,ou=groups,dc=example,dc=com",
+}
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_CACHE_TIMEOUT = 3600
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -10,11 +51,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'k+y%ss&0pz#*^8kt@dak42!&ms-&udwb=rl_=fe*w==+a=9y_*'
+AUTHENTICATION_BACKENDS = (
+    "django_auth_ldap.backend.LDAPBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','0.0.0.0']
 LOGIN_REDIRECT_URL = '/admin'
 LOGIN_URL = '/login'
 
@@ -114,7 +159,7 @@ DATABASES = {
         'HOST' : 'db2',
         'PORT' : 5432,
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+        'NAME': 'db.sqlite3',
     }
 }
 
@@ -173,10 +218,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend',
-    )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

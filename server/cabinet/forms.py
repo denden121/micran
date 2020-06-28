@@ -1,5 +1,5 @@
 from django import forms
-from .models import Report, Project, Profile
+from .models import Report, Project, Profile, Group, Action
 from django.contrib.auth.models import User
 import re
 from django.core.exceptions import ValidationError
@@ -27,3 +27,15 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         exclude = ['participants']
+
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = '__all__'
+
+
+class ActionForm(forms.ModelForm):
+    class Meta:
+        model = Action
+        exclude = ['available_actions']
