@@ -40,8 +40,12 @@ def token(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = authenticate(username=username, password=password)
-    token = get_tokens_for_user(user)
-    return HttpResponse(json.dumps(token))
+    if user:
+        token = get_tokens_for_user(user)
+        return HttpResponse(json.dumps(token))
+    else:
+        return HttpResponse("False")
+
 
 
 @csrf_exempt
