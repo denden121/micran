@@ -226,14 +226,17 @@ def group_view(request):
         if request.method == "POST":
             group = GroupForm(request.POST)
             if group.is_valid():
-                print("FF")
+                print("FFfff")
                 update = group.save(commit=False)
                 actions = request.POST['actions'].split()
-                actions = [Action.objects.get(action=action) for action in actions]
+                for action in actions:
+                    print(action)
+                actions = [Action.objects.get(pk=int(action)) for action in actions]
                 if actions and group.is_valid():
                     group = group.save()
-                    [group.available_actions.add(actions[i].action) for i in range(len(actions))]
+                    [group.available_actions.add(actions[i]) for i in range(len(actions))]
                     return HttpResponse("Success")
+
 
 @csrf_exempt
 def action_view(request):
