@@ -5,9 +5,10 @@ const Activity = (props) =>{
     return(
         temp.map((action,index) =>{
             console.log(action)
+            let tempId = 'activity_' +action.pk
             return(
                 <div className="checkBox">
-                    <input className="form-check-input" type="checkbox"/>
+                    <input className="form-check-input activity" type="checkbox" id={tempId} />
                     <label className="form-check-label" >
                         {action.fields.action}
                     </label>
