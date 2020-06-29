@@ -61,14 +61,8 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    {/*<Switch>*/}
-                    <Route path='/cabinet/profile'>
-                        <SendReport send_report={this.send_report}/>
-                    </Route>
-                    {/*    <Route path='/cabinet/send_report' exact component = {()=>{return <SendReport send_report={this.send_report}/>}}/>*/}
-                    {/*    <Redirect to='/cabinet'/>*/}
-                    {/*</Switch>*/}
                     {/*<SendReport send_report={this.send_report}/>*/}
+                    <AddGroups/>
                 </div>
             </div>
         )
