@@ -29,7 +29,7 @@ def get_tokens_for_user(user):
 
 def get_access(action, user):
     try:
-        action = Action.objects.get(group = user.profile.group, action=action)
+        action = Action.objects.get(group=user.profile.group, action=action)
     except Action.DoesNotExist:
         return False
     return True
@@ -45,7 +45,6 @@ def token(request):
         return HttpResponse(json.dumps(token))
     else:
         return HttpResponse("False")
-
 
 
 @csrf_exempt
@@ -199,7 +198,8 @@ def project_view(request, project_id, user_id='default'):
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
                     update = form.save(commit=False)
-                    participants = [(User.objects.get(username=participant)) for participant in request.POST['participants'].split()]
+                    participants = [(User.objects.get(username=participant)) for participant in
+                                    request.POST['participants'].split()]
                     profiles = [Profile.objects.get(user=participant) for participant in participants]
                     if profiles and form.is_valid():
                         project = form.save()
@@ -230,7 +230,6 @@ def group_view(request):
         if request.method == "POST":
             group = GroupForm(request.POST)
             if group.is_valid():
-                print("FFfff")
                 update = group.save(commit=False)
                 actions = request.POST['actions'].split()
                 for action in actions:
@@ -256,6 +255,7 @@ def action_view(request):
                 action.save()
                 return HttpResponse("Success")
 
+
 @csrf_exempt
 def available_actions(request):
     user = get_user_jwt(request)
@@ -264,3 +264,20 @@ def available_actions(request):
             group = user.profile.group
             data = serializers.serialize('json', group.available_actions.all())
             return HttpResponse(data)
+
+
+@csrf_exempt
+def groups_with_permission(request):
+    user = get_user_jwt(request)
+    if user and get_access('info_about_group', user):
+        groups = Group.objects.all()
+        data = []
+        for group in groups:
+            profiles = Profile.objects.filter(group=group)
+            users = []
+            for profile in profiles:
+                user = profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
+                users.append(user)
+            if users:
+                data.append(json.dumps({'group': group.name, 'users': users}))
+        return HttpResponse(data)
