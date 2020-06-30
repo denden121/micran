@@ -1,6 +1,10 @@
 import React, {Component} from "react"
+import NameGroupps from "./NameGroupps/NameGroupps"
 
 class ManageGroupps extends React.Component{
+    state = {
+        groupps:{}
+    }
     render(){
         return(
             <table className="table">
@@ -13,18 +17,7 @@ class ManageGroupps extends React.Component{
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-
-                </tr>
+                <NameGroupps/>
                 </tbody>
             </table>
 
