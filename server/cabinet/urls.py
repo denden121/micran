@@ -19,6 +19,7 @@ urlpatterns = [
     path('cabinet/project/<int:project_id>', views.project_view),
     # roles
     path('groups/', views.group_view),
+    path('groups_admin/', views.groups_with_permission),
     path('actions/', views.action_view),
     path('available_actions/', views.available_actions),
 ]

@@ -1,12 +1,13 @@
-import React,{Component} from "react";
+import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
 import BrowseReports from '../BrowseReports/BrowseReports'
 
-class AddGroups extends React.Component{
+class AddGroups extends React.Component {
     state = {
-        actions:{}
+        actions: {}
     }
+
     async componentDidMount() {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
@@ -18,11 +19,12 @@ class AddGroups extends React.Component{
         }
         await fetch("http://127.0.0.1:8000/actions/", requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({actions:result}))
+            .then(result => this.setState({actions: result}))
             .catch(error => console.log('error', error))
         // console.log(this.state.actions[0].fields.action)
     }
-    createGroup =async ()=> {
+
+    createGroup = async () => {
         let $activities = document.querySelectorAll('.activity')
         let result = []
         $activities.forEach(value => {
@@ -31,7 +33,7 @@ class AddGroups extends React.Component{
             }
         })
         let nameGroup = document.querySelector('#nameGroup').value
-        console.log(result,nameGroup)
+        console.log(result, nameGroup)
         let myHeaders = new Headers();
         let token = localStorage.getItem('token')
         myHeaders.append("Authorization", token);
@@ -50,16 +52,60 @@ class AddGroups extends React.Component{
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
     }
+
     render() {
-        return(
-            <div className="container">
-                <div className="form-group">
-                    <label for="GroupName">Название группы</label>
-                        <input id = "nameGroup" type="text" className="form-control"/>
-                        <div className="form-check">
-                        <Activity actions={this.state.actions}/>
+        return (
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="form-group">
+                            <div className="row">
+                                <label className="col-md-4"><strong>Название группы</strong></label>
+                            </div>
+                            <input id="nameGroup" type="text" className="form-control" placeholder="Новая группа"/>
+                            <div className="form-check">
+                                <Activity actions={this.state.actions}/>
+                            </div>
+                            <div className="row">
+                                <label className="col-md-6"><strong>1.Пользовательский раздел</strong></label>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-9" align="left">
+                                    <div className="form-check">
+                                        <label className="checkbox">
+                                            <input type="checkbox" className="form-check-input"/>
+                                            Доступ в пользовательский раздел (код 1)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <label className="col-md-6"><strong>2.Администраторский раздел</strong></label>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-9" align="left">
+                                    <div className="form-check">
+                                        <label className="checkbox">
+                                            <input type="checkbox" className="form-check-input"/>
+                                            Доступ в администраторский раздел (код 2)
+                                        </label>
+                                        <label className="checkbox">
+                                            <input type="checkbox" className="form-check-input"/>
+                                            Доступ ко всему департаменту (код 44)
+                                        </label>
+                                        <label className="checkbox">
+                                            <input type="checkbox" className="form-check-input"/>
+                                            Доступ по всему своему департменту (код 45)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button className="btn btn-sm btn-primary groupps" type='submit'
+                                    onClick={this.createGroup}>Отправить
+                            </button>
                         </div>
-                        <button className="btn btn-sm btn-primary" type='submit' onClick={this.createGroup}>Отправить</button>
+                    </div>
                 </div>
             </div>
         )
