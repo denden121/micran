@@ -10,6 +10,7 @@ import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
 import AddGroups from "../AddGroups/AddGroups";
+import ManageGroupps from "../ManageGroupps/ManageGroupps";
 
 import Projects from "../Projects/Projects"
 class Main extends Component{
@@ -62,7 +63,8 @@ class Main extends Component{
 
                 <div className="Data">
                     {/*<SendReport send_report={this.send_report}/>*/}
-                    <AddGroups/>
+                    {/*<AddGroups/>*/}
+                    <ManageGroupps/>
                 </div>
             </div>
         )
