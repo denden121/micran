@@ -1,6 +1,6 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from .models import Profile, Project, Report, Action, Group
 from django.contrib.auth.models import User
@@ -271,13 +271,12 @@ def groups_with_permission(request):
     user = get_user_jwt(request)
     if user and get_access('info_about_group', user):
         groups = Group.objects.all()
-        data = []
+        data = {}
         for group in groups:
             profiles = Profile.objects.filter(group=group)
-            users = []
+            users = {}
             for profile in profiles:
-                user = profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
-                users.append(user)
+                users[profile.user.pk] = profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
             if users:
-                data.append(json.dumps({'group': group.name, 'users': users}))
-        return HttpResponse(data)
+                data[group.name] = {'users' : users, 'description' : group.description}
+        return JsonResponse(data)
