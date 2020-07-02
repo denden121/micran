@@ -278,5 +278,5 @@ def groups_with_permission(request):
             for profile in profiles:
                 users[profile.user.pk] = profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
             if users:
-                data[group.name] = {'users' : users, 'description' : group.description}
-        return JsonResponse(data)
+                data[group.pk] = {'name': group.name, 'users' : users, 'description' : group.description}
+        return HttpResponse(json.dumps(data))
