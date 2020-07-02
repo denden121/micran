@@ -7,7 +7,7 @@ from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 
 # Baseline configuration.
-AUTH_LDAP_SERVER_URI = "ldap://ldap.micran.ru:389"
+AUTH_LDAP_SERVER_URI = "0.0.0.0:9000"
 
 AUTH_LDAP_BIND_DN = "cn=django-agent,dc=localnet,dc=micran"
 AUTH_LDAP_BIND_PASSWORD = "phlebotinum"
