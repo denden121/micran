@@ -2,38 +2,7 @@ import React from 'react'
 
 
 const NameGroupps = (props) =>{
-    let temp ={
-        0:{
-            fields:{
-                name:"Данил",
-                discription:"дурачок",
-                members:"Данил Юра Настя"
-            }
-        },
-        1:{
-            fields:{
-                name:"Юра",
-                discription:"Не дурачок",
-                members:"Данил Юра Настя"
-            }
-        },
-        2:{
-            fields:{
-                name:"Настя",
-                discription:"алорал",
-                members:"Данил Юра Настя"
-            }
-        }, 
-        3:{
-            fields:{
-                name:"Данил",
-                discription:"дурачок",
-                members:"Данил Юра Настя"
-            }
-        }
-        
-    }
-    console.log(temp)
+   
         
     let temp1 = Array.from(temp)
     console.log(temp1)
