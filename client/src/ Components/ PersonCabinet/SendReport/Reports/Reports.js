@@ -5,23 +5,34 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Reports =(props)=>{
     return(
         <div className="container-fluid" >
-            
-            {/* <strong><h3>Отчет о проделанной работе</h3></strong> */}
-           <div className="Reports"> 
-                <div className="dropdown">
-                    <a className="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Проекты
-                    </a>
+            <div className="col-sm-8">
+                <div className="row" style={{display:"none"}}>
+                    <div className="col-sm-12">
+                        <div className="box">
+                            <div className="box-content">
+                                <div className="row">
+                                    <div className="col-sm-12 has-tooltip" data-placement="top" title="Пользуйтесь поиском при выборе проекта">
+                                        <p id="proj"><strong>Проект</strong></p>
+                                        <select className="select2 form-control select2-offscreen"
+                                        id='CB_proj'>                                            
+                                        </select>
+                                        <p id="proj_note"></p>
+                                    </div>
+                                </div>
+                                    <br/>
+                                <div id="time-read">
+                                    <strong>Часы:</strong>
+                                    <input className="form-control" placeholder="Часы"  type="text"/>
+                                </div>
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                     <a className="dropdown-item" href="#" >Проект №1</a>
-                     <a className="dropdown-item" href="#">Проект №2</a>
-                     <a className="dropdown-item" href="#">Проект №3</a>
                 </div>
-                </div>
-           </div>
-            
-            
+
+            </div> 
+                    
             
         </div>
     )
