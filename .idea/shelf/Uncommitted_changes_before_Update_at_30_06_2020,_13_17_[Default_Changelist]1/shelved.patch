@@ -1,0 +1,425 @@
+Index: client/src/ Components/ PersonCabinet/Navigation/Navigation.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport './Navigation.css'\n\nconst Navigation =(props)=>{\n    return(\n        <div className=\"container-fluid\">\n          \n            <div className=\"row\">\n    <nav className=\"col-md-2 d-none d-md-block bg-light sidebar\">\n      <div className=\"sidebar-sticky\">\n        <ul className=\"nav flex-column\">\n          <li className=\"nav-item\">\n            <a className=\"nav-link\" href=\"#\">\n              <span data-feather=\"home\"></span>\n                           \n                Отправка отчетов \n                <span className=\"sr-only\"></span>\n            </a>\n          </li>\n          <li className=\"nav-item\">\n            <a className=\"nav-link\" href=\"#\">\n              <span data-feather=\"file\"></span>\n                \n              Просмотр отчетов\n            </a>\n          </li>\n          <li className=\"nav-item\">\n            <a className=\"nav-link\" href=\"#\">\n              <span data-feather=\"shopping-cart\"></span>\n              Реестр проектов\n            </a>\n          </li>\n          <li className=\"nav-item\">\n            <a className=\"nav-link\" href=\"#\">\n              <span data-feather=\"users\"></span>\n              Отпуск\n            </a>\n          </li>\n          <li className=\"nav-item\">\n            <a className=\"nav-link\" href=\"#\">\n              <span data-feather=\"bar-chart-2\"></span>\n              Зарплата\n            </a>\n          </li>\n          <li className=\"nav-item\">\n            <a className=\"nav-link\" href=\"#\">\n              <span data-feather=\"layers\"></span>\n              Помощь\n            </a>\n          </li>\n          </ul>\n        </div>\n        </nav>\n        \n        </div>\n        </div>\n    )\n}\n\nexport default Navigation;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/Navigation/Navigation.js	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/Navigation/Navigation.js	(date 1593408308937)
+@@ -1,61 +1,60 @@
+ import React from "react"
+ import 'bootstrap/dist/css/bootstrap.min.css';
+ import './Navigation.css'
+-
++import {NavLink} from 'react-router-dom'
+ const Navigation =(props)=>{
+-    return(
+-        <div className="container-fluid">
+-          
+-            <div className="row">
+-    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+-      <div className="sidebar-sticky">
+-        <ul className="nav flex-column">
+-          <li className="nav-item">
+-            <a className="nav-link" href="#">
+-              <span data-feather="home"></span>
+-                           
+-                Отправка отчетов 
+-                <span className="sr-only"></span>
+-            </a>
+-          </li>
+-          <li className="nav-item">
+-            <a className="nav-link" href="#">
+-              <span data-feather="file"></span>
+-                
+-              Просмотр отчетов
+-            </a>
+-          </li>
+-          <li className="nav-item">
+-            <a className="nav-link" href="#">
+-              <span data-feather="shopping-cart"></span>
+-              Реестр проектов
+-            </a>
+-          </li>
+-          <li className="nav-item">
+-            <a className="nav-link" href="#">
+-              <span data-feather="users"></span>
+-              Отпуск
+-            </a>
+-          </li>
+-          <li className="nav-item">
+-            <a className="nav-link" href="#">
+-              <span data-feather="bar-chart-2"></span>
+-              Зарплата
+-            </a>
+-          </li>
+-          <li className="nav-item">
+-            <a className="nav-link" href="#">
+-              <span data-feather="layers"></span>
+-              Помощь
+-            </a>
+-          </li>
+-          </ul>
+-        </div>
+-        </nav>
+-        
++  return(
++      <div className="container-fluid">
++        <div className="row">
++          <nav className="col-md-2 d-none d-md-block bg-light sidebar">
++            <div className="sidebar-sticky">
++              <ul className="nav flex-column">
++                <li className="nav-item">
++                  <NavLink className="nav-link" to="cabinet/send_reports">
++                    <span data-feather="home"></span>
++
++                    Отправка отчетов
++                    <span className="sr-only"></span>
++                  </NavLink>
++                </li>
++                <li className="nav-item">
++                  <NavLink className="nav-link" to="cabinet/view_reports">
++                    <span data-feather="file"></span>
++
++                    Просмотр отчетов
++                  </NavLink>
++                </li>
++                <li className="nav-item">
++                  <NavLink className="nav-link" to="cabinet/view_reports">
++                    <span data-feather="shopping-cart"></span>
++                    Реестр проектов
++                  </NavLink>
++                </li>
++                <li className="nav-item">
++                  <NavLink className="nav-link" to="cabinet/holiday">
++                    <span data-feather="users"></span>
++                    Отпуск
++                  </NavLink>
++                </li>
++                <li className="nav-item">
++                  <NavLink className="nav-link" to="cabinet/salary">
++                    <span data-feather="bar-chart-2"></span>
++                    Зарплата
++                  </NavLink>
++                </li>
++                <li className="nav-item">
++                  <NavLink className="nav-link" to="cabinet/help">
++                    <span data-feather="layers"></span>
++                    Помощь
++                  </NavLink>
++                </li>
++              </ul>
++            </div>
++          </nav>
++
+         </div>
+-        </div>
+-    )
++      </div>
++  )
+ }
+ 
+ export default Navigation;
+\ No newline at end of file
+Index: client/src/ Components/ PersonCabinet/BrowseReports/BrowserReports.css
+===================================================================
+--- client/src/ Components/ PersonCabinet/BrowseReports/BrowserReports.css	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/NavAndHeader/NavAndHeader.js	(date 1593409578813)
+@@ -1,0 +1,19 @@
++import React from 'react'
++import Header from "../Header/Header"
++import Navigation from "../Navigation/Navigation"
++// import 'react' from React
++
++const NavAndHeader=(props)=> {
++    return(
++        <div>
++            <div className="Head">
++                <Header clickLogOut={props.logOut}/>
++            </div>
++
++            <div className='Nav'>
++                <Navigation/>
++            </div>
++        </div>
++    )
++}
++export default NavAndHeader
+\ No newline at end of file
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { Component } from 'react';\nimport './App.css';\nimport Auth from \"./ Components/Auth/Auth\"\nimport {BrowserRouter, Route} from 'react-router-dom'\nimport {Redirect,Switch} from 'react-router-dom'\nimport Main from \"./ Components/ PersonCabinet/MainPage/Main\"\nimport Registration from \"./ Components/Registration/registration\";\nimport ReactDOM from \"react-dom\";\n\nclass  App extends Component {\n    state = {\n        token: '',\n    }\n    //обработка кнопки для авторизации\n    authHandler = async () => {\n        let myHeaders = new Headers();\n        myHeaders.append(\"Content-Type\", \"application/x-www-form-urlencoded\");\n        let login = document.getElementById(\"input-login\").value\n        let password = document.getElementById(\"input-password\").value\n        // console.log(login,password)\n        let urlencoded = new URLSearchParams();// Добавляем параметры запросы\n        urlencoded.append(\"username\", login);\n        urlencoded.append(\"password\", password);\n        let requestOptions = {\n            method: 'POST',\n            body: urlencoded,\n            redirect: 'follow',\n            headers: myHeaders\n        };\n        console.log(login,password)\n        //проверка логина и пароля(отправка запроса)\n        let sendUrl = \"http://127.0.0.1:8000/token/\"\n        await fetch(sendUrl, requestOptions)\n            .then(response => response.json())\n            .then(result => localStorage.setItem('token', result.access))\n            .catch(error => localStorage.setItem('token', ''));\n\n        // console.log('sssss',localStorage.getItem('token'))\n        // console.log(localStorage.getItem('token') === 'undefined')\n        if (localStorage.getItem('token') == 'undefined') {\n            alert('incorrect')\n        } else {\n            myHeaders = new Headers();\n            myHeaders.append(\"Authorization\",localStorage.getItem('token'));\n\n            requestOptions = {\n                method: 'GET',\n                headers: myHeaders,\n                redirect: 'follow'\n            };\n\n            await fetch(\"http://127.0.0.1:8000/check/\", requestOptions)\n                .then(response => response.text())\n                .then(result => localStorage.setItem('checkReg',result))\n                .catch(error => console.log('error', error));\n            ReactDOM.render(\n                <BrowserRouter>\n                    <React.StrictMode>\n                        <App/>\n                    </React.StrictMode>\n                </BrowserRouter>,\n                document.getElementById('root')\n            );\n        }\n        console.log('прошел всю кнопку')\n\n    }\n    sendReg= async ()=> {\n        let myHeaders = new Headers();\n        let token = localStorage.getItem('token')\n        myHeaders.append(\"Authorization\", token);\n\n        let formdata = new FormData();\n        let first_name = document.getElementById('name').value\n        let surname = document.getElementById('surname').value\n        let middle_name = document.getElementById('fatherName').value\n        formdata.append(\"first_name\", first_name);\n        formdata.append(\"second_name\", surname);\n        formdata.append(\"middle_name\", middle_name);\n        let requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n\n        await fetch(\"http://127.0.0.1:8000/cabinet/register/\", requestOptions)\n            .then(response => response.text())\n            .catch(error => console.log('error', error));\n        localStorage.setItem('checkReg', 'True')\n    }\n    render(){\n        const funcPersArea = () => {\n            let token = localStorage.getItem('token')\n            if (typeof token==='string' && token!=='') {\n                return < Main clickLogOut = {this.logOut}/>\n            } else {\n                return <Redirect to='/'/>\n            }\n        }\n        const funcAuth = () => {\n            let token = localStorage.getItem('token')\n            let reg = localStorage.getItem('checkReg')\n            console.log(token,reg)\n            console.log(typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True')\n            console.log(localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='')\n            if (typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True') {\n                return <Redirect to='/cabinet'/>\n            }\n            else if( localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='') {\n                return <Redirect to='reg'/>\n            }\n            else{\n                console.log('пошел на авторизацию')\n                return <Auth authHandler={this.authHandler}/>;\n            }\n        };\n        const funcReg = () =>{\n            let reg = localStorage.getItem('checkReg')\n            // debugger;\n            if(reg === 'False' ) {\n                return <Registration sendFunc={this.sendReg}/>\n            }\n            else{\n                return <Redirect to='/cabinet'/>;\n            }\n        }\n        return (\n            <div className='App'>\n                <Switch>\n                    <Route path='/' exact component = {funcAuth}/>\n                    <Route path='/reg' exact component = {funcReg}/>\n                    <Route path='/cabinet' exact component = {funcPersArea}/>\n                    {/*<Redirect to='/cabinet'/>*/}\n                </Switch>\n                {/*<Switch>*/}\n                {/*    <Route path='/auth' exact component = {Auth} />*/}\n                {/*    <Route path='/main' exact component = {Main} />*/}\n                {/*</Switch>*/}\n            </div>\n        )\n    }\n}\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/App.js	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/App.js	(date 1593410685688)
+@@ -13,6 +13,7 @@
+     }
+     //обработка кнопки для авторизации
+     authHandler = async () => {
++
+         let myHeaders = new Headers();
+         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+         let login = document.getElementById("input-login").value
+@@ -93,7 +94,7 @@
+         const funcPersArea = () => {
+             let token = localStorage.getItem('token')
+             if (typeof token==='string' && token!=='') {
+-                return < Main clickLogOut = {this.logOut}/>
++                return <Main/>
+             } else {
+                 return <Redirect to='/'/>
+             }
+@@ -133,10 +134,6 @@
+                     <Route path='/cabinet' exact component = {funcPersArea}/>
+                     {/*<Redirect to='/cabinet'/>*/}
+                 </Switch>
+-                {/*<Switch>*/}
+-                {/*    <Route path='/auth' exact component = {Auth} />*/}
+-                {/*    <Route path='/main' exact component = {Main} />*/}
+-                {/*</Switch>*/}
+             </div>
+         )
+     }
+Index: client/src/ Components/ PersonCabinet/MainPage/Main.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport Navigation from \"../Navigation/Navigation\";\nimport Header from \"../Header/Header\"\nimport BrowseReports from '../BrowseReports/BrowseReports'\nimport SendReport from \"../SendReport/SendReport\"\nimport rend from '../../../index.js'\nimport PersonData from \"../PersonData/PersonData\";\nimport \"./Main.css\"\nimport Switch from \"react-bootstrap/cjs/Switch\";\nimport {Redirect, Route} from \"react-router-dom\";\nimport AddGroups from \"../AddGroups/AddGroups\";\n\nimport Projects from \"../Projects/Projects\"\nclass Main extends Component{\n    logOut = () =>{\n        localStorage.setItem('token','')\n        localStorage.setItem('checkReg','False')\n        // rend()\n    }\n    send_report =async ()=>{\n        let mentor = document.getElementById('mentorProject').value\n        let time = document.getElementById('spendTime').value\n        let body = document.getElementById('bodeReport').value\n        let token = localStorage.getItem('token')\n\n        let myHeaders = new Headers()\n        myHeaders.append(\"Authorization\", token);\n\n        let formdata = new FormData();\n        formdata.append(\"text\", body);\n        formdata.append(\"hour \", time);\n        formdata.append(\"project\", \"test\");\n        formdata.append(\"curator\", mentor);\n\n        let requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n\n         await fetch(\"http://127.0.0.1:8000/cabinet/reports/\", requestOptions)\n            .then(response => response.text())\n            .then(result => console.log(result))\n            .catch(error => console.log('error', error));\n         alert('Отчет отправлен')\n         document.getElementById('mentorProject').value = ''\n         document.getElementById('spendTime').value= ''\n         document.getElementById('bodeReport').value= ''\n    }\n    render() {\n        return (\n            <div className=\"container\">\n                <div className=\"Head\">\n                    <Header clickLogOut={this.logOut}/>\n                </div>\n\n                <div className='Nav'>\n                    <Navigation/>\n                </div>\n\n                <div className=\"Data\">\n                    {/*<SendReport send_report={this.send_report}/>*/}\n                     {/*<AddGroups/>*/}\n                    {/*<BrowseReports/>*/}\n\n                </div>\n            </div>\n        )\n    }\n}\n\nexport default Main;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/MainPage/Main.js	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/MainPage/Main.js	(date 1593497824691)
+@@ -2,14 +2,15 @@
+ import 'bootstrap/dist/css/bootstrap.min.css';
+ import Navigation from "../Navigation/Navigation";
+ import Header from "../Header/Header"
+-import BrowseReports from '../BrowseReports/BrowseReports'
++import ViewReports from '../ViewReports/ViewReports'
+ import SendReport from "../SendReport/SendReport"
+ import rend from '../../../index.js'
+ import PersonData from "../PersonData/PersonData";
+ import "./Main.css"
+ import Switch from "react-bootstrap/cjs/Switch";
+-import {Redirect, Route} from "react-router-dom";
++import {Redirect, Route,BrowserRouter} from "react-router-dom";
+ import AddGroups from "../AddGroups/AddGroups";
++import NavAndHeader from "../NavAndHeader/NavAndHeader"
+ 
+ import Projects from "../Projects/Projects"
+ class Main extends Component{
+@@ -49,24 +50,30 @@
+          document.getElementById('spendTime').value= ''
+          document.getElementById('bodeReport').value= ''
+     }
++
+     render() {
++        //const Route=()=>{
++        //     if (document.URL.split('/').pop() === 'salary'){
++        //         return <AddGroups>}else{
++        //     }
++        // }
+         return (
+-            <div className="container">
+-                <div className="Head">
+-                    <Header clickLogOut={this.logOut}/>
+-                </div>
++             <div className="container">
+ 
+-                <div className='Nav'>
+-                    <Navigation/>
+-                </div>
+-
++            <NavAndHeader logOut={this.logOut}/>
+                 <div className="Data">
+-                    {/*<SendReport send_report={this.send_report}/>*/}
+-                     {/*<AddGroups/>*/}
+-                    {/*<BrowseReports/>*/}
+-
++                    <Switch>
++                        {/*<Route/>*/}
++                        {/*<SendReport send_report={this.send_report}/>*/}
++                        {/*<AddGroups/>*/}
++                        {/*<ViewReports/>*/}
++                        {/*<Route path='cabinet/' component={()=>{return <NavAndHeader logOut={this.logOut}/>}}/>*/}
++                        {/*<Route path='cabinet/salary' render={AddGroups}/>*/}
++                        {/*<Route exact path='cabinet/view_reports' component={ViewReports}/>*/}
++                        {/*<Route path='cabinet/send_reports' component={this.logOut}/>*/}
++                    </Switch>
+                 </div>
+-            </div>
++             </div>
+         )
+     }
+ }
+Index: client/src/ Components/ PersonCabinet/AddGroups/AddGroups.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React,{Component} from \"react\";\nimport './AddGroups.css'\nimport Activity from \"./Activity/Activity\"\nimport BrowseReports from '../BrowseReports/BrowseReports'\n\nclass AddGroups extends React.Component{\n    state = {\n        actions:{}\n    }\n    async componentDidMount() {\n        let token = localStorage.getItem('token')\n        let myHeaders = new Headers()\n        myHeaders.append(\"Authorization\", token)\n        let requestOptions = {\n            method: 'GET',\n            headers: myHeaders,\n            redirect: 'follow'\n        }\n        await fetch(\"http://127.0.0.1:8000/actions/\", requestOptions)\n            .then(response => response.json())\n            .then(result => this.setState({actions:result}))\n            .catch(error => console.log('error', error))\n        // console.log(this.state.actions[0].fields.action)\n    }\n    createGroup =async ()=> {\n        let $activities = document.querySelectorAll('.activity')\n        let result = []\n        $activities.forEach(value => {\n            if (value.checked) {\n                result.push(value.id.split('_')[1])\n            }\n        })\n        let nameGroup = document.querySelector('#nameGroup').value\n        console.log(result,nameGroup)\n        let myHeaders = new Headers();\n        let token = localStorage.getItem('token')\n        myHeaders.append(\"Authorization\", token);\n        var formdata = new FormData();\n        formdata.append(\"actions\", result.join(' '));\n        formdata.append(\"name\", nameGroup);\n        var requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n\n        await fetch(\"http://127.0.0.1:8000/groups/\", requestOptions)\n            .then(response => response.text())\n            .then(result => console.log(result))\n            .catch(error => console.log('error', error));\n    }\n    render() {\n        return(\n            <div className=\"container\">\n                <div className=\"form-group\">\n                    <label for=\"GroupName\">Название группы</label>\n                        <input id = \"nameGroup\" type=\"text\" className=\"form-control\"/>\n                        <div className=\"form-check\">\n                        <Activity actions={this.state.actions}/>\n                        </div>\n                        <button className=\"btn btn-sm btn-primary\" type='submit' onClick={this.createGroup}>Отправить</button>\n                </div>\n            </div>\n        )\n    }\n}\n\nexport default AddGroups
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/AddGroups/AddGroups.js	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/AddGroups/AddGroups.js	(date 1593408493925)
+@@ -1,7 +1,7 @@
+ import React,{Component} from "react";
+ import './AddGroups.css'
+ import Activity from "./Activity/Activity"
+-import BrowseReports from '../BrowseReports/BrowseReports'
++import ViewReports from '../ViewReports/ViewReports'
+ 
+ class AddGroups extends React.Component{
+     state = {
+Index: client/src/ Components/ PersonCabinet/LookReport/ProjectCard/ProjectCard.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.Projects{\n    border: 1 px solid #ccc;\n    margin-bottom: 10px;\n    display: block;\n    padding: 10px;\n    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14);\n    border-radius: 5px;\n    float: right;\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/LookReport/ProjectCard/ProjectCard.css	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/LookReport/ProjectCard/ProjectCard.css	(date 1593404067872)
+@@ -1,9 +1,16 @@
+ .Projects{
+-    border: 1 px solid #ccc;
+-    margin-bottom: 10px;
++
+     display: block;
+-    padding: 10px;
+-    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14);
+-    border-radius: 5px;
+     float: right;
++    -webkit-border-radius: 5px;
++    -moz-border-radius: 5px;
++    border-radius: 5px;
++    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
++    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
++    box-shadow: 0 1px 2px rgba(0,0,0,.05);
++    padding: 19px 29px 29px;
++    margin: 0 auto 20px;
++    background-color: #fff;
++    border: 1px solid #e5e5e5;
++
+ }
+\ No newline at end of file
+Index: client/src/ Components/ PersonCabinet/LookReport/ProjectCard/ProjectCard.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport '../LookReport.css'\n\nconst ProjectCard =(props)=>{\n    return(\n        <div className=\"container-fluid\" >\n        <div className=\"Otchet\">\n           \n            <div className=\"pageReport\">\n            <div className=\"card text-left\" >\n                <div className=\"card-body\">\n                    <h5 className=\"card-title\">Отчет</h5>\n                       <div className=\"card-text\">\n                       <h6>Название проекта</h6>\n             <div className=\"projName\">{props.project}</div>\n        <h6>Куратор проекта</h6>\n            <div className=\"supervisor\">{props.curator}</div>\n         <h6>Часы</h6>\n            <div className=\"time\">{props.hour}</div>\n        <h6>Текст отчета</h6>\n            <div className=\"repText\">{props.text}</div>\n                       </div>                        \n                </div>\n          </div>\n         </div>               \n        \n        </div>\n    </div>\n    )\n}\n\nexport default ProjectCard;\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/LookReport/ProjectCard/ProjectCard.js	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/LookReport/ProjectCard/ProjectCard.js	(date 1593404762965)
+@@ -2,6 +2,7 @@
+ import 'bootstrap/dist/css/bootstrap.min.css';
+ import '../LookReport.css'
+ 
++
+ const ProjectCard =(props)=>{
+     return(
+         <div className="container-fluid" >
+@@ -10,16 +11,27 @@
+             <div className="pageReport">
+             <div className="card text-left" >
+                 <div className="card-body">
+-                    <h5 className="card-title">Отчет</h5>
++                    <h4 className="card-title"><strong>Отчет</strong></h4>
+                        <div className="card-text">
+-                       <h6>Название проекта</h6>
+-             <div className="projName">{props.project}</div>
+-        <h6>Куратор проекта</h6>
+-            <div className="supervisor">{props.curator}</div>
+-         <h6>Часы</h6>
+-            <div className="time">{props.hour}</div>
+-        <h6>Текст отчета</h6>
+-            <div className="repText">{props.text}</div>
++
++             <div className="projName">
++                 <h6><strong>Название проекта</strong></h6>
++                 {props.project}
++             </div>
++            <div className="supervisor">
++                <h6><strong>Куратор проекта</strong></h6>
++                {props.curator}
++            </div>
++
++            <div className="time">
++                <h6><strong>Часы</strong></h6>
++                {props.hour}
++            </div>
++
++            <div className="repText">
++                <h6><strong>Текст отчета</strong></h6>
++                {props.text}
++            </div>
+                        </div>                        
+                 </div>
+           </div>
+Index: client/src/ Components/ PersonCabinet/LookReport/LookReport.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.Otchet{\n    display: grid;\n    grid-template-areas: \n    \"header header header\"\n    \"nav article article\";\n    grid-template-rows: 60px 1fr 60px;\n    grid-template-columns: 10% 1fr 25%;\n    grid-gap: 10px;\n    height: 100vh;\n    margin: 0;\n}\n\nheader, nav, article {\n    padding: 20px;\n    \n    }\n\n#Head{\n    grid-area: header;\n}\n\n#pageReport{\n    grid-area: article;\n}\n\n#pageNav{\n    grid-area: nav;\n}\n\n.card{\n    width: 18rem;\n}\n\n.a,\n.b,\n.c,\n.d{\n    display: inline-block;\n}\n\n.Label1{\n    float: left;\n    font-size: 16px;\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/LookReport/LookReport.css	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/LookReport/LookReport.css	(date 1593405038287)
+@@ -8,6 +8,7 @@
+     grid-gap: 10px;
+     height: 100vh;
+     margin: 0;
++
+ }
+ 
+ header, nav, article {
+@@ -29,6 +30,13 @@
+ 
+ .card{
+     width: 18rem;
++    -webkit-border-radius: 5px;
++    -moz-border-radius: 5px;
++    border-radius: 5px;
++    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
++    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
++    box-shadow: 0 1px 2px rgba(0,0,0,.05);
++    border: 1px solid #e5e5e5;
+ }
+ 
+ .a,
+Index: client/src/ Components/ PersonCabinet/BrowseReports/BrowseReports.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React,{Component} from 'react'\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport Header from \"../Header/Header\"\nimport Navigation from \"../Navigation/Navigation\"\nimport './BrowserReports.css'\nimport '../LookReport/ProjectCard/ProjectCard'\nimport ProjectCard from '../LookReport/ProjectCard/ProjectCard';\n\n\n\nconst NewReports =(props)=>{\n    let temp = Array.from(props.reports)\n    return(\n        temp.map((report,index) =>{\n            console.log(report)\n            return(\n                <ProjectCard\n                    key={index}\n                    project={report.fields.project}\n                    curator={report.fields.curator}\n                    hour={report.fields.hour}\n                    text={report.fields.text}\n                />    \n            )\n        })\n    )\n}\nclass BrowseReports extends React.Component{\n    state ={\n        reports:{}\n    }\n    async componentDidMount() {\n        let myHeaders = new Headers();\n        let token = localStorage.getItem('token')\n        myHeaders.append(\"Authorization\", token);\n        let requestOptions = {\n            method: 'GET',\n            headers: myHeaders,\n            redirect: 'follow'\n        };\n\n        await fetch(\"http://127.0.0.1:8000/cabinet/reports\", requestOptions)\n            .then(response => response.json())\n            .then(result => this.setState({reports: result}))\n            .catch(error => console.log('error', error));\n        // console.log(this.state.reports[0].fields.text)\n    }\n\n    render() {\n        \n        return(\n        // <div>{ this.state.reports.result[0].fields.text }</div>\n               \n        <div className=\"container\">\n            <NewReports reports={this.state.reports}/>\n        </div>\n                \n        )       \n    }\n}\n\nexport default BrowseReports
+===================================================================
+--- client/src/ Components/ PersonCabinet/BrowseReports/BrowseReports.js	(revision 2424533465324968bf8d7b91339cd87624e54c97)
++++ client/src/ Components/ PersonCabinet/ViewReports/ViewReports.js	(date 1593408518197)
+@@ -2,7 +2,7 @@
+ import 'bootstrap/dist/css/bootstrap.min.css';
+ import Header from "../Header/Header"
+ import Navigation from "../Navigation/Navigation"
+-import './BrowserReports.css'
++import './ViewReports.css'
+ import '../LookReport/ProjectCard/ProjectCard'
+ import ProjectCard from '../LookReport/ProjectCard/ProjectCard';
+ 
+@@ -25,7 +25,7 @@
+         })
+     )
+ }
+-class BrowseReports extends React.Component{
++class ViewReports extends React.Component{
+     state ={
+         reports:{}
+     }
+@@ -59,4 +59,4 @@
+     }
+ }
+ 
+-export default BrowseReports
+\ No newline at end of file
++export default ViewReports
+\ No newline at end of file

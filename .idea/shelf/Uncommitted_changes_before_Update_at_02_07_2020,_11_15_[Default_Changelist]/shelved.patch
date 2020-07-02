@@ -1,0 +1,97 @@
+Index: client/src/ Components/ PersonCabinet/ManageGroupps/NameGroupps/NameGroupps.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react'\n\n\nconst NameGroupps = (props) =>{\n    console.log(props)\n    let temp1 = Array.from(props.listGroup)\n    console.log(temp1)\n    temp1 = temp1.map((groupps,index) =>{\n        console.log(groupps)\n        let tempId = 'name_' +groupps.pk\n        return(\n            <div className=\"nameGroupps\">\n                <tr>\n                    <th scope=\"row\">{index}</th>\n                    <td>{groupps.fields.name}</td>\n                    <td>{groupps.fields.discription}</td>\n                    <td>{groupps.fields.members}</td>\n                </tr>                  \n            </div>\n        )\n    })\n    return(\n        temp1\n    )\n}\n\nexport default NameGroupps\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/ManageGroupps/NameGroupps/NameGroupps.js	(revision 7882df11e1f19201b31060c41dfbd13b9255e952)
++++ client/src/ Components/ PersonCabinet/ManageGroupps/NameGroupps/NameGroupps.js	(date 1593662872963)
+@@ -2,9 +2,9 @@
+ 
+ 
+ const NameGroupps = (props) =>{
+-    console.log(props)
++    // console.log(props)
+     let temp1 = Array.from(props.listGroup)
+-    console.log(temp1)
++    // console.log(temp1)
+     temp1 = temp1.map((groupps,index) =>{
+         console.log(groupps)
+         let tempId = 'name_' +groupps.pk
+Index: client/src/ Components/ PersonCabinet/ManageGroupps/ManageGroupps.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport NameGroupps from \"./NameGroupps/NameGroupps\"\n\nclass ManageGroupps extends React.Component{\n    componentDidMount() {\n        let token = localStorage.getItem('token')\n        let myHeaders = new Headers();\n        myHeaders.append(\"Authorization\", token);\n\n        let requestOptions = {\n            method: 'GET',\n            headers: myHeaders,\n            redirect: 'follow'\n        };\n\n        fetch(\"http://127.0.0.1:8000/groups_admin/\", requestOptions)\n            // .then(response => console.log(this.setState({groupps:response.json()})))\n            .then(response => response.json())\n            .then(result =>console.log(result))\n\n    }\n\n    state = {\n        groupps:{}\n    }\n    render(){\n        return(\n            <table className=\"table\">\n                <thead className=\"thead-dark\">\n                <tr>\n                    <th scope=\"col\">№</th>\n                    <th scope=\"col\">Название</th>\n                    <th scope=\"col\">Описание</th>\n                    <th scope=\"col\">Входит в группу</th>\n                </tr>\n                </thead>\n                <tbody>\n                <NameGroupps listGroup = {this.state.groupps}/>\n                </tbody>\n            </table>\n\n\n\n        )\n    }\n}\nexport default ManageGroupps;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/ManageGroupps/ManageGroupps.js	(revision 7882df11e1f19201b31060c41dfbd13b9255e952)
++++ client/src/ Components/ PersonCabinet/ManageGroupps/ManageGroupps.js	(date 1593663237574)
+@@ -1,8 +1,8 @@
+ import React, {Component} from "react"
+ import NameGroupps from "./NameGroupps/NameGroupps"
+ 
+-class ManageGroupps extends React.Component{
+-    componentDidMount() {
++class ManageGroups extends React.Component{
++    async componentDidMount() {
+         let token = localStorage.getItem('token')
+         let myHeaders = new Headers();
+         myHeaders.append("Authorization", token);
+@@ -13,15 +13,17 @@
+             redirect: 'follow'
+         };
+ 
+-        fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
+-            // .then(response => console.log(this.setState({groupps:response.json()})))
+-            .then(response => response.json())
+-            .then(result =>console.log(result))
++        await fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
++            // .then(response => console.log(this.setState({groups: response.json()})))
++            .then(response => console.log(response.json()))
++            .then(result => console.log(result))
++        let temp = Array.from(this.state.groups)
++        console.log('array', temp)
+ 
+     }
+ 
+     state = {
+-        groupps:{}
++        groups:{}
+     }
+     render(){
+         return(
+@@ -35,7 +37,7 @@
+                 </tr>
+                 </thead>
+                 <tbody>
+-                <NameGroupps listGroup = {this.state.groupps}/>
++                    <NameGroupps listGroup = {this.state.groups}/>
+                 </tbody>
+             </table>
+ 
+@@ -44,4 +46,4 @@
+         )
+     }
+ }
+-export default ManageGroupps;
+\ No newline at end of file
++export default ManageGroups;
+\ No newline at end of file
+Index: server/cabinet/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from rest_framework_simplejwt.tokens import RefreshToken\nfrom django.shortcuts import render, redirect, get_object_or_404\nfrom django.http import HttpResponse, JsonResponse\nfrom django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie\nfrom .models import Profile, Project, Report, Action, Group\nfrom django.contrib.auth.models import User\nfrom django.core import serializers\nfrom rest_framework_simplejwt.authentication import JWTAuthentication\nfrom .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm\nimport simplejson as json\nfrom django.contrib.auth import authenticate\n\n\ndef get_user_jwt(request):\n    token = request.headers.get('Authorization')\n    validated_token = JWTAuthentication().get_validated_token(token)\n    user = JWTAuthentication().get_user(validated_token)\n    return user\n\n\ndef get_tokens_for_user(user):\n    refresh = RefreshToken.for_user(user)\n\n    return {\n        'refresh': str(refresh),\n        'access': str(refresh.access_token),\n    }\n\n\ndef get_access(action, user):\n    try:\n        action = Action.objects.get(group=user.profile.group, action=action)\n    except Action.DoesNotExist:\n        return False\n    return True\n\n\n@csrf_exempt\ndef token(request):\n    username = request.POST.get('username')\n    password = request.POST.get('password')\n    user = authenticate(username=username, password=password)\n    if user:\n        token = get_tokens_for_user(user)\n        return HttpResponse(json.dumps(token))\n    else:\n        return HttpResponse(\"False\")\n\n\n@csrf_exempt\ndef check_view(request):\n    user = get_user_jwt(request)\n    if not hasattr(user, 'profile'):\n        return HttpResponse(\"False\")\n    return HttpResponse(\"True\")\n\n\n@csrf_exempt\ndef cabinet_view(request, user_id='default'):\n    user = get_user_jwt(request)\n    if user_id == 'default':\n        if not hasattr(user, 'profile'):\n            return HttpResponse(\"Profile undefined\")\n        # data_user = serializers.serialize('json', [user])\n        data_profile = serializers.serialize('json', [user.profile], fields=('first_name', 'last_name', 'middle_name'))\n        return HttpResponse(data_profile)\n    else:\n        if user and (user.id == user_id or user.is_staff):\n            profile = Profile.objects.filter(user=user)\n            data = serializers.serialize('json', profile)\n            return HttpResponse(data)\n        return HttpResponse(\"Permission denied\")\n\n\n@csrf_exempt\ndef register_view(request):\n    user = get_user_jwt(request)\n    if not hasattr(user, 'profile'):\n        Profile.objects.create(user=user)\n    if request.method == \"POST\":\n        form = ProfileForm(request.POST, request.FILES, instance=user.profile)\n        print(form.errors)\n        if form.is_valid():\n            update = form.save(commit=False)\n            update.user = user\n            update.save()\n            return HttpResponse(\"Success\")\n        return HttpResponse(\"Something went wrong\")\n    return HttpResponse('Method not allowed')\n\n\n@csrf_exempt\ndef all_report_view(request, user_id='default'):\n    user = get_user_jwt(request)\n    if user_id == 'default':\n        profile = Profile.objects.get(user=user)\n        if user:\n            if request.method == \"GET\":\n                reports = Report.objects.filter(creator_id=user.id)\n                data = serializers.serialize('json', reports)\n                return HttpResponse(data)\n            if request.method == \"POST\":\n                form = ReportForm(request.POST)\n                print(form.errors)\n                if form.is_valid():\n                    report = form.save(commit=False)\n                    report.creator_id = profile\n                    print(request.POST)\n                    report.save()\n                    return HttpResponse(\"Success\")\n                return HttpResponse(\"Fail\")\n            return HttpResponse(\"Method not allowed\")\n        return HttpResponse(\"Authentication error\")\n    else:\n        if user:\n            if request.method == \"GET\":\n                if user_id != user.id and not get_access('check_reports', user):\n                    return HttpResponse(\"You don't have permissions\")\n                reports = Report.objects.filter(creator_id=user_id)\n                data = serializers.serialize('json', reports)\n                return HttpResponse(data)\n            return HttpResponse(\"Method not allowed\")\n        return HttpResponse(\"Authentication error\")\n\n\n@csrf_exempt\ndef report_view(request, report_id, user_id='default'):\n    if user_id == 'default':\n        user = get_user_jwt(request)\n        report = Report.objects.filter(creator_id_id=user.id, id=report_id)\n        if user:\n            if request.method == \"GET\":\n                data = serializers.serialize('json', report)\n                return HttpResponse(data)\n            elif request.method == \"POST\":\n                form = ReportForm(request.POST, request.FILES, instance=report)\n                if form.is_valid():\n                    update = form.save()\n                return HttpResponse(\"Success\")\n            return HttpResponse(\"Method not allowed\")\n        return HttpResponse(\"Authentication error\")\n    else:\n        user = get_user_jwt(request)\n        if user:\n            if request.method == \"GET\":\n                if get_access('check_reports', user):\n                    report = Report.objects.filter(user=user_id, id=report_id)\n                    data = serializers.serialize('json', report)\n                    return HttpResponse(data)\n                return HttpResponse(\"You don't have permissions\")\n            return HttpResponse(\"Access error\")\n        return HttpResponse(\"Authentication error\")\n\n\n@csrf_exempt\ndef all_projects_view(request, user_id='default'):\n    if user_id == 'default':\n        user = get_user_jwt(request)\n        if user:\n            if request.method == \"GET\":\n                projects = Project.objects.filter(participants=user.id)\n                data = serializers.serialize('json', projects)\n                return HttpResponse(data)\n            if request.method == \"POST\" and get_access('make_projects', user):\n                form = ProjectForm(request.POST)\n                participants = request.POST['participants'].split()\n                participants = [(User.objects.get(username=participant)) for participant in participants]\n                profiles = [Profile.objects.get(user=participant) for participant in participants]\n                if profiles and form.is_valid():\n                    project = form.save()\n                    [project.participants.add(profiles[i].user.id) for i in range(len(profiles))]\n                    return HttpResponse(\"Success\")\n                return HttpResponse(\"Something went wrong\")\n            return HttpResponse(\"Method not allowed\")\n        return HttpResponse(\"Authentication error\")\n    else:\n        user = get_user_jwt(request)\n        if user:\n            if request.method == \"GET\" and get_access('check_projects', user):\n                projects = Project.objects.filter(participants=user_id)\n                data = serializers.serialize('json', projects)\n                return HttpResponse(data)\n            return HttpResponse(\"Method not allowed\")\n        return HttpResponse(\"Authentication error\")\n\n\n@csrf_exempt\ndef project_view(request, project_id, user_id='default'):\n    if user_id == 'default':\n        user = get_user_jwt(request)\n        if user:\n            if request.method == \"GET\":\n                project = Project.objects.filter(id=project_id)\n                data = serializers.serialize('json', project)\n                return HttpResponse(data)\n            elif request.method == \"POST\" and get_access('make_projects', user):\n                project = Project.objects.get(id=project_id)\n                form = ProjectForm(request.POST, request.FILES, instance=project)\n                if form.is_valid():\n                    update = form.save(commit=False)\n                    participants = [(User.objects.get(username=participant)) for participant in\n                                    request.POST['participants'].split()]\n                    profiles = [Profile.objects.get(user=participant) for participant in participants]\n                    if profiles and form.is_valid():\n                        project = form.save()\n                        [project.participants.add(profiles[i].user.id) for i in range(len(profiles))]\n                        return HttpResponse(\"Success\")\n                return HttpResponse(\"Success\")\n            return HttpResponse(\"Method not allowed\")\n        return HttpResponse(\"Authentication error\")\n    else:\n        user = get_user_jwt(request)\n        if user:\n            if request.method == \"GET\" or get_access('check_projects', user):\n                project = Project.objects.filter(participants=user_id, id=project_id)\n                data = serializers.serialize('json', project)\n                return HttpResponse(data)\n            return HttpResponse(\"Method not allowed\")\n        return HttpResponse(\"Authentication error\")\n\n\n@csrf_exempt\ndef group_view(request):\n    user = get_user_jwt(request)\n    if user:\n        if request.method == \"GET\":\n            groups = Group.objects.all()\n            data = serializers.serialize('json', groups)\n            return HttpResponse(data)\n        if request.method == \"POST\":\n            group = GroupForm(request.POST)\n            if group.is_valid():\n                update = group.save(commit=False)\n                actions = request.POST['actions'].split()\n                for action in actions:\n                    print(action)\n                actions = [Action.objects.get(pk=int(action)) for action in actions]\n                if actions and group.is_valid():\n                    group = group.save()\n                    [group.available_actions.add(actions[i]) for i in range(len(actions))]\n                    return HttpResponse(\"Success\")\n\n\n@csrf_exempt\ndef action_view(request):\n    user = get_user_jwt(request)\n    if user:\n        if request.method == \"GET\":\n            actions = Action.objects.all()\n            data = serializers.serialize('json', actions)\n            return HttpResponse(data)\n        if request.method == \"POST\":\n            action = ActionForm(request.POST)\n            if action.is_valid():\n                action.save()\n                return HttpResponse(\"Success\")\n\n\n@csrf_exempt\ndef available_actions(request):\n    user = get_user_jwt(request)\n    if user:\n        if request.method == \"GET\":\n            group = user.profile.group\n            data = serializers.serialize('json', group.available_actions.all())\n            return HttpResponse(data)\n\n\n@csrf_exempt\ndef groups_with_permission(request):\n    user = get_user_jwt(request)\n    if user and get_access('info_about_group', user):\n        groups = Group.objects.all()\n        data = {}\n        for group in groups:\n            profiles = Profile.objects.filter(group=group)\n            users = {}\n            for profile in profiles:\n                users[profile.user.pk] = profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name\n            if users:\n                data[group.name] = {'users' : users, 'description' : group.description}\n        return JsonResponse(data)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- server/cabinet/views.py	(revision 7882df11e1f19201b31060c41dfbd13b9255e952)
++++ server/cabinet/views.py	(date 1593662800547)
+@@ -279,4 +279,5 @@
+                 users[profile.user.pk] = profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
+             if users:
+                 data[group.name] = {'users' : users, 'description' : group.description}
++            print(data)
+         return JsonResponse(data)
+\ No newline at end of file

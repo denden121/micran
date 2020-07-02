@@ -2,9 +2,9 @@ import React from 'react'
 
 
 const NameGroupps = (props) =>{
-    console.log(props)
+    // console.log(props)
     let temp1 = Array.from(props.listGroup)
-    console.log(temp1)
+    // console.log(temp1)
     temp1 = temp1.map((groupps,index) =>{
         console.log(groupps)
         let tempId = 'name_' +groupps.pk
