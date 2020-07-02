@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
@@ -91,6 +92,7 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
+    t = datetime().now()
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -107,6 +109,7 @@ def all_report_view(request, user_id='default'):
                     report.creator_id = profile
                     print(request.POST)
                     report.save()
+                    print(report.date)
                     return HttpResponse("Success")
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
