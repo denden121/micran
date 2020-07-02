@@ -2,8 +2,19 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
+class ActionManager(models.Manager):
+    def get_by_natural_key(self, action):
+        return self.get(action=action)
+
+
 class Action(models.Model):
     action = models.CharField(max_length=30, blank=True)
+    objects = ActionManager()
+
+    class Meta:
+        unique_together = [['action']]
+
 
     def __str__(self):
         return self.action
@@ -33,6 +44,9 @@ class Profile(models.Model):
     lateness = models.CharField(max_length=30, blank=True)
     group = models.ForeignKey('Group', on_delete=models.PROTECT, blank=True, null=True)
     # first_time = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = [['first_name', 'last_name', 'middle_name']]
 
     def __str__(self):
         return self.user.username
