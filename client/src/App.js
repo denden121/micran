@@ -13,6 +13,7 @@ class  App extends Component {
     }
     //обработка кнопки для авторизации
     authHandler = async () => {
+
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         let login = document.getElementById("input-login").value
@@ -93,7 +94,7 @@ class  App extends Component {
         const funcPersArea = () => {
             let token = localStorage.getItem('token')
             if (typeof token==='string' && token!=='') {
-                return < Main clickLogOut = {this.logOut}/>
+                return <Main/>
             } else {
                 return <Redirect to='/'/>
             }
@@ -133,10 +134,6 @@ class  App extends Component {
                     <Route path='/cabinet' exact component = {funcPersArea}/>
                     {/*<Redirect to='/cabinet'/>*/}
                 </Switch>
-                {/*<Switch>*/}
-                {/*    <Route path='/auth' exact component = {Auth} />*/}
-                {/*    <Route path='/main' exact component = {Main} />*/}
-                {/*</Switch>*/}
             </div>
         )
     }

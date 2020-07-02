@@ -2,6 +2,24 @@ import React, {Component} from "react"
 import NameGroupps from "./NameGroupps/NameGroupps"
 
 class ManageGroupps extends React.Component{
+    componentDidMount() {
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
+            // .then(response => console.log(this.setState({groupps:response.json()})))
+            .then(response => response.json())
+            .then(result =>console.log(result))
+
+    }
+
     state = {
         groupps:{}
     }
@@ -17,7 +35,7 @@ class ManageGroupps extends React.Component{
                 </tr>
                 </thead>
                 <tbody>
-                <NameGroupps/>
+                <NameGroupps listGroup = {this.state.groupps}/>
                 </tbody>
             </table>
 
