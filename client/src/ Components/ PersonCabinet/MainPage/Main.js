@@ -2,7 +2,6 @@ import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header"
-import BrowseReports from '../BrowseReports/BrowseReports'
 import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
@@ -13,6 +12,7 @@ import AddGroups from "../AddGroups/AddGroups";
 import ManageGroupps from "../ManageGroupps/ManageGroupps";
 
 import Projects from "../Projects/Projects"
+import ProjectCard from "../LookReport/ProjectCard/ProjectCard";
 class Main extends Component{
     logOut = () =>{
         localStorage.setItem('token','')
@@ -62,9 +62,10 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    {/*<SendReport send_report={this.send_report}/>*/}
+                    <SendReport send_report={this.send_report}/>
                     {/*<AddGroups/>*/}
-                    <ManageGroupps/>
+                    {/* <ManageGroupps/> */}
+                    {/* <ProjectCard/> */}
                 </div>
             </div>
         )

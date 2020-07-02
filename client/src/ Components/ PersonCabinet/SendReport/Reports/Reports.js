@@ -5,30 +5,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Reports =(props)=>{
     return(
         <div className="container-fluid" >
-         
-           <div className="Reports"> 
-            <h4>Проект №1</h4>
             
-            <div className="a">
-                <label className="Label1">Куратор проекта: 
-                <input id='mentorProject' type="text" className="form-control form-control-lg" placeholder="Введите ФИО куратора"/>
-                </label>
-            <div/>
+            {/* <strong><h3>Отчет о проделанной работе</h3></strong> */}
+           <div className="Reports"> 
+                <div className="dropdown">
+                    <a className="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Проекты
+                    </a>
 
-            <div className="b">
-                <label className="Label1">Затраченное время: 
-                <input id = 'spendTime' type="text" className="form-control form-control-lg" placeholder="Введите количество часов" />
-                </label>
-            </div>
-
-            <div className="c">
-                <label className="Label1">Отчет о проделанной работе:
-                <textarea id='bodeReport' type="text"className="form-control form-control-lg" placeholder="Введите текст отчета"/>
-                </label>   
-            </div>           
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                     <a className="dropdown-item" href="#" >Проект №1</a>
+                     <a className="dropdown-item" href="#">Проект №2</a>
+                     <a className="dropdown-item" href="#">Проект №3</a>
                 </div>
-                <button onClick={props.send_report} type="submit" className="btn btn-lg btn-primary">Отправить отчет</button>
-            </div>
+                </div>
+           </div>
+            
+            
             
         </div>
     )

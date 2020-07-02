@@ -2,7 +2,7 @@ import React,{Component} from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "../Header/Header"
 import Navigation from "../Navigation/Navigation"
-import './BrowserReports.css'
+// import './ViewReports.css'
 import '../LookReport/ProjectCard/ProjectCard'
 import ProjectCard from '../LookReport/ProjectCard/ProjectCard';
 
@@ -25,7 +25,7 @@ const NewReports =(props)=>{
         })
     )
 }
-class BrowseReports extends React.Component{
+class ViewReports extends React.Component{
     state ={
         reports:{}
     }
@@ -59,4 +59,4 @@ class BrowseReports extends React.Component{
     }
 }
 
-export default BrowseReports
+export default ViewReports
