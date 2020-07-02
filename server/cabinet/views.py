@@ -92,13 +92,13 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
-    t = datetime().now()
+    t = datetime.now()
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
-                reports = Report.objects.filter(creator_id=user.id)
+                reports = Report.objects.filter(creator_id=user.id, date__month = t.month, date__year=t.year)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
             if request.method == "POST":
@@ -109,7 +109,6 @@ def all_report_view(request, user_id='default'):
                     report.creator_id = profile
                     print(request.POST)
                     report.save()
-                    print(report.date)
                     return HttpResponse("Success")
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
