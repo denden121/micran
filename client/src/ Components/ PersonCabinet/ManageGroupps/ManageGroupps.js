@@ -18,7 +18,7 @@ class ManageGroups extends React.Component{
             .then(result => this.setState({groups:result}))
         // let temp = Array.from(this.state.groups)
         // console.log('array', temp)
-        console.log('state',this.state.groups[0])
+        console.log('state',this.state.groups[0git ad])
     }
 
     state = {

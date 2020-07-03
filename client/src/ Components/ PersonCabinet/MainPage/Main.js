@@ -62,9 +62,9 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    <SendReport send_report={this.send_report}/>
+                    {/* <SendReport send_report={this.send_report}/> */}
                     {/* <AddGroups/> */}
-                    {/* <ManageGroupps/> */}
+                    <ManageGroupps/>
                     {/* <ProjectCard/> */}
                 </div>
             </div>
