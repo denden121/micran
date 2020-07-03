@@ -15,7 +15,7 @@ class ManageGroups extends React.Component{
 
         await fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
             // .then(response => console.log(this.setState({groups: response.json()})))
-            .then(response => console.log(response.text()))
+            .then(response => response.json())
             .then(result => console.log(result))
         let temp = Array.from(this.state.groups)
         console.log('array', temp)

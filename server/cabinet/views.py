@@ -282,4 +282,3 @@ def groups_with_permission(request):
             if users:
                 data['pk: ' + str(group.pk)] = {'model': 'cabinet.group',  'name': group.name, 'users' : users, 'description' : group.description}
         return HttpResponse(json.dumps(data))
-    # return HttpResponse(data)
