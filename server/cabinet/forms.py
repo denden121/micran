@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        exclude = ['creator_id']
+        exclude = ['creator_id', 'date']
 
 
 # class UserForm(forms.ModelForm):

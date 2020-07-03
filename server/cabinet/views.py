@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
@@ -91,12 +92,13 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
+    t = datetime.now()
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
-                reports = Report.objects.filter(creator_id=user.id)
+                reports = Report.objects.filter(creator_id=user.id, date__month = t.month, date__year=t.year)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
             if request.method == "POST":
@@ -276,7 +278,8 @@ def groups_with_permission(request):
             profiles = Profile.objects.filter(group=group)
             users = {}
             for profile in profiles:
-                users[profile.user.pk] = profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
+                users = [profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name]
             if users:
-                data[group.name] = {'users' : users, 'description' : group.description}
-        return JsonResponse(data)
+                data['pk: ' + str(group.pk)] = {'model': 'cabinet.group',  'name': group.name, 'users' : users, 'description' : group.description}
+        return HttpResponse(json.dumps(data))
+    # return HttpResponse(data)

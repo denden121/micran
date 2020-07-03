@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Reports =(props)=>{
     return(
         <div className="container-fluid" >
-            <div className="col-sm-8">
-                <div className="row" style={{display:"none"}}>
+            <div className="row" style={{display:"none"}}>
+                <div className="col-sm-8">
                     <div className="col-sm-12">
                         <div className="box">
                             <div className="box-content">

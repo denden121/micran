@@ -1,8 +1,8 @@
 import React, {Component} from "react"
 import NameGroupps from "./NameGroupps/NameGroupps"
 
-class ManageGroupps extends React.Component{
-    componentDidMount() {
+class ManageGroups extends React.Component{
+    async componentDidMount() {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -13,9 +13,13 @@ class ManageGroupps extends React.Component{
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
-            // .then(response => console.log(this.setState({groupps:response.json()})))
-            .then(response => console.log(this.setState({groups:response.json()})))
+        await fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
+            // .then(response => console.log(this.setState({groups: response.json()})))
+            .then(response => console.log(response.text()))
+            .then(result => console.log(result))
+        let temp = Array.from(this.state.groups)
+        console.log('array', temp)
+
     }
 
     state = {
@@ -33,7 +37,7 @@ class ManageGroupps extends React.Component{
                 </tr>
                 </thead>
                 <tbody>
-                <NameGroupps listGroup = {this.state.groups}/>
+                    <NameGroupps listGroup = {this.state.groups}/>
                 </tbody>
             </table>
 
@@ -42,4 +46,4 @@ class ManageGroupps extends React.Component{
         )
     }
 }
-export default ManageGroupps;
+export default ManageGroups;
