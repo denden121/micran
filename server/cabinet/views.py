@@ -98,10 +98,13 @@ def all_report_view(request, user_id='default'):
         profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
-                reports = Report.objects.filter(creator_id=user.id, date__month = t.month, date__year=t.year)
+                reports = Report.objects.filter(creator_id=user.id, date__month = request.GET['month'], date__year = request.GET['year'])
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
             if request.method == "POST":
+                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
+                if reports:
+                    return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
                 print(form.errors)
                 if form.is_valid():
@@ -278,7 +281,8 @@ def groups_with_permission(request):
             profiles = Profile.objects.filter(group=group)
             users = {}
             for profile in profiles:
-                users = [profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name]
+                users = []
+                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
                 fields = {'name': group.name, 'users': users, 'description': group.description}
             if users:
                 data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
