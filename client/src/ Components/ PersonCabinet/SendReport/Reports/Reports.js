@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Reports =(props)=>{
     return(
-        <div className="container-fluid">
+        <div className="contacdiner-fluid">
             <div className="row" >
                 <div className="col-sm-8">
                     <div className="col-sm-12">

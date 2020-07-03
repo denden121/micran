@@ -14,12 +14,11 @@ class ManageGroups extends React.Component{
         };
 
         await fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
-            // .then(response => console.log(this.setState({groups: response.json()})))
             .then(response => response.json())
-            .then(result => console.log(result))
-        let temp = Array.from(this.state.groups)
-        console.log('array', temp)
-
+            .then(result => this.setState({groups:result}))
+        // let temp = Array.from(this.state.groups)
+        // console.log('array', temp)
+        console.log('state',this.state.groups[0])
     }
 
     state = {
@@ -40,9 +39,6 @@ class ManageGroups extends React.Component{
                     <NameGroupps listGroup = {this.state.groups}/>
                 </tbody>
             </table>
-
-
-
         )
     }
 }
