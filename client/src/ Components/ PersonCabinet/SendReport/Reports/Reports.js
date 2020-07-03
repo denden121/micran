@@ -22,13 +22,13 @@ const Reports =(props)=>{
                                     <br/>
                                 <div id="time-read">
                                     <p className="col-sm-1"><strong>Часы:</strong></p>
-                                    <input className="form-control" placeholder="Часы"  type="text"/>
+                                    <input onChange={props.changeHours} className="form-control" placeholder="Часы" value = {String(props.report.hour)}  type="text"/>
                                 </div>
                                      <br/>
                                 <div id="note-read">
                                     <p className="col-sm-3"><strong>Состав работ</strong></p>
                                     <textarea className="form-control" id="note-read" maxlength="10000"
-                                    placeholder="Состав работ по проекту..." rows="10"></textarea>
+                                    placeholder="Состав работ по проекту..." value={props.report.text} rows="10"></textarea>
                                 </div>
                                 <hr className="normal"/>
                                 <div className="text=rigth">

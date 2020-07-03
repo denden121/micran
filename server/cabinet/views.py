@@ -282,7 +282,7 @@ def groups_with_permission(request):
             users = {}
             for profile in profiles:
                 users = []
-                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
                 fields = {'name': group.name, 'users': users, 'description': group.description}
             if users:
                 data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
