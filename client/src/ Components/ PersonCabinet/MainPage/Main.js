@@ -19,7 +19,6 @@ class Main extends Component{
         localStorage.setItem('checkReg','False')
         // rend()
     }
-
     render() {
         return (
             <div className="container">
@@ -32,7 +31,11 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
+<<<<<<< HEAD
                     {/* <SendReport sendReport={this.sendReport}/> */}
+=======
+                    <SendReport />
+>>>>>>> 0ac6d807ebb9272e75cceab1dc4c39a32f84f39a
                     {/* <AddGroups/> */}
                     <ManageGroupps/>
                     {/* <ProjectCard/> */}

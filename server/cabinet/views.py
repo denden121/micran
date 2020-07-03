@@ -281,7 +281,13 @@ def groups_with_permission(request):
             profiles = Profile.objects.filter(group=group)
             users = []
             for profile in profiles:
+<<<<<<< HEAD
                 users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+=======
+                users = []
+                profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
+                fields = {'name': group.name, 'users': users, 'description': group.description}
+>>>>>>> 0ac6d807ebb9272e75cceab1dc4c39a32f84f39a
             if users:
                 fields = {'name': group.name, 'users': users, 'description': group.description}
                 users = []
