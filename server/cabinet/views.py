@@ -271,14 +271,15 @@ def available_actions(request):
 @csrf_exempt
 def groups_with_permission(request):
     user = get_user_jwt(request)
-    if user and get_access('info_about_group', user):
+    if user:
         groups = Group.objects.all()
-        data = {}
+        data = []
         for group in groups:
             profiles = Profile.objects.filter(group=group)
             users = {}
             for profile in profiles:
                 users = [profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name]
+                fields = {'name': group.name, 'users': users, 'description': group.description}
             if users:
-                data['pk: ' + str(group.pk)] = {'model': 'cabinet.group',  'name': group.name, 'users' : users, 'description' : group.description}
+                data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
         return HttpResponse(json.dumps(data))
