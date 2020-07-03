@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
-import ViewReports from '../ViewReports/ViewReports'
+
 
 class AddGroups extends React.Component {
     state = {

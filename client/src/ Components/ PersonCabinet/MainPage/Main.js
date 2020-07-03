@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header"
-import SendReport from "../SendReport/SendReport"
+//import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
 import "./Main.css"
@@ -32,11 +32,7 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-<<<<<<< HEAD
-                    {/* <SendReport send_report={this.send_report}/> */}
-=======
-                    <SendReport sendReport={this.sendReport}/>
->>>>>>> 2ddefed7034c72ec6a3ad6636fd0f86a53c27846
+                    {/* <SendReport sendReport={this.sendReport}/> */}
                     {/* <AddGroups/> */}
                     <ManageGroupps/>
                     {/* <ProjectCard/> */}

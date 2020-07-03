@@ -18,7 +18,7 @@ class ManageGroups extends React.Component{
             .then(result => this.setState({groups:result}))
         // let temp = Array.from(this.state.groups)
         // console.log('array', temp)
-        console.log('state',this.state.groups[0git ad])
+        console.log('state',this.state.groups[0])
     }
 
     state = {
@@ -26,7 +26,8 @@ class ManageGroups extends React.Component{
     }
     render(){
         return(
-            <table className="table">
+            <div className="container-fluid">
+                <table className="table">
                 <thead className="thead-dark">
                 <tr>
                     <th scope="col">№</th>
@@ -36,9 +37,14 @@ class ManageGroups extends React.Component{
                 </tr>
                 </thead>
                 <tbody>
-                    <NameGroupps listGroup = {this.state.groups}/>
-                </tbody>
-            </table>
+                    <tr>
+                        <th scope="row"></th>
+                        <td><NameGroupps listGroup = {this.state.groups}/></td> 
+                     </tr>
+               </tbody>
+               </table>
+                
+            </div>
         )
     }
 }

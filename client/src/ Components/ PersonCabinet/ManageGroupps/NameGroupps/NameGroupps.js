@@ -9,17 +9,18 @@ const NameGroupps = (props) =>{
         console.log('temp11111111111111',groups.fields)
         let tempId = 'name_' +groups.pk
         return(
-            <div className="nameGroupps">
-                <tr>
-                    <th scope="row">1</th>                
-                    <td>{groups.fields.name}</td>
-                    <td>{groups.fields.description}</td>
-                    <td>{groups.fields.users.join(' ')}</td>
-                </tr>             
+            <div className="nameGroupps">                
+                                  
+                        <th>{index+1}</th>                
+                        <td>{groups.fields.name}</td>
+                        <td>{groups.fields.description}</td>
+                        <td>{groups.fields.users.join(' ')}</td>
+                                                      
             </div>
         )
     })
     return(
+        
         temp1
     )
 }
