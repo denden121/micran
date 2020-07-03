@@ -4,31 +4,45 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Reports =(props)=>{
     return(
-        <div className="container-fluid" >
-         
-           <div className="Reports"> 
-            <h4>Проект №1</h4>
-            
-            <div className="a">
-                <label className="Label1">Куратор проекта: 
-                <input id='mentorProject' type="text" className="form-control form-control-lg" placeholder="Введите ФИО куратора"/>
-                </label>
-            <div/>
+        <div className="container-fluid">
+            <div className="row" >
+                <div className="col-sm-8">
+                    <div className="col-sm-12">
+                        <div className="box">
+                            <div className="box-content">
+                                <div className="row">
+                                    <div className="col-sm-12 has-tooltip" data-placement="top" title="Пользуйтесь поиском при выборе проекта">
+                                        <p id="proj" className="col-sm-1"><strong>Проект</strong></p>
+                                        <select className="select2 form-control select2-offscreen"
+                                        id='CB_proj'>                                            
+                                        </select>
+                                        <p id="proj_note"></p>
+                                    </div>
+                                </div>
+                                    <br/>
+                                <div id="time-read">
+                                    <p className="col-sm-1"><strong>Часы:</strong></p>
+                                    <input className="form-control" placeholder="Часы"  type="text"/>
+                                </div>
+                                     <br/>
+                                <div id="note-read">
+                                    <p className="col-sm-3"><strong>Состав работ</strong></p>
+                                    <textarea className="form-control" id="note-read" maxlength="10000"
+                                    placeholder="Состав работ по проекту..." rows="10"></textarea>
+                                </div>
+                                <hr className="normal"/>
+                                <div className="text=rigth">
+                                    <button className="btn btn-success">
+                                    <i className="icon-save"></i>Сохранить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <div className="b">
-                <label className="Label1">Затраченное время: 
-                <input id = 'spendTime' type="text" className="form-control form-control-lg" placeholder="Введите количество часов" />
-                </label>
-            </div>
-
-            <div className="c">
-                <label className="Label1">Отчет о проделанной работе:
-                <textarea id='bodeReport' type="text"className="form-control form-control-lg" placeholder="Введите текст отчета"/>
-                </label>   
-            </div>           
                 </div>
-                <button onClick={props.send_report} type="submit" className="btn btn-lg btn-primary">Отправить отчет</button>
-            </div>
+
+            </div> 
+                    
             
         </div>
     )
