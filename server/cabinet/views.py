@@ -279,11 +279,14 @@ def groups_with_permission(request):
         data = []
         for group in groups:
             profiles = Profile.objects.filter(group=group)
-            users = {}
+            users = []
             for profile in profiles:
-                users = []
                 users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                fields = {'name': group.name, 'users': users, 'description': group.description}
             if users:
-                data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
+                fields = {'name': group.name, 'users': users, 'description': group.description}
+                users = []
+            else:    
+                users = []
+                fields = {'name': group.name, 'users': users, 'description': group.description}
+            data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
         return HttpResponse(json.dumps(data))
