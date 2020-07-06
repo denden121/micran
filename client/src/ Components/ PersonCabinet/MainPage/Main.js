@@ -31,11 +31,7 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-<<<<<<< HEAD
-                    {/* <SendReport sendReport={this.sendReport}/> */}
-=======
-                    <SendReport />
->>>>>>> 0ac6d807ebb9272e75cceab1dc4c39a32f84f39a
+                    {/* <SendReport /> */}
                     {/* <AddGroups/> */}
                     <ManageGroupps/>
                     {/* <ProjectCard/> */}

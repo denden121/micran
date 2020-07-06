@@ -1,10 +1,6 @@
 import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
-<<<<<<< HEAD
-
-=======
->>>>>>> 0ac6d807ebb9272e75cceab1dc4c39a32f84f39a
 
 class AddGroups extends React.Component {
     state = {
