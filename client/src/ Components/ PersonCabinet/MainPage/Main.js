@@ -31,10 +31,14 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    <SendReport />
-                    {/* <AddGroups/> */}
-                    {/* <ManageGroupps/> */}
-                    {/* <ProjectCard/> */}
+
+                    <Switch>
+                        {/*<Route path='/cabinet/' component = {PersonData}/>*/}
+                        <Route path='/cabinet/admin'  component = {AddGroups}/>
+                        <Route path='/cabinet/manage_groups'  component = {ManageGroupps}/>
+                        <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
+                        {/*<Redirect to='/cabinet'/>*/}
+                    </Switch>
                 </div>
             </div>
         )

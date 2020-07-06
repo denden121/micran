@@ -5,7 +5,6 @@ import Reports from "./Reports/Reports"
 class SendReport extends React.Component{
     state= {
         report:{},
-        hours:''
     }
      async componentDidMount() {
          let token = localStorage.getItem('token')
