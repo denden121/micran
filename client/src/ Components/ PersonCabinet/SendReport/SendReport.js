@@ -61,7 +61,7 @@ class SendReport extends React.Component{
     changeReport=()=>{
 
     }
-    changeHours=(event)=>{
+    changeHours= event =>{
         // event.target.value
         this.setState({hours:event.target.value})
         console.log(this.state.hours)
