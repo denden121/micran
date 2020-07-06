@@ -132,7 +132,7 @@ def all_report_view(request, user_id='default'):
 def report_view(request, report_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
-        report = Report.objects.filter(creator_id_id=user.id, id=report_id)
+        report = Report.objects.get(creator_id_id=user.id, id=report_id)
         if user:
             if request.method == "GET":
                 data = serializers.serialize('json', report)
