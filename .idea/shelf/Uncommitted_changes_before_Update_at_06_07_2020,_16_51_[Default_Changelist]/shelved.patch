@@ -1,0 +1,135 @@
+Index: client/src/ Components/ PersonCabinet/ManageGroupps/ManageGroupps.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport NameGroupps from \"./NameGroupps/NameGroupps\"\n\nclass ManageGroups extends React.Component{\n    async componentDidMount() {\n        let token = localStorage.getItem('token')\n        let myHeaders = new Headers();\n        myHeaders.append(\"Authorization\", token);\n\n        let requestOptions = {\n            method: 'GET',\n            headers: myHeaders,\n            redirect: 'follow'\n        };\n\n        await fetch(\"http://127.0.0.1:8000/groups_admin/\", requestOptions)\n            // .then(response => console.log(this.setState({groups: response.json()})))\n            .then(response => console.log(response.json().Promise))\n            .then(result => console.log(result))\n        let temp = Array.from(this.state.groups)\n        console.log('array', temp)\n\n    }\n\n    state = {\n        groups:{}\n    }\n    render(){\n        return(\n            <table className=\"table\">\n                <thead className=\"thead-dark\">\n                <tr>\n                    <th scope=\"col\">№</th>\n                    <th scope=\"col\">Название</th>\n                    <th scope=\"col\">Описание</th>\n                    <th scope=\"col\">Входит в группу</th>\n                </tr>\n                </thead>\n                <tbody>\n                    <NameGroupps listGroup = {this.state.groups}/>\n                </tbody>\n            </table>\n\n\n\n        )\n    }\n}\nexport default ManageGroups;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/ManageGroupps/ManageGroupps.js	(revision b2620a55b7d643bc8f1e315cbfbbb89bed08086d)
++++ client/src/ Components/ PersonCabinet/ManageGroupps/ManageGroupps.js	(date 1593769674450)
+@@ -14,14 +14,12 @@
+         };
+ 
+         await fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
+-            // .then(response => console.log(this.setState({groups: response.json()})))
+-            .then(response => console.log(response.json().Promise))
++            .then(response => console.log(response.json()))
+             .then(result => console.log(result))
+         let temp = Array.from(this.state.groups)
+         console.log('array', temp)
+ 
+     }
+-
+     state = {
+         groups:{}
+     }
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { Component } from 'react';\nimport './App.css';\nimport Auth from \"./ Components/Auth/Auth\"\nimport {BrowserRouter, Route} from 'react-router-dom'\nimport {Redirect,Switch} from 'react-router-dom'\nimport Main from \"./ Components/ PersonCabinet/MainPage/Main\"\nimport Registration from \"./ Components/Registration/registration\";\nimport ReactDOM from \"react-dom\";\n\nclass  App extends Component {\n    state = {\n        token: '',\n    }\n    //обработка кнопки для авторизации\n    authHandler = async () => {\n\n        let myHeaders = new Headers();\n        myHeaders.append(\"Content-Type\", \"application/x-www-form-urlencoded\");\n        let login = document.getElementById(\"input-login\").value\n        let password = document.getElementById(\"input-password\").value\n        // console.log(login,password)\n        let urlencoded = new URLSearchParams();// Добавляем параметры запросы\n        urlencoded.append(\"username\", login);\n        urlencoded.append(\"password\", password);\n        let requestOptions = {\n            method: 'POST',\n            body: urlencoded,\n            redirect: 'follow',\n            headers: myHeaders\n        };\n        console.log(login,password)\n        //проверка логина и пароля(отправка запроса)\n        let sendUrl = \"http://127.0.0.1:8000/token/\"\n        await fetch(sendUrl, requestOptions)\n            .then(response => response.json())\n            .then(result => localStorage.setItem('token', result.access))\n            .catch(error => localStorage.setItem('token', ''));\n\n        // console.log('sssss',localStorage.getItem('token'))\n        // console.log(localStorage.getItem('token') === 'undefined')\n        if (localStorage.getItem('token') == 'undefined') {\n            alert('incorrect')\n        } else {\n            myHeaders = new Headers();\n            myHeaders.append(\"Authorization\",localStorage.getItem('token'));\n\n            requestOptions = {\n                method: 'GET',\n                headers: myHeaders,\n                redirect: 'follow'\n            };\n\n            await fetch(\"http://127.0.0.1:8000/check/\", requestOptions)\n                .then(response => response.text())\n                .then(result => localStorage.setItem('checkReg',result))\n                .catch(error => console.log('error', error));\n            ReactDOM.render(\n                <BrowserRouter>\n                    <React.StrictMode>\n                        <App/>\n                    </React.StrictMode>\n                </BrowserRouter>,\n                document.getElementById('root')\n            );\n        }\n        console.log('прошел всю кнопку')\n\n    }\n    sendReg= async ()=> {\n        let myHeaders = new Headers();\n        let token = localStorage.getItem('token')\n        myHeaders.append(\"Authorization\", token);\n\n        let formdata = new FormData();\n        let first_name = document.getElementById('name').value\n        let surname = document.getElementById('surname').value\n        let middle_name = document.getElementById('fatherName').value\n        formdata.append(\"first_name\", first_name);\n        formdata.append(\"second_name\", surname);\n        formdata.append(\"middle_name\", middle_name);\n        let requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n\n        await fetch(\"http://127.0.0.1:8000/cabinet/register/\", requestOptions)\n            .then(response => response.text())\n            .catch(error => console.log('error', error));\n        localStorage.setItem('checkReg', 'True')\n    }\n    render(){\n        const funcPersArea = () => {\n            let token = localStorage.getItem('token')\n            if (typeof token==='string' && token!=='') {\n                return <Main/>\n            } else {\n                return <Redirect to='/'/>\n            }\n        }\n        const funcAuth = () => {\n            let token = localStorage.getItem('token')\n            let reg = localStorage.getItem('checkReg')\n            console.log(token,reg)\n            console.log(typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True')\n            console.log(localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='')\n            if (typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True') {\n                return <Redirect to='/cabinet'/>\n            }\n            else if( localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='') {\n                return <Redirect to='reg'/>\n            }\n            else{\n                console.log('пошел на авторизацию')\n                return <Auth authHandler={this.authHandler}/>;\n            }\n        };\n        const funcReg = () =>{\n            let reg = localStorage.getItem('checkReg')\n            // debugger;\n            if(reg === 'False' ) {\n                return <Registration sendFunc={this.sendReg}/>\n            }\n            else{\n                return <Redirect to='/cabinet'/>;\n            }\n        }\n        return (\n            <div className='App'>\n                <Switch>\n                    <Route path='/' exact component = {funcAuth}/>\n                    <Route path='/reg' exact component = {funcReg}/>\n                    <Route path='/cabinet' exact component = {funcPersArea}/>\n                    {/*<Redirect to='/cabinet'/>*/}\n                </Switch>\n            </div>\n        )\n    }\n}\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/App.js	(revision b2620a55b7d643bc8f1e315cbfbbb89bed08086d)
++++ client/src/App.js	(date 1593769894806)
+@@ -129,9 +129,9 @@
+         return (
+             <div className='App'>
+                 <Switch>
+-                    <Route path='/' exact component = {funcAuth}/>
+-                    <Route path='/reg' exact component = {funcReg}/>
+-                    <Route path='/cabinet' exact component = {funcPersArea}/>
++                    <Route path='/' exact component = {Auth}/>
++                    <Route path='/reg' exact component = {Registration}/>
++                    <Route path='/cabinet' exact component = {Main}/>
+                     {/*<Redirect to='/cabinet'/>*/}
+                 </Switch>
+             </div>
+Index: client/src/ Components/ PersonCabinet/MainPage/Main.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport Navigation from \"../Navigation/Navigation\";\nimport Header from \"../Header/Header\"\nimport SendReport from \"../SendReport/SendReport\"\nimport rend from '../../../index.js'\nimport PersonData from \"../PersonData/PersonData\";\nimport \"./Main.css\"\nimport Switch from \"react-bootstrap/cjs/Switch\";\nimport {Redirect, Route} from \"react-router-dom\";\nimport AddGroups from \"../AddGroups/AddGroups\";\nimport ManageGroupps from \"../ManageGroupps/ManageGroupps\";\n\nimport Projects from \"../Projects/Projects\"\nclass Main extends Component{\n    logOut = () =>{\n        localStorage.setItem('token','')\n        localStorage.setItem('checkReg','False')\n        // rend()\n    }\n    send_report =async ()=>{\n        let mentor = document.getElementById('mentorProject').value\n        let time = document.getElementById('spendTime').value\n        let body = document.getElementById('bodeReport').value\n        let token = localStorage.getItem('token')\n\n        let myHeaders = new Headers()\n        myHeaders.append(\"Authorization\", token);\n\n        let formdata = new FormData();\n        formdata.append(\"text\", body);\n        formdata.append(\"hour \", time);\n        formdata.append(\"project\", \"test\");\n        formdata.append(\"curator\", mentor);\n\n        let requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n\n         await fetch(\"http://127.0.0.1:8000/cabinet/reports/\", requestOptions)\n            .then(response => response.text())\n            .then(result => console.log(result))\n            .catch(error => console.log('error', error));\n         alert('Отчет отправлен')\n         document.getElementById('mentorProject').value = ''\n         document.getElementById('spendTime').value= ''\n         document.getElementById('bodeReport').value= ''\n    }\n    render() {\n        return (\n            <div className=\"container\">\n                <div className=\"Head\">\n                    <Header clickLogOut={this.logOut}/>\n                </div>\n\n                <div className='Nav'>\n                    <Navigation/>\n                </div>\n\n                <div className=\"Data\">\n                    {/*<SendReport send_report={this.send_report}/>*/}\n                    {/*<AddGroups/>*/}\n                    <ManageGroupps/>\n                </div>\n            </div>\n        )\n    }\n}\n\nexport default Main;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/MainPage/Main.js	(revision b2620a55b7d643bc8f1e315cbfbbb89bed08086d)
++++ client/src/ Components/ PersonCabinet/MainPage/Main.js	(date 1593774364746)
+@@ -9,9 +9,11 @@
+ import Switch from "react-bootstrap/cjs/Switch";
+ import {Redirect, Route} from "react-router-dom";
+ import AddGroups from "../AddGroups/AddGroups";
+-import ManageGroupps from "../ManageGroupps/ManageGroupps";
++import ManageGroups from "../ManageGroupps/ManageGroupps";
+ 
+ import Projects from "../Projects/Projects"
++import Auth from "../../Auth/Auth";
++import Registration from "../../Registration/registration";
+ class Main extends Component{
+     logOut = () =>{
+         localStorage.setItem('token','')
+@@ -52,18 +54,20 @@
+     render() {
+         return (
+             <div className="container">
+-                <div className="Head">
+-                    <Header clickLogOut={this.logOut}/>
+-                </div>
++                {/*<div className="Head">*/}
++                {/*    <Header clickLogOut={this.logOut}/>*/}
++                {/*</div>*/}
+ 
+-                <div className='Nav'>
+-                    <Navigation/>
+-                </div>
++                {/*<div className='Nav'>*/}
++                {/*    <Navigation/>*/}
++                {/*</div>*/}
+ 
+                 <div className="Data">
+-                    {/*<SendReport send_report={this.send_report}/>*/}
+-                    {/*<AddGroups/>*/}
+-                    <ManageGroupps/>
++                    <Switch>
++                        <Route path='/cabinet/'  component = {Navigation}/>
++                        <Route exect path='/cabinet/group'  component = {AddGroups}/>
++                        <Route path='/cabinet/manage'  component = {ManageGroups}/>
++                    </Switch>
+                 </div>
+             </div>
+         )
+Index: client/src/ Components/Registration/registration.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport './registration.css'\n\nconst Registration =(props)=>{\n    return(\n       <div className=\"container-fluid\">\n           <form className=\"form-horizontal\">\n               <h5>Регистрация</h5>\n\n               <div className=\"from-group row\">\n                   <label className=\"col-sm-2 col-form-label\">Имя</label>\n                   <div className=\"col-sm-10\">\n                       <input id ='name' type=\"text\" className=\"form-control\"/>\n                   </div>\n               </div>\n\n               <div className=\"from-group row\">\n                   <label className=\"col-sm-2 col-form-label\">Фамилия</label>\n                   <div className=\"col-sm-10\">\n                       <input id='surname' type=\"text\" className=\"form-control\"/>\n                   </div>\n               </div>\n\n               <div className=\"from-group row\">\n                   <label className=\"col-sm-2 col-form-label\">Отчество</label>\n                   <div className=\"col-sm-10\">\n                       <input id=\"fatherName\" type=\"text\" className=\"form-control\"/>\n                   </div>\n               </div>\n\n               \n            <button onClick={props.sendFunc} type=\"submit\" class=\"btn btn-primary\">Зарегистрироваться</button>\n\n           </form>\n       </div>\n    )\n        \n}\n\nexport default Registration;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/Registration/registration.js	(revision b2620a55b7d643bc8f1e315cbfbbb89bed08086d)
++++ client/src/ Components/Registration/registration.js	(date 1593770065290)
+@@ -30,7 +30,7 @@
+                </div>
+ 
+                
+-            <button onClick={props.sendFunc} type="submit" class="btn btn-primary">Зарегистрироваться</button>
++            {/*<button onClick={props.sendFunc} type="submit" class="btn btn-primary">Зарегистрироваться</button>*/}
+ 
+            </form>
+        </div>
+Index: client/src/ Components/Auth/Auth.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react'\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport './Auth.css'\nimport picture from './micran1.png'\n\nconst Auth =(props)=>{\n    \n    return(\n        \n       <div className=\"container-fluid\">\n           <div className=\"form-signin\">\n               \n               <img src={picture} alt=\"\" className=\"img-fluid\"></img>\n              \n               \n                <div className=\"form-froup\">\n                    <label className=\"Label\">Имя пользователя</label>\n                        <input type=\"text\" className=\"form-control form-control-lg\" id=\"input-login\"/>\n                </div>\n\n                <div className=\"form-froup\">\n                    <label className=\"Label\">Пароль</label>\n                        <input type=\"password\" className=\"form-control form-control-lg\" id=\"input-password\"/>\n                        \n                </div>\n                \n                <div className=\"checkBox\" align=\"left\">\n                    <label className=\"checkbox\">\n                        <input type=\"checkbox\"/>\n                         Запомнить меня\n                    </label>\n                    \n                </div>\n                \n                <button onClick={props.authHandler} type=\"submit\" className=\"btn btn-lg btn-primary\">Войти</button>\n           </div>\n       </div>\n    )\n}\n\nexport default Auth;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/Auth/Auth.js	(revision b2620a55b7d643bc8f1e315cbfbbb89bed08086d)
++++ client/src/ Components/Auth/Auth.js	(date 1593769894318)
+@@ -32,7 +32,7 @@
+                     
+                 </div>
+                 
+-                <button onClick={props.authHandler} type="submit" className="btn btn-lg btn-primary">Войти</button>
++                {/*<button onClick={props.authHandler} type="submit" className="btn btn-lg btn-primary">Войти</button>*/}
+            </div>
+        </div>
+     )

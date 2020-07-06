@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
-import ViewReports from '../ViewReports/ViewReports'
-
 class AddGroups extends React.Component {
     state = {
         actions: {}
@@ -18,10 +16,10 @@ class AddGroups extends React.Component {
             redirect: 'follow'
         }
         await fetch("http://127.0.0.1:8000/actions/", requestOptions)
-            .then(response => response.json())
+            .then(response =>  response.json())
             .then(result => this.setState({actions: result}))
             .catch(error => console.log('error', error))
-        // console.log(this.state.actions[0].fields.action)
+        console.log('state',this.state.actions)
     }
 
     createGroup = async () => {

@@ -2,24 +2,25 @@ import React from 'react'
 
 
 const NameGroupps = (props) =>{
-    // console.log(props)
+    console.log('props',props.listGroup)
     let temp1 = Array.from(props.listGroup)
-    // console.log(temp1)
-    temp1 = temp1.map((groupps,index) =>{
-        console.log(groupps)
-        let tempId = 'name_' +groupps.pk
+    console.log('temp1',temp1)
+    temp1 = temp1.map((groups,index) =>{
+        console.log('temp11111111111111',groups.fields)
+        let tempId = 'name_' +groups.pk
         return(
-            <div className="nameGroupps">
-                <tr>
-                    <th scope="row">{index}</th>
-                    <td>{groupps.fields.name}</td>
-                    <td>{groupps.fields.discription}</td>
-                    <td>{groupps.fields.members}</td>
-                </tr>                  
+            <div className="nameGroupps">                
+                                  
+                        <th>{index+1}</th>                
+                        <td>{groups.fields.name}</td>
+                        <td>{groups.fields.description}</td>
+                        <td>{groups.fields.users.join(' ')}</td>
+                                                      
             </div>
         )
     })
     return(
+        
         temp1
     )
 }

@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
@@ -91,15 +92,19 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
+    t = datetime.now()
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
-                reports = Report.objects.filter(creator_id=user.id)
+                reports = Report.objects.filter(creator_id=user.id, date__month = request.GET['month'], date__year = request.GET['year'])
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
             if request.method == "POST":
+                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
+                if reports:
+                    return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
                 print(form.errors)
                 if form.is_valid():
@@ -269,15 +274,25 @@ def available_actions(request):
 @csrf_exempt
 def groups_with_permission(request):
     user = get_user_jwt(request)
-    if user and get_access('info_about_group', user):
+    if user:
         groups = Group.objects.all()
-        data = {}
+        data = []
         for group in groups:
             profiles = Profile.objects.filter(group=group)
-            users = {}
+            users = []
             for profile in profiles:
-                users = [profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name]
+<<<<<<< HEAD
+                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+=======
+                users = []
+                profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name
+                fields = {'name': group.name, 'users': users, 'description': group.description}
+>>>>>>> 0ac6d807ebb9272e75cceab1dc4c39a32f84f39a
             if users:
-                data['pk: ' + str(group.pk)] = {'model': 'cabinet.group',  'name': group.name, 'users' : users, 'description' : group.description}
+                fields = {'name': group.name, 'users': users, 'description': group.description}
+                users = []
+            else:    
+                users = []
+                fields = {'name': group.name, 'users': users, 'description': group.description}
+            data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
         return HttpResponse(json.dumps(data))
-    # return HttpResponse(data)

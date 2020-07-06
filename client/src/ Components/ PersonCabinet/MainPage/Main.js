@@ -12,42 +12,12 @@ import AddGroups from "../AddGroups/AddGroups";
 import ManageGroupps from "../ManageGroupps/ManageGroupps";
 
 import Projects from "../Projects/Projects"
+import ProjectCard from "../LookReport/ProjectCard/ProjectCard";
 class Main extends Component{
     logOut = () =>{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
         // rend()
-    }
-    send_report =async ()=>{
-        let mentor = document.getElementById('mentorProject').value
-        let time = document.getElementById('spendTime').value
-        let body = document.getElementById('bodeReport').value
-        let token = localStorage.getItem('token')
-
-        let myHeaders = new Headers()
-        myHeaders.append("Authorization", token);
-
-        let formdata = new FormData();
-        formdata.append("text", body);
-        formdata.append("hour ", time);
-        formdata.append("project", "test");
-        formdata.append("curator", mentor);
-
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow'
-        };
-
-         await fetch("http://127.0.0.1:8000/cabinet/reports/", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-         alert('Отчет отправлен')
-         document.getElementById('mentorProject').value = ''
-         document.getElementById('spendTime').value= ''
-         document.getElementById('bodeReport').value= ''
     }
     render() {
         return (
@@ -61,9 +31,14 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    {/*<SendReport send_report={this.send_report}/>*/}
-                    {/*<AddGroups/>*/}
-                    <ManageGroupps/>
+
+                    <Switch>
+                        {/*<Route path='/cabinet/' component = {PersonData}/>*/}
+                        <Route path='/cabinet/admin'  component = {AddGroups}/>
+                        <Route path='/cabinet/manage_groups'  component = {ManageGroupps}/>
+                        <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
+                        {/*<Redirect to='/cabinet'/>*/}
+                    </Switch>
                 </div>
             </div>
         )

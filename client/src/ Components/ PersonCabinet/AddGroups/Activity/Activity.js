@@ -1,6 +1,6 @@
 import React from 'react'
 import '../AddGroups.css'
-const Activity = (props) =>{
+const Activity =    (props) =>{
     let temp = Array.from(props.actions)
     return(
         temp.map((action,index) =>{
