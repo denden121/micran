@@ -2,14 +2,21 @@ import React from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navigation.css'
 import {NavLink} from 'react-router-dom'
+import Calendar from 'react-calendar';
+
 const Navigation =(props)=>{
+  // state={
+  //   date: new Date(),
+  // }
+  // onChange = date => this.setState({date})
   return(
       <div className="container-fluid">
         <div className="row">
           <nav className="col-md-2 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
+            <Calendar/>
               <ul className="nav flex-column">
-                <li className="nav-item">
+                <li className="nav-item">                  
                   <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
                     <span data-feather="home"></span>
                     Отправка отчетов
