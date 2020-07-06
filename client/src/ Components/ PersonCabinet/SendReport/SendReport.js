@@ -5,7 +5,6 @@ import Reports from "./Reports/Reports"
 class SendReport extends React.Component{
     state= {
         report:{},
-        hours:''
     }
      async componentDidMount() {
          let token = localStorage.getItem('token')
@@ -62,7 +61,7 @@ class SendReport extends React.Component{
     changeReport=()=>{
 
     }
-    changeHours=(event)=>{
+    changeHours= event =>{
         // event.target.value
         this.setState({hours:event.target.value})
         console.log(this.state.hours)

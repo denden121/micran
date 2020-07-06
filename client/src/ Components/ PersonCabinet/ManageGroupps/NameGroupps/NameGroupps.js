@@ -6,19 +6,20 @@ const NameGroupps = (props) =>{
     let temp1 = Array.from(props.listGroup)
     console.log('temp1',temp1)
     temp1 = temp1.map((groups,index) =>{
-        console.log('temp11111111111111',groups.fields)
-        let tempId = 'name_' +groups.pk
+        //console.log('temp11111111111111',groups.fields)
+        //let tempId = 'name_' +groups.pk
         return(
             <div className="nameGroupps">                
-                                  
-                        <th>{index+1}</th>                
+                    <tr>      
+                        <th scope="row">{index+1}</th>
                         <td>{groups.fields.name}</td>
                         <td>{groups.fields.description}</td>
                         <td>{groups.fields.users.join(' ')}</td>
-                                                      
+                    </tr>                                 
             </div>
         )
     })
+    console.log('result',temp1)
     return(
         
         temp1

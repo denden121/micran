@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header"
-//import SendReport from "../SendReport/SendReport"
+import SendReport from "../SendReport/SendReport"
 import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
 import "./Main.css"
@@ -31,14 +31,14 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-<<<<<<< HEAD
-                    {/* <SendReport sendReport={this.sendReport}/> */}
-=======
-                    <SendReport />
->>>>>>> 0ac6d807ebb9272e75cceab1dc4c39a32f84f39a
-                    {/* <AddGroups/> */}
-                    <ManageGroupps/>
-                    {/* <ProjectCard/> */}
+
+                    <Switch>
+                        {/*<Route path='/cabinet/' component = {PersonData}/>*/}
+                        <Route path='/cabinet/admin'  component = {AddGroups}/>
+                        <Route path='/cabinet/manage_groups'  component = {ManageGroupps}/>
+                        <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
+                        {/*<Redirect to='/cabinet'/>*/}
+                    </Switch>
                 </div>
             </div>
         )

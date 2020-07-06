@@ -131,7 +131,7 @@ class  App extends Component {
                 <Switch>
                     <Route path='/' exact component = {funcAuth}/>
                     <Route path='/reg' exact component = {funcReg}/>
-                    <Route path='/cabinet' exact component = {funcPersArea}/>
+                    <Route path='/cabinet'  component = {funcPersArea}/>
                     {/*<Redirect to='/cabinet'/>*/}
                 </Switch>
             </div>

@@ -10,28 +10,26 @@ const Navigation =(props)=>{
             <div className="sidebar-sticky">
               <ul className="nav flex-column">
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="cabinet/send_reports">
+                  <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
                     <span data-feather="home"></span>
-
                     Отправка отчетов
                     <span className="sr-only"></span>
-                  </NavLink>
+                  </a>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="cabinet/view_reports">
+                  <NavLink className="nav-link" to="cabinet/look_reports">
                     <span data-feather="file"></span>
-
                     Просмотр отчетов
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="cabinet/view_reports">
+                  <NavLink className="nav-link" to="#">
                     <span data-feather="shopping-cart"></span>
                     Реестр проектов
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="cabinet/holiday">
+                  <NavLink className="nav-link" to="/holiday">
                     <span data-feather="users"></span>
                     Отпуск
                   </NavLink>
@@ -43,10 +41,16 @@ const Navigation =(props)=>{
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="cabinet/help">
+                  <NavLink className="nav-link" to="/help">
                     <span data-feather="layers"></span>
                     Помощь
                   </NavLink>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="http://localhost:3000/cabinet/admin">
+                    <span data-feather="layers"></span>
+                    admin
+                  </a>
                 </li>
               </ul>
             </div>
