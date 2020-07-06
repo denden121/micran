@@ -28,20 +28,17 @@ class ManageGroups extends React.Component{
         return(
             <div className="container-fluid">
                 <table className="table">
-                <thead className="thead-dark">
-                <tr>
-                    <th scope="col">№</th>
-                    <th scope="col">Название</th>
-                    <th scope="col">Описание</th>
-                    <th scope="col">Входит в группу</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row"></th>
-                        <td><NameGroupps listGroup = {this.state.groups}/></td> 
-                     </tr>
-               </tbody>
+                    <thead >
+                        <tr>
+                            <th scope="col">№</th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Описание</th>
+                            <th scope="col">Входит в группу</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <NameGroupps listGroup = {this.state.groups}/>
+                </tbody>
                </table>
                 
             </div>

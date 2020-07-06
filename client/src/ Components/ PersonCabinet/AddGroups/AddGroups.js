@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
+
 class AddGroups extends React.Component {
     state = {
         actions: {}
