@@ -12,6 +12,7 @@
     "create-react-app": "^3.4.1",
     "django-react-csrftoken": "^1.0.4",
     "js-cookie": "^2.2.1",
+    "public-ip": "^4.0.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-calendar": "^3.1.0",

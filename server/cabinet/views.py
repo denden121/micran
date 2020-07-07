@@ -42,8 +42,11 @@ def logging(request, username, status, action):
 
 @csrf_exempt
 def token(request):
+    print(request.headers.get('IP'))
     username = request.POST.get('username')
     password = request.POST.get('password')
+    print("fffffffffffffffff")
+    print(username, password)
     user = authenticate(username=username, password=password)
     action = 'login'
     if user:
