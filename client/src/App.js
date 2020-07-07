@@ -37,7 +37,7 @@ class  App extends Component {
             .catch(error => localStorage.setItem('token', ''));
 
         console.log('sssss',localStorage.getItem('token'))
-        console.log(localStorage.getItem('token')
+        console.log(localStorage.getItem('token'))
         if (localStorage.getItem('token') == 'undefined') {
             alert('incorrect')
         } else {
