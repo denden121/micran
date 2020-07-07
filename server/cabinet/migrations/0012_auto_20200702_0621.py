@@ -17,12 +17,4 @@ class Migration(migrations.Migration):
             field=models.DateField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
         ),
-        migrations.AlterUniqueTogether(
-            name='action',
-            unique_together={('action',)},
-        ),
-        migrations.AlterUniqueTogether(
-            name='profile',
-            unique_together={('first_name', 'last_name', 'middle_name')},
-        ),
     ]
