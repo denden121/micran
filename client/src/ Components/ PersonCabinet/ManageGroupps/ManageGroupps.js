@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import NameGroupps from "./NameGroupps/NameGroupps"
+import Table from 'react-bootstrap/Table'
 
 class ManageGroups extends React.Component{
     async componentDidMount() {
@@ -27,7 +28,7 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                <table className="table">
+                <Table className="table">
                     <thead >
                         <tr>
                             <th scope="col">№</th>
@@ -39,7 +40,7 @@ class ManageGroups extends React.Component{
                     <tbody>
                         <NameGroupps listGroup = {this.state.groups}/>
                 </tbody>
-               </table>
+               </Table>
                 
             </div>
         )
