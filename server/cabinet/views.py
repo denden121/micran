@@ -3,7 +3,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from .models import Profile, Project, Report, Action, Group
+from .models import Profile, Project, Report, Action, Group, Logging
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -36,15 +36,24 @@ def get_access(action, user):
     return True
 
 
+def logging(request, username, status, action):
+    log = Logging.objects.create(IP=request.headers.get('IP'), login=username, status=status, action=action)
+
+
 @csrf_exempt
 def token(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     user = authenticate(username=username, password=password)
+    action = 'login'
     if user:
-        token = get_tokens_for_user(user)
-        return HttpResponse(json.dumps(token))
+        status = True
+        token_json = get_tokens_for_user(user)
+        logging(request, username=username, status=status, action=action)
+        return HttpResponse(json.dumps(token_json))
     else:
+        status = False
+        logging(request, username=username, status=status, action=action)
         return HttpResponse("False")
 
 
@@ -292,3 +301,12 @@ def groups_with_permission(request):
                 fields = {'name': group.name, 'users': users, 'description': group.description}
             data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
         return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def logs(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            data = serializers.serialize('json', Logging.objects.all())
+            return HttpResponse(data)

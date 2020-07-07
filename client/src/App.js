@@ -36,8 +36,8 @@ class  App extends Component {
             .then(result => localStorage.setItem('token', result.access))
             .catch(error => localStorage.setItem('token', ''));
 
-        // console.log('sssss',localStorage.getItem('token'))
-        // console.log(localStorage.getItem('token') === 'undefined')
+        console.log('sssss',localStorage.getItem('token'))
+        console.log(localStorage.getItem('token')
         if (localStorage.getItem('token') == 'undefined') {
             alert('incorrect')
         } else {
