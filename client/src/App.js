@@ -14,18 +14,17 @@ class  App extends Component {
     //обработка кнопки для авторизации
     authHandler = async () => {
         const publicIp = require('public-ip');
-        (async () => {
-            this.setState({IP:await publicIp.v4()})
-        })()
+        const ip = String(await publicIp.v4())
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        myHeaders.append("IP",this.state.ip)
+        // myHeaders.append("IP",this.state.ip)
         let login = document.getElementById("input-login").value
         let password = document.getElementById("input-password").value
         console.log(login,password)
         let urlencoded = new URLSearchParams();// Добавляем параметры запросы
         urlencoded.append("username", login);
         urlencoded.append("password", password);
+        urlencoded.append("IP", ip);
         let requestOptions = {
             method: 'POST',
             body: urlencoded,
