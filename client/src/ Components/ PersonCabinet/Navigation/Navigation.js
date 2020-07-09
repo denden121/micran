@@ -2,6 +2,7 @@ import React from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navigation.css'
 import {NavLink} from 'react-router-dom'
+import Calendar from "./Calendar/Calendar"
 
 
 const Navigation =(props)=>{
@@ -15,6 +16,8 @@ const Navigation =(props)=>{
           <nav className="col-md-2 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
               <ul className="nav flex-column">
+                {/* <input type="month" className="form-control" min="2018-03"></input> */}
+                <Calendar/>
                 <li className="nav-item">                  
                   <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
                     <span data-feather="home"></span>
