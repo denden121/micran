@@ -7,10 +7,15 @@ class Logging(models.Model):
     login = models.CharField(max_length=30, blank=True)
     action = models.CharField(max_length=30, blank=True)
     status = models.BooleanField()
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        return f'{self.action} at {self.date} by {self.login} with {self.status} status'
 
 
 class Action(models.Model):
     action = models.CharField(max_length=30, blank=True)
+    num = models.IntegerField()
 
     def __str__(self):
         return self.action
