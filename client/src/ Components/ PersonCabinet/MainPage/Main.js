@@ -10,6 +10,7 @@ import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
 import AddGroups from "../AddGroups/AddGroups";
 import ManageGroupps from "../ManageGroupps/ManageGroupps";
+import ViewLogs from "../ViewLogs/ViewLogs";
 
 import Projects from "../Projects/Projects"
 import ProjectCard from "../LookReport/ProjectCard/ProjectCard";
@@ -33,9 +34,10 @@ class Main extends Component{
                 <div className="Data">
 
                     <Switch>
-                        {/*<Route path='/cabinet/' component = {PersonData}/>*/}
-                        <Route path='/cabinet/admin'  component = {AddGroups}/>
-                        <Route path='/cabinet/manage_groups'  component = {ManageGroupps}/>
+                        <Route path='/cabinet/' exact component = {PersonData}/>
+                        <Route path='/cabinet/admin' exact component = {AddGroups}/>
+                        <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
+                        <Route path='/cabinet/manage_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
                         {/*<Redirect to='/cabinet'/>*/}
                     </Switch>

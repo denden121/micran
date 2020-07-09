@@ -8,6 +8,12 @@ class Logging(models.Model):
     action = models.CharField(max_length=30, blank=True)
     status = models.BooleanField()
     date = models.DateTimeField(auto_now_add=True, blank=True)
+<<<<<<< HEAD
+=======
+
+    def __str__(self):
+        return f'{self.action} at {self.date} by {self.login} with {self.status} status'
+>>>>>>> 51c67f878d67dd8ca791371cf03508fbcc557527
 
 
 class Action(models.Model):
