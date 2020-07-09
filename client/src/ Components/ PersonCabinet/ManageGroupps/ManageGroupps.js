@@ -28,7 +28,7 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                <Table className="table">
+                <Table className="table" listGroup = {this.state.groups}>
                     <thead >
                         <tr>
                             <th scope="col">№</th>
@@ -38,7 +38,7 @@ class ManageGroups extends React.Component{
                         </tr>
                     </thead>
                     <tbody>
-                        <NameGroupps listGroup = {this.state.groups}/>
+                        
                 </tbody>
                </Table>
                 
