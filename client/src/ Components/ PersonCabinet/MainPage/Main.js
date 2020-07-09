@@ -9,7 +9,7 @@ import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
 import AddGroups from "../Administration/AddGroups/AddGroups";
-import ManageGroupps from "../ManageGroupps/ManageGroupps";
+import ManageGroupps from "../Administration/ManageGroups/ManageGroupps";
 import ViewLogs from "../Administration/ViewLogs/ViewLogs";
 
 
