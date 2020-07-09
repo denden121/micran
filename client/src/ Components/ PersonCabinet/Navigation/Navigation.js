@@ -30,10 +30,16 @@ const Navigation =(props)=>{
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="#">
+                  <a className="nav-link" href='http://localhost:3000/cabinet/manage_groups'>
                     <span data-feather="shopping-cart"></span>
-                    Реестр проектов
-                  </NavLink>
+                    Manage groups
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href='http://localhost:3000/cabinet/admin/logs'>
+                    <span data-feather="shopping-cart"></span>
+                    View logs
+                  </a>
                 </li>
                 <li className="nav-item">
                   <NavLink className="nav-link" to="/holiday">
