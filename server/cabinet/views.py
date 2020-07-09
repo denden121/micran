@@ -28,9 +28,9 @@ def get_tokens_for_user(user):
     }
 
 
-def get_access(action, user):
+def get_access(action_id, user):
     try:
-        action = Action.objects.get(group=user.profile.group, action=action)
+        Action.objects.get(group=user.profile.group, action_id=action_id)
     except Action.DoesNotExist:
         return False
     return True
@@ -130,7 +130,7 @@ def all_report_view(request, user_id='default'):
     else:
         if user:
             if request.method == "GET":
-                if user_id != user.id and not get_access('check_reports', user):
+                if user_id != user.id and not get_access(11, user):  #11 is check reports
                     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
@@ -159,7 +159,7 @@ def report_view(request, report_id, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET":
-                if get_access('check_reports', user):
+                if get_access(11, user):
                     report = Report.objects.filter(user=user_id, id=report_id)
                     data = serializers.serialize('json', report)
                     return HttpResponse(data)
@@ -177,7 +177,7 @@ def all_projects_view(request, user_id='default'):
                 projects = Project.objects.filter(participants=user.id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
-            if request.method == "POST" and get_access('make_projects', user):
+            if request.method == "POST" and get_access(13, user):  #13 is create projects
                 form = ProjectForm(request.POST)
                 participants = request.POST['participants'].split()
                 participants = [(User.objects.get(username=participant)) for participant in participants]
@@ -192,7 +192,7 @@ def all_projects_view(request, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access('check_projects', user):
+            if request.method == "GET" and get_access(12, user): #12 is check projects
                 projects = Project.objects.filter(participants=user_id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
@@ -209,7 +209,7 @@ def project_view(request, project_id, user_id='default'):
                 project = Project.objects.filter(id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
-            elif request.method == "POST" and get_access('make_projects', user):
+            elif request.method == "POST" and get_access(13, user):
                 project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
@@ -227,7 +227,7 @@ def project_view(request, project_id, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" or get_access('check_projects', user):
+            if request.method == "GET" or get_access(12, user):
                 project = Project.objects.filter(participants=user_id, id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
@@ -285,7 +285,7 @@ def available_actions(request):
 @csrf_exempt
 def groups_with_permission(request):
     user = get_user_jwt(request)
-    if user:
+    if user and get_access(101, user):
         groups = Group.objects.all()
         data = []
         for group in groups:
