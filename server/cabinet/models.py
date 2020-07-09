@@ -15,7 +15,6 @@ class Logging(models.Model):
 
 class Action(models.Model):
     action = models.CharField(max_length=30, blank=True)
-    action_num = models.PositiveSmallIntegerField(blank=True, default=1)
 
     def __str__(self):
         return self.action
