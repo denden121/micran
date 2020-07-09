@@ -7,6 +7,7 @@ class Logging(models.Model):
     login = models.CharField(max_length=30, blank=True)
     action = models.CharField(max_length=30, blank=True)
     status = models.BooleanField()
+    date = models.DateTimeField(auto_now_add=True, blank=True)
 
 
 class Action(models.Model):
