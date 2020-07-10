@@ -24,11 +24,10 @@ class PersonData extends Component{
     }
     render(){
         return(
-            <div className="container-fluid">             
+            <div className="container-fluid">  
+            <h4 className="col-md-3">Личные данные</h4>           
                 <div className="row mb-2">
                     <div className="col-md-8">
-                    <h4 className="col-md-5">Личные данные</h4>
-                    <br/>
                         <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-3 d-flex flex-column position-static">
                                 <div className="col-md-8 order-md-1">
@@ -48,6 +47,9 @@ class PersonData extends Component{
                                     </div>
                                     <div className="mb-3">
                                         <label for="middleName">Отчество</label>
+                                        <div className="form-control">
+
+                                        </div>
                                     </div>
                                 </div>                            
                             </div>
