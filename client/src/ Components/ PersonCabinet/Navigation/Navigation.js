@@ -12,6 +12,8 @@ const Navigation =(props)=>{
             <div className="sidebar-sticky">
               <Calendar/>
               <ul className="nav flex-column">
+                {/* <input type="month" className="form-control" min="2018-03"></input> */}
+                <Calendar/>
                 <li className="nav-item">                  
                   <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
                     <span data-feather="home"></span>

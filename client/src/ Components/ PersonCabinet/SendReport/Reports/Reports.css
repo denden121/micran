@@ -22,7 +22,16 @@
     
 }
 
+.Label2{
+    float:right;
+}
 
+.total{
+    text-align: right;
+    color:grey;
+    margin:0;
+    padding: 0;
+}
 
 
 .a,
