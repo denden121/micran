@@ -1,0 +1,59 @@
+Index: client/src/ Components/ PersonCabinet/Navigation/Navigation.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport './Navigation.css'\nimport {NavLink} from 'react-router-dom'\nimport Calendar from './Calendar/Calendar';\n\nconst Navigation =(props)=>{\n  return(\n      <div className=\"container-fluid\">\n        <div className=\"row\">\n          <nav className=\"col-md-2 d-none d-md-block bg-light sidebar\">\n            <div className=\"sidebar-sticky\">\n              <Calendar/>\n              <ul className=\"nav flex-column\">\n                {/* <input type=\"month\" className=\"form-control\" min=\"2018-03\"></input> */}\n                <Calendar/>\n                <li className=\"nav-item\">                  \n                  <a className=\"nav-link\" href=\"http://localhost:3000/cabinet/send_reports\">\n                    <span data-feather=\"home\"></span>\n                    Send report\n                    <span className=\"sr-only\"></span>\n                  </a>\n                </li>\n                <li className=\"nav-item\">\n                  <a className=\"nav-link\" href='http://localhost:3000/cabinet/admin/view_groups'>\n                    <span data-feather=\"shopping-cart\"></span>\n                    View groups\n                  </a>\n                </li>\n                <li className=\"nav-item\">\n                  <a className=\"nav-link\" href='http://localhost:3000/cabinet/admin/logs'>\n                    <span data-feather=\"shopping-cart\"></span>\n                    View logs\n                  </a>\n                </li>\n                <li className=\"nav-item\">\n                  <a className=\"nav-link\" href=\"http://localhost:3000/cabinet/admin/add_groups\">\n                    <span data-feather=\"layers\"></span>\n                    AddGroups\n                  </a>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"/holiday\">\n                    <span data-feather=\"users\"></span>\n                    Отпуск\n                  </NavLink>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"cabinet/salary\">\n                    <span data-feather=\"bar-chart-2\"></span>\n                    Зарплата\n                  </NavLink>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"/help\">\n                    <span data-feather=\"layers\"></span>\n                    Помощь\n                  </NavLink>\n                </li>\n\n              </ul>\n            </div>\n          </nav>\n\n        </div>\n      </div>\n  )\n}\n\nexport default Navigation;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/Navigation/Navigation.js	(revision f4eb6dd38d36ca7f6f30a75557ffa2f79ba2d33d)
++++ client/src/ Components/ PersonCabinet/Navigation/Navigation.js	(date 1594354670938)
+@@ -10,7 +10,7 @@
+         <div className="row">
+           <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+             <div className="sidebar-sticky">
+-              <Calendar/>
++              {/*<Calendar/>*/}
+               <ul className="nav flex-column">
+                 {/* <input type="month" className="form-control" min="2018-03"></input> */}
+                 <Calendar/>
+Index: client/src/ Components/ PersonCabinet/Navigation/Calendar/Calendar.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\"\n\n\nconst Calendar =(props)=>{\n    return(\n        <div className=\"month-picker\">\n            <div className=\"nativeDatePicker\">   \n             <input min=\"2015\" type=\"month\" id=\"month-visit\" name=\"month-visit\" className=\"form-control\"/>\n                <span className=\"validity\"></span>\n            </div>\n            </div>\n    )\n}\n\nexport default Calendar
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/Navigation/Calendar/Calendar.js	(revision f4eb6dd38d36ca7f6f30a75557ffa2f79ba2d33d)
++++ client/src/ Components/ PersonCabinet/Navigation/Calendar/Calendar.js	(date 1594354877662)
+@@ -5,9 +5,9 @@
+     return(
+         <div className="month-picker">
+             <div className="nativeDatePicker">   
+-             <input min="2015" type="month" id="month-visit" name="month-visit" className="form-control"/>
+-                <span className="validity"></span>
+-            </div>
++             <input min="2015" type="month" id="month-visit" defaultValue={'December 2020' } name="month-visit" className="form-control"/>
++                {/*<span className="validity"></span>*/}
++            </div>      
+             </div>
+     )
+ }
+Index: client/src/ Components/ PersonCabinet/SendReport/SendReport.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport Reports from \"./Reports/Reports\"\n\nclass SendReport extends React.Component{\n    state= {\n        report:{},\n        id:''\n    }\n     async componentDidMount() {\n         let token = localStorage.getItem('token')\n         let myHeaders = new Headers();\n         myHeaders.append(\"Authorization\", token);\n\n         let requestOptions = {\n             method: 'GET',\n             headers: myHeaders,\n             redirect: 'follow'\n         };\n         let now = new Date()\n         let month = now.getMonth() + 1, yaer = now.getFullYear()\n         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + yaer\n         await fetch(url, requestOptions)\n             .then(response => response.json())\n             .then(result => this.setState({report:result[0].fields,id:result[0].pk}))\n             .catch(error => console.log('error', error));\n         // console.log(this.state.report)\n         console.log('state',this.state.report)\n         console.log('id',this.state.id)\n     }\n\n    saveReport= async ()=>{\n        let time = document.getElementById('spend-time').value\n        let body = document.querySelector('.body_for_report').value\n        let token = localStorage.getItem('token')\n        let project = document.querySelector('.project-for-report').value\n        let myHeaders = new Headers()\n        myHeaders.append(\"Authorization\", token);\n        console.log(project)\n        let formdata = new FormData();\n        formdata.append(\"text\", body)\n        formdata.append(\"hour \", time)\n        formdata.append(\"project\", project)\n        console.log(body)\n        // formdata.append(\"id\", project)\n\n        let requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n        let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`\n        await fetch(url, requestOptions)\n            .then(response => response.text())\n            .then(result => console.log(result))\n            .catch(error => console.log('error', error));\n        alert('Отчет отправлен')\n        // document.getElementById('mentorProject').value = ''\n        // document.getElementById('spendTime').value= ''\n        // document.getElementById('bodeReport').value= ''\n    }\n\n    render() {\n        return (\n            <div>\n                <div className container-fluid>\n                    <Reports saveReport = {this.saveReport}\n                             report = {this.state.report}/>\n                </div>\n            </div>\n        )\n    }\n}\n\nexport default SendReport
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/SendReport/SendReport.js	(revision f4eb6dd38d36ca7f6f30a75557ffa2f79ba2d33d)
++++ client/src/ Components/ PersonCabinet/SendReport/SendReport.js	(date 1594354607298)
+@@ -56,9 +56,6 @@
+             .then(result => console.log(result))
+             .catch(error => console.log('error', error));
+         alert('Отчет отправлен')
+-        // document.getElementById('mentorProject').value = ''
+-        // document.getElementById('spendTime').value= ''
+-        // document.getElementById('bodeReport').value= ''
+     }
+ 
+     render() {
