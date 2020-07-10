@@ -56,9 +56,6 @@ class SendReport extends React.Component{
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
         alert('Отчет отправлен')
-        // document.getElementById('mentorProject').value = ''
-        // document.getElementById('spendTime').value= ''
-        // document.getElementById('bodeReport').value= ''
     }
 
     render() {
