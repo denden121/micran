@@ -62,6 +62,7 @@ class AddGroups extends React.Component {
                                 <label className="col-md-4"><strong>Название группы</strong></label>
                             </div>
                             <input  id="nameGroup" type="text" className="form-control" placeholder="Новая группа"/>
+                            <br/>
                             <div className="form-check">
                                 <Activity actions={this.state.actions}/>
                             </div>
@@ -99,7 +100,7 @@ class AddGroups extends React.Component {
                             {/*        </div>*/}
                             {/*    </div>*/}
                             {/*</div>*/}
-
+                            <br/>
                             <button className="btn btn-sm btn-primary groupps" type='submit'
                                     onClick={this.createGroup}>Отправить
                             </button>
