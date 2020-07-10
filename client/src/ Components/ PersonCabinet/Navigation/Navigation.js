@@ -2,43 +2,41 @@ import React from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navigation.css'
 import {NavLink} from 'react-router-dom'
-import Calendar from 'react-calendar';
+import Calendar from './Calendar/Calendar';
 
 const Navigation =(props)=>{
-  // state={
-  //   date: new Date(),
-  // }
-  // onChange = date => this.setState({date})
   return(
       <div className="container-fluid">
         <div className="row">
           <nav className="col-md-2 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
-            <Calendar/>
+              <Calendar/>
               <ul className="nav flex-column">
+                {/* <input type="month" className="form-control" min="2018-03"></input> */}
+                <Calendar/>
                 <li className="nav-item">                  
                   <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
                     <span data-feather="home"></span>
-                    Отправка отчетов
+                    Send report
                     <span className="sr-only"></span>
                   </a>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="cabinet/look_reports">
-                    <span data-feather="file"></span>
-                    Просмотр отчетов
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href='http://localhost:3000/cabinet/manage_groups'>
+                  <a className="nav-link" href='http://localhost:3000/cabinet/admin/view_groups'>
                     <span data-feather="shopping-cart"></span>
-                    Manage groups
+                    View groups
                   </a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href='http://localhost:3000/cabinet/admin/logs'>
                     <span data-feather="shopping-cart"></span>
                     View logs
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="http://localhost:3000/cabinet/admin/add_groups">
+                    <span data-feather="layers"></span>
+                    AddGroups
                   </a>
                 </li>
                 <li className="nav-item">
@@ -59,12 +57,7 @@ const Navigation =(props)=>{
                     Помощь
                   </NavLink>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="http://localhost:3000/cabinet/admin">
-                    <span data-feather="layers"></span>
-                    admin
-                  </a>
-                </li>
+
               </ul>
             </div>
           </nav>

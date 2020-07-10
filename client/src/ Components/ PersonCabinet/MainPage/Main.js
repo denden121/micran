@@ -3,22 +3,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../Navigation/Navigation";
 import Header from "../Header/Header"
 import SendReport from "../SendReport/SendReport"
-import rend from '../../../index.js'
+// import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
 import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
-import AddGroups from "../AddGroups/AddGroups";
-import ManageGroupps from "../ManageGroupps/ManageGroupps";
-import ViewLogs from "../ViewLogs/ViewLogs";
+import AddGroups from "../Administration/AddGroups/AddGroups";
+import ManageGroupps from "../Administration/ManageGroups/ManageGroupps";
+import ViewLogs from "../Administration/ViewLogs/ViewLogs";
 
-import Projects from "../Projects/Projects"
-import ProjectCard from "../LookReport/ProjectCard/ProjectCard";
+
 class Main extends Component{
     logOut = () =>{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
-        // rend()
     }
     render() {
         return (
@@ -32,12 +30,11 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-
                     <Switch>
                         <Route path='/cabinet/' exact component = {PersonData}/>
-                        <Route path='/cabinet/admin' exact component = {AddGroups}/>
+                        <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
-                        <Route path='/cabinet/manage_groups' exact component = {ManageGroupps}/>
+                        <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
                         {/*<Redirect to='/cabinet'/>*/}
                     </Switch>
