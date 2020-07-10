@@ -3,7 +3,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from .models import Profile, Project, Report, Action, Group, Logging
+from .models import Profile, Project, Report, Action, Group, Logging, Salary
 from django.contrib.auth.models import User
 from django.core import serializers
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -311,3 +311,26 @@ def logs(request):
         if request.method == "GET":
             data = serializers.serialize('json', Logging.objects.all())
             return HttpResponse(data)
+
+@csrf_exempt
+def salary(request):
+    user = get_user_jwt(request)
+    person = request.POST.get('person')
+    if user:
+        if request.method == "POST":
+            salary = Salary.objects.create(person=person)
+            salary.time_norm = request.POST.get('time_norm')
+            salary.plan_salary = request.POST.get('plan_salary')
+            salary.is_awarded = request.POST.get('is_awarded')
+            salary.award = request.POST.get('award')
+            salary.days_worked = salary.days_norm - (salary.vacation + salary.sick_leave + salary.day_off)
+            # time_report  #достать из отчета
+            # time_orion = models.FloatField(blank=True)  # достать из бд
+        # days_norm = models.FloatField(blank=True)
+
+        # vacation = models.FloatField(blank=True)
+        # sick_leave = models.FloatField(blank=True)
+        # day_off = models.FloatField(blank=True)
+        #  = models.FloatField(blank=True)
+        #
+        # salary_hand = models.FloatField(blank=True)
