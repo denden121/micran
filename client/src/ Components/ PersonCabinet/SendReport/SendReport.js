@@ -5,6 +5,7 @@ import Reports from "./Reports/Reports"
 class SendReport extends React.Component{
     state= {
         report:{},
+        id:''
     }
      async componentDidMount() {
          let token = localStorage.getItem('token')
@@ -21,25 +22,27 @@ class SendReport extends React.Component{
          let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + yaer
          await fetch(url, requestOptions)
              .then(response => response.json())
-             .then(result => this.setState({hours: result[0].fields.hours,text:result[0].fields.text}))
+             .then(result => this.setState({report:result[0].fields,id:result[0].pk}))
              .catch(error => console.log('error', error));
-         console.log(this.state.report)
+         // console.log(this.state.report)
+         console.log('state',this.state.report)
+         console.log('id',this.state.id)
      }
 
-    sendReport =async ()=>{
-        let mentor = document.getElementById('mentorProject').value
-        let time = document.getElementById('spendTime').value
-        let body = document.getElementById('bodeReport').value
+    saveReport= async ()=>{
+        let time = document.getElementById('spend-time').value
+        let body = document.querySelector('.body_for_report').value
         let token = localStorage.getItem('token')
-
+        let project = document.querySelector('.project-for-report').value
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token);
-
+        console.log(project)
         let formdata = new FormData();
-        formdata.append("text", body);
-        formdata.append("hour ", time);
-        formdata.append("project", "test");
-        formdata.append("curator", mentor);
+        formdata.append("text", body)
+        formdata.append("hour ", time)
+        formdata.append("project", project)
+        console.log(body)
+        // formdata.append("id", project)
 
         let requestOptions = {
             method: 'POST',
@@ -47,35 +50,23 @@ class SendReport extends React.Component{
             body: formdata,
             redirect: 'follow'
         };
-
-         await fetch("http://127.0.0.1:8000/cabinet/reports/", requestOptions)
+        let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`
+        await fetch(url, requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-         alert('Отчет отправлен')
-         document.getElementById('mentorProject').value = ''
-         document.getElementById('spendTime').value= ''
-         document.getElementById('bodeReport').value= ''
-    }
-
-    changeReport=()=>{
-
-    }
-    changeHours= event =>{
-        // event.target.value
-        this.setState({hours:event.target.value})
-        console.log(this.state.hours)
-
+        alert('Отчет отправлен')
+        // document.getElementById('mentorProject').value = ''
+        // document.getElementById('spendTime').value= ''
+        // document.getElementById('bodeReport').value= ''
     }
 
     render() {
         return (
             <div>
                 <div className container-fluid>
-                    <Reports sendReport={this.sendReport}
-                             changeReport = {this.changeReport}
-                             changeHours = {this.changeHours}
-                             report = {this.state}/>
+                    <Reports saveReport = {this.saveReport}
+                             report = {this.state.report}/>
                 </div>
             </div>
         )

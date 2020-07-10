@@ -1,7 +1,6 @@
 import React from "react"
 import "./Reports.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Card from "../Card/Card"
 
 const Reports =(props)=>{
     return(

@@ -13,15 +13,18 @@ class  App extends Component {
     }
     //обработка кнопки для авторизации
     authHandler = async () => {
-
+        const publicIp = require('public-ip');
+        const ip = String(await publicIp.v4())
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        // myHeaders.append("IP",this.state.ip)
         let login = document.getElementById("input-login").value
         let password = document.getElementById("input-password").value
-        // console.log(login,password)
+        console.log(login,password)
         let urlencoded = new URLSearchParams();// Добавляем параметры запросы
         urlencoded.append("username", login);
         urlencoded.append("password", password);
+        urlencoded.append("IP", ip);
         let requestOptions = {
             method: 'POST',
             body: urlencoded,
@@ -36,8 +39,8 @@ class  App extends Component {
             .then(result => localStorage.setItem('token', result.access))
             .catch(error => localStorage.setItem('token', ''));
 
-        // console.log('sssss',localStorage.getItem('token'))
-        // console.log(localStorage.getItem('token') === 'undefined')
+        console.log('sssss',localStorage.getItem('token'))
+        console.log(localStorage.getItem('token'))
         if (localStorage.getItem('token') == 'undefined') {
             alert('incorrect')
         } else {
@@ -53,7 +56,7 @@ class  App extends Component {
             await fetch("http://127.0.0.1:8000/check/", requestOptions)
                 .then(response => response.text())
                 .then(result => localStorage.setItem('checkReg',result))
-                .catch(error => console.log('error', error));
+                .catch(error => console.log('error'));
             ReactDOM.render(
                 <BrowserRouter>
                     <React.StrictMode>
@@ -63,10 +66,10 @@ class  App extends Component {
                 document.getElementById('root')
             );
         }
-        console.log('прошел всю кнопку')
+        // console.log('прошел всю кнопку')
 
     }
-    sendReg= async ()=> {
+    sendReg = async ()=> {
         let myHeaders = new Headers();
         let token = localStorage.getItem('token')
         myHeaders.append("Authorization", token);
@@ -87,7 +90,7 @@ class  App extends Component {
 
         await fetch("http://127.0.0.1:8000/cabinet/register/", requestOptions)
             .then(response => response.text())
-            .catch(error => console.log('error', error));
+            .catch(error => console.log('error'));
         localStorage.setItem('checkReg', 'True')
     }
     render(){
@@ -102,7 +105,7 @@ class  App extends Component {
         const funcAuth = () => {
             let token = localStorage.getItem('token')
             let reg = localStorage.getItem('checkReg')
-            console.log(token,reg)
+            // console.log(token,reg)
             console.log(typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True')
             console.log(localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='')
             if (typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True') {

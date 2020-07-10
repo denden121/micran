@@ -7,19 +7,15 @@ class ManageGroups extends React.Component{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
-
         let requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
-
-        await fetch("http://127.0.0.1:8000/groups_admin/", requestOptions)
+        await fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
             .then(response => response.json())
             .then(result => this.setState({groups:result}))
-        // let temp = Array.from(this.state.groups)
-        // console.log('array', temp)
-        console.log('state',this.state.groups[0])
+        // console.log('state',this.state.groups[0])
     }
 
     state = {
@@ -28,7 +24,7 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                <Table className="table" listGroup = {this.state.groups}>
+                <table className="table">
                     <thead >
                         <tr>
                             <th scope="col">№</th>
@@ -38,10 +34,9 @@ class ManageGroups extends React.Component{
                         </tr>
                     </thead>
                     <tbody>
-                        
-                </tbody>
-               </Table>
-                
+                        <NameGroupps listGroup = {this.state.groups}/>
+                    </tbody>
+               </table>
             </div>
         )
     }
