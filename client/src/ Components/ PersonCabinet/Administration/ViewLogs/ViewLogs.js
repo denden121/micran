@@ -17,7 +17,6 @@ class ViewLogs extends React.Component{
             .then(response => response.json())
             .then(result => this.setState({logs:result}))
         console.log(this.state.logs)
-        // console.log('state',this.state.groups[0])
     }
     state = {
         logs:{}

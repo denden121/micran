@@ -61,44 +61,44 @@ class AddGroups extends React.Component {
                             <div className="row">
                                 <label className="col-md-4"><strong>Название группы</strong></label>
                             </div>
-                            <input id="nameGroup" type="text" className="form-control" placeholder="Новая группа"/>
+                            <input  id="nameGroup" type="text" className="form-control" placeholder="Новая группа"/>
                             <div className="form-check">
                                 <Activity actions={this.state.actions}/>
                             </div>
-                            <div className="row">
-                                <label className="col-md-6"><strong>1.Пользовательский раздел</strong></label>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-9" align="left">
-                                    <div className="form-check">
-                                        <label className="checkbox">
-                                            <input type="checkbox" className="form-check-input"/>
-                                            Доступ в пользовательский раздел (код 1)
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <label className="col-md-6"><strong>2.Администраторский раздел</strong></label>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-9" align="left">
-                                    <div className="form-check">
-                                        <label className="checkbox">
-                                            <input type="checkbox" className="form-check-input"/>
-                                            Доступ в администраторский раздел (код 2)
-                                        </label>
-                                        <label className="checkbox">
-                                            <input type="checkbox" className="form-check-input"/>
-                                            Доступ ко всему департаменту (код 44)
-                                        </label>
-                                        <label className="checkbox">
-                                            <input type="checkbox" className="form-check-input"/>
-                                            Доступ по всему своему департменту (код 45)
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                            {/*<div className="row">*/}
+                            {/*    <label className="col-md-6"><strong>1.Пользовательский раздел</strong></label>*/}
+                            {/*</div>*/}
+                            {/*<div className="row">*/}
+                            {/*    <div className="col-md-9" align="left">*/}
+                            {/*        <div className="form-check">*/}
+                            {/*            <label className="checkbox">*/}
+                            {/*                <input type="checkbox" className="form-check-input"/>*/}
+                            {/*                Доступ в пользовательский раздел (код 1)*/}
+                            {/*            </label>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                            {/*<div className="row">*/}
+                            {/*    <label className="col-md-6"><strong>2.Администраторский раздел</strong></label>*/}
+                            {/*</div>*/}
+                            {/*<div className="row">*/}
+                            {/*    <div className="col-md-9" align="left">*/}
+                            {/*        <div className="form-check">*/}
+                            {/*            <label className="checkbox">*/}
+                            {/*                <input type="checkbox" className="form-check-input"/>*/}
+                            {/*                Доступ в администраторский раздел (код 2)*/}
+                            {/*            </label>*/}
+                            {/*            <label className="checkbox">*/}
+                            {/*                <input type="checkbox" className="form-check-input"/>*/}
+                            {/*                Доступ ко всему департаменту (код 44)*/}
+                            {/*            </label>*/}
+                            {/*            <label className="checkbox">*/}
+                            {/*                <input type="checkbox" className="form-check-input"/>*/}
+                            {/*                Доступ по всему своему департменту (код 45)*/}
+                            {/*            </label>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
                             <button className="btn btn-sm btn-primary groupps" type='submit'
                                     onClick={this.createGroup}>Отправить

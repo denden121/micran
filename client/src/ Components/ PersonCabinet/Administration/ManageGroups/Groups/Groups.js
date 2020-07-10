@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const NameGroupps = (props) =>{
+const Groups = (props) =>{
     let temp1 = Array.from(props.listGroup)
     temp1 = temp1.map((groups,index) =>{
         return(
@@ -19,5 +19,5 @@ const NameGroupps = (props) =>{
     )
 }
 
-export default NameGroupps
+export default Groups
 

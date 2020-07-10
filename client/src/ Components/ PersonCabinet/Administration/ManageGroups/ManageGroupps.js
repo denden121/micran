@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import NameGroupps from "./NameGroupps/NameGroupps"
+import Groups from "./Groups/Groups"
 import Table from 'react-bootstrap/Table'
 
 class ManageGroups extends React.Component{
@@ -15,7 +15,7 @@ class ManageGroups extends React.Component{
         await fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
             .then(response => response.json())
             .then(result => this.setState({groups:result}))
-        // console.log('state',this.state.groups[0])
+        console.log('state',this.state.groups[0])
     }
 
     state = {
@@ -34,7 +34,7 @@ class ManageGroups extends React.Component{
                         </tr>
                     </thead>
                     <tbody>
-                        <NameGroupps listGroup = {this.state.groups}/>
+                        <Groups listGroup = {this.state.groups}/>
                     </tbody>
                </table>
             </div>
