@@ -2,7 +2,7 @@ import React from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navigation.css'
 import {NavLink} from 'react-router-dom'
-import Calendar from 'react-calendar';
+import Calendar from './Calendar/Calendar';
 
 const Navigation =(props)=>{
   return(
@@ -10,7 +10,7 @@ const Navigation =(props)=>{
         <div className="row">
           <nav className="col-md-2 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
-            <Calendar/>
+              <Calendar/>
               <ul className="nav flex-column">
                 <li className="nav-item">                  
                   <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
