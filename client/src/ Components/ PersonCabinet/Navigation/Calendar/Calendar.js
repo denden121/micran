@@ -6,12 +6,12 @@ import datepickerJAFactory from 'jquery-datepicker/i18n/jquery.ui.datepicker-ja'
 class Calendar extends React.Component{
     // datepickerFactory($);
     // datepickerJAFactory($);
-    $(function () {
-        $('#datetimepicker10').datetimepicker({
-            viewMode: 'years',
-            format: 'MM/YYYY'
-        });
-    });
+    // $(function () {
+    //     $('#datetimepicker10').datetimepicker({
+    //         viewMode: 'years',
+    //         format: 'MM/YYYY'
+    //     });
+    // });
     render(){
         return(
                
