@@ -30,7 +30,7 @@ def get_tokens_for_user(user):
 
 def get_access(action_num, user):
     try:
-        Action.objects.get(group=user.profile.group, action_num=action_num)
+        Action.objects.get(group=user.profile.group, num=action_num)
     except Action.DoesNotExist:
         return False
     return True
