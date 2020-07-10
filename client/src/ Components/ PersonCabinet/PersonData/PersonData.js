@@ -24,69 +24,36 @@ class PersonData extends Component{
     }
     render(){
         return(
-            <div className="container-fluid">
-
-                <div className="row">
-                    <div className="col-md-1"></div>
-                    <div className="col-md-6 order-md-1">
-
-                        <h4 className="col-md-5 mb-2">Личные данные</h4>
-                        <div className="row">
-                            <div className="col-md-12 mb-3">
-                                <label className="col-md-6" for="firstName">Имя</label>
-                                <div  className="form-control" id="firstName">
-                                    {this.state.cabinet.first_name}
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Фамилия</label>
-                                <div  className="form-control" id="firstName">
-                                    {this.state.cabinet.last_name}
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Отчество</label>
-                                <div  className="form-control" id="firstName">
-                                    {this.state.cabinet.middle_name}
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Дата рождения</label>
-                                <div  className="form-control" id="firstName"/>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Пол</label>
-                                <div  className="form-control" id="firstName"/>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Стаж</label>
-                                <div  className="form-control" id="firstName"/>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Смена</label>
-                                <div  className="form-control" id="firstName"/>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Дата трудоустройства</label>
-                                <div  className="form-control" id="firstName"/>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label for="firstName">Допустимое время опоздания</label>
-                                <div  className="form-control" id="firstName"/>
-                            </div>
-                            <div className="col-md-12 mb-3">
-                                <label className="col-md-6" for="firstName">Совместительство</label>
-                                <div  className="form-control" id="firstName"/>
-                            </div>
-                            <div className="col-md-12 mb-3">
-                                <label className="col-md-6" for="firstName">Входит в группы</label>
-                                <div  className="form-control" id="firstName"/>
+            <div className="container-fluid">             
+                <div className="row mb-2">
+                    <div className="col-md-8">
+                    <h4 className="col-md-5">Личные данные</h4>
+                    <br/>
+                        <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div className="col p-3 d-flex flex-column position-static">
+                                <div className="col-md-8 order-md-1">
+                                    <div className="row">
+                                        <div className="col-md-6 mb-3">
+                                            <label for="firstName">Имя</label>
+                                            <div className="form-control" id="firstName">
+                                                {this.state.cabinet.first_name}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mb-3">
+                                            <label for="lastName">Фамилия</label>
+                                            <div className="form-control" id="lastName">
+                                                {this.state.cabinet.last_name}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-3">
+                                        <label for="middleName">Отчество</label>
+                                    </div>
+                                </div>                            
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
 
 
