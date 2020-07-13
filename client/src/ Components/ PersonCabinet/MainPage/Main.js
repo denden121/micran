@@ -11,7 +11,7 @@ import {Redirect, Route} from "react-router-dom";
 import AddGroups from "../Administration/AddGroups/AddGroups";
 import ManageGroupps from "../Administration/ManageGroups/ManageGroupps";
 import ViewLogs from "../Administration/ViewLogs/ViewLogs";
-
+import Salary from "../Salary/Salary"
 
 class Main extends Component{
     logOut = () =>{
@@ -30,14 +30,15 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                    <Switch>
+                     <Switch>
                         <Route path='/cabinet/' exact component = {PersonData}/>
                         <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
                         <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
                         {/*<Redirect to='/cabinet'/>*/}
-                    </Switch>
+                     </Switch> 
+                    {/* <Salary/> */}
                 </div>
             </div>
         )
