@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import './AddGroups.css'
-import Activity from "./Activity/Activity"
+import SalaryTable from "./SalaryTable/SalaryTable";
+
+
 
 class Salary extends React.Component {
     state = {
@@ -25,10 +26,12 @@ class Salary extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-
+                <table className="table table-bordered">
+                    <SalaryTable listGroup = {this.state.salaries}/>
+                </table>
             </div>
         )
     }
 }
 
-export default AddGroups
+export default Salary

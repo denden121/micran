@@ -24,8 +24,8 @@ class ViewLogs extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                <table className="table">
-                    <thead >
+                <table className="table table-hover table-bordered">
+                    <thead className="thead-dark">
                         <tr>
                             <th scope="col">№</th>
                             <th scope="col">IP</th>
