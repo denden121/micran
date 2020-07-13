@@ -1,0 +1,41 @@
+.winter{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+    
+}
+.spring{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+}
+.summer{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+}
+.autumn{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+}
+.winter:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #5488af; 
+}
+.spring:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #5488af; 
+}
+.summer:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #5488af; 
+}
+.autumn:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #5488af; 
+}
