@@ -110,8 +110,17 @@ def all_report_view(request, user_id='default'):
         if user:
             if request.method == "GET":
                 reports = Report.objects.filter(creator_id=user.id, date__month = request.GET['month'], date__year = request.GET['year'])
-                data = serializers.serialize('json', reports)
-                return HttpResponse(data)
+                projects = Project.objects.all()
+                data = []
+                fields_project = []
+                for report in reports:
+                    for project in projects:
+                        fields_project.append({'name': project.name})
+                    fields = {'text': report.text, 'hour': report.hour, 'project': report.project,
+                              'curator': report.curator, 'fields_project': fields_project}
+                    data.append({'model': 'cabinet.report', 'pk': report.pk, 'fields': fields})
+
+                return HttpResponse(json.dumps(data))
             if request.method == "POST":
                 reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
                 if reports:
