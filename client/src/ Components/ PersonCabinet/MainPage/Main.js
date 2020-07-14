@@ -12,13 +12,40 @@ import AddGroups from "../Administration/AddGroups/AddGroups";
 import ManageGroupps from "../Administration/ManageGroups/ManageGroupps";
 import ViewLogs from "../Administration/ViewLogs/ViewLogs";
 import Salary from "../Salary/Salary"
+import rend from "../../../index";
+
+const Month = {
+    'Янв':1,
+    'Фев':2,
+    'Март':3,
+    'Апр':4,
+    'Май':5,
+    'Июнь':6,
+    'Июль':7,
+    'Авг':8,
+    'Сен':9,
+    'Окт':10,
+    'Ноя':11,
+    'Дек':12,
+}
 
 class Main extends Component{
+
     logOut = () =>{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
     }
+    onClickDate = (event) =>{
+        let month = event.target.textContent
+        month  = Month[month]
+        localStorage.setItem('date',`${month} 2020`)
+        rend()
+    }
     render() {
+        if(!localStorage.getItem('date')){
+            let date = new Date()
+            localStorage.setItem('date',`${date.getMonth()+1} ${date.getFullYear()} `)
+        }
         return (
             <div className="container">
                 <div className="Head">
@@ -26,7 +53,7 @@ class Main extends Component{
                 </div>
 
                 <div className='Nav'>
-                    <Navigation/>
+                    <Navigation onClickDate = {this.onClickDate}/>
                 </div>
 
                 <div className="Data">
@@ -36,9 +63,9 @@ class Main extends Component{
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
                         <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
+                        <Route path='/cabinet/salary' exact  component = {Salary}/>
                         {/*<Redirect to='/cabinet'/>*/}
-                     </Switch> 
-                    {/* <Salary/> */}
+                     </Switch>
                 </div>
             </div>
         )
