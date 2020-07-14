@@ -1,7 +1,5 @@
 import React from "react"
-import $ from 'jquery'
-import datepickerFactory from 'jquery-datepicker';
-import datepickerJAFactory from 'jquery-datepicker/i18n/jquery.ui.datepicker-ja';
+import "./Calendar.css"
 
 class Calendar extends React.Component{
     // datepickerFactory($);
@@ -14,16 +12,28 @@ class Calendar extends React.Component{
     // });
     render(){
         return(
-               
-                <div className="col-sm-6" style={{height:"130px"}}>
-                    <div className="form-group">
-                        <div className='input-group date' id='datetimepicker10'>
-                            <input type='text' className="form-control" />
-                            <span className="input-group-addon">
-                            </span>
-                        </div>
-                    </div>
+            <div className="Calendar">
+                <div>
+                    <div className="winter border">Дек</div>
+                    <div className="winter border">Янв</div>  
+                    <div className="winter border">Фев</div>  
                 </div>
+                <div>
+                    <div className="spring border">Март</div>
+                    <div className="spring border">Апр</div>
+                    <div className="spring border">Май</div>
+                </div> 
+                <div>
+                    <div className="summer border">Июнь</div>
+                    <div className="summer border">Июль</div>
+                    <div className="summer border">Авг</div>
+                </div>  
+                <div>
+                    <div className="autumn border">Сен</div>
+                    <div className="autumn border">Окт</div>
+                    <div className="autumn border">Ноя</div>
+                </div>   
+            </div>            
         )
     }
 }

@@ -30,20 +30,16 @@ class SendReport extends React.Component{
      }
 
     saveReport= async ()=>{
-        let time = document.getElementById('spend-time').value
-        let body = document.querySelector('.body_for_report').value
+        let time = document.querySelector('#time_project').value
+        let body = document.querySelector('#body_report').value
         let token = localStorage.getItem('token')
-        let project = document.querySelector('.project-for-report').value
+        let project = document.querySelector('#name_project').value
         let myHeaders = new Headers()
-        myHeaders.append("Authorization", token);
-        console.log(project)
+        myHeaders.append("Authorization", token)
         let formdata = new FormData();
         formdata.append("text", body)
         formdata.append("hour ", time)
         formdata.append("project", project)
-        console.log(body)
-        // formdata.append("id", project)
-
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -51,6 +47,7 @@ class SendReport extends React.Component{
             redirect: 'follow'
         };
         let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`
+
         await fetch(url, requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
