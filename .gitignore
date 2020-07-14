@@ -1,6 +1,6 @@
 *.sh
 .idea
-/server/main/__pycache__
-/server/cabinet/__pycache__
+/server/main/__pycache__/
+/server/cabinet/__pycache__/
 /server/db.sqlite3
 *.pyc
