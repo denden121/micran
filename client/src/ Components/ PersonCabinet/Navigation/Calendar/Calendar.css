@@ -25,17 +25,58 @@
 }
 .winter:hover{
     color: #ffe; /* Цвет текста активного пункта */
-    background-color: #5488af; 
+    background-color: #11BCD3; 
 }
 .spring:hover{
     color: #ffe; /* Цвет текста активного пункта */
-    background-color: #5488af; 
+    background-color: #11BCD3; 
 }
 .summer:hover{
     color: #ffe; /* Цвет текста активного пункта */
-    background-color: #5488af; 
+    background-color: #11BCD3; 
 }
 .autumn:hover{
     color: #ffe; /* Цвет текста активного пункта */
-    background-color: #5488af; 
+    background-color: #11BCD3; 
+}
+
+.year ul{
+    list-style-type: none;
+}
+
+.year {
+    display:inline-block;
+    padding: 5px 5px;
+    width: 90%;
+    background: #11BCD3;
+    text-align: center;
+}
+
+.year ul {
+    margin: 0;
+    padding: 0;
+}
+
+.year ul li {
+    color: white;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.year .prev {
+    float: left;
+    padding-top: 5px;
+}
+
+/* Next button */
+.year .next {
+    float: right;
+    padding-top: 5px;
+}
+
+.year div .active {
+    padding: 5px;
+    background: #11BCD3;
+    color: white !important
 }

@@ -9,10 +9,12 @@ const SalaryTable = (props) =>{
                 <tr>
                     <th scope="row">№</th>
                     {/* <td>{index+1}</td> */}
+                    <td>1</td>
                 </tr>
                 <tr>
                     <th scope="row">ФИО</th>
                     {/* <td>{salaries.fields.fio}</td> */}
+                    <td>Гурачевский</td>
                 </tr>
                 <tr>
                     <th scope="row">Комментарий</th>
