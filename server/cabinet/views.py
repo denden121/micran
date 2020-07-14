@@ -1,15 +1,16 @@
-from rest_framework_simplejwt.tokens import RefreshToken
+import simplejson as json
 from datetime import datetime
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from .models import Profile, Project, Report, Action, Group, Logging, Salary
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm
-import simplejson as json
-from django.contrib.auth import authenticate
+from .models import Profile, Project, Report, Action, Group, Logging, Salary
 
 
 def get_user_jwt(request):
@@ -119,7 +120,6 @@ def all_report_view(request, user_id='default'):
                     fields = {'text': report.text, 'hour': report.hour, 'project': report.project,
                               'curator': report.curator, 'fields_project': fields_project}
                     data.append({'model': 'cabinet.report', 'pk': report.pk, 'fields': fields})
-
                 return HttpResponse(json.dumps(data))
             if request.method == "POST":
                 reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
@@ -159,9 +159,11 @@ def report_view(request, report_id, user_id='default'):
                 return HttpResponse(data)
             elif request.method == "POST":
                 form = ReportForm(request.POST, request.FILES, instance=report)
+                print(form.errors)
                 if form.is_valid():
                     update = form.save()
-                return HttpResponse("Success")
+                    return HttpResponse("Success")
+                return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:

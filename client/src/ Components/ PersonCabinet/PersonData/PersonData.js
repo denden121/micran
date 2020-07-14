@@ -32,7 +32,7 @@ class PersonData extends Component{
                     
                         <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-3 d-flex flex-column position-static">
-                            <h4 align="center">Личные данные</h4> 
+                            <h4 className="text-left">Личные данные</h4> 
                             <br/> 
                                 <div className="col-md-8 order-md-1">
                                     <div className="row">
