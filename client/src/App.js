@@ -54,6 +54,8 @@ class  App extends Component {
                 .then(response => response.text())
                 .then(result => localStorage.setItem('checkReg',result))
                 .catch(error => console.log('error'));
+            const time = new Date()
+            localStorage.setItem('date',`${time.getMonth()+1} ${time.getFullYear()}`)
             ReactDOM.render(
                 <BrowserRouter>
                     <React.StrictMode>

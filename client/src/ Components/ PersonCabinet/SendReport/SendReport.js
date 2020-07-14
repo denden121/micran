@@ -17,9 +17,10 @@ class SendReport extends React.Component{
              headers: myHeaders,
              redirect: 'follow'
          };
-         let now = new Date()
-         let month = now.getMonth() + 1, yaer = now.getFullYear()
-         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + yaer
+         let now = localStorage.getItem('date').split(' ')
+         let month = now[0]
+         let year = now[1]
+         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
          await fetch(url, requestOptions)
              .then(response => response.json())
              .then(result => this.setState({report:result[0].fields,id:result[0].pk}))
