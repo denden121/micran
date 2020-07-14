@@ -66,25 +66,34 @@ const Reports =(props)=>{
                             <div className="box-content">
                                 <div id="time-read">
                                     <label className="col-sm-1" className="Label1"><strong>Проект:</strong></label>
-                                    {/* <input onChange={props.changeHours} className="form-control" placeholder="Часы" defaultValue = {String(props.report.hour)}  type="text"/> */}
-                                    <select className="select2 form-control select2-offscreen"
-                                        id='CB_proj'>                                            
-                                        </select>
+                                    <input className="form-control" id='name_project' placeholder="Проект" defaultValue='MicRac' type="text"/>
+                                    {/*<select className="select2 form-control select2-offscreen"*/}
+                                    {/*    id='CB_proj'>                                            */}
+                                    {/*    </select>*/}
                                 </div>
                                      <br/>
                                      <div id="time-read">
                                     <label className="col-sm-1" className="Label1"><strong>Часы:</strong></label>
-                                    <input onChange={props.changeHours} className="form-control" placeholder="Часы" defaultValue = {String(props.report.hour)}  type="text"/>
+                                    <input className="form-control"
+                                           id = 'time_project'
+                                           placeholder="Часы"
+                                           defaultValue = {props.report.hour}
+                                           type="text"/>
                                 </div>
                                      <br/>
                                 <div id="note-read">
                                 <label className="col-sm-1" className="Label1"><strong>Состав работ:</strong></label>
-                                    <textarea defaultValue = {props.report.text}className="form-control" id="note-read" maxlength="10000"
-                                    placeholder="Состав работ по проекту..."  rows="10"></textarea>
+                                    <textarea
+                                        defaultValue = {props.report.text}
+                                        className="form-control"
+                                        id="body_report"
+                                        maxlength="10000"
+                                        placeholder="Состав работ по проекту..."
+                                        rows="10"></textarea>
                                 </div>
                                 <hr className="normal"/>
                                 <label className="Label2">
-                                    <button className="btn btn-success">
+                                    <button onClick={props.saveReport} className="btn btn-success">
                                     Сохранить</button>
                                 </label>
                             </div>
