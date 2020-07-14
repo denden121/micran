@@ -74,6 +74,7 @@
     float: left;
     padding-top: 5px;
     color: white;
+    text-decoration: none;
 }
 
 /* Next button */
@@ -81,10 +82,5 @@
     float: right;
     padding-top: 5px;
     color:white;
-}
-
-.year div .active {
-    padding: 5px;
-    background: #11BCD3;
-    color: white !important
+    text-decoration: none;
 }
