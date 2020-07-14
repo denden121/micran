@@ -26,7 +26,7 @@ class Salary extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                <table className="table table-bordered">
+                <table className="table-responsive-md table-bordered">
                     <SalaryTable listGroup = {this.state.salaries}/>
                 </table>
             </div>

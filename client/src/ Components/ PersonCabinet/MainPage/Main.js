@@ -57,7 +57,7 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                     <Switch>
+                     {/* <Switch>
                         <Route path='/cabinet/' exact component = {PersonData}/>
                         <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
@@ -65,7 +65,8 @@ class Main extends Component{
                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
                         <Route path='/cabinet/salary' exact  component = {Salary}/>
                         <Redirect to='/cabinet'/>
-                     </Switch>
+                     </Switch> */}
+                     <Salary/>
                 </div>
             </div>
         )
