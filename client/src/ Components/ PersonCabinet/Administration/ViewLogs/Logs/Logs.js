@@ -3,7 +3,7 @@ import React from 'react'
 
 const Logs = (props) =>{
     let result = Array.from(props.listLogs)
-    result = result.map((groups,index) =>{
+    return result = result.map((groups,index) =>{
         return(
             <tr>
                 <th scope="row">{index+1}</th>
@@ -15,10 +15,6 @@ const Logs = (props) =>{
             </tr>
         )
     })
-    // console.log('result',result)
-    return(
-        result
-    )
 }
 
 export default Logs

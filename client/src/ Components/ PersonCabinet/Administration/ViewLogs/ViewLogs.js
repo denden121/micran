@@ -3,7 +3,7 @@ import Logs from "./Logs/Logs"
 
 
 class ViewLogs extends React.Component{
-    async componentDidMount() {
+    loadLogs= async ()=>{
         const token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -17,6 +17,9 @@ class ViewLogs extends React.Component{
             .then(response => response.json())
             .then(result => this.setState({logs:result}))
         console.log(this.state.logs)
+    }
+    componentDidMount() {
+        this.loadLogs()
     }
     state = {
         logs:{}

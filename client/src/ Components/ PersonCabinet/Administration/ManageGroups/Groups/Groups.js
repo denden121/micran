@@ -2,8 +2,8 @@ import React from 'react'
 
 
 const Groups = (props) =>{
-    let temp1 = Array.from(props.listGroup)
-    temp1 = temp1.map((groups,index) =>{
+    let result = Array.from(props.listGroup)
+    return result = result.map((groups,index) =>{
         return(
             <tr>
                 <th scope="row">{index+1}</th>
@@ -13,10 +13,6 @@ const Groups = (props) =>{
             </tr>
         )
     })
-    // console.log('result',temp1)
-    return(
-        temp1
-    )
 }
 
 export default Groups

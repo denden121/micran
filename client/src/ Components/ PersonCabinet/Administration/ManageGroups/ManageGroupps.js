@@ -3,7 +3,10 @@ import Groups from "./Groups/Groups"
 import Table from 'react-bootstrap/Table'
 
 class ManageGroups extends React.Component{
-    async componentDidMount() {
+    componentDidMount() {
+        this.loadActions()
+    }
+    loadActions = async () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -17,7 +20,6 @@ class ManageGroups extends React.Component{
             .then(result => this.setState({groups:result}))
         console.log('state',this.state.groups[0])
     }
-
     state = {
         groups:{}
     }

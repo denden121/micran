@@ -3,6 +3,7 @@
     width:30%;
     display: inline-block;
     border-style: outset;
+    cursor: pointer;
     
 }
 .spring{
@@ -10,23 +11,26 @@
     width:30%;
     display: inline-block;
     border-style: outset;
+    cursor: pointer;
 }
 .summer{
     padding: 10px;
     width:30%;
     display: inline-block;
     border-style: outset;
+    cursor: pointer;
 }
 .autumn{
     padding: 10px;
     width:30%;
     display: inline-block;
     border-style: outset;
+    cursor: pointer;
 }
 .winter:hover{
     color: #ffe; /* Цвет текста активного пункта */
     background-color: #736A90;
-}
+    }
 .spring:hover{
     color: #ffe; /* Цвет текста активного пункта */
     background-color: #736A90
@@ -72,15 +76,22 @@
 } */
 .year .prev {
     float: left;
-    padding-top: 5px;
+    padding-top: 1px;
     color: white;
     text-decoration: none;
+    cursor: pointer;
 }
 
 /* Next button */
 .year .next {
     float: right;
-    padding-top: 5px;
+    padding-top: 1px;
     color:white;
     text-decoration: none;
+    cursor: pointer;
 }
+/* .months div .active{
+    padding: 5px;
+    background: #1abc9c;
+    color: white 
+} */
