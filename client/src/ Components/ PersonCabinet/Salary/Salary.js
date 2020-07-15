@@ -4,6 +4,7 @@ import Stimul from "./Stimul/Stimul"
 import "./Salary.css"
 import Profit from "./Profit/Profit"
 import Comment from "./Comment/Comment"
+import Total from "./Total/Total"
 
 class Salary extends React.Component {
     state = {
@@ -55,6 +56,11 @@ class Salary extends React.Component {
                     </div>
                 </div>
                 <h5 className="text-left">Итого</h5>
+                <div className="row">
+                    <div className="col-md-12">
+                        <Total/>
+                    </div>
+                </div>
             </div>
         )
     }
