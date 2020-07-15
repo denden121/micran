@@ -110,7 +110,8 @@ def all_report_view(request, user_id='default'):
         profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
-                reports = Report.objects.filter(creator_id=user.id, date__month = request.GET['month'], date__year = request.GET['year'])
+                reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
+                                                date__year=request.GET['year'])
                 projects = Project.objects.all()
                 data = []
                 fields_project = []
@@ -139,7 +140,7 @@ def all_report_view(request, user_id='default'):
     else:
         if user:
             if request.method == "GET":
-                if user_id != user.id and not get_access(11, user):  #11 is check reports
+                if user_id != user.id and not get_access(11, user):  # 11 is check reports
                     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
@@ -185,17 +186,13 @@ def all_projects_view(request, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET":
-                projects = Project.objects.filter(participants=user.id)
+                projects = Project.objects.all()
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
-            if request.method == "POST" and get_access(13, user):  #13 is create projects
+            if request.method == "POST" and get_access(13, user):  # 13 is create projects
                 form = ProjectForm(request.POST)
-                participants = request.POST['participants'].split()
-                participants = [(User.objects.get(username=participant)) for participant in participants]
-                profiles = [Profile.objects.get(user=participant) for participant in participants]
-                if profiles and form.is_valid():
-                    project = form.save()
-                    [project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
+                if form.is_valid():
+                    form.save()
                     return HttpResponse("Success")
                 return HttpResponse("Something went wrong")
             return HttpResponse("Method not allowed")
@@ -203,7 +200,7 @@ def all_projects_view(request, user_id='default'):
     else:
         user = get_user_jwt(request)
         if user:
-            if request.method == "GET" and get_access(12, user): #12 is check projects
+            if request.method == "GET" and get_access(12, user):  # 12 is check projects
                 projects = Project.objects.filter(participants=user_id)
                 data = serializers.serialize('json', projects)
                 return HttpResponse(data)
@@ -224,22 +221,15 @@ def project_view(request, project_id, user_id='default'):
                 project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
-                    update = form.save(commit=False)
-                    participants = [(User.objects.get(username=participant)) for participant in
-                                    request.POST['participants'].split()]
-                    profiles = [Profile.objects.get(user=participant) for participant in participants]
-                    if profiles and form.is_valid():
-                        project = form.save()
-                        [project.participants.add(profiles[i].user.id) for i in range(len(profiles))]
-                        return HttpResponse("Success")
-                return HttpResponse("Success")
+                    form.save()
+                    return HttpResponse("Success")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:
         user = get_user_jwt(request)
         if user:
             if request.method == "GET" or get_access(12, user):
-                project = Project.objects.filter(participants=user_id, id=project_id)
+                project = Project.objects.filter(id=project_id)
                 data = serializers.serialize('json', project)
                 return HttpResponse(data)
             return HttpResponse("Method not allowed")
@@ -311,7 +301,7 @@ def groups_with_permission(request):
             else:
                 fields = {'name': group.name, 'users': users, 'description': group.description}
                 users = []
-            data.append({'model': 'cabinet.group','pk': group.pk,'fields': fields})
+            data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
         return HttpResponse(json.dumps(data))
 
 
@@ -322,6 +312,7 @@ def logs(request):
         if request.method == "GET":
             data = serializers.serialize('json', Logging.objects.all())
             return HttpResponse(data)
+
 
 @csrf_exempt
 def salary(request):
@@ -345,3 +336,16 @@ def salary(request):
         #  = models.FloatField(blank=True)
         #
         # salary_hand = models.FloatField(blank=True)
+
+
+@csrf_exempt
+def projects_from_reports(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            reports = Report.objects.filter(creator_id=user.id)
+            data = []
+            for report in reports:
+                fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour}
+                data.append({'pk': report.pk, 'fields': fields})
+            return HttpResponse(json.dumps(data))

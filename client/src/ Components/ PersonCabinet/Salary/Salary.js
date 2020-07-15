@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import Koeff from "./Koeff/Koeff";
 import Stimul from "./Stimul/Stimul"
-
-
+import "./Salary.css"
+import Profit from "./Profit/Profit"
+import Comment from "./Comment/Comment"
 
 class Salary extends React.Component {
     state = {
@@ -27,18 +28,33 @@ class Salary extends React.Component {
     render() {
         return (
             <div className="container-fluid">
+                
                 <h3 className="text-left">Расчетный листок</h3>
                 <br/>
                 <h5 className="text-left">Коэффициенты</h5>
-                <table className="table-bordered">
+                <table className="koeff table-bordered">
                     <Koeff listGroup = {this.state.salaries}/>
                 </table>
                 <br/>
                 <h5 className="text-left">Стимулирующие надбавки</h5>
-                <br/>
-                <table className="table-bordered">
+                <table className="stimull table-bordered">
                     <Stimul listGroup = {this.state.salaries}/>
                 </table>
+                <br/>
+                <h5 className="text-left">Начисления</h5>
+                <table className="stimull table-bordered">
+                    <Profit listGroup = {this.state.salaries}/>
+                </table>
+                <br/>
+                <h5 className="text-left">Комментарий руководителя</h5>
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <Comment/>
+                        </div>
+                    </div>
+                </div>
+                <h5 className="text-left">Итого</h5>
             </div>
         )
     }
