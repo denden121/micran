@@ -38,7 +38,9 @@ class Main extends Component{
     onClickDate = (event) =>{
         let month = event.target.textContent
         month  = Month[month]
-        localStorage.setItem('date',`${month} 2020`)
+        const temp_date=  localStorage.getItem('date').split(' ')[1]
+        console.log(temp_date)
+        localStorage.setItem('date',`${month} ${temp_date}`)
         rend()
     }
     onClickNext=()=>{

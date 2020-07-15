@@ -5,7 +5,8 @@ import Reports from "./Reports/Reports"
 class SendReport extends React.Component{
     state= {
         report:{},
-        id:''
+        id:'',
+        listProject:{}
     }
     componentDidMount(){
         this.loadReport()
@@ -62,6 +63,7 @@ class SendReport extends React.Component{
             <div>
                 <div className container-fluid>
                     <Reports
+                        listProject = {this.state.listProject}
                         saveReport = {this.saveReport}
                         report = {this.state.report}
                     />
