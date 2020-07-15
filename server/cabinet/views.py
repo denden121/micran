@@ -343,7 +343,8 @@ def projects_from_reports(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            reports = Report.objects.filter(creator_id=user.id)
+            reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
+                                            date__year=request.GET['year'])
             data = []
             for report in reports:
                 fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour}
