@@ -57,11 +57,9 @@ const Navigation =(props)=>{
                     Помощь
                   </NavLink>
                 </li>
-
               </ul>
             </div>
           </nav>
-
         </div>
       </div>
   )
