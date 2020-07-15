@@ -3,12 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ListReports =(props)=>{
         return(
-            <div id="proj-list">
-                <label className="col-sm-1" className="Label1"><strong>Список проектов</strong></label>
-                    <br/>
-                    <hr className="normal"/>
-                    {props.projects}
-                    <br/>
+            <div id="proj-list">                
+                {props.projects}                    
                         <label className="Label2">
                             <button className="btn btn-danger btn-sm"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
