@@ -19,6 +19,7 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-calendar": "^3.1.0",
+    "react-collapse": "^5.0.1",
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.1",
     "react-month-picker": "^2.2.0",
