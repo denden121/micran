@@ -5,9 +5,8 @@ import "./ProjectList.css"
 const Reports = (props) =>{
     let result = Array.from(props.listProject)
     return (result.map((cardReport, index)=>{
-
         return (
-            <div className="border">                
+            <div onClick = {() => {props.onClickCard(index)}} className = "border">
                 <div className="text-left"><strong>№{cardReport.pk}</strong> {cardReport.fields.project_name}</div>
                 {/* <div>{cardReport.fields.text}</div> */}
                 <div className="text-right">{cardReport.fields.hour} ч.</div>                
@@ -25,12 +24,11 @@ const Reports = (props) =>{
 }
 
 const ListReports =(props)=>{
-    console.log('listreport',props)
+    // console.log('listreport',props)
     return(
         <div id="proj-list">
-            <Reports listProject = {props.listProject}/>
+            <Reports onClickCard = {props.onClickCard} listProject = {props.listProject}/>
             <br/>
-            <Reports listProject = {props.listProject}/>
             <hr className="normal"/>
         </div>
     )
