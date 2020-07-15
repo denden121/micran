@@ -13,6 +13,7 @@ import ManageGroupps from "../Administration/ManageGroups/ManageGroupps";
 import ViewLogs from "../Administration/ViewLogs/ViewLogs";
 import Salary from "../Salary/Salary"
 import rend from "../../../index";
+import Payroll from "../Payroll/Payroll"
 
 const Month = {
     'Янв':1,
@@ -83,9 +84,10 @@ class Main extends Component{
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
                         <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
-                        <Route path='/cabinet/salary' exact  component = {Salary}/>
+                        <Route path='/cabinet/salary' exact  component = {Salary}/> 
                         {/*<Redirect to='/cabinet'/>*/}
                      </Switch>
+                     {/* <Payroll/> */}
                 </div>
             </div>
         )
