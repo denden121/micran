@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import SalaryTable from "./SalaryTable/SalaryTable";
+import Koeff from "./Koeff/Koeff";
+import Stimul from "./Stimul/Stimul"
 
 
 
@@ -26,8 +27,17 @@ class Salary extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                <table className="table table-bordered">
-                    <SalaryTable listGroup = {this.state.salaries}/>
+                <h3 className="text-left">Расчетный листок</h3>
+                <br/>
+                <h5 className="text-left">Коэффициенты</h5>
+                <table className="table-bordered">
+                    <Koeff listGroup = {this.state.salaries}/>
+                </table>
+                <br/>
+                <h5 className="text-left">Стимулирующие надбавки</h5>
+                <br/>
+                <table className="table-bordered">
+                    <Stimul listGroup = {this.state.salaries}/>
                 </table>
             </div>
         )

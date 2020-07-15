@@ -7,30 +7,10 @@ class SendReport extends React.Component{
         report:{},
         id:''
     }
-     async componentDidMount() {
-         let token = localStorage.getItem('token')
-         let myHeaders = new Headers();
-         myHeaders.append("Authorization", token);
-
-         let requestOptions = {
-             method: 'GET',
-             headers: myHeaders,
-             redirect: 'follow'
-         };
-         let now = localStorage.getItem('date').split(' ')
-         let month = now[0]
-         let year = now[1]
-         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
-         await fetch(url, requestOptions)
-             .then(response => response.json())
-             .then(result => this.setState({report:result[0].fields,id:result[0].pk}))
-             .catch(error => console.log('error', error));
-         // console.log(this.state.report)
-         console.log('state',this.state.report)
-         console.log('id',this.state.id)
-     }
-
-    saveReport= async ()=>{
+    componentDidMount(){
+        this.loadReport()
+    }
+    saveReport = async ()=>{
         let time = document.querySelector('#time_project').value
         let body = document.querySelector('#body_report').value
         let token = localStorage.getItem('token')
@@ -55,13 +35,36 @@ class SendReport extends React.Component{
             .catch(error => console.log('error', error));
         alert('Отчет отправлен')
     }
+    loadReport = async () =>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
 
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        let now = localStorage.getItem('date').split(' ')
+        let month = now[0]
+        let year = now[1]
+        let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
+        await fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(result => this.setState({report:result[0].fields,id:result[0].pk}))
+            .catch(error => console.log('error', error));
+        // console.log(this.state.report)
+        console.log('state',this.state.report)
+        console.log('id',this.state.id)
+    }
     render() {
         return (
             <div>
                 <div className container-fluid>
-                    <Reports saveReport = {this.saveReport}
-                             report = {this.state.report}/>
+                    <Reports
+                        saveReport = {this.saveReport}
+                        report = {this.state.report}
+                    />
                 </div>
             </div>
         )

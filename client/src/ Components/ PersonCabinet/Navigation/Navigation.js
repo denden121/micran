@@ -10,11 +10,11 @@ const Navigation =(props)=>{
         <div className="row">
           <nav className="col-md-2 d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
-              <Calendar onClickDate = {props.onClickDate}/>
+              <Calendar onClickDate = {props.onClickDate}
+                        onClickNext = {props.onClickNext}
+                        onClickPrevios = {props.onClickPrivious}/>
               <ul className="nav flex-column">
-                {/* <input type="month" className="form-control" min="2018-03"></input> */}
-                
-                <li className="nav-item">                  
+                <li className="nav-item">
                   <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
                     <span data-feather="home"></span>
                     Send report
@@ -46,7 +46,7 @@ const Navigation =(props)=>{
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" to="http://localhost:3000/cabinet/salary">
+                  <a className="nav-link" href="http://localhost:3000/cabinet/salary">
                     <span data-feather="bar-chart-2"></span>
                     Salary
                   </a>
