@@ -2,7 +2,7 @@ import React from "react"
 import "./Calendar.css"
 
 
-const Calendar = (props) =>{
+const Calendar = (props) => {
     return(
         <div className="Calendar">
             <div className="year align-center rounded bg-dark">
