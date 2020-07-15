@@ -5,7 +5,7 @@ import "./Calendar.css"
 const Calendar = (props) =>{
     return(
         <div className="Calendar">
-            <div className="year align-center rounded">
+            <div className="year align-center rounded bg-dark">
                 <ul>
                     <div onClick={props.onClickPrevios} className="prev">&#10094;</div>
                     <div onClick={props.onClickNext} className="next">&#10095;</div>
