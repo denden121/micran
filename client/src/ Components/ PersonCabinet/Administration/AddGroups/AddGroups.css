@@ -13,3 +13,7 @@
     border: 1px solid #11BCD3;
     width: 100%;
 }
+
+.checkBox:hover{
+     color: #11BCD3; 
+}

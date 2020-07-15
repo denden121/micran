@@ -1,9 +1,17 @@
 import React from "react"
 import "./Calendar.css"
 
+
 const Calendar = (props) =>{
     return(
         <div className="Calendar">
+            <div className="year align-center rounded">
+                <ul>
+                    <div onClick={props.onClickPrevios} className="prev">&#10094;</div>
+                    <div onClick={props.onClickNext} className="next">&#10095;</div>
+                    <li><span style={{fontSize:"18px"}} id = 'year'>{localStorage.getItem('date').split(' ')[1]}</span></li>
+                </ul>
+            </div>
             <div>
                 <div onClick={props.onClickDate} className="winter border">Дек</div>
                 <div onClick={props.onClickDate} className="winter border">Янв</div>

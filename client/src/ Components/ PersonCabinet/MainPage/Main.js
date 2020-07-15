@@ -41,6 +41,20 @@ class Main extends Component{
         localStorage.setItem('date',`${month} 2020`)
         rend()
     }
+    onClickNext=()=>{
+        const temp_month = localStorage.getItem('date').split(' ')[0]
+        const temp_year = localStorage.getItem('date').split(' ')[1]
+        localStorage.setItem('date',`${temp_month} ${parseInt(temp_year)+1}`)
+        rend()
+    }
+    onClickPrivious=()=>{
+        console.log('clicckk')
+        const temp_month = localStorage.getItem('date').split(' ')[0]
+        const temp_year = localStorage.getItem('date').split(' ')[1]
+        localStorage.setItem('date',`${temp_month} ${parseInt(temp_year)-1}`)
+        rend()
+    }
+
     render() {
         if(!localStorage.getItem('date')){
             let date = new Date()
@@ -53,7 +67,11 @@ class Main extends Component{
                 </div>
 
                 <div className='Nav'>
-                    <Navigation onClickDate = {this.onClickDate}/>
+                    <Navigation
+                        onClickDate = {this.onClickDate}
+                        onClickNext = {this.onClickNext}
+                        onClickPrivious = {this.onClickPrivious}
+                    />
                 </div>
 
                 <div className="Data">
