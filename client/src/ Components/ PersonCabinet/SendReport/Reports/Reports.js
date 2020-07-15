@@ -5,6 +5,7 @@ import ProjectList from "./ProjectList/ProjectList";
 
 
 const Reports =(props)=>{
+    console.log('report',props)
     return(
         <div className="container-fluid">
             <div className="report">
@@ -51,7 +52,11 @@ const Reports =(props)=>{
                                 <div className="box-content">
                                     <div id="time-read">
                                         <label className="col-sm-1" className="Label1"><strong>Проект:</strong></label>
-                                        <input className="form-control" id='name_project' placeholder="Проект" defaultValue='MicRac' type="text"/>
+                                        <input className="form-control"
+                                               id='name_project'
+                                               placeholder="Проект"
+                                               defaultValue='MicRac'
+                                               type="text"/>
                                         {/*<select className="select2 form-control select2-offscreen"*/}
                                         {/*    id='CB_proj'>                                            */}
                                         {/*    </select>*/}
@@ -62,14 +67,14 @@ const Reports =(props)=>{
                                         <input className="form-control"
                                                id = 'time_project'
                                                placeholder="Часы"
-                                               defaultValue = {props.report.hour}
+                                               // defaultValue = {props.report.hour}
                                                type="text"/>
                                     </div>
                                     <br/>
                                     <div id="note-read">
                                         <label className="col-sm-1" className="Label1"><strong>Состав работ:</strong></label>
                                         <textarea
-                                            defaultValue = {props.report.text}
+                                            // defaultValue = {props.report.text}
                                             className="form-control"
                                             id="body_report"
                                             maxlength="10000"

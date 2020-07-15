@@ -4,9 +4,7 @@ import Reports from "./Reports/Reports"
 
 class SendReport extends React.Component{
     state= {
-        report:{},
-        id:'',
-        listProject:{}
+        reports:{},
     }
     componentDidMount(){
         this.loadReport()
@@ -52,20 +50,20 @@ class SendReport extends React.Component{
         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
         await fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({report:result[0].fields,id:result[0].pk}))
+            .then(result => this.setState({reports:result,}))
             .catch(error => console.log('error', error));
         // console.log(this.state.report)
         console.log('state',this.state.report)
         console.log('id',this.state.id)
     }
     render() {
+        console.log(this.state)
         return (
             <div>
                 <div className container-fluid>
                     <Reports
-                        listProject = {this.state.listProject}
+                        listProject = {this.state.reports}
                         saveReport = {this.saveReport}
-                        report = {this.state.report}
                     />
                 </div>
             </div>
