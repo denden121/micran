@@ -346,7 +346,7 @@ def projects_from_reports(request):
                                             date__year=request.GET['year'])
             data = []
             for report in reports:
-                fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour}
+                fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour, 'project_pk': report.project.pk}
                 data.append({'pk': report.pk, 'fields': fields})
             return HttpResponse(json.dumps(data))
 
