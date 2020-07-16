@@ -8,8 +8,8 @@ urlpatterns = [
     path('check/', views.check_view),
     path('cabinet/register/', views.register_view),
     # reports
-    path('cabinet/<int:user_id>/reports/', views.all_report_view),
-    path('cabinet/reports/', views.projects_from_reports),
+    path('cabinet/post_reports/', views.all_report_view),
+    path('cabinet/get_reports/', views.projects_from_reports),
     path('cabinet/<int:user_id>/report/<int:report_id>', views.report_view),
     path('cabinet/report/<int:report_id>', views.report_view),
     # projects
