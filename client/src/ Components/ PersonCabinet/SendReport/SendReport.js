@@ -11,30 +11,65 @@ class SendReport extends React.Component{
         this.loadReport()
         this.loadListProject()
     }
+    isProjectList=(nameProject)=> {
+        for (let project of this.state.reports) {
+            // console.log(project.fields.project_pk,nameProject)
+            if (project.fields.project_pk == nameProject) {
+                return project.pk
+            }
+        }
+        return
+    }
     saveReport = async ()=>{
         let time = document.querySelector('#time_project').value
         let body = document.querySelector('#body_report').value
         let token = localStorage.getItem('token')
         let project = document.querySelector('#name_project').value
-        let myHeaders = new Headers()
-        myHeaders.append("Authorization", token)
-        let formdata = new FormData();
-        formdata.append("text", body)
-        formdata.append("hour ", time)
-        formdata.append("project", project)
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow'
-        };
-        let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`
+        console.log(this.state.reports)
+        let pk =  this.isProjectList(project)
+        if(pk){
+            let myHeaders = new Headers()
+            myHeaders.append("Authorization", token)
+            let formdata = new FormData();
+            formdata.append("text", body)
+            formdata.append("hour ", time)
+            formdata.append("project", project)
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
+            let url = `http://127.0.0.1:8000/cabinet/report/${pk}`
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            alert('Отчет Сохранен')
+        }
+        else{
+            let myHeaders = new Headers()
+            myHeaders.append("Authorization", token)
+            let formdata = new FormData();
+            formdata.append("text", body)
+            formdata.append("hour ", time)
+            formdata.append("project", project)
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
+            let url = `http://127.0.0.1:8000/cabinet/post_reports/`
 
-        await fetch(url, requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        alert('Отчет отправлен')
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            this.loadReport()
+            alert('Отчет отправлен')
+        }
+
     }
     loadReport = async () =>{
         let token = localStorage.getItem('token')
@@ -71,7 +106,6 @@ class SendReport extends React.Component{
         let url = 'http://127.0.0.1:8000/cabinet/projects_for_reports'
         await fetch(url, requestOptions)
             .then(response => response.json())
-            // .then(result => this.setState({reports:result,}))
             .then(result => this.setState({name_projects:result}))
             .catch(error => console.log('error', error));
     }
@@ -80,7 +114,7 @@ class SendReport extends React.Component{
         document.querySelector('#time_project').value = dateReport.hour
         document.querySelector('#body_report').value = dateReport.text
         console.log(document.querySelector('#name_project').value)
-        document.querySelector('#name_project').value = index + 1
+        document.querySelector('#name_project').value = dateReport.project_pk
         console.log(document.querySelector('#name_project').value)
         // let myHeaders = new Headers()
         // myHeaders.append("Authorization", token)
