@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ProjectList from "./ProjectList/ProjectList";
 
 const NameProjects = (props) =>{
-    console.log(props)
+    // console.log(props)
     if (props.listNameFrojects) {
         const result = Array.from(props.listNameFrojects)
         return result.map((item) =>{

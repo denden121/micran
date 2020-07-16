@@ -131,7 +131,8 @@ def all_report_view(request, user_id='default'):
                     data.append({'model': 'cabinet.report', 'pk': report.pk, 'fields': fields})
                 return HttpResponse(json.dumps(data))
             if request.method == "POST":
-                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
+                project_pk = request.POST.get('project')
+                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year, project=project_pk)
                 if reports:
                     return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
