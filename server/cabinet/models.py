@@ -50,6 +50,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     sex = models.CharField(max_length=5, blank=True)
     subdivision = models.CharField(max_length=30, blank=True)
+    departament = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)

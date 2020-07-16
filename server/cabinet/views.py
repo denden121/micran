@@ -20,6 +20,14 @@ def get_user_jwt(request):
     return user
 
 
+def get_time_from_reports(user):
+    t = datetime.now()
+    reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
+    hour = 0
+    hour = sum([report.hour + hour for report in reports])
+    return hour
+
+
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
 
@@ -317,8 +325,20 @@ def logs(request):
 @csrf_exempt
 def salary(request):
     user = get_user_jwt(request)
-    person = request.POST.get('person')
+    # person = request.GET.get('person')
+    hour = get_time_from_reports(user)
     if user:
+        if request.method == "GET":
+            # individual
+            if request.GET.get('type') == 'individual':
+                salary = Salary.objects.filter(person=person)
+                data = serializers.serialize('json', salary)
+                return HttpResponse(data)
+            else:
+                rabotyagi = Profile.objects.filter(departament=user.profile.departament)
+                salarys = Salary.objects.filter(person__in=rabotyagi)
+                data = serializers.serialize('json', salarys)
+                return HttpResponse(data)
         if request.method == "POST":
             salary = Salary.objects.create(person=person)
             salary.time_norm = request.POST.get('time_norm')
@@ -350,3 +370,13 @@ def projects_from_reports(request):
                 fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour}
                 data.append({'pk': report.pk, 'fields': fields})
             return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def workers_departament(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            rabotyagi = Profile.objects.filter(departament=user.profile.departament)
+            data = serializers.serialize('json', rabotyagi)
+            return HttpResponse(data)

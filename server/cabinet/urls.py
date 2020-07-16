@@ -20,6 +20,8 @@ urlpatterns = [
     # roles
     path('groups/', views.group_view),
     path('actions/', views.action_view),
+    path('salary/', views.salary),
+    path('workers/', views.workers_departament),
     path('available_actions/', views.available_actions),
     path('admin/logs/', views.logs),
     path('admin/groups_admin/', views.groups_with_permission),
