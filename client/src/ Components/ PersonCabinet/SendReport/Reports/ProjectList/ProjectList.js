@@ -24,7 +24,6 @@ const Reports = (props) =>{
 }
 
 const ListReports =(props)=>{
-    // console.log('listreport',props)
     return(
         <div id="proj-list">
             <Reports onClickCard = {props.onClickCard} listProject = {props.listProject}/>
