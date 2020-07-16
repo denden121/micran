@@ -369,6 +369,5 @@ def projects_for_reports(request):
             projects = Project.objects.all()
             data = []
             for project in projects:
-                fields = {'project_name': project.name}
-                data.append({'pk': project.pk, 'fields': fields})
+                data.append({'pk': project.pk, 'project_name': project.name})
             return HttpResponse(json.dumps(data))

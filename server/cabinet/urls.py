@@ -14,7 +14,7 @@ urlpatterns = [
     path('cabinet/report/<int:report_id>', views.report_view),
     # projects
     path('cabinet/projects/', views.all_projects_view),
-    path('cabinet/projects_from_reports/', views.projects_for_reports),
+    path('cabinet/projects_for_reports/', views.projects_for_reports),
     path('cabinet/<int:user_id>/project/<int:project_id>', views.project_view),
     path('cabinet/project/<int:project_id>', views.project_view),
     # roles
