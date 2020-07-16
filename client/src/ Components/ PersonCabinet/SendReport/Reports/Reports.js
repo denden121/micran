@@ -3,9 +3,20 @@ import "./Reports.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProjectList from "./ProjectList/ProjectList";
 
+const NameProjects = (props) =>{
+    console.log(props)
+    if (props.listNameFrojects) {
+        const result = Array.from(props.listNameFrojects)
+        return result.map((item) =>{
+            return(
+                <option value={item.pk}>{item.project_name}</option>
+            )
+        })
+    }
+    return ''
+}
 
 const Reports =(props)=>{
-    // console.log('report',props)
     return(
         <div className="container-fluid">
             <div className="report">
@@ -55,14 +66,14 @@ const Reports =(props)=>{
                                 <div className="box-content">
                                     <div id="time-read">
                                         <label className="col-sm-1" className="Label1"><strong>Проект:</strong></label>
-                                        <input className="form-control"
-                                               id='name_project'
-                                               placeholder="Проект"
-                                               defaultValue='MicRac'
-                                               type="text"/>
-                                        {/*<select className="select2 form-control select2-offscreen"*/}
-                                        {/*    id='CB_proj'>                                            */}
-                                        {/*    </select>*/}
+                                        {/*<input className="form-control"*/}
+                                        {/*       id='name_project'*/}
+                                        {/*       placeholder="Проект"*/}
+                                        {/*       defaultValue='MicRac'*/}
+                                        {/*       type="text"/>*/}
+                                        <select className="select2 form-control select2-offscreen" id='name_project'>
+                                            <NameProjects listNameFrojects = {props.listNameFrojects}/>
+                                        </select>
                                     </div>
                                     <br/>
                                     <div id="time-read">
@@ -82,7 +93,8 @@ const Reports =(props)=>{
                                             id="body_report"
                                             maxlength="10000"
                                             placeholder="Состав работ по проекту..."
-                                            rows="10"></textarea>
+                                            rows="10">
+                                        </textarea>
                                     </div>
                                     <hr className="normal"/>
                                     <label className="Label2">
