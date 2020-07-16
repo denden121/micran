@@ -2,6 +2,7 @@ import React from 'react'
 import "./Payroll.css"
 import PayrollCheck from "./PayrollCheck/PayrollCheck"
 import Norma from "./Norma/Norma"
+import TableZp from "./TableZp/TableZp"
 
 
 
@@ -26,8 +27,11 @@ class Payroll extends React.Component{
                          </div>
                          <br/>
                          <Norma/>
+                         <br/>
+                         {/* <TableZp/> */}
                     </div>
-                </div>               
+                </div>   
+                <TableZp/>         
             </div>
         )
     }
