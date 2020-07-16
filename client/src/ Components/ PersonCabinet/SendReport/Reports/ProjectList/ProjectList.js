@@ -7,7 +7,7 @@ const Reports = (props) =>{
     return (result.map((cardReport, index)=>{
         return (
             <div onClick = {() => {props.onClickCard(index)}} className = "border">
-                <div className="text-left"><strong>№{cardReport.pk}</strong> {cardReport.fields.project_name}</div>
+                <div className="text-left"><strong>№{index+1}</strong> {cardReport.fields.project_name}</div>
                 {/* <div>{cardReport.fields.text}</div> */}
                 <div className="text-right">{cardReport.fields.hour} ч.</div>                
                 <div className="delete text-right">

@@ -47,25 +47,29 @@ class SendReport extends React.Component{
                 .catch(error => console.log('error', error));
             alert('Отчет Сохранен')
         }
-        // let myHeaders = new Headers()
-        // myHeaders.append("Authorization", token)
-        // let formdata = new FormData();
-        // formdata.append("text", body)
-        // formdata.append("hour ", time)
-        // formdata.append("project", project)
-        // let requestOptions = {
-        //     method: 'POST',
-        //     headers: myHeaders,
-        //     body: formdata,
-        //     redirect: 'follow'
-        // };
-        // let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`
-        //
-        // await fetch(url, requestOptions)
-        //     .then(response => response.text())
-        //     .then(result => console.log(result))
-        //     .catch(error => console.log('error', error));
-        // alert('Отчет отправлен')
+        else{
+            let myHeaders = new Headers()
+            myHeaders.append("Authorization", token)
+            let formdata = new FormData();
+            formdata.append("text", body)
+            formdata.append("hour ", time)
+            formdata.append("project", project)
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
+            let url = `http://127.0.0.1:8000/cabinet/post_reports/`
+
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            this.loadReport()
+            alert('Отчет отправлен')
+        }
+
     }
     loadReport = async () =>{
         let token = localStorage.getItem('token')
