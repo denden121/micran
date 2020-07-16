@@ -13,6 +13,7 @@ import ManageGroupps from "../Administration/ManageGroups/ManageGroupps";
 import ViewLogs from "../Administration/ViewLogs/ViewLogs";
 import Salary from "../Salary/Salary"
 import rend from "../../../index";
+import Payroll from "../Payroll/Payroll"
 
 const Month = {
     'Янв':1,
@@ -38,7 +39,9 @@ class Main extends Component{
     onClickDate = (event) =>{
         let month = event.target.textContent
         month  = Month[month]
-        localStorage.setItem('date',`${month} 2020`)
+        const temp_date=  localStorage.getItem('date').split(' ')[1]
+        console.log(temp_date)
+        localStorage.setItem('date',`${month} ${temp_date}`)
         rend()
     }
     onClickNext=()=>{
@@ -75,15 +78,16 @@ class Main extends Component{
                 </div>
 
                 <div className="Data">
-                     <Switch>
+                     {/* <Switch>
                         <Route path='/cabinet/' exact component = {PersonData}/>
                         <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
                         <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
-                        <Route path='/cabinet/salary' exact  component = {Salary}/>
-                        {/*<Redirect to='/cabinet'/>*/}
-                     </Switch>
+                        <Route path='/cabinet/salary' exact  component = {Salary}/>   */}
+                        {/* <Redirect to='/cabinet'/> */}
+                     {/* </Switch> */}
+                     <Payroll/>
                 </div>
             </div>
         )

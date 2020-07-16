@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm
+from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryForm
 from .models import Profile, Project, Report, Action, Group, Logging, Salary
 
 
@@ -189,31 +189,21 @@ def report_view(request, report_id, user_id='default'):
 
 
 @csrf_exempt
-def all_projects_view(request, user_id='default'):
-    if user_id == 'default':
-        user = get_user_jwt(request)
-        if user:
-            if request.method == "GET":
-                projects = Project.objects.all()
-                data = serializers.serialize('json', projects)
-                return HttpResponse(data)
-            if request.method == "POST" and get_access(13, user):  # 13 is create projects
-                form = ProjectForm(request.POST)
-                if form.is_valid():
-                    form.save()
-                    return HttpResponse("Success")
-                return HttpResponse("Something went wrong")
-            return HttpResponse("Method not allowed")
-        return HttpResponse("Authentication error")
-    else:
-        user = get_user_jwt(request)
-        if user:
-            if request.method == "GET" and get_access(12, user):  # 12 is check projects
-                projects = Project.objects.filter(participants=user_id)
-                data = serializers.serialize('json', projects)
-                return HttpResponse(data)
-            return HttpResponse("Method not allowed")
-        return HttpResponse("Authentication error")
+def all_projects_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            projects = Project.objects.all()
+            data = serializers.serialize('json', projects)
+            return HttpResponse(data)
+        if request.method == "POST" and get_access(13, user):  # 13 is create projects
+            form = ProjectForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponse("Success")
+            return HttpResponse("Something went wrong")
+        return HttpResponse("Method not allowed")
+    return HttpResponse("Authentication error")
 
 
 @csrf_exempt
@@ -340,22 +330,11 @@ def salary(request):
                 data = serializers.serialize('json', salarys)
                 return HttpResponse(data)
         if request.method == "POST":
-            salary = Salary.objects.create(person=person)
-            salary.time_norm = request.POST.get('time_norm')
-            salary.plan_salary = request.POST.get('plan_salary')
-            salary.is_awarded = request.POST.get('is_awarded')
-            salary.award = request.POST.get('award')
-            salary.days_worked = salary.days_norm - (salary.vacation + salary.sick_leave + salary.day_off)
-            # time_report  #достать из отчета
-            # time_orion = models.FloatField(blank=True)  # достать из бд
-        # days_norm = models.FloatField(blank=True)
-
-        # vacation = models.FloatField(blank=True)
-        # sick_leave = models.FloatField(blank=True)
-        # day_off = models.FloatField(blank=True)
-        #  = models.FloatField(blank=True)
-        #
-        # salary_hand = models.FloatField(blank=True)
+            form = SalaryForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponse("Success")
+            return HttpResponse(form.errors.as_data())
 
 
 @csrf_exempt
@@ -380,3 +359,16 @@ def workers_departament(request):
             rabotyagi = Profile.objects.filter(departament=user.profile.departament)
             data = serializers.serialize('json', rabotyagi)
             return HttpResponse(data)
+
+
+@csrf_exempt
+def projects_for_reports(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            projects = Project.objects.all()
+            data = []
+            for project in projects:
+                fields = {'project_name': project.name}
+                data.append({'pk': project.pk, 'fields': fields})
+            return HttpResponse(json.dumps(data))

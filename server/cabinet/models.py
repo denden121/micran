@@ -115,3 +115,4 @@ class Salary(models.Model):
     is_awarded = models.BooleanField(blank=True)
     salary_hand = models.FloatField(blank=True)
     person = models.ForeignKey('Profile', on_delete=models.CASCADE, to_field='user')
+    date = models.DateField(blank=True, auto_now_add=True)

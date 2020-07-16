@@ -4,8 +4,7 @@ import Reports from "./Reports/Reports"
 
 class SendReport extends React.Component{
     state= {
-        report:{},
-        id:''
+        reports:{},
     }
     componentDidMount(){
         this.loadReport()
@@ -51,19 +50,54 @@ class SendReport extends React.Component{
         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
         await fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({report:result[0].fields,id:result[0].pk}))
+            .then(result => this.setState({reports:result,}))
             .catch(error => console.log('error', error));
         // console.log(this.state.report)
         console.log('state',this.state.report)
         console.log('id',this.state.id)
     }
+    onClickCard = (index) =>{
+        // console.log(index)
+        // console.log(this.state.reports[index])
+        let dateReport = this.state.reports[index].fields
+        document.querySelector('#time_project').value = dateReport.hour
+        document.querySelector('#body_report').value = dateReport.text
+        document.querySelector('#name_project').value = dateReport.project_name
+        // let myHeaders = new Headers()
+        // myHeaders.append("Authorization", token)
+        // let formdata = new FormData();
+        // formdata.append("text", body)
+        // formdata.append("hour ", time)
+        // formdata.append("project", project)
+        // let requestOptions = {
+        //     method: 'POST',
+        //     headers: myHeaders,
+        //     body: formdata,
+        //     redirect: 'follow'
+        // };
+        // let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`
+        //
+        // await fetch(url, requestOptions)
+        //     .then(response => response.text())
+        //     .then(result => console.log(result))
+        //     .catch(error => console.log('error', error));
+        // alert('Отчет отправлен')
+    }
+    onClickNewProject = () =>{
+        document.querySelector('#time_project').value = ''
+        document.querySelector('#body_report').value = ''
+        document.querySelector('#name_project').value = ''
+    }
     render() {
+        console.log(this.state)
         return (
             <div>
                 <div className container-fluid>
                     <Reports
+                        onClickCard = {this.onClickCard}
+                        listProject = {this.state.reports}
                         saveReport = {this.saveReport}
-                        report = {this.state.report}
+                        onClickNewProject = {this.onClickNewProject}
                     />
                 </div>
             </div>

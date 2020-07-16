@@ -7,8 +7,19 @@ const Profit = (props) =>{
         return(
             <tbody>
                 <tr>
-                    <th scope="row" className="text-left">Квалификационный коэффициент</th>
-                    {/* <td>{index+1}</td> */}
+                    <th scope="row" className="text-left">Плановая ЗП</th>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <th scope="row" className="text-left">Премия</th>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <th scope="row" className="text-left">На руки</th>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <th scope="row" className="text-left">ПНачислено</th>
                     <td>1</td>
                 </tr>
             </tbody>         

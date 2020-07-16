@@ -1,5 +1,5 @@
 from django import forms
-from .models import Report, Project, Profile, Group, Action
+from .models import Report, Project, Profile, Group, Action, Salary
 from django.contrib.auth.models import User
 import re
 from django.core.exceptions import ValidationError
@@ -39,3 +39,9 @@ class ActionForm(forms.ModelForm):
     class Meta:
         model = Action
         exclude = ['available_actions']
+
+
+class SalaryForm(forms.ModelForm):
+    class Meta:
+        model = Salary
+        fields = '__all__'
