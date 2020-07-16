@@ -5,9 +5,11 @@ import Reports from "./Reports/Reports"
 class SendReport extends React.Component{
     state= {
         reports:{},
+        name_projects:{}
     }
     componentDidMount(){
         this.loadReport()
+        this.loadListProject()
     }
     saveReport = async ()=>{
         let time = document.querySelector('#time_project').value
@@ -47,22 +49,39 @@ class SendReport extends React.Component{
         let now = localStorage.getItem('date').split(' ')
         let month = now[0]
         let year = now[1]
-        let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
+        let url = 'http://127.0.0.1:8000/cabinet/get_reports/?month=' + month + '&year=' + year
         await fetch(url, requestOptions)
             .then(response => response.json())
             .then(result => this.setState({reports:result,}))
             .catch(error => console.log('error', error));
         // console.log(this.state.report)
-        console.log('state',this.state.report)
-        console.log('id',this.state.id)
+        // console.log('state',this.state.report)
+        // console.log('id',this.state.id)
+    }
+    loadListProject = async () =>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        let url = 'http://127.0.0.1:8000/cabinet/projects_for_reports'
+        await fetch(url, requestOptions)
+            .then(response => response.json())
+            // .then(result => this.setState({reports:result,}))
+            .then(result => this.setState({name_projects:result}))
+            .catch(error => console.log('error', error));
     }
     onClickCard = (index) =>{
-        // console.log(index)
-        // console.log(this.state.reports[index])
         let dateReport = this.state.reports[index].fields
         document.querySelector('#time_project').value = dateReport.hour
         document.querySelector('#body_report').value = dateReport.text
-        document.querySelector('#name_project').value = dateReport.project_name
+        console.log(document.querySelector('#name_project').value)
+        document.querySelector('#name_project').value = index + 1
+        console.log(document.querySelector('#name_project').value)
         // let myHeaders = new Headers()
         // myHeaders.append("Authorization", token)
         // let formdata = new FormData();
@@ -96,6 +115,7 @@ class SendReport extends React.Component{
                     <Reports
                         onClickCard = {this.onClickCard}
                         listProject = {this.state.reports}
+                        listNameFrojects = {this.state.name_projects}
                         saveReport = {this.saveReport}
                         onClickNewProject = {this.onClickNewProject}
                     />
