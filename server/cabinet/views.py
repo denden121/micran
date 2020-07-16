@@ -321,15 +321,15 @@ def salary(request):
     if user:
         if request.method == "GET":
             # individual
-            if request.GET.get('type') == 'individual':
-                salary = Salary.objects.filter(person=person)
-                data = serializers.serialize('json', salary)
-                return HttpResponse(data)
-            else:
-                rabotyagi = Profile.objects.filter(departament=user.profile.departament)
-                salarys = Salary.objects.filter(person__in=rabotyagi)
-                data = serializers.serialize('json', salarys)
-                return HttpResponse(data)
+            # if request.GET.get('type') == 'individual':
+            salary = Salary.objects.filter(person=user.profile)
+            data = serializers.serialize('json', salary)
+            return HttpResponse(data)
+            # else:
+            #     rabotyagi = Profile.objects.filter(departament=user.profile.departament)
+            #     salarys = Salary.objects.filter(person__in=rabotyagi)
+            #     data = serializers.serialize('json', salarys)
+            #     return HttpResponse(data)
         if request.method == "POST":
             form = SalaryForm(request.POST)
             if form.is_valid():
