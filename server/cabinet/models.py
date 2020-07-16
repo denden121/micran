@@ -94,8 +94,8 @@ class Report(models.Model):
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
     # project = models.CharField(max_length=50, blank=True)
-    curator = models.CharField(max_length=50, blank=True, default=None)
-    date = models.DateField(blank=True)
+    # curator = models.CharField(max_length=50, blank=True, default=None)
+    date = models.DateField(blank=True, auto_now_add=True)
 
     # def __str__(self):
         # return self.name

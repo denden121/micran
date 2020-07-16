@@ -131,7 +131,8 @@ def all_report_view(request, user_id='default'):
                     data.append({'model': 'cabinet.report', 'pk': report.pk, 'fields': fields})
                 return HttpResponse(json.dumps(data))
             if request.method == "POST":
-                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
+                project_pk = request.POST.get('project')
+                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year, project=project_pk)
                 if reports:
                     return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
@@ -320,15 +321,15 @@ def salary(request):
     if user:
         if request.method == "GET":
             # individual
-            if request.GET.get('type') == 'individual':
-                salary = Salary.objects.filter(person=person)
-                data = serializers.serialize('json', salary)
-                return HttpResponse(data)
-            else:
-                rabotyagi = Profile.objects.filter(departament=user.profile.departament)
-                salarys = Salary.objects.filter(person__in=rabotyagi)
-                data = serializers.serialize('json', salarys)
-                return HttpResponse(data)
+            # if request.GET.get('type') == 'individual':
+            salary = Salary.objects.filter(person=user.profile)
+            data = serializers.serialize('json', salary)
+            return HttpResponse(data)
+            # else:
+            #     rabotyagi = Profile.objects.filter(departament=user.profile.departament)
+            #     salarys = Salary.objects.filter(person__in=rabotyagi)
+            #     data = serializers.serialize('json', salarys)
+            #     return HttpResponse(data)
         if request.method == "POST":
             form = SalaryForm(request.POST)
             if form.is_valid():
@@ -346,7 +347,7 @@ def projects_from_reports(request):
                                             date__year=request.GET['year'])
             data = []
             for report in reports:
-                fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour}
+                fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour, 'project_pk': report.project.pk}
                 data.append({'pk': report.pk, 'fields': fields})
             return HttpResponse(json.dumps(data))
 
