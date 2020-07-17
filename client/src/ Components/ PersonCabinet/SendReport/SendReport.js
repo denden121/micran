@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Reports from "./Reports/Reports"
+import rend from "../../../index";
 
 class SendReport extends React.Component{
     state= {
@@ -60,7 +61,7 @@ class SendReport extends React.Component{
                 body: formdata,
                 redirect: 'follow'
             };
-            let url = `http://127.0.0.1:8000/cabinet/post_reports/`
+            let url = `http://127.0.0.1:8000/cabinet/reports/`
 
             await fetch(url, requestOptions)
                 .then(response => response.text())
@@ -84,7 +85,7 @@ class SendReport extends React.Component{
         let now = localStorage.getItem('date').split(' ')
         let month = now[0]
         let year = now[1]
-        let url = 'http://127.0.0.1:8000/cabinet/get_reports/?month=' + month + '&year=' + year
+        let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
         await fetch(url, requestOptions)
             .then(response => response.json())
             .then(result => this.setState({reports:result,}))
@@ -141,12 +142,33 @@ class SendReport extends React.Component{
         document.querySelector('#body_report').value = ''
         document.querySelector('#name_project').value = ''
     }
+    // onClickDeleteCard =async (index) =>{
+    //     console.log('index',index)
+    //     let token = localStorage.getItem('token')
+    //     let myHeaders = new Headers();
+    //     myHeaders.append("Authorization", token);
+    //
+    //     let requestOptions = {
+    //         method: 'DELETE',
+    //         headers: myHeaders,
+    //         redirect: 'follow'
+    //     };
+    //     let url = `http://127.0.0.1:8000/cabinet/report/${index}`
+    //     await fetch(url, requestOptions)
+    //         .then(response => response.text())
+    //         .then(result => console.log(result))
+    //         .catch(error => console.log('error', error));
+    //     this.loadReport()
+    //     // console.log('state',this.state.report)
+    //     // console.log('id',this.state.id)
+    // }
     render() {
         console.log(this.state)
         return (
             <div>
                 <div className container-fluid>
                     <Reports
+                        onClickDeleteCard = {this.onClickDeleteCard}
                         onClickCard = {this.onClickCard}
                         listProject = {this.state.reports}
                         listNameFrojects = {this.state.name_projects}
