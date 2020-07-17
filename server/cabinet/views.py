@@ -172,7 +172,7 @@ def report_view(request, report_id, user_id='default'):
                     return HttpResponse("Success")
                 return HttpResponse("Fail")
             elif request.method =="DELETE":
-                report = Report.objects.get_object_or_404(pk=report_id)
+                report = get_object_or_404(Report, pk=report_id)
                 report.delete()
                 return HttpResponse("Success")
             return HttpResponse("Method not allowed")
