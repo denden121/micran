@@ -3,8 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./ProjectList.css"
 
 const Reports = (props) =>{
+    console.log('reports',props)
     let result = Array.from(props.listProject)
     return (result.map((cardReport, index)=>{
+        console.log(cardReport)
         return (
             <div onClick = {() => {props.onClickCard(index)}} className = "border">
                 <div className="text-left"><strong>№{index+1}</strong> {cardReport.fields.project_name}</div>
@@ -26,7 +28,10 @@ const Reports = (props) =>{
 const ListReports =(props)=>{
     return(
         <div id="proj-list">
-            <Reports onClickCard = {props.onClickCard} listProject = {props.listProject}/>
+            <Reports
+                onClickDeleteCard = {props.onClickDeleteCard}
+                onClickCard = {props.onClickCard}
+                listProject = {props.listProject}/>
             <br/>
             <hr className="normal"/>
         </div>

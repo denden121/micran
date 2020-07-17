@@ -17,6 +17,7 @@ const NameProjects = (props) =>{
 }
 
 const Reports =(props)=>{
+    console.log('report props',props)
     return(
         <div className="container-fluid">
             <div className="report">
@@ -27,6 +28,7 @@ const Reports =(props)=>{
                                 <label className="col-sm-1" className="Label1"><strong>Отчет о проделанной работе</strong></label>
                                 <label className="col-sm-1" className="text-left"><strong>Список проектов</strong><hr className="normal"/></label>
                                 <ProjectList
+                                    onClickDeleteCard = {props.onClickDeleteCard}
                                     onClickCard={props.onClickCard}
                                     listProject = {props.listProject}
                                 />

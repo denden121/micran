@@ -10,7 +10,10 @@ class Salary extends React.Component {
     state = {
         salary: {}
     }
-    async componentDidMount() {
+    componentDidMount() {
+        this.getSalary()
+    }
+    getSalary=async ()=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -29,7 +32,6 @@ class Salary extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                
                 <h3 className="text-left">Расчетный листок</h3>
                 <br/>
                 <h5 className="text-left">Коэффициенты</h5>
