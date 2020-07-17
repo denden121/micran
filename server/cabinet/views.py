@@ -120,17 +120,13 @@ def all_report_view(request, user_id='default'):
             if request.method == "GET":
                 reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
                                                 date__year=request.GET['year'])
-                projects = Project.objects.all()
                 data = []
-                fields_project = []
                 for report in reports:
-                    for project in projects:
-                        fields_project.append({'name': project.name})
-                    fields = {'text': report.text, 'hour': report.hour, 'project': report.project,
-                              'curator': report.curator, 'fields_project': fields_project}
-                    data.append({'model': 'cabinet.report', 'pk': report.pk, 'fields': fields})
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                              'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
                 return HttpResponse(json.dumps(data))
-            if request.method == "POST":
+            elif request.method == "POST":
                 project_pk = request.POST.get('project')
                 reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year, project=project_pk)
                 if reports:
@@ -162,18 +158,23 @@ def all_report_view(request, user_id='default'):
 def report_view(request, report_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
-        report = Report.objects.get(creator_id_id=user.id, id=report_id)
         if user:
             if request.method == "GET":
+                report = Report.objects.filter(creator_id_id=user.id, id=report_id)
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
             elif request.method == "POST":
+                report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
                 if form.is_valid():
                     update = form.save()
                     return HttpResponse("Success")
                 return HttpResponse("Fail")
+            elif request.method =="DELETE":
+                report = Report.objects.get(pk=report_id)
+                report.delete()
+                return HttpResponse("Success")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:
@@ -336,20 +337,6 @@ def salary(request):
                 form.save()
                 return HttpResponse("Success")
             return HttpResponse(form.errors.as_data())
-
-
-@csrf_exempt
-def projects_from_reports(request):
-    user = get_user_jwt(request)
-    if user:
-        if request.method == "GET":
-            reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
-                                            date__year=request.GET['year'])
-            data = []
-            for report in reports:
-                fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour, 'project_pk': report.project.pk}
-                data.append({'pk': report.pk, 'fields': fields})
-            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
