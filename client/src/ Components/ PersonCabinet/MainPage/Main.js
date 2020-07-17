@@ -14,6 +14,7 @@ import ViewLogs from "../Administration/ViewLogs/ViewLogs";
 import Salary from "../Salary/Salary"
 import rend from "../../../index";
 import Payroll from "../Payroll/Payroll"
+import Register from "../Register/Register"
 
 const Month = {
     'Янв':1,
@@ -86,6 +87,7 @@ class Main extends Component{
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
                         <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
+                        <Route path='/cabinet/admin/register' exact  component = {Register}/>
                     </Switch>
                 </div>
             </div>
