@@ -11,7 +11,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input type="text" className="form-control" style={{padding:"0",margin:"0"}} />
+                            <input type="text" className="form-control"  />
                         </div>
                     </div>
                 </div>
@@ -21,7 +21,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input type="text" className="form-control" style={{padding:"0",margin:"0"}} />
+                            <input type="text" className="form-control"  />
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input type="text" className="form-control" style={{padding:"0",margin:"0"}} />
+                            <input type="text" className="form-control" />
                         </div>
                     </div>
                 </div>
