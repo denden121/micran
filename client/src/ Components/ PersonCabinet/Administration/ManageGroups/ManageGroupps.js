@@ -26,7 +26,8 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                <table className="table table-hover table-bordered">
+               <div className="table-responsive">
+               <table className="table table-hover table-bordered">
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">№</th>
@@ -39,6 +40,7 @@ class ManageGroups extends React.Component{
                         <Groups listGroup = {this.state.groups}/>
                     </tbody>
                </table>
+               </div>
             </div>
         )
     }

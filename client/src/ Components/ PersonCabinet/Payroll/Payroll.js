@@ -28,10 +28,10 @@ class Payroll extends React.Component{
                          <br/>
                          <Norma/>
                          <br/>
-                         {/* <TableZp/> */}
+                         <TableZp/>
                     </div>
                 </div>   
-                <TableZp/>         
+                {/* <TableZp/>          */}
             </div>
         )
     }
