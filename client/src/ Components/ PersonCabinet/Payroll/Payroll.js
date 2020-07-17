@@ -7,6 +7,27 @@ import TableZp from "./TableZp/TableZp"
 
 
 class Payroll extends React.Component{
+    state = {
+
+    }
+    componentDidMount() {
+        this.loadAllSalary()
+    }
+    loadAllSalary = async ()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        await fetch("http://127.0.0.1:8000/salary/", requestOptions)
+            .then(response => response.json())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    }
     render(){
         return(
             <div className="container-fluid">
