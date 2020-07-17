@@ -9,8 +9,8 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryForm
-from .models import Profile, Project, Report, Action, Group, Logging, Salary
+from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
+from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual
 
 
 def get_user_jwt(request):
@@ -20,9 +20,9 @@ def get_user_jwt(request):
     return user
 
 
-def get_time_from_reports(user):
+def get_time_from_reports(profile):
     t = datetime.now()
-    reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year)
+    reports = Report.objects.filter(creator_id=profile.user.id, date__month=t.month, date__year=t.year)
     hour = 0
     hour = sum([report.hour + hour for report in reports])
     return hour
@@ -53,9 +53,7 @@ def logging(request, username, status, action):
 def token(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
-    print(f'fdsffsddffddsfsdsdfdsffdsfssdfsdfdsfdsfdsfds{username}    {password}')
     user = authenticate(username=username, password=password)
-    print('kjdlgkdj', request.POST.get('IP'))
     action = 'login'
     if user:
         status = True
@@ -317,20 +315,25 @@ def logs(request):
 @csrf_exempt
 def salary(request):
     user = get_user_jwt(request)
-    # person = request.GET.get('person')
-    hour = get_time_from_reports(user)
     if user:
         if request.method == "GET":
-            # individual
-            # if request.GET.get('type') == 'individual':
-            salary = Salary.objects.filter(person=user.profile)
-            data = serializers.serialize('json', salary)
-            return HttpResponse(data)
-            # else:
-            #     rabotyagi = Profile.objects.filter(departament=user.profile.departament)
-            #     salarys = Salary.objects.filter(person__in=rabotyagi)
-            #     data = serializers.serialize('json', salarys)
-            #     return HttpResponse(data)
+            workers = Profile.objects.filter(departament=user.profile.departament)
+            salary_common = SalaryCommon.objects.get(pk=1)
+            data = []
+            output = []
+            for worker in workers:
+                hour = get_time_from_reports(worker)
+                salary = SalaryIndividual.objects.get(person=worker)
+                salary.time_from_report = hour
+                salary.save(update_fields=['time_from_report'])
+                field = {'Full name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
+                         'work_days': salary.days_worked, 'hours_worked': salary.time_from_report, 'time_norm': salary.time_norm,
+                         'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
+                         'is_awarded': salary.is_awarded, 'award': salary.award, 'salary_hand': salary.salary_hand}
+                # person = {'person': field, 'pk': worker.pk}
+                data.append({'pk': worker.pk, 'person':field})
+            output.append({'fields': {'days_norm': salary_common.days_norm_common, 'time_norm': salary_common.time_norm_common, 'persons': data}})
+            return HttpResponse(json.dumps(output))
         if request.method == "POST":
             form = SalaryForm(request.POST)
             if form.is_valid():

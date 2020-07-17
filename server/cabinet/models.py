@@ -101,18 +101,24 @@ class Report(models.Model):
         # return self.name
 
 
-class Salary(models.Model):
-    days_norm = models.FloatField(blank=True)
+class SalaryIndividual(models.Model):
     days_worked = models.FloatField(blank=True)
     vacation = models.FloatField(blank=True)
     sick_leave = models.FloatField(blank=True)
     day_off = models.FloatField(blank=True)
-    time_report = models.FloatField(blank=True)
-    time_norm = models.FloatField(blank=True)
+    time_from_report = models.FloatField(blank=True)
     time_orion = models.FloatField(blank=True)
+    time_norm = models.FloatField(blank=True)
+    time_off = models.FloatField(blank=True)
     plan_salary = models.FloatField(blank=True)
     award = models.FloatField(blank=True)
     is_awarded = models.BooleanField(blank=True)
     salary_hand = models.FloatField(blank=True)
     person = models.ForeignKey('Profile', on_delete=models.CASCADE, to_field='user')
     date = models.DateField(blank=True, auto_now_add=True)
+    common_part = models.ForeignKey('SalaryCommon', on_delete=models.CASCADE)
+
+
+class SalaryCommon(models.Model):
+    days_norm_common = models.FloatField(blank=True)
+    time_norm_common = models.FloatField(blank=True)
