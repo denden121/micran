@@ -201,3 +201,20 @@ fetch("http://127.0.0.1:8000/admin/logs/", requestOptions)
   .catch(error => console.log('error', error));
 ==================================================================================================================
 
+Salary ========================================================
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTk1MDUxODg5LCJqdGkiOiJkOTU2NjRkNzk0MWI0MTljOTQ5MDE2ZmJkMmM4YmU0ZiIsInVzZXJfaWQiOjF9.HnTICEu_xjs7JL1-d_SXAc_YMDZLXNXTIf0XWj_PCvA");
+
+var formdata = new FormData();
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:8000/salary/", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
