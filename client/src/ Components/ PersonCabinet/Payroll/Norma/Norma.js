@@ -15,10 +15,9 @@ const Norma = (props) => {
                  </div>
                 <div className="card col-md-4">
                     <div className="card-header text-left bg-success">
-                        Норма рабочих часов за месяц
                     </div>
                     <div className="card-body text-left">
-                        184
+                        <input type="text" className="form-control" style={{padding:"0",margin:"0"}} placeholder="Норма рабочих часов за месяц"/>
                     </div>
                 </div>
             </div>
