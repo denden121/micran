@@ -1,0 +1,7 @@
+.red th {
+    color: red;
+}
+
+input[placeholder]{
+    font-size: 13px;
+}
