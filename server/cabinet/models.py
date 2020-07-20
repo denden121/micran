@@ -102,21 +102,21 @@ class Report(models.Model):
 
 
 class SalaryIndividual(models.Model):
-    days_worked = models.FloatField(blank=True)
-    vacation = models.FloatField(blank=True)
-    sick_leave = models.FloatField(blank=True)
-    day_off = models.FloatField(blank=True)
-    time_from_report = models.FloatField(blank=True)
-    time_orion = models.FloatField(blank=True)
-    time_norm = models.FloatField(blank=True)
-    time_off = models.FloatField(blank=True)
-    plan_salary = models.FloatField(blank=True)
-    award = models.FloatField(blank=True)
-    is_awarded = models.BooleanField(blank=True)
-    salary_hand = models.FloatField(blank=True)
+    days_worked = models.FloatField(blank=True, default = 0)
+    vacation = models.FloatField(blank=True, default = 0)
+    sick_leave = models.FloatField(blank=True, default = 0)
+    day_off = models.FloatField(blank=True, default = 0)
+    time_from_report = models.FloatField(blank=True, default = 0)
+    time_orion = models.FloatField(blank=True, default = 0)
+    time_norm = models.FloatField(blank=True, default = 0)
+    time_off = models.FloatField(blank=True, default = 0)
+    plan_salary = models.FloatField(blank=True, default = 0)
+    award = models.FloatField(blank=True, default = 0)
+    is_awarded = models.BooleanField(blank=True, default = 0)
+    salary_hand = models.FloatField(blank=True, default = 0)
     person = models.ForeignKey('Profile', on_delete=models.CASCADE, to_field='user')
     date = models.DateField(blank=True, auto_now_add=True)
-    common_part = models.ForeignKey('SalaryCommon', on_delete=models.CASCADE)
+    common_part = models.ForeignKey('SalaryCommon', on_delete=models.CASCADE, default = 1)
 
 
 class SalaryCommon(models.Model):

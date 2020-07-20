@@ -46,6 +46,12 @@ const Navigation =(props)=>{
                   </a>
                 </li>
                 <li className="nav-item">
+                  <a className="nav-link" href="http://localhost:3000/cabinet/admin/register">
+                    <span data-feather="layers"></span>
+                    Register
+                  </a>
+                </li>
+                <li className="nav-item">
                   <NavLink className="nav-link" to="/holiday">
                     <span data-feather="users"></span>
                     Отпуск

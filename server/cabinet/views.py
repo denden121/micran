@@ -196,7 +196,7 @@ def all_projects_view(request):
             projects = Project.objects.all()
             data = serializers.serialize('json', projects)
             return HttpResponse(data)
-        if request.method == "POST" and get_access(13, user):  # 13 is create projects
+        if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
             if form.is_valid():
                 form.save()
@@ -335,7 +335,16 @@ def salary(request):
             output.append({'fields': {'days_norm': salary_common.days_norm_common, 'time_norm': salary_common.time_norm_common, 'persons': data}})
             return HttpResponse(json.dumps(output))
         if request.method == "POST":
-            form = SalaryForm(request.POST)
+            person = request.POST.get('person')
+            person = Profile.objects.get(pk=person)
+            year = request.POST.get('year')
+            month = request.POST.get('month')
+            try:
+                salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
+            except SalaryIndividual.DoesNotExist:
+                salary = SalaryIndividual.objects.create(person=person)
+            salary.time_from_report = get_time_from_reports(person)
+            form = SalaryIndividualForm(request.POST, instance=salary)
             if form.is_valid():
                 form.save()
                 return HttpResponse("Success")
