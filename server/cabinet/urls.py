@@ -6,6 +6,7 @@ urlpatterns = [
     path('token/', views.token),
     path('cabinet/<int:user_id>/', views.cabinet_view),
     path('check/', views.check_view),
+    path('check_admin/', views.check_admin_view),
     path('cabinet/register/', views.register_view),
     # reports
     path('cabinet/reports/', views.all_report_view),

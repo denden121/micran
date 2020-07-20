@@ -299,3 +299,26 @@ fetch("http://127.0.0.1:8000/cabinet/projects/", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
+
+
+===================================ADMINISTRATOR=======================================
+var myHeaders = new Headers();
+myHeaders.append("IP", "194.64.23.12");
+myHeaders.append("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTk1MzAxODMwLCJqdGkiOiIxMGE4MWZhZDY0OTA0MGM4YTI4MTk2MDMwM2Y4ZTIyNiIsInVzZXJfaWQiOjF9.-Uf8YL8F8-G6cmpmOnQ2T3F_2nz8ayYdJO3lQKKzdWk");
+
+var formdata = new FormData();
+formdata.append("username", "admin");
+formdata.append("password", "admin");
+formdata.append("IP", "125.23.42.12");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:8000/check_admin/", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
