@@ -69,9 +69,13 @@ def token(request):
 @csrf_exempt
 def check_view(request):
     user = get_user_jwt(request)
-    if not hasattr(user, 'profile'):
-        return HttpResponse("False")
-    return HttpResponse("True")
+    return HttpResponse(hasattr(user, 'profile'))
+
+
+@csrf_exempt
+def check_admin_view(request):
+    user = get_user_jwt(request)
+    return HttpResponse(get_access(100, user))
 
 
 @csrf_exempt
