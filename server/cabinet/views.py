@@ -196,7 +196,7 @@ def all_projects_view(request):
             projects = Project.objects.all()
             data = serializers.serialize('json', projects)
             return HttpResponse(data)
-        if request.method == "POST" and get_access(13, user):  # 13 is create projects
+        if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
             if form.is_valid():
                 form.save()
