@@ -19,7 +19,7 @@ class Payroll extends React.Component{
         myHeaders.append("Authorization", token);
         let requestOptions = {
             method: 'GET',
-            headers: myHeaders,
+            headers: myHeaders, 
             redirect: 'follow'
         };
 

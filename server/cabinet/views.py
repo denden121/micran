@@ -318,9 +318,9 @@ def salary(request):
     if user:
         if request.method == "GET":
             workers = Profile.objects.filter(departament=user.profile.departament)
-            salary = SalaryCommon.objects.get(pk=1)
+            salary_common = SalaryCommon.objects.get(pk=1)
             data = []
-            data.append({'days_norm': salary.days_norm_common, 'time_norm': salary.time_norm_common})
+            output = []
             for worker in workers:
                 hour = get_time_from_reports(worker)
                 salary = SalaryIndividual.objects.get(person=worker)
@@ -330,8 +330,10 @@ def salary(request):
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report, 'time_norm': salary.time_norm,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'is_awarded': salary.is_awarded, 'award': salary.award, 'salary_hand': salary.salary_hand}
-                data.append({'pk': worker.pk, 'fields':field})
-            return HttpResponse(json.dumps(data))
+                # person = {'person': field, 'pk': worker.pk}
+                data.append({'pk': worker.pk, 'person':field})
+            output.append({'fields': {'days_norm': salary_common.days_norm_common, 'time_norm': salary_common.time_norm_common, 'persons': data}})
+            return HttpResponse(json.dumps(output))
         if request.method == "POST":
             form = SalaryForm(request.POST)
             if form.is_valid():
