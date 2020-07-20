@@ -50,4 +50,4 @@ class SalaryCommonForm(forms.ModelForm):
 class SalaryIndividualForm(forms.ModelForm):
     class Meta:
         model = SalaryIndividual
-        fields = '__all__'
+        exclude = ['time_from_report', 'common_part']
