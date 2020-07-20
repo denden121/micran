@@ -39,7 +39,7 @@ class  App extends Component {
             .then(result => localStorage.setItem('token', result.access))
             .catch(error => localStorage.setItem('token', ''));
 
-        if (localStorage.getItem('token') == 'undefined') {
+        if (localStorage.getItem('token') == '') {
             alert('incorrect')
         } else {
             myHeaders = new Headers();
@@ -75,7 +75,7 @@ class  App extends Component {
         const surname = document.getElementById('surname').value
         const middle_name = document.getElementById('fatherName').value
         formdata.append("first_name", first_name);
-        formdata.append("second_name", surname);
+        formdata.append("last_name", surname);
         formdata.append("middle_name", middle_name);
         const requestOptions = {
             method: 'POST',
