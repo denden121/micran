@@ -87,7 +87,7 @@ class Main extends Component{
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
                         <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                         <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
-                        <Route path='/cabinet/admin/register' exact  component = {Register}/>
+                        <Route path='/cabinet/admin/register' exact  component = {Register}/>                        
                     </Switch>
                 </div>
             </div>

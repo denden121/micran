@@ -14,9 +14,9 @@ const TableZp = (props) =>{
                     <table className="table table-bordered table-sm">
                 <tbody>
                     <tr>
-                        <th colspan="7" scope="colgroup"></th>
-                        <th colspan="3" scope="colgroup">Начисления</th>
-                        <th colspan="5" scope="colgroup">Рассчитанные данные</th>
+                        <th colSpan="7" scope="colgroup"></th>
+                        <th colSpan="3" scope="colgroup">Начисления</th>
+                        <th colSpan="5" scope="colgroup">Рассчитанные данные</th>
                     </tr>
                     <tr>
                         <th scope="col">№</th>
@@ -32,27 +32,27 @@ const TableZp = (props) =>{
                             <br/>час</th>
                         <th scope="col">Плановая ЗП,
                             руб</th>
-                        <th colspan="2" scope="colgroup">Депримирование за часы,
+                        <th colSpan="2" scope="colgroup">Депримирование за часы,
                             руб</th>
-                        <th colspan="2" scope="colgroup">Премия</th>
+                        <th colSpan="2" scope="colgroup">Премия</th>
                         <th scope="col">На руки,руб</th>
                         <th scope="col">Начислено,
                             <br/>руб</th>
                         <th scope="col">Ст-ть часов,руб</th>
                     </tr>
                    <tr>
-                       <th colspan="15" scope="colgroup" className="table-secondary">Отдел цифровых устройств</th>
+                       <th colSpan="15" scope="colgroup" className="table-secondary">Отдел цифровых устройств</th>
                    </tr>
                    <tr>
-                       <td scope="col">1</td>
-                       <td scope="col">Осеева</td>
-                       <td scope="col">1</td>
-                       <td scope="col">18(78%)</td>
-                       <td scope="col">0</td>
-                       <td scope="col">144</td>
-                       <td scope="col" className="red">71</td>
+                       <td scope="col"><div></div></td>
+                       <td scope="col"><div></div></td>
+                       <td scope="col"><div></div></td>
+                       <td scope="col"><div></div></td>
+                       <td scope="col"><div></div></td>
+                       <td scope="col"><div></div></td>
+                       <td scope="col" className="red"><div></div></td>
                        <td scope="col"><input type="text" className="in form-control" placeholder="0.00%"></input></td>
-                       <td scope="col">1</td>
+                       <td scope="col"><div></div></td>
                        <td scope="col">
                            <label className="checkbox Label2">
                                 <input type="checkbox" className="form-check-input"/>
@@ -60,9 +60,9 @@ const TableZp = (props) =>{
                         </td>
                         <td scope="col"><input type="text" className="in form-control" placeholder="0.00%"></input></td>
                         <td scope="col"><input type="text" className="in form-control" placeholder="0.00руб"></input></td>
-                        <td scope="col">1</td>
-                        <td scope="col">1</td>
-                        <td scope="col">1</td>
+                        <td scope="col"><div></div></td>
+                        <td scope="col"><div></div></td>
+                        <td scope="col"><div></div></td>
                    </tr>
                 </tbody>
             </table>
