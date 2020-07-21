@@ -31,13 +31,16 @@ const PayrollCheck =(props)=>{
             </label>
         </div>
         <hr className="normal"/>
-        <select className="select2 form-control select2-offscreen">
-            Департамент СВЧ электроники                                                                               
-        </select>
+        <select className="custom-select">
+            <option selected>Выбрать</option>
+            <option>Департамент СВЧ электроники</option>
+        </select> 
         <br/>
-        <select className="select2 form-control select2-offscreen">
-            Департамент СВЧ электроники                                                                               
-        </select>
+        <br/>
+        <select className="custom-select">
+            <option selected>Выбрать</option>
+            <option>Департамент СВЧ электроники</option>
+        </select> 
         </div>
     )
 }
