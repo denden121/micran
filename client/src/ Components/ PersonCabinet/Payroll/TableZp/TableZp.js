@@ -4,8 +4,71 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import "./TableZp.css"
 import BootstrapTable from 'react-bootstrap-table-next';
 
+const FieldSalary = (props) =>{
+    if (props.allSalary) {
+        let result = Array.from(props.allSalary)
+        return result.map((fields, index) => {
+            console.log(fields)
+            return (
+                <tr>
+                    <td scope="col">
+                        <div>{index+1}</div>
+                    </td>
+                    <td scope="col">
+                        <div>{fields.person.full_name}</div>
+                    </td>
+                    <td scope="col">
+                        <div></div>
+                    </td>
+                    <td scope="col">
+                        <div>{fields.person.work_days}</div>
+                    </td>
+                    <td scope="col">
+                        <div>{fields.person.hours_worked}</div>
+                    </td>
+                    <td scope="col">
+                        <div>{fields.person.time_norm}</div>
+                    </td>
+                    <td scope="col" className="red">
+                        <div>{fields.person.time_off}</div>
+                    </td>
+                    <td scope="col">
+                        <input type="text" defaultValue={fields.person.plan_salary} className="in form-control" placeholder="0.00%"></input>
+                    </td>
+                    <td scope="col">
+                        <div></div>
+                    </td>
+                    <td scope="col">
+                        <label className="checkbox Label2">
+                            {fields.person.is_awarded
+                            ? <input type="checkbox"  className="form-check-input" checked/>
+                            : <input type="checkbox"  className="form-check-input" />}
+                        </label>
+                    </td>
+                    <td scope="col">
+                        <input type="text" className="in form-control" defaultValue={(100*fields.person.award)/fields.person.plan_salary}  placeholder="0.00%"/>
+                    </td>
+                    <td scope="col">
+                        <input type="text" className="in form-control" defaultValue={fields.person.award} placeholder="0.00руб"/>
+                    </td>
+                    <td scope="col">
+                        <div>{fields.person.salary_hand}</div>
+                    </td>
+                    <td scope="col">
+                        <div>{(fields.person.salary_hand*1.13).toFixed(2)}</div>
+                    </td>
+                    <td scope="col">
+                        <div></div>
+                    </td>
+                </tr>
+            )
+        })
+    }
+    return ''
+}
 
 const TableZp = (props) =>{
+    console.log(props)
     return(
         <div className="tablezp">
             <div className="row">
@@ -43,27 +106,7 @@ const TableZp = (props) =>{
                    <tr>
                        <th colSpan="15" scope="colgroup" className="table-secondary">Отдел цифровых устройств</th>
                    </tr>
-                   <tr>
-                       <td scope="col"><div></div></td>
-                       <td scope="col"><div></div></td>
-                       <td scope="col"><div></div></td>
-                       <td scope="col"><div></div></td>
-                       <td scope="col"><div></div></td>
-                       <td scope="col"><div></div></td>
-                       <td scope="col" className="red"><div></div></td>
-                       <td scope="col"><input type="text" className="in form-control" placeholder="0.00%"></input></td>
-                       <td scope="col"><div></div></td>
-                       <td scope="col">
-                           <label className="checkbox Label2">
-                                <input type="checkbox" className="form-check-input"/>
-                            </label>
-                        </td>
-                        <td scope="col"><input type="text" className="in form-control" placeholder="0.00%"></input></td>
-                        <td scope="col"><input type="text" className="in form-control" placeholder="0.00руб"></input></td>
-                        <td scope="col"><div></div></td>
-                        <td scope="col"><div></div></td>
-                        <td scope="col"><div></div></td>
-                   </tr>
+                   <FieldSalary allSalary = {props.allSalary}/>
                 </tbody>
             </table>
                     </div>

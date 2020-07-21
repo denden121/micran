@@ -8,7 +8,7 @@ import TableZp from "./TableZp/TableZp"
 
 class Payroll extends React.Component{
     state = {
-
+        allSalary:{}
     }
     componentDidMount() {
         this.loadAllSalary()
@@ -25,8 +25,9 @@ class Payroll extends React.Component{
 
         await fetch("http://127.0.0.1:8000/salary/", requestOptions)
             .then(response => response.json())
-            .then(result => console.log(result))
+            .then(result => this.setState({allSalary:result[0].fields}))
             .catch(error => console.log('error', error));
+        console.log(this.state.allSalary)
     }
     render(){
         return(
@@ -47,9 +48,14 @@ class Payroll extends React.Component{
                              <button className="btn btn-sm btn-danger">Синхронизировать таблицы</button>
                          </div>
                          <br/>
-                         <Norma/>
+                         <Norma
+                             normDays = {this.state.allSalary.days_norm}
+                             normTime = {this.state.allSalary.time_norm}
+                         />
                          <br/>
-                         <TableZp/>
+                         <TableZp
+                             allSalary = {this.state.allSalary.persons}
+                         />
                     </div>
                 </div>   
                 {/* <TableZp/>          */}

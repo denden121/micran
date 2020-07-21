@@ -2,6 +2,7 @@ import React from "react"
 import "./Norma.css"
 
 const Norma = (props) => {
+    console.log('props',props)
     return(
         <div className="norma">
             <div className="row no-gutters flex-md-row mb-4  h-md-250 position-relative">
@@ -11,7 +12,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input type="text" className="form-control"  />
+                            <input type="text" className="form-control"  defaultValue={props.normDays}/>
                         </div>
                     </div>
                 </div>
@@ -21,7 +22,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input type="text" className="form-control"  />
+                            <input type="text" className="form-control" defaultValue={props.normTime} />
                         </div>
                     </div>
                 </div>
