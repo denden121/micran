@@ -330,7 +330,7 @@ def salary(request):
                 salary = SalaryIndividual.objects.get(person=worker)
                 salary.time_from_report = hour
                 salary.save(update_fields=['time_from_report'])
-                field = {'Full name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
+                field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report, 'time_norm': salary.time_norm,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'is_awarded': salary.is_awarded, 'award': salary.award, 'salary_hand': salary.salary_hand}
