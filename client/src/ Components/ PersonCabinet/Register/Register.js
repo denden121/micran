@@ -23,7 +23,7 @@ class Register extends React.Component{
                             <button type="button" className="btn btn-primary btn-sm" >Экспорт результатов</button>
                         </div>
                         <hr className="normal"/>
-                        <h5 className="text-left">Список проектов</h5>
+                        
                         <RegisterTable/>
                     </div>
                 </div>

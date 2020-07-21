@@ -7,6 +7,7 @@ const RegisterTable =(props)=>{
             <div className="row">
                 <div className="col-sm-12">
                     <div className="responsive-table">
+                        <div className="title text-left"><h5>Список проектов</h5></div>
                         <table className="reestr data-table-column-filter table table-bordered table-striped" style={{marginBottom:"0"}}>
                             <thead>
                                 <tr>
