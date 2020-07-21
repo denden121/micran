@@ -6,7 +6,7 @@ class PersonData extends Component{
     state = {
         cabinet:''
     }
-    componentDidMount() {
+    loadPersonDate=async ()=>{
         let myHeaders = new Headers();
         let token = localStorage.getItem('token')
         myHeaders.append("Authorization", token);
@@ -16,11 +16,14 @@ class PersonData extends Component{
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:8000/cabinet/", requestOptions)
+        await fetch("http://127.0.0.1:8000/cabinet/", requestOptions)
             .then(response => response.json())
             .then(result => this.setState({cabinet:result[0].fields}))
             .catch(error => console.log('error', error));
-        console.log(this.state)
+        console.log('person date',this.state)
+    }
+    componentDidMount() {
+        this.loadPersonDate()
     }
     render(){
         return(
