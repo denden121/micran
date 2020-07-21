@@ -87,14 +87,11 @@ class Project(models.Model):
 
 
 class Report(models.Model):
-    # name = models.CharField(max_length=50, blank=True)
-    # name = models.CharField(max_length=50, blank=True)
+    status = models.BooleanField(blank=True)
     creator_id = models.ForeignKey('Profile', on_delete=models.CASCADE, to_field='user')
     project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.CASCADE)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
-    # project = models.CharField(max_length=50, blank=True)
-    # curator = models.CharField(max_length=50, blank=True, default=None)
     date = models.DateField(blank=True, auto_now_add=True)
 
     # def __str__(self):

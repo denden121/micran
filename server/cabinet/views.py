@@ -147,8 +147,8 @@ def all_report_view(request, user_id='default'):
     else:
         if user:
             if request.method == "GET":
-                if user_id != user.id and not get_access(11, user):  # 11 is check reports
-                    return HttpResponse("You don't have permissions")
+                # if user_id != user.id:  # 11 is check reports
+                #     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
@@ -184,7 +184,8 @@ def report_view(request, report_id, user_id='default'):
         if user:
             if request.method == "GET":
                 if get_access(11, user):
-                    report = Report.objects.filter(user=user_id, id=report_id)
+                    checked_user = Profile.objects.get(pk=user_id)
+                    report = Report.objects.filter(user=checked_user, id=report_id)
                     data = serializers.serialize('json', report)
                     return HttpResponse(data)
                 return HttpResponse("You don't have permissions")
@@ -329,13 +330,14 @@ def salary(request):
                 hour = get_time_from_reports(worker)
                 salary = SalaryIndividual.objects.get(person=worker)
                 salary.time_from_report = hour
-                salary.save(update_fields=['time_from_report'])
-                field = {'Full name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
+                salary.time_norm = salary_common.days_norm_common * 8
+                salary.save(update_fields=['time_from_report', 'time_norm'])
+                field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report, 'time_norm': salary.time_norm,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'is_awarded': salary.is_awarded, 'award': salary.award, 'salary_hand': salary.salary_hand}
                 # person = {'person': field, 'pk': worker.pk}
-                data.append({'pk': worker.pk, 'person':field})
+                data.append({'pk': worker.pk, 'person': field})
             output.append({'fields': {'days_norm': salary_common.days_norm_common, 'time_norm': salary_common.time_norm_common, 'persons': data}})
             return HttpResponse(json.dumps(output))
         if request.method == "POST":
@@ -360,8 +362,8 @@ def workers_departament(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            rabotyagi = Profile.objects.filter(departament=user.profile.departament)
-            data = serializers.serialize('json', rabotyagi)
+            workers = Profile.objects.filter(departament=user.profile.departament)
+            data = serializers.serialize('json', workers)
             return HttpResponse(data)
 
 
