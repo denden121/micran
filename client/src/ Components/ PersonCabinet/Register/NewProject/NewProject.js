@@ -125,9 +125,9 @@ const NewProject =(props)=>{
                             <hr className="normal"/> 
                         </div> 
                         <div className="block4 text-right" >
-                            <button type="button" className="btn btn-primary btn-sm" onClick={()=>document.location='/cabinet/admin/register'}>Назад</button>
+                            {/* <button type="button" className="btn btn-primary btn-sm" onClick={()=>document.location='/cabinet/admin/register'}>Назад</button> */}
                             <button type="button" className="btn btn-success btn-sm" style={{marginLeft:"5px"}}>Сохранить</button>
-                            <button type="button" className="btn btn-secondary btn-sm" style={{marginLeft:"5px"}}>Отмена</button>
+                            <button type="button" className="btn btn-secondary btn-sm" style={{marginLeft:"5px"}}onClick={()=>document.location='/cabinet/admin/register'}>Отмена</button>
                         </div>     
                                   
                     </div>                        
