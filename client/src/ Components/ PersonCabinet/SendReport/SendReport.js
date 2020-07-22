@@ -110,58 +110,54 @@ class SendReport extends React.Component{
             .then(result => this.setState({name_projects:result}))
             .catch(error => console.log('error', error));
     }
+    onChangeSelect = (event) =>{
+        console.log('event',event.target.value)
+        let project =''
+
+        // for(let i of this.state.reports){
+        //     // if(i.fields.project_name == this.state.name_projects[event.target.value-1].project_name){
+        //     //    this.onClickCard(j)
+        //     //     console.log(j)
+        //     // }
+        //     j++
+        // }
+    }
     onClickCard = (index) =>{
-        let dateReport = this.state.reports[index].fields
-        document.querySelector('#time_project').value = dateReport.hour
-        document.querySelector('#body_report').value = dateReport.text
-        console.log(document.querySelector('#name_project').value)
-        document.querySelector('#name_project').value = dateReport.project_pk
-        console.log(document.querySelector('#name_project').value)
-        // let myHeaders = new Headers()
-        // myHeaders.append("Authorization", token)
-        // let formdata = new FormData();
-        // formdata.append("text", body)
-        // formdata.append("hour ", time)
-        // formdata.append("project", project)
-        // let requestOptions = {
-        //     method: 'POST',
-        //     headers: myHeaders,
-        //     body: formdata,
-        //     redirect: 'follow'
-        // };
-        // let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`
-        //
-        // await fetch(url, requestOptions)
-        //     .then(response => response.text())
-        //     .then(result => console.log(result))
-        //     .catch(error => console.log('error', error));
-        // alert('Отчет отправлен')
+        // console.log('index',index)
+        if (this.state.reports[index]) {
+            let dateReport = this.state.reports[index].fields
+            document.querySelector('#time_project').value = dateReport.hour
+            document.querySelector('#body_report').value = dateReport.text
+            // console.log(document.querySelector('#name_project').value)
+            document.querySelector('#name_project').value = dateReport.project_pk
+            // console.log(document.querySelector('#name_project').value)
+        }
     }
     onClickNewProject = () =>{
         document.querySelector('#time_project').value = ''
         document.querySelector('#body_report').value = ''
         document.querySelector('#name_project').value = ''
     }
-    // onClickDeleteCard =async (index) =>{
-    //     console.log('index',index)
-    //     let token = localStorage.getItem('token')
-    //     let myHeaders = new Headers();
-    //     myHeaders.append("Authorization", token);
-    //
-    //     let requestOptions = {
-    //         method: 'DELETE',
-    //         headers: myHeaders,
-    //         redirect: 'follow'
-    //     };
-    //     let url = `http://127.0.0.1:8000/cabinet/report/${index}`
-    //     await fetch(url, requestOptions)
-    //         .then(response => response.text())
-    //         .then(result => console.log(result))
-    //         .catch(error => console.log('error', error));
-    //     this.loadReport()
-    //     // console.log('state',this.state.report)
-    //     // console.log('id',this.state.id)
-    // }
+    onClickDeleteCard =async (index) =>{
+        // console.log('index',index)
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+
+        let requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        let url = `http://127.0.0.1:8000/cabinet/report/${index}`
+        await fetch(url, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        this.loadReport()
+        // console.log('state',this.state.report)
+        // console.log('id',this.state.id)
+    }
     render() {
         console.log(this.state)
         return (
@@ -174,6 +170,7 @@ class SendReport extends React.Component{
                         listNameFrojects = {this.state.name_projects}
                         saveReport = {this.saveReport}
                         onClickNewProject = {this.onClickNewProject}
+                        onChangeSelect = {this.onChangeSelect}
                     />
                 </div>
             </div>

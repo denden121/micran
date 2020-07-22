@@ -57,8 +57,7 @@ class Payroll extends React.Component{
                              allSalary = {this.state.allSalary.persons}
                          />
                     </div>
-                </div>   
-                {/* <TableZp/>          */}
+                </div>                                
             </div>
         )
     }

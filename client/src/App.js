@@ -49,7 +49,12 @@ class  App extends Component {
                 headers: myHeaders,
                 redirect: 'follow'
             };
-            const url = "http://127.0.0.1:8000/check/"
+            let url = "http://127.0.0.1:8000/check_admin/"
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => localStorage.setItem('admin',result))
+                .catch(error => console.log('error'));
+            url = "http://127.0.0.1:8000/check/"
             await fetch(url, requestOptions)
                 .then(response => response.text())
                 .then(result => localStorage.setItem('checkReg',result))
