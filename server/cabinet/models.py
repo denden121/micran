@@ -47,7 +47,7 @@ class Group(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
     sex = models.CharField(max_length=5, blank=True)
     subdivision = models.CharField(max_length=30, blank=True)
     departament = models.CharField(max_length=30, blank=True)
@@ -88,8 +88,8 @@ class Project(models.Model):
 
 class Report(models.Model):
     status = models.BooleanField(blank=True)
-    creator_id = models.ForeignKey('Profile', on_delete=models.CASCADE, to_field='user')
-    project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.CASCADE)
+    creator_id = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
+    project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.PROTECT)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
     date = models.DateField(blank=True, auto_now_add=True)
@@ -111,11 +111,12 @@ class SalaryIndividual(models.Model):
     award = models.FloatField(blank=True, default = 0)
     is_awarded = models.BooleanField(blank=True, default = 0)
     salary_hand = models.FloatField(blank=True, default = 0)
-    person = models.ForeignKey('Profile', on_delete=models.CASCADE, to_field='user')
+    person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
     date = models.DateField(blank=True, auto_now_add=True)
-    common_part = models.ForeignKey('SalaryCommon', on_delete=models.CASCADE, default = 1)
+    common_part = models.ForeignKey('SalaryCommon', on_delete=models.PROTECT, default = 1)
 
 
 class SalaryCommon(models.Model):
-    days_norm_common = models.FloatField(blank=True)
-    time_norm_common = models.FloatField(blank=True)
+    days_norm_common = models.FloatField(blank=True, default = 0)
+    time_norm_common = models.FloatField(blank=True, default = 0)
+    date = models.DateField(blank=True, auto_now_add=True, unique=True)
