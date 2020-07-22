@@ -50,6 +50,7 @@ class AddGroups extends React.Component {
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
+        alert('группа создана')
     }
 
     render() {

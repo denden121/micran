@@ -30,10 +30,33 @@ class Payroll extends React.Component{
             .catch(error => console.log('error', error));
         console.log(this.state.allSalary)
     }
-    onBlurNormDay = (event)=>{
+    onBlurNormDay =async (event)=>{
         console.log('value',event.target.value)
         console.log('default',event.target.defaultValue)
         console.log('class',event.target.className)
+        if(event.target.value!=event.target.defaultValue){
+            const token = localStorage.getItem('token')
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", token);
+
+            const date = localStorage.getItem('date').split(' ')
+            var formdata = new FormData();
+            formdata.append("year", date[1]);
+            formdata.append("month", date[0]);
+            formdata.append("days_norm_common", event.target.value);
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
+            const url = `http://127.0.0.1:8000/salary/change_common/`
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+        }
     }
     onBlurNormHours=(event)=>{
         console.log('value',event.target.value)
