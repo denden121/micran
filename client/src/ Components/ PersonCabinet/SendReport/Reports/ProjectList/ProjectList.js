@@ -29,7 +29,7 @@ const   ListReports =(props)=>{
     return(
         <div id="proj-list">
             <Reports
-                onCl        ickDeleteCard = {props.onClickDeleteCard}
+                onClickDeleteCard = {props.onClickDeleteCard}
                 onClickCard = {props.onClickCard}
                 listProject = {props.listProject}/>
             <br/>
