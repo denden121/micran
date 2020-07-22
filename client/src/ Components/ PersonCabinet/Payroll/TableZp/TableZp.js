@@ -5,6 +5,7 @@ import "./TableZp.css"
 import BootstrapTable from 'react-bootstrap-table-next';
 
 const FieldSalary = (props) =>{
+
     if (props.allSalary) {
         let result = Array.from(props.allSalary)
         return result.map((fields, index) => {
@@ -33,7 +34,7 @@ const FieldSalary = (props) =>{
                         <div>{fields.person.time_off}</div>
                     </td>
                     <td scope="col">
-                        <input type="text" defaultValue={fields.person.plan_salary} className="in form-control" placeholder="0.00%"></input>
+                        <input type="text" defaultValue={fields.person.plan_salary} className={`in form-control ${fields.pk}.plan_salary`} placeholder="0.00%"></input>
                     </td>
                     <td scope="col">
                         <div></div>
@@ -49,7 +50,7 @@ const FieldSalary = (props) =>{
                         <input type="text" className="in form-control" defaultValue={(100*fields.person.award)/fields.person.plan_salary}  placeholder="0.00%"/>
                     </td>
                     <td scope="col">
-                        <input type="text" className="in form-control" defaultValue={fields.person.award} placeholder="0.00руб"/>
+                        <input type="text" className={`in form-control ${fields.pk}.award`}defaultValue={fields.person.award} placeholder="0.00руб"/>
                     </td>
                     <td scope="col">
                         <div>{fields.person.salary_hand}</div>
@@ -75,7 +76,7 @@ const TableZp = (props) =>{
                 <div className="col-sm-12">
                     <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
                     <table className="table table-bordered table-sm">
-                <tbody className="zarplata">
+                <tbody onBlur={props.onBlurNormDay} className="zarplata">
                     <tr>
                         <th colSpan="7" scope="colgroup"></th>
                         <th colSpan="3" scope="colgroup">Начисления</th>
@@ -106,7 +107,7 @@ const TableZp = (props) =>{
                    <tr>
                        <th colSpan="15" scope="colgroup" className="table-secondary">Отдел цифровых устройств</th>
                    </tr>
-                   <FieldSalary allSalary = {props.allSalary}/>
+                    <FieldSalary allSalary = {props.allSalary}/>
                 </tbody>
             </table>
                     </div>

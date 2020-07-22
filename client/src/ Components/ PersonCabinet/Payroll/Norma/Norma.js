@@ -12,7 +12,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input type="text" className="form-control"  defaultValue={props.normDays}/>
+                            <input onBlur={props.onBlurNormDay} type="text" className="form-control norm_day"  defaultValue={props.normDays}/>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input type="text" className="form-control" defaultValue={props.normTime} />
+                            <input onBlur={props.onBlurNormHours} type="text" className="form-control" defaultValue={props.normTime} />
                         </div>
                     </div>
                 </div>

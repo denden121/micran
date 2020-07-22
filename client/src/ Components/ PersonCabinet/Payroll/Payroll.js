@@ -29,6 +29,16 @@ class Payroll extends React.Component{
             .catch(error => console.log('error', error));
         console.log(this.state.allSalary)
     }
+    onBlurNormDay = (event)=>{
+        console.log('value',event.target.value)
+        console.log('default',event.target.defaultValue)
+        console.log('class',event.target.className)
+    }
+    onBlurNormHours=(event)=>{
+        console.log('value',event.target.value)
+        console.log('default',event.target.defaultValue)
+        console.log('class',event.target.className)
+    }
     render(){
         return(
             <div className="container-fluid">
@@ -51,10 +61,13 @@ class Payroll extends React.Component{
                          <Norma
                              normDays = {this.state.allSalary.days_norm}
                              normTime = {this.state.allSalary.time_norm}
+                             onBlurNormDay = {this.onBlurNormDay}
+                             onBlurNormHours = {this.onBlurNormHours}
                          />
                          <br/>
                          <TableZp
                              allSalary = {this.state.allSalary.persons}
+                             onBlurNormDay = {this.onBlurNormDay}
                          />
                     </div>
                 </div>                                
