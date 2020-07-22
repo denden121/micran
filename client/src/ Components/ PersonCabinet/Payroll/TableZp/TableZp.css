@@ -1,7 +1,16 @@
-.red th {
-    color: red;
+.zarplata{
+    display:block;
+    max-height:800px;
+    overflow-y:auto;
 }
-
-input[placeholder]{
-    font-size: 13px;
+.zarplata{
+    display:table;
+    width:200%;
+    table-layout:fixed;
+}
+/* thead {
+    width: calc( 100% - 1em )
+}  */
+.ico td{
+    width:15px
 }

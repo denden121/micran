@@ -75,7 +75,7 @@ const TableZp = (props) =>{
                 <div className="col-sm-12">
                     <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
                     <table className="table table-bordered table-sm">
-                <tbody>
+                <tbody className="zarplata">
                     <tr>
                         <th colSpan="7" scope="colgroup"></th>
                         <th colSpan="3" scope="colgroup">Начисления</th>
@@ -83,9 +83,9 @@ const TableZp = (props) =>{
                     </tr>
                     <tr>
                         <th scope="col">№</th>
-                        <th scope="col">ФИО</th>
-                        <td></td>
-                        <th scope="col">Отраб.дни
+                        <th scope="col" className="col-md-3 col-sm-4 col-lg-6">ФИО</th>
+                        <td className="ico"></td>
+                        <th scope="col" className="col-md-2 col-sm-3 col-lg-6">Отраб.дни
                             <br/>(%)</th>
                         <th scope="col">Отчет,
                             <br/>час</th>
@@ -97,7 +97,7 @@ const TableZp = (props) =>{
                             руб</th>
                         <th colSpan="2" scope="colgroup">Депримирование за часы,
                             руб</th>
-                        <th colSpan="2" scope="colgroup">Премия</th>
+                        <th colSpan="2" scope="colgroup" className="col-md-2 col-sm-3 col-lg-6">Премия</th>
                         <th scope="col">На руки,руб</th>
                         <th scope="col">Начислено,
                             <br/>руб</th>
