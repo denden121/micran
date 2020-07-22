@@ -22,8 +22,9 @@ class Payroll extends React.Component{
             headers: myHeaders, 
             redirect: 'follow'
         };
-
-        await fetch("http://127.0.0.1:8000/salary/", requestOptions)
+        const date = localStorage.getItem('date').split(' ')
+        const url = `http://127.0.0.1:8000/salary/?month=${date[0]}&year=${date[1]}`
+        await fetch(url, requestOptions)
             .then(response => response.json())
             .then(result => this.setState({allSalary:result[0].fields}))
             .catch(error => console.log('error', error));
