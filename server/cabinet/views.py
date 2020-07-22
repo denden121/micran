@@ -335,7 +335,7 @@ def salary(request):
                 try:
                     salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
                 except SalaryCommon.DoesNotExist:
-                    salary_common = SalaryCommon.objects.create(pdate__year=year, date__month=month)
+                    salary_common = SalaryCommon.objects.create(date__year=year, date__month=month)
                 try:
                     salary = SalaryIndividual.objects.get(person=worker, date__year=year, date__month=month)
                 except SalaryIndividual.DoesNotExist:
