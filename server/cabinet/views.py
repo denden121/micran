@@ -335,7 +335,7 @@ def salary(request):
                 try:
                     salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
                 except SalaryCommon.DoesNotExist:
-                    salary_common = SalaryCommon.objects.create(pdate__year=year, date__month=month)
+                    salary_common = SalaryCommon.objects.create(date__year=year, date__month=month)
                 try:
                     salary = SalaryIndividual.objects.get(person=worker, date__year=year, date__month=month)
                 except SalaryIndividual.DoesNotExist:
@@ -371,6 +371,19 @@ def salary(request):
                 form.save()
                 return HttpResponse("Success")
             return HttpResponse(form.errors.as_data())
+
+
+@csrf_exempt
+def salary_individual(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            person = Profile.objects.get(user=user)
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            salary = SalaryIndividual.objects.filter(person=person, date__year=year, date__month=month)
+            data = serializers.serialize('json', salary)
+            return HttpResponse(data)
 
 
 @csrf_exempt
