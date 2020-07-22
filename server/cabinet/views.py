@@ -299,7 +299,6 @@ def groups_with_permission(request):
             users = []
             for profile in profiles:
                 users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                fields = {'name': group.name, 'users': users, 'description': group.description}
             if users:
                 fields = {'name': group.name, 'users': users, 'description': group.description}
                 users = []
@@ -382,7 +381,9 @@ def salary_individual(request):
             year = request.GET.get('year')
             month = request.GET.get('month')
             salary = SalaryIndividual.objects.filter(person=person, date__year=year, date__month=month)
-            data = serializers.serialize('json', salary)
+            data = serializers.serialize('json', salary, fields=('salary_hand', 'days_off', 'award', 'days_worked',
+                                                                 'vacation', 'sick_leave', 'time_from_report',
+                                                                 'time_orion', 'time_norm', 'time_off', 'plan_salary'))
             return HttpResponse(data)
 
 
@@ -414,7 +415,9 @@ def change_common_salary(request):
     if user:
         year = request.POST.get('year')
         month = request.POST.get('month')
+        days = request.POST.get('days_norm_common')
         salary = SalaryCommon.objects.get(date__year=year, date__month=month)
+        salary.time_norm_common = int(days) * 8
         form = SalaryCommonForm(request.POST, instance=salary)
         if form.is_valid():
             form.save()
