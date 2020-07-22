@@ -17,7 +17,7 @@ const NameProjects = (props) =>{
 }
 
 const Reports =(props)=>{
-    console.log('report props',props)
+    // console.log('report props',props)
     return(
         <div className="container-fluid">
             <div className="report">
@@ -73,7 +73,7 @@ const Reports =(props)=>{
                                         {/*       placeholder="Проект"*/}
                                         {/*       defaultValue='MicRac'*/}
                                         {/*       type="text"/>*/}
-                                        <select className="select2 form-control select2-offscreen" id='name_project'>
+                                        <select onChange={props.onChangeSelect} className="select2 form-control select2-offscreen" id='name_project'>
                                             <NameProjects listNameFrojects = {props.listNameFrojects}/>
                                         </select>
                                     </div>
