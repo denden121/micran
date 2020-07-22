@@ -17,12 +17,13 @@ class Salary extends React.Component {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
+        const date = localStorage.getItem('date')
         let requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         }
-        const url = "http://127.0.0.1:8000/salary/"
+        const url = `http://127.0.0.1:8000/salary/?month=${date[0]}&${date[1]}`
         await fetch(url, requestOptions)
             .then(response =>  response.json())
             .then(result => this.setState({salary: result}))
