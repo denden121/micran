@@ -17,16 +17,17 @@ class Salary extends React.Component {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
-        const date = localStorage.getItem('date')
+        const date = localStorage.getItem('date').split(' ')
         let requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         }
-        const url = `http://127.0.0.1:8000/salary/?month=${date[0]}&${date[1]}`
+        console.log('year',date[1])
+        const url = `http://127.0.0.1:8000/salary/individual/?month=${date[0]}&year=${date[1]}`
         await fetch(url, requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({salary: result}))
+            .then(result => this.setState({salary: result[0]}))
             .catch(error => console.log('error', error))
         console.log('state',this.state.salary)
     }
@@ -47,7 +48,7 @@ class Salary extends React.Component {
                 <br/> */}
                 <h5 className="text-left">Начисления</h5>
                 <table className="stimull table-bordered">
-                    <Profit listGroup = {this.state.salaries}/>
+                    <Profit salary = {this.state.salary}/>
                 </table>
                 <br/>
                 {/* <h5 className="text-left">Комментарий руководителя</h5>
@@ -61,7 +62,7 @@ class Salary extends React.Component {
                 <h5 className="text-left">Итого</h5>
                 <div className="row">
                     <div className="col-md-12">
-                        <Total/>
+                        <Total salary = {this.state.salary}/>
                     </div>
                 </div>
             </div>
