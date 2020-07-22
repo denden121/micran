@@ -84,7 +84,6 @@ def cabinet_view(request, user_id='default'):
     if user_id == 'default':
         if not hasattr(user, 'profile'):
             return HttpResponse("Profile undefined")
-        # data_user = serializers.serialize('json', [user])
         data_profile = serializers.serialize('json', [user.profile], fields=('first_name', 'last_name', 'middle_name'))
         return HttpResponse(data_profile)
     else:
@@ -130,7 +129,8 @@ def all_report_view(request, user_id='default'):
                 return HttpResponse(json.dumps(data))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
-                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year, project=project_pk)
+                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year,
+                                                project=project_pk)
                 if reports:
                     return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
@@ -173,7 +173,7 @@ def report_view(request, report_id, user_id='default'):
                     update = form.save()
                     return HttpResponse("Success")
                 return HttpResponse("Fail")
-            elif request.method =="DELETE":
+            elif request.method == "DELETE":
                 report = get_object_or_404(Report, pk=report_id)
                 report.delete()
                 return HttpResponse("Success")
@@ -326,19 +326,29 @@ def salary(request):
             salary_common = SalaryCommon.objects.get(pk=1)
             data = []
             output = []
+            year = request.GET.get('year')
+            month = request.GET.get('month')
             for worker in workers:
                 hour = get_time_from_reports(worker)
-                salary = SalaryIndividual.objects.get(person=worker)
+                try:
+                    salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
+                except SalaryCommon.DoesNotExist:
+                    salary_common = SalaryCommon.objects.create(pdate__year=year, date__month=month)
+                try:
+                    salary = SalaryIndividual.objects.get(person=worker, date__year=year, date__month=month)
+                except SalaryIndividual.DoesNotExist:
+                    salary = SalaryIndividual.objects.create(person=worker, common_part=salary_common)
                 salary.time_from_report = hour
                 salary.time_norm = salary_common.days_norm_common * 8
                 salary.save(update_fields=['time_from_report', 'time_norm'])
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
-                         'work_days': salary.days_worked, 'hours_worked': salary.time_from_report, 'time_norm': salary.time_norm,
+                         'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
+                         'time_norm': salary.time_norm,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'is_awarded': salary.is_awarded, 'award': salary.award, 'salary_hand': salary.salary_hand}
-                # person = {'person': field, 'pk': worker.pk}
                 data.append({'pk': worker.pk, 'person': field})
-            output.append({'fields': {'days_norm': salary_common.days_norm_common, 'time_norm': salary_common.time_norm_common, 'persons': data}})
+            output.append({'fields': {'days_norm': salary_common.days_norm_common,
+                                      'time_norm': salary_common.time_norm_common, 'persons': data}})
             return HttpResponse(json.dumps(output))
         if request.method == "POST":
             person = request.POST.get('person')
@@ -346,9 +356,13 @@ def salary(request):
             year = request.POST.get('year')
             month = request.POST.get('month')
             try:
+                salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
+            except SalaryCommon.DoesNotExist:
+                salary_common = SalaryCommon.objects.create()
+            try:
                 salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
             except SalaryIndividual.DoesNotExist:
-                salary = SalaryIndividual.objects.create(person=person)
+                salary = SalaryIndividual.objects.create(person=person, common_part=salary_common)
             salary.time_from_report = get_time_from_reports(person)
             form = SalaryIndividualForm(request.POST, instance=salary)
             if form.is_valid():
@@ -377,3 +391,17 @@ def projects_for_reports(request):
             for project in projects:
                 data.append({'pk': project.pk, 'project_name': project.name})
             return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def change_common_salary(request):
+    user = get_user_jwt(request)
+    if user:
+        year = request.POST.get('year')
+        month = request.POST.get('month')
+        salary = SalaryCommon.objects.get(date__year=year, date__month=month)
+        form = SalaryCommonForm(request.POST, instance=salary)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("Success")
+        return HttpResponse("Fail")
