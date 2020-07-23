@@ -115,7 +115,6 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
-    t = datetime.now()
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -126,13 +125,15 @@ def all_report_view(request, user_id='default'):
                 data = []
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
+                              'status': report.status, 'project_pk': report.project.pk}
                     data.append({'pk': report.pk, 'fields': fields})
                 return HttpResponse(json.dumps(data))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
-                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year,
-                                                project=project_pk)
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user.id, date__year=year,
+                                                date__month=month, project=project_pk)
                 if reports:
                     return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
@@ -168,6 +169,9 @@ def report_view(request, report_id, user_id='default'):
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
             elif request.method == "POST":
+                project_pk = request.POST.get('project')
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
@@ -314,7 +318,10 @@ def logs(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            data = serializers.serialize('json', Logging.objects.all())
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            logs = Logging.objects.filter(date__year=year, date__month=month)
+            data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
 
