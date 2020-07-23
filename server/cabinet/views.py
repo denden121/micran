@@ -115,7 +115,6 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
-    t = datetime.now()
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -131,8 +130,10 @@ def all_report_view(request, user_id='default'):
                 return HttpResponse(json.dumps(data))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
-                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year,
-                                                project=project_pk)
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user.id, date__year=year,
+                                                date__month=month, project=project_pk)
                 if reports:
                     return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
@@ -168,6 +169,13 @@ def report_view(request, report_id, user_id='default'):
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
             elif request.method == "POST":
+                project_pk = request.POST.get('project')
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user.id, date__year=year,
+                                                date__month=month, project=project_pk)
+                if reports:
+                    return HttpResponse("Already have a report")
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
