@@ -125,7 +125,7 @@ def all_report_view(request, user_id='default'):
                 data = []
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
+                              'status': report.status, 'project_pk': report.project.pk}
                     data.append({'pk': report.pk, 'fields': fields})
                 return HttpResponse(json.dumps(data))
             elif request.method == "POST":
@@ -172,10 +172,6 @@ def report_view(request, report_id, user_id='default'):
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
                 year, month, day = date.split('-')
-                reports = Report.objects.filter(creator_id=user.id, date__year=year,
-                                                date__month=month, project=project_pk)
-                if reports:
-                    return HttpResponse("Already have a report")
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
@@ -322,7 +318,10 @@ def logs(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            data = serializers.serialize('json', Logging.objects.all())
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            logs = Logging.objects.filter(date__year=year, date__month=month)
+            data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
 
