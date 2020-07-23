@@ -99,7 +99,7 @@ const Reports =(props)=>{
                                     </div>
                                     <hr className="normal"/>
                                     <label className="Label2">
-                                        <button onClick={props.saveReport} className="btn btn-success">
+                                        <button onClick={props.OnClickSaveReport} className="btn btn-success">
                                             Сохранить</button>
                                     </label>
                                 </div>

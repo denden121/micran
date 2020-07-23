@@ -13,14 +13,14 @@ class SendReport extends React.Component{
         this.loadReport()
         this.loadListProject()
     }
-    saveReport = async ()=>{
+    OnClickSaveReport = async ()=>{
         let time = document.querySelector('#time_project').value
         let body = document.querySelector('#body_report').value
         let token = localStorage.getItem('token')
         let project = document.querySelector('#name_project').value
 
         const date = localStorage.getItem('date').split(' ')
-        if(!this.state.select_report){
+        if(this.state.select_report){
             let myHeaders = new Headers()
             myHeaders.append("Authorization", token)
             let formdata = new FormData();
@@ -39,7 +39,6 @@ class SendReport extends React.Component{
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
-            alert('Отчет Сохранен')
         }
         else{
             let myHeaders = new Headers()
@@ -161,7 +160,7 @@ class SendReport extends React.Component{
                         onClickCard = {this.onClickCard}
                         listProject = {this.state.reports}
                         listNameFrojects = {this.state.name_projects}
-                        saveReport = {this.saveReport}
+                        OnClickSaveReport = {this.OnClickSaveReport}
                         onClickNewProject = {this.onClickNewProject}
                         onChangeSelect = {this.onChangeSelect}
                     />
