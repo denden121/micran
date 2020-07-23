@@ -125,7 +125,7 @@ def all_report_view(request, user_id='default'):
                 data = []
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
+                              'status': report.status, 'project_pk': report.project.pk}
                     data.append({'pk': report.pk, 'fields': fields})
                 return HttpResponse(json.dumps(data))
             elif request.method == "POST":
@@ -322,7 +322,10 @@ def logs(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            data = serializers.serialize('json', Logging.objects.all())
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            logs = Logging.objects.filter(date__year=year, date__month=month)
+            data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
 
