@@ -6,6 +6,7 @@ import {Redirect,Switch} from 'react-router-dom'
 import Main from "./ Components/ PersonCabinet/MainPage/Main"
 import Registration from "./ Components/Registration/registration";
 import ReactDOM from "react-dom";
+import rend from "./index";
 
 class  App extends Component {
     state = {
@@ -13,14 +14,15 @@ class  App extends Component {
     }
     //обработка кнопки для авторизации
     authHandler = async () => {
+        //написать валидацию и изменить окно неправильных данных
+        //получение побличного ip для логирования
         const publicIp = require('public-ip');
         const ip = String(await publicIp.v4())
-
+        //сбор данных для отправки на авторизацию
         let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         const login = document.getElementById("input-login").value
         const password = document.getElementById("input-password").value
-
         let urlencoded = new URLSearchParams();// Добавляем параметры запросы
         urlencoded.append("username", login);
         urlencoded.append("password", password);
@@ -38,10 +40,11 @@ class  App extends Component {
             .then(response => response.json())
             .then(result => localStorage.setItem('token', result.access))
             .catch(error => localStorage.setItem('token', ''));
-
+        //проверка верны данные или нет
         if (localStorage.getItem('token') == '') {
             alert('incorrect')
         } else {
+            //проверка прав
             myHeaders = new Headers();
             myHeaders.append("Authorization",localStorage.getItem('token'));
             requestOptions = {
@@ -54,6 +57,7 @@ class  App extends Component {
                 .then(response => response.text())
                 .then(result => localStorage.setItem('admin',result))
                 .catch(error => console.log('error'));
+            //проверка зарегистрирован пользователь или нет
             url = "http://127.0.0.1:8000/check/"
             await fetch(url, requestOptions)
                 .then(response => response.text())
@@ -61,17 +65,12 @@ class  App extends Component {
                 .catch(error => console.log('error'));
             const time = new Date()
             localStorage.setItem('date',`${time.getMonth()+1} ${time.getFullYear()}`)
-            ReactDOM.render(
-                <BrowserRouter>
-                    <React.StrictMode>
-                        <App/>
-                    </React.StrictMode>
-                </BrowserRouter>,
-                document.getElementById('root')
-            );
+            rend()
         }
     }
+    //функция отправки регистрации
     sendReg = async ()=> {
+        //написать валидацию
         const token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -95,6 +94,7 @@ class  App extends Component {
         localStorage.setItem('checkReg', 'True')
     }
     render(){
+
         const funcPersArea = () => {
             let token = localStorage.getItem('token')
             if (typeof token==='string' && token!=='') {

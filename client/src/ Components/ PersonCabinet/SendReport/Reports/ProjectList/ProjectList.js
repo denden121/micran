@@ -6,7 +6,7 @@ const Reports = (props) =>{
     // console.log('reports',props)
     let result = Array.from(props.listProject)
     return (result.map((cardReport, index)=>{
-        // console.log(cardReport)
+
         return (
             <div onClick = {() => {props.onClickCard(index)}} className = "border">
                 <div className="text-left"><strong>№{index+1}</strong> {cardReport.fields.project_name}</div>

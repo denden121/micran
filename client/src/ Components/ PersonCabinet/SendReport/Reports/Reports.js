@@ -17,7 +17,6 @@ const NameProjects = (props) =>{
 }
 
 const Reports =(props)=>{
-    // console.log('report props',props)
     return(
         <div className="container-fluid">
             <div className="report">
@@ -25,7 +24,7 @@ const Reports =(props)=>{
                     <div className="col-md-5">
                         <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
-                                <label className="col-sm-1" className="Label1"><strong>Отчет о проделанной работе</strong></label>
+
                                 <label className="col-sm-1" className="text-left"><strong>Список проектов</strong><hr className="normal"/></label>
                                 <ProjectList
                                     onClickDeleteCard = {props.onClickDeleteCard}
