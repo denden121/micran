@@ -172,10 +172,6 @@ def report_view(request, report_id, user_id='default'):
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
                 year, month, day = date.split('-')
-                reports = Report.objects.filter(creator_id=user.id, date__year=year,
-                                                date__month=month, project=project_pk)
-                if reports:
-                    return HttpResponse("Already have a report")
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
