@@ -12,7 +12,8 @@ class ViewLogs extends React.Component{
             headers: myHeaders,
             redirect: 'follow'
         };
-        const url = "http://127.0.0.1:8000/admin/logs/"
+        const date = localStorage.getItem('date').split(' ')
+        const url = `http://127.0.0.1:8000/admin/logs/?month=${date[0]}&year=${date[1]}`
         await fetch(url, requestOptions)
             .then(response => response.json())
             .then(result => this.setState({logs:result}))
