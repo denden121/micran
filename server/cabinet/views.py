@@ -126,7 +126,7 @@ def all_report_view(request, user_id='default'):
                 if salary:
                     data = [{'time_norm': salary[0].time_norm_common}]
                 else:
-                    data = []
+                    data = [{'time_norm': ''}]
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
