@@ -42,21 +42,21 @@ const Reports =(props)=>{
                         <div className="row no-gutters border rounded overflow-hidden flex-sm-row mb-4 h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="total">
-                                    Итого
+                                    Итого {props.total}
                                 </div>
                             </div>
                         </div>
                         <div className="row no-gutters border rounded overflow-hidden flex-sm-row mb-4 h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="total">
-                                    Время по карточке
+                                    Время по карточке {props.timeCard}
                                 </div>
                             </div>
                         </div>
                         <div className="row no-gutters border rounded overflow-hidden flex-sm-row mb-4 h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="total">
-                                    Норма
+                                    Норма {props.timeNorm}
                                 </div>
                             </div>
                         </div>
