@@ -13,14 +13,14 @@ class SendReport extends React.Component{
         this.loadReport()
         this.loadListProject()
     }
-    saveReport = async ()=>{
+    OnClickSaveReport = async ()=>{
         let time = document.querySelector('#time_project').value
         let body = document.querySelector('#body_report').value
         let token = localStorage.getItem('token')
         let project = document.querySelector('#name_project').value
 
         const date = localStorage.getItem('date').split(' ')
-        if(!this.state.select_report){
+        if(this.state.select_report){
             let myHeaders = new Headers()
             myHeaders.append("Authorization", token)
             let formdata = new FormData();
@@ -39,7 +39,7 @@ class SendReport extends React.Component{
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
-            alert('Отчет Сохранен')
+            rend()
         }
         else{
             let myHeaders = new Headers()
@@ -62,9 +62,8 @@ class SendReport extends React.Component{
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
             this.loadReport()
-            alert('Отчет отправлен')
         }
-
+        console.log(this.state)
     }
     loadReport = async () =>{
         let token = localStorage.getItem('token')
@@ -84,6 +83,11 @@ class SendReport extends React.Component{
             .then(response => response.json())
             .then(result => this.setState({reports:result,}))
             .catch(error => console.log('error', error));
+        let temp = this.state.reports.length
+        if (temp) {
+            this.setState({select_report: this.state.reports[temp - 1].pk})
+        }
+        console.log(this.state)
         // console.log(this.state.report)
         // console.log('state',this.state.report)
         // console.log('id',this.state.id)
@@ -148,6 +152,10 @@ class SendReport extends React.Component{
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
         this.loadReport()
+        this.setState({select_report:''})
+        document.querySelector('#time_project').value = ''
+        document.querySelector('#body_report').value = ''
+        document.querySelector('#name_project').value = ''
         // console.log('state',this.state.report)
         // console.log('id',this.state.id)
     }
@@ -161,7 +169,7 @@ class SendReport extends React.Component{
                         onClickCard = {this.onClickCard}
                         listProject = {this.state.reports}
                         listNameFrojects = {this.state.name_projects}
-                        saveReport = {this.saveReport}
+                        OnClickSaveReport = {this.OnClickSaveReport}
                         onClickNewProject = {this.onClickNewProject}
                         onChangeSelect = {this.onChangeSelect}
                     />
