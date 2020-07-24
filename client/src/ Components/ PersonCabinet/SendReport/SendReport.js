@@ -86,6 +86,9 @@ class SendReport extends React.Component{
         let temp = this.state.reports.length
         if (temp) {
             this.setState({select_report: this.state.reports[temp - 1].pk})
+            document.querySelector('#time_project').value = this.state.reports[temp-1].fields.hour
+            document.querySelector('#body_report').value = this.state.reports[temp-1].fields.text
+            document.querySelector('#name_project').value = this.state.reports[temp-1].fields.project_name
         }
         console.log(this.state)
         // console.log(this.state.report)
