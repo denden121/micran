@@ -123,15 +123,14 @@ def all_report_view(request, user_id='default'):
                 reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
                                                 date__year=request.GET['year'])
                 salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
-                if salary:
-                    data = [{'time_norm': salary[0].time_norm_common}]
-                else:
-                    data = [{'time_norm': ''}]
+                data = []
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
                     data.append({'pk': report.pk, 'fields': fields})
-                return HttpResponse(json.dumps(data))
+                if salary:
+                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'reports': data}))
+                return HttpResponse(json.dumps({'time_norm': '', 'reports': data}))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
