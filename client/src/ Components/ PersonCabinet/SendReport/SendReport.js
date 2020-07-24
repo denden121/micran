@@ -81,7 +81,7 @@ class SendReport extends React.Component{
         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
         await fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({reports:result,}))
+            .then(result => console.log(result))
             .catch(error => console.log('error', error));
         let temp = this.state.reports.length
         if (temp) {
