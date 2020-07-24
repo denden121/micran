@@ -122,7 +122,11 @@ def all_report_view(request, user_id='default'):
             if request.method == "GET":
                 reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
                                                 date__year=request.GET['year'])
-                data = []
+                salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
+                if salary:
+                    data = [{'time_norm': salary[0].time_norm_common}]
+                else:
+                    data = []
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
