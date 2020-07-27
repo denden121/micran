@@ -177,7 +177,7 @@ def report_view(request, report_id, user_id='default'):
                 year, month, day = date.split('-')
                 reports = Report.objects.filter(creator_id=user.id, date__year=year,
                                                 date__month=month, project=project_pk)
-                if reports:`
+                if reports:
                     return HttpResponse("Already have a report")
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
@@ -394,11 +394,14 @@ def salary_individual(request):
             person = Profile.objects.get(user=user)
             year = request.GET.get('year')
             month = request.GET.get('month')
-            salary = SalaryIndividual.objects.filter(person=person, date__year=year, date__month=month)
-            data = serializers.serialize('json', salary, fields=('salary_hand', 'days_off', 'award', 'days_worked',
-                                                                 'vacation', 'sick_leave', 'time_from_report',
-                                                                 'time_orion', 'time_norm', 'time_off', 'plan_salary'))
-            return HttpResponse(data)
+            salary = get_object_or_404(SalaryIndividual, person=person, date__year=year, date__month=month)
+            data = {'salary_hand': salary.salary_hand, 'day_off': salary.day_off, 'award': salary.award,
+                    'days_worked': salary.days_worked,
+                    'vacation': salary.vacation, 'sick_leave': salary.sick_leave,
+                    'time_from_report': salary.time_from_report,
+                    'time_orion': salary.time_orion, 'time_norm': salary.time_norm, 'time_off': salary.time_off,
+                    'plan_salary': salary.plan_salary}
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
