@@ -6,47 +6,40 @@ import rend from "../../../index";
 class SendReport extends React.Component{
     state= {
         reports:{},
-        name_projects:{}
+        name_projects:{},
+        select_report:''
     }
     componentDidMount(){
         this.loadReport()
         this.loadListProject()
     }
-    isProjectList=(nameProject)=> {
-        for (let project of this.state.reports) {
-            // console.log(project.fields.project_pk,nameProject)
-            if (project.fields.project_pk == nameProject) {
-                return project.pk
-            }
-        }
-        return
-    }
-    saveReport = async ()=>{
+    OnClickSaveReport = async ()=>{
         let time = document.querySelector('#time_project').value
         let body = document.querySelector('#body_report').value
         let token = localStorage.getItem('token')
         let project = document.querySelector('#name_project').value
-        console.log(this.state.reports)
-        let pk =  this.isProjectList(project)
-        if(pk){
+
+        const date = localStorage.getItem('date').split(' ')
+        if(this.state.select_report){
             let myHeaders = new Headers()
             myHeaders.append("Authorization", token)
             let formdata = new FormData();
             formdata.append("text", body)
             formdata.append("hour ", time)
             formdata.append("project", project)
+            formdata.append('date',`${date[1]}-${date[0]}-3`)
             let requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
                 body: formdata,
                 redirect: 'follow'
             };
-            let url = `http://127.0.0.1:8000/cabinet/report/${pk}`
+            let url = `http://127.0.0.1:8000/cabinet/report/${this.state.select_report}`
             await fetch(url, requestOptions)
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
-            alert('Отчет Сохранен')
+            rend()
         }
         else{
             let myHeaders = new Headers()
@@ -55,6 +48,7 @@ class SendReport extends React.Component{
             formdata.append("text", body)
             formdata.append("hour ", time)
             formdata.append("project", project)
+            formdata.append('date',`${date[1]}-${date[0]}-3`)
             let requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
@@ -68,9 +62,8 @@ class SendReport extends React.Component{
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
             this.loadReport()
-            alert('Отчет отправлен')
         }
-
+        console.log(this.state)
     }
     loadReport = async () =>{
         let token = localStorage.getItem('token')
@@ -90,6 +83,11 @@ class SendReport extends React.Component{
             .then(response => response.json())
             .then(result => this.setState({reports:result,}))
             .catch(error => console.log('error', error));
+        let temp = this.state.reports.length
+        if (temp) {
+            this.setState({select_report: this.state.reports[temp - 1].pk})
+        }
+        console.log(this.state)
         // console.log(this.state.report)
         // console.log('state',this.state.report)
         // console.log('id',this.state.id)
@@ -123,20 +121,19 @@ class SendReport extends React.Component{
         // }
     }
     onClickCard = (index) =>{
-        // console.log('index',index)
         if (this.state.reports[index]) {
             let dateReport = this.state.reports[index].fields
             document.querySelector('#time_project').value = dateReport.hour
             document.querySelector('#body_report').value = dateReport.text
-            // console.log(document.querySelector('#name_project').value)
             document.querySelector('#name_project').value = dateReport.project_pk
-            // console.log(document.querySelector('#name_project').value)
+            this.setState({select_report:this.state.reports[index].pk})
         }
     }
     onClickNewProject = () =>{
         document.querySelector('#time_project').value = ''
         document.querySelector('#body_report').value = ''
         document.querySelector('#name_project').value = ''
+        this.setState({select_report:''})
     }
     onClickDeleteCard =async (index) =>{
         // console.log('index',index)
@@ -155,20 +152,24 @@ class SendReport extends React.Component{
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
         this.loadReport()
+        this.setState({select_report:''})
+        document.querySelector('#time_project').value = ''
+        document.querySelector('#body_report').value = ''
+        document.querySelector('#name_project').value = ''
         // console.log('state',this.state.report)
         // console.log('id',this.state.id)
     }
     render() {
-        console.log(this.state)
         return (
             <div>
+                <label><strong>Отчет о проделанной работе</strong></label>
                 <div className container-fluid>
                     <Reports
                         onClickDeleteCard = {this.onClickDeleteCard}
                         onClickCard = {this.onClickCard}
                         listProject = {this.state.reports}
                         listNameFrojects = {this.state.name_projects}
-                        saveReport = {this.saveReport}
+                        OnClickSaveReport = {this.OnClickSaveReport}
                         onClickNewProject = {this.onClickNewProject}
                         onChangeSelect = {this.onChangeSelect}
                     />

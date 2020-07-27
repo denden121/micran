@@ -3,6 +3,7 @@ import "./Norma.css"
 
 const Norma = (props) => {
     console.log('props',props)
+    // console.log(document.getElementById('timenorm').value)
     return(
         <div className="norma">
             <div className="row no-gutters flex-md-row mb-4  h-md-250 position-relative">
@@ -12,7 +13,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input onBlur={props.onBlurNormDay} type="text" className="form-control norm_day"  defaultValue={props.normDays}/>
+                            <input id='timenorm' onBlur={props.onBlurNormDay} type="text" className="form-control"  defaultValue={props.normDays}/>
                         </div>
                     </div>
                 </div>
@@ -22,7 +23,7 @@ const Norma = (props) => {
                     </div>
                     <div className="card-body text-left">
                         <div className="input-group">
-                            <input onBlur={props.onBlurNormHours} type="text" className="form-control" defaultValue={props.normTime} />
+                            {props.normTime}
                         </div>
                     </div>
                 </div>

@@ -2,33 +2,32 @@ import React from 'react'
 
 
 const Profit = (props) =>{
-    // let temp = Array.from(props.listSalary)
-    // temp = temp.map((salaries,index) =>{
-        return(
+    if(props.salary.fields) {
+        // console.log(props.salary.fields)
+        // let temp = Array.from(props.listSalary)
+        // temp = temp.map((salaries,index) =>{
+        return (
             <tbody>
-                <tr>
-                    <th scope="row" className="text-left">Плановая ЗП</th>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <th scope="row" className="text-left">Премия</th>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <th scope="row" className="text-left">На руки</th>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <th scope="row" className="text-left">ПНачислено</th>
-                    <td>1</td>
-                </tr>
-            </tbody>         
+            <tr>
+                <th scope="row" className="text-left">Плановая ЗП</th>
+                <td>{props.salary.fields.plan_salary}</td>
+            </tr>
+            <tr>
+                <th scope="row" className="text-left">Премия</th>
+                <td>{props.salary.fields.award}</td>
+            </tr>
+            <tr>
+                <th scope="row" className="text-left">На руки</th>
+                <td>{props.salary.fields.salary_hand}</td>
+            </tr>
+            <tr>
+                <th scope="row" className="text-left">ПНачислено</th>
+                <td>{props.salary.fields.salary_hand + props.salary.fields.salary_hand}</td>
+            </tr>
+            </tbody>
         )
-    
-    // console.log('result',temp1)
-    // return(
-    //     temp
-    // )
+    }
+    return ''
 }
 
 export default Profit

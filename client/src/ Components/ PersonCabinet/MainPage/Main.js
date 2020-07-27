@@ -82,8 +82,8 @@ class Main extends Component{
 
                 <div className="Data">
                     <Switch>
-                        <Route path='/cabinet/' exact component = {PersonData}/>
-                        <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
+                        <Route path='/cabinet/' exact component = {SendReport}/>
+                        <Route path='/cabinet/person' exact  component = {PersonData}/>
                         <Route path='/cabinet/salary' exact  component = {Salary}/>
                         <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>

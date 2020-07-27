@@ -115,7 +115,6 @@ def register_view(request):
 
 @csrf_exempt
 def all_report_view(request, user_id='default'):
-    t = datetime.now()
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = Profile.objects.get(user=user)
@@ -123,16 +122,21 @@ def all_report_view(request, user_id='default'):
             if request.method == "GET":
                 reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
                                                 date__year=request.GET['year'])
+                salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
                 data = []
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
+                              'status': report.status, 'project_pk': report.project.pk}
                     data.append({'pk': report.pk, 'fields': fields})
-                return HttpResponse(json.dumps(data))
+                if salary:
+                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'reports': data}))
+                return HttpResponse(json.dumps({'time_norm': '', 'reports': data}))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
-                reports = Report.objects.filter(creator_id=user.id, date__month=t.month, date__year=t.year,
-                                                project=project_pk)
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user.id, date__year=year,
+                                                date__month=month, project=project_pk)
                 if reports:
                     return HttpResponse("Already have a report")
                 form = ReportForm(request.POST)
@@ -168,6 +172,13 @@ def report_view(request, report_id, user_id='default'):
                 data = serializers.serialize('json', report)
                 return HttpResponse(data)
             elif request.method == "POST":
+                project_pk = request.POST.get('project')
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user.id, date__year=year,
+                                                date__month=month, project=project_pk)
+                if reports:`
+                    return HttpResponse("Already have a report")
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
@@ -299,7 +310,6 @@ def groups_with_permission(request):
             users = []
             for profile in profiles:
                 users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                fields = {'name': group.name, 'users': users, 'description': group.description}
             if users:
                 fields = {'name': group.name, 'users': users, 'description': group.description}
                 users = []
@@ -315,7 +325,10 @@ def logs(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            data = serializers.serialize('json', Logging.objects.all())
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            logs = Logging.objects.filter(date__year=year, date__month=month)
+            data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
 
@@ -374,6 +387,21 @@ def salary(request):
 
 
 @csrf_exempt
+def salary_individual(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            person = Profile.objects.get(user=user)
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            salary = SalaryIndividual.objects.filter(person=person, date__year=year, date__month=month)
+            data = serializers.serialize('json', salary, fields=('salary_hand', 'days_off', 'award', 'days_worked',
+                                                                 'vacation', 'sick_leave', 'time_from_report',
+                                                                 'time_orion', 'time_norm', 'time_off', 'plan_salary'))
+            return HttpResponse(data)
+
+
+@csrf_exempt
 def workers_departament(request):
     user = get_user_jwt(request)
     if user:
@@ -401,7 +429,9 @@ def change_common_salary(request):
     if user:
         year = request.POST.get('year')
         month = request.POST.get('month')
+        days = request.POST.get('days_norm_common')
         salary = SalaryCommon.objects.get(date__year=year, date__month=month)
+        salary.time_norm_common = int(days) * 8
         form = SalaryCommonForm(request.POST, instance=salary)
         if form.is_valid():
             form.save()

@@ -38,7 +38,7 @@ class Action(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=30, blank=True, unique=True)
     description = models.CharField(max_length=500, blank=True)
     available_actions = models.ManyToManyField(Action, blank=True)
 
@@ -92,7 +92,7 @@ class Report(models.Model):
     project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.PROTECT)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
-    date = models.DateField(blank=True, auto_now_add=True)
+    date = models.DateField(blank=True)
 
     # def __str__(self):
         # return self.name
