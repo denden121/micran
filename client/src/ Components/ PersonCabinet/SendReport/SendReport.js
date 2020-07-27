@@ -88,19 +88,20 @@ class SendReport extends React.Component{
                                                 timeNorm : result.time_norm}))
             .catch(error => console.log('error', error));
         let temp = this.state.reports.length
-        if (temp) {
-            let  tempTime = this.state.reports[temp-1].fields.hour
-            this.setState({select_report: this.state.reports[temp - 1].pk,timeCard:tempTime})
-            document.querySelector('#time_project').value = this.state.reports[temp-1].fields.hour
-            document.querySelector('#body_report').value = this.state.reports[temp-1].fields.text
-            document.querySelector('#name_project').value = this.state.reports[temp-1].fields.project_pk
-        }
-        console.log(this.state)
         let total = 0
-        for (let i of this.state.reports){
-            total += i.fields.hour
+        if (temp) {
+            let tempTime = this.state.reports[temp - 1].fields.hour
+            this.setState({select_report: this.state.reports[temp - 1].pk, timeCard: tempTime})
+            document.querySelector('#time_project').value = this.state.reports[temp - 1].fields.hour
+            document.querySelector('#body_report').value = this.state.reports[temp - 1].fields.text
+            document.querySelector('#name_project').value = this.state.reports[temp - 1].fields.project_pk
+            console.log(this.state)
+
+            for (let i of this.state.reports) {
+                total += i.fields.hour
+            }
         }
-        this.setState({total:total})
+        this.setState({total: total})
         // console.log(this.state.report)
         console.log('state',this.state)
         // console.log('id',this.state.id)

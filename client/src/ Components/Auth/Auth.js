@@ -18,12 +18,12 @@ const Auth =(props)=>{
                     <input type="password" className="form-control form-control-lg" id="input-password"/>
                 </div>
 
-                <div className="checkBox" align="left">
-                    <label className="checkbox">
-                        <input type="checkbox"/>
-                        Запомнить меня
-                    </label>
-                </div>
+                {/*<div className="checkBox" align="left">*/}
+                {/*    <label className="checkbox">*/}
+                {/*        <input type="checkbox"/>*/}
+                {/*        Запомнить меня*/}
+                {/*    </label>*/}
+                {/*</div>*/}
                 <button onClick={props.authHandler} type="submit" className="btn btn-lg btn-primary">Войти</button>
             </div>
         </div>

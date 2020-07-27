@@ -31,6 +31,18 @@ const Month = {
     'Окт':10,
     'Ноя':11,
     'Дек':12,
+    '1':'Янв',
+    '2':'Фев',
+    '3':'Март',
+    '4':'Апр',
+    '5':'Май',
+    '6':'Июнь',
+    '7':'Июль',
+    '8':'Авг',
+    '9':'Сен',
+    '10':'Окт',
+    '11':'Ноя',
+    '12':'Дек',
 }
 
 class Main extends Component{
@@ -41,7 +53,7 @@ class Main extends Component{
     }
     onClickDate = (event) =>{
         let month = event.target.textContent
-        month  = Month[month]
+        month  = Month[month] ?Month[month]:localStorage.getItem('date').split(' ')[0]
         const temp_date=  localStorage.getItem('date').split(' ')[1]
         console.log(temp_date)
         localStorage.setItem('date',`${month} ${temp_date}`)
