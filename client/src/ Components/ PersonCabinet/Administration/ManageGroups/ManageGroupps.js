@@ -40,6 +40,7 @@ class ManageGroups extends React.Component{
                         <Groups listGroup = {this.state.groups}/>
                     </tbody>
                </table>
+                   <button onClick={()=>{document.location ='/cabinet/admin/add_groups'}}>Создать новую группу</button>
                </div>
             </div>
         )
