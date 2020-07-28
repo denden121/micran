@@ -7,7 +7,10 @@ class SendReport extends React.Component{
     state= {
         reports:{},
         name_projects:{},
-        select_report:''
+        select_report:'',
+        timeNorm:'',
+        timeCard:'',
+        total:''
     }
     componentDidMount(){
         this.loadReport()
@@ -81,15 +84,26 @@ class SendReport extends React.Component{
         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
         await fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({reports:result,}))
+            .then(result => this.setState({reports :result.reports,
+                                                timeNorm : result.time_norm}))
             .catch(error => console.log('error', error));
         let temp = this.state.reports.length
+        let total = 0
         if (temp) {
-            this.setState({select_report: this.state.reports[temp - 1].pk})
+            let tempTime = this.state.reports[temp - 1].fields.hour
+            this.setState({select_report: this.state.reports[temp - 1].pk, timeCard: tempTime})
+            document.querySelector('#time_project').value = this.state.reports[temp - 1].fields.hour
+            document.querySelector('#body_report').value = this.state.reports[temp - 1].fields.text
+            document.querySelector('#name_project').value = this.state.reports[temp - 1].fields.project_pk
+            console.log(this.state)
+
+            for (let i of this.state.reports) {
+                total += i.fields.hour
+            }
         }
-        console.log(this.state)
+        this.setState({total: total})
         // console.log(this.state.report)
-        // console.log('state',this.state.report)
+        console.log('state',this.state)
         // console.log('id',this.state.id)
     }
     loadListProject = async () =>{
@@ -126,7 +140,8 @@ class SendReport extends React.Component{
             document.querySelector('#time_project').value = dateReport.hour
             document.querySelector('#body_report').value = dateReport.text
             document.querySelector('#name_project').value = dateReport.project_pk
-            this.setState({select_report:this.state.reports[index].pk})
+
+            this.setState({select_report:this.state.reports[index].pk,timeCard:dateReport.hour})
         }
     }
     onClickNewProject = () =>{
@@ -172,6 +187,9 @@ class SendReport extends React.Component{
                         OnClickSaveReport = {this.OnClickSaveReport}
                         onClickNewProject = {this.onClickNewProject}
                         onChangeSelect = {this.onChangeSelect}
+                        timeCard = {this.state.timeCard}
+                        total = {this.state.total}
+                        timeNorm = {this.state.timeNorm}
                     />
                 </div>
             </div>
