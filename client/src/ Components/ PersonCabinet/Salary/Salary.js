@@ -27,7 +27,7 @@ class Salary extends React.Component {
         const url = `http://127.0.0.1:8000/salary/individual/?month=${date[0]}&year=${date[1]}`
         await fetch(url, requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({salary: result[0]}))
+            .then(result => this.setState({salary: result}))
             .catch(error => console.log('error', error))
         console.log('state',this.state.salary)
     }
@@ -36,29 +36,11 @@ class Salary extends React.Component {
             <div className="container-fluid">
                 <h3 className="text-left">Расчетный листок</h3>
                 <br/>
-                {/* <h5 className="text-left">Коэффициенты</h5>
-                <table className="koeff table-bordered">
-                    <Koeff listGroup = {this.state.salaries}/>
-                </table>
-                <br/>
-                <h5 className="text-left">Стимулирующие надбавки</h5>
-                <table className="stimull table-bordered">
-                    <Stimul listGroup = {this.state.salaries}/>
-                </table>
-                <br/> */}
                 <h5 className="text-left">Начисления</h5>
                 <table className="stimull table-bordered">
                     <Profit salary = {this.state.salary}/>
                 </table>
                 <br/>
-                {/* <h5 className="text-left">Комментарий руководителя</h5>
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <Comment/>
-                        </div>
-                    </div>
-                </div> */}
                 <h5 className="text-left">Итого</h5>
                 <div className="row">
                     <div className="col-md-12">

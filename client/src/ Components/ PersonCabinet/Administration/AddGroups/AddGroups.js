@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 class AddGroups extends React.Component {
     state = {
@@ -50,10 +52,18 @@ class AddGroups extends React.Component {
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
+        document.location = 'view_groups'
         alert('группа создана')
     }
 
+
     render() {
+        const options = [
+            { value: 'chocolate', label: 'Chocolate' },
+            { value: 'strawberry', label: 'Strawberry' },
+            { value: 'vanilla', label: 'Vanilla' }
+        ]
+        const animatedComponents = makeAnimated();
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -67,44 +77,17 @@ class AddGroups extends React.Component {
                             <div className="form-check">
                                 <Activity actions={this.state.actions}/>
                             </div>
-                            {/*<div className="row">*/}
-                            {/*    <label className="col-md-6"><strong>1.Пользовательский раздел</strong></label>*/}
-                            {/*</div>*/}
-                            {/*<div className="row">*/}
-                            {/*    <div className="col-md-9" align="left">*/}
-                            {/*        <div className="form-check">*/}
-                            {/*            <label className="checkbox">*/}
-                            {/*                <input type="checkbox" className="form-check-input"/>*/}
-                            {/*                Доступ в пользовательский раздел (код 1)*/}
-                            {/*            </label>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                            {/*<div className="row">*/}
-                            {/*    <label className="col-md-6"><strong>2.Администраторский раздел</strong></label>*/}
-                            {/*</div>*/}
-                            {/*<div className="row">*/}
-                            {/*    <div className="col-md-9" align="left">*/}
-                            {/*        <div className="form-check">*/}
-                            {/*            <label className="checkbox">*/}
-                            {/*                <input type="checkbox" className="form-check-input"/>*/}
-                            {/*                Доступ в администраторский раздел (код 2)*/}
-                            {/*            </label>*/}
-                            {/*            <label className="checkbox">*/}
-                            {/*                <input type="checkbox" className="form-check-input"/>*/}
-                            {/*                Доступ ко всему департаменту (код 44)*/}
-                            {/*            </label>*/}
-                            {/*            <label className="checkbox">*/}
-                            {/*                <input type="checkbox" className="form-check-input"/>*/}
-                            {/*                Доступ по всему своему департменту (код 45)*/}
-                            {/*            </label>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
+                            <Select
+                                closeMenuOnSelect={false}
+                                components={animatedComponents}
+                                isMulti
+                                options={options}
+                            />
                             <br/>
                             <button className="btn btn-sm btn-primary groupps" type='submit'
                                     onClick={this.createGroup}>Отправить
                             </button>
+                            <button onClick={()=>{document.location='view_groups'}}>Назад</button>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,8 @@ import React from 'react'
 
 
 const Total = (props) =>{
-    if(props.salary.fields) {
+    console.log('props total', props)
+    if(props.salary) {
         return(
             <div className="row no-gutters  overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                 <div className="prof card col-md-4">
@@ -11,7 +12,7 @@ const Total = (props) =>{
                         Начислено
                     </div>
                     <div className="card-body text-left">
-                        {props.salary.fields.award + props.salary.fields.salary_hand}
+                        {props.salary.award + props.salary.salary_hand}
                     </div>
                 </div>
                 <div className="prof card col-md-4">
@@ -19,7 +20,7 @@ const Total = (props) =>{
                          На руки
                     </div>
                     <div className="card-body text-left">
-                        {props.salary.fields.salary_hand}
+                        {props.salary.salary_hand}
                     </div>
                 </div>
                  <div className="prof card col-md-4">
@@ -27,7 +28,7 @@ const Total = (props) =>{
                         Налог ДФЛ(13%)
                     </div>
                 <div className="card-body text-left">
-                        {(props.salary.fields.award + props.salary.fields.salary_hand)*0.13}
+                        {(props.salary.award + props.salary.salary_hand)*0.13}
                  </div>
                 </div>
             </div>

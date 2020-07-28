@@ -37,12 +37,6 @@ const Navigation =(props)=>{
                                         </a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="http://localhost:3000/cabinet/admin/add_groups">
-                                            <span data-feather="layers"></span>
-                                            AddGroups
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
                                         <a className="nav-link" href="http://localhost:3000/cabinet/admin/play_roll">
                                             <span data-feather="layers"></span>
                                             Play_roll
