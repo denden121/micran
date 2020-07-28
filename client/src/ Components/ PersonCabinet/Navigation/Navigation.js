@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navigation.css'
-import {Icon} from 'antd';
+// import {MenuFoldOutlined} from '@ant-design/icons';
 import {NavLink} from 'react-router-dom'
 import Calendar from './Calendar/Calendar';
 import Month from "react-calendar/dist/umd/YearView/Month";
@@ -47,10 +47,10 @@ class Navigation extends Component{
                     <div className="nav">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         {localStorage.getItem('date')}
-                        <Icon
+                        {/* <MenuFoldOutlined
                         className="nav__icon"
                         type="menu-fold"
-                        onClick={this.handleClick.bind(this)}/>
+                        onClick={this.handleClick.bind(this)}/> */}
                         <div className="nav__body">
                         <div className="sidebar-sticky">
                             <Calendar onClickDate = {this.onClickDate}

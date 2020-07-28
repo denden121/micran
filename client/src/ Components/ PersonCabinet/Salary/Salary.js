@@ -27,7 +27,7 @@ class Salary extends React.Component {
         const url = `http://127.0.0.1:8000/salary/individual/?month=${date[0]}&year=${date[1]}`
         await fetch(url, requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({salary: result[0]}))
+            .then(result => this.setState({salary: result}))
             .catch(error => console.log('error', error))
         console.log('state',this.state.salary)
     }
