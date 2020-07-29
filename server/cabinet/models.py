@@ -109,6 +109,8 @@ class SalaryIndividual(models.Model):
     time_off = models.FloatField(blank=True, default = 0)
     plan_salary = models.FloatField(blank=True, default = 0)
     award = models.FloatField(blank=True, default = 0)
+    penalty = models.FloatField(blank=True, default = 0)
+    is_penalty = models.BooleanField(blank=True, default = 0)
     is_awarded = models.BooleanField(blank=True, default = 0)
     salary_hand = models.FloatField(blank=True, default = 0)
     person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
