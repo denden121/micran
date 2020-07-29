@@ -85,40 +85,41 @@ const NewProject =(props)=>{
                             <div className="input-group mb-3 input-group-sm">
                             <label className="napr col-sm-2 text-left" style={{fontSize:"16px"}}>Тип</label>
                                 <div className="checkbox checkbox-inline " >
-                                    <input type="form-check-input text-success "  type="checkbox" className="styled"/>
+                                    <input type="form-check-input text-success "  type="radio" className="styled" name="tip" value="vnutr"/>
                                         <label for="inlineCheckbox1" style={{border: "3px solid grey", background:"grey", color:"white", borderRadius:"7px", fontSize:"12px", marginLeft:"5px"}}> Внутр</label>
                                 </div>
+                               
                                 <div className="checkbox checkbox-inline " >
-                                    <input type="form-check-input text-success "  type="checkbox" className="styled" style={{marginLeft:"5px"}}/>
+                                    <input type="form-check-input text-success "  type="radio" className="styled" name="tip" value="vnesh" style={{marginLeft:"5px"}}/>
                                         <label for="inlineCheckbox1" style={{border: "3px solid #FF7A36", background:"#FF7A36", color:"white", borderRadius:"7px", fontSize:"12px", marginLeft:"5px"}}>Внеш</label>
                                 </div>
                             </div>
                             <div className="input-group mb-3 input-group-sm">
                             <label className="napr col-sm-2 text-left" style={{fontSize:"16px"}}>Состояние</label>
                                 <div className="checkbox checkbox-inline " >
-                                    <input type="form-check-input text-success "  type="checkbox" className="styled"/>
+                                    <input type="form-check-input text-success "  type="radio" className="styled" name="sost" value="open"/>
                                         <label for="inlineCheckbox1" style={{border: "3px solid #6FD76F", background:"#6FD76F", color:"white", borderRadius:"7px", fontSize:"12px", marginLeft:"5px"}}>Открыт</label>
                                 </div>
                                 <div className="checkbox checkbox-inline " >
-                                    <input type="form-check-input text-success "  type="checkbox" className="styled" style={{marginLeft:"5px"}}/>
+                                    <input type="form-check-input text-success "  type="radio" className="styled" name="sost" value="close" style={{marginLeft:"5px"}}/>
                                         <label for="inlineCheckbox1" style={{border: "3px solid #E23C3C", background:"#E23C3C", color:"white", borderRadius:"7px", fontSize:"12px", marginLeft:"5px"}}>Закрыт</label>
                                 </div>
                             </div>
                             <div className="input-group mb-3 input-group-sm">
                             <label className="napr col-sm-2 text-left" style={{fontSize:"16px"}}>Доступность для отчетов сотрудников</label>
                                 <div className="checkbox checkbox-inline " >
-                                    <input type="form-check-input text-success "  type="checkbox" className="styled"/>
+                                    <input type="form-check-input text-success "  type="radio" className="styled" name="dost" value="dostupen"/>
                                         <label for="inlineCheckbox1" style={{border: "3px solid #6FD76F", background:"#6FD76F", color:"white", borderRadius:"7px", fontSize:"12px", marginLeft:"5px"}}>Досупен</label>
                                 </div>
                                 <div className="checkbox checkbox-inline " >
-                                    <input type="form-check-input text-success "  type="checkbox" className="styled" style={{marginLeft:"5px"}}/>
+                                    <input type="form-check-input text-success "  type="radio" className="styled" name="dost" value="nedostupen" style={{marginLeft:"5px"}}/>
                                         <label for="inlineCheckbox1" style={{border: "3px solid #E23C3C", background:"#E23C3C", color:"white", borderRadius:"7px", fontSize:"12px", marginLeft:"5px"}}>Недоступен</label>
                                 </div>
                             </div>
                             <div className="input-group mb-3 input-group-sm">
                             <label className="napr col-sm-2 text-left" style={{fontSize:"16px"}}>Приемка ВП</label>
                                 <div className="checkbox checkbox-inline " >
-                                    <input type="form-check-input text-success "  type="checkbox" className="styled"/>
+                                    <input type="form-check-input text-success "  type="radio" className="styled"/>
                                         <label for="inlineCheckbox1" style={{border: "3px solid #454545", background:"#454545", color:"white", borderRadius:"7px", fontSize:"12px", marginLeft:"5px"}}>ПП</label>
                                 </div>
                             </div>

@@ -27,6 +27,18 @@
     border-style: outset;
     cursor: pointer;
 }
+.winter:active{
+}
+.winter:focus{
+    color:green !important;
+}
+
+.spring{
+}
+.summer{
+}
+.autumn{
+}
 .winter:hover{
     color: #ffe; /* Цвет текста активного пункта */
     background-color: #736A90;

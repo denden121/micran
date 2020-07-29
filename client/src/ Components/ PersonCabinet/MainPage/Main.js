@@ -51,27 +51,7 @@ class Main extends Component{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
     }
-    onClickDate = (event) =>{
-        let month = event.target.textContent
-        month  = Month[month] ?Month[month]:localStorage.getItem('date').split(' ')[0]
-        const temp_date=  localStorage.getItem('date').split(' ')[1]
-        console.log(temp_date)
-        localStorage.setItem('date',`${month} ${temp_date}`)
-        rend()
-    }
-    onClickNext=()=>{
-        const temp_month = localStorage.getItem('date').split(' ')[0]
-        const temp_year = localStorage.getItem('date').split(' ')[1]
-        localStorage.setItem('date',`${temp_month} ${parseInt(temp_year)+1}`)
-        rend()
-    }
-    onClickPrivious=()=>{
-        console.log('clicckk')
-        const temp_month = localStorage.getItem('date').split(' ')[0]
-        const temp_year = localStorage.getItem('date').split(' ')[1]
-        localStorage.setItem('date',`${temp_month} ${parseInt(temp_year)-1}`)
-        rend()
-    }
+    
 
     render() {
         if(!localStorage.getItem('date')){
