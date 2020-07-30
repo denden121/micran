@@ -113,7 +113,7 @@ class SalaryIndividual(models.Model):
     is_penalty = models.BooleanField(blank=True, default = 0)
     salary_hand = models.FloatField(blank=True, default = 0)
     person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
-    date = models.DateField(blank=True, auto_now_add=True)
+    date = models.DateField(blank=True)
     common_part = models.ForeignKey('SalaryCommon', on_delete=models.PROTECT, default = 1)
 
 

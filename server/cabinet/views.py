@@ -377,14 +377,8 @@ def salary(request):
             person = Profile.objects.get(pk=person)
             year = request.POST.get('year')
             month = request.POST.get('month')
-            try:
-                salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
-            except SalaryCommon.DoesNotExist:
-                salary_common = SalaryCommon.objects.create()
-            try:
-                salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
-            except SalaryIndividual.DoesNotExist:
-                salary = SalaryIndividual.objects.create(person=person, common_part=salary_common)
+            salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
+            salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
             salary.time_from_report = get_time_from_reports(person)
             form = SalaryIndividualForm(request.POST, instance=salary)
             if form.is_valid():
