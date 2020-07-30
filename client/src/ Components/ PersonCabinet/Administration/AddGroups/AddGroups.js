@@ -67,16 +67,22 @@ class AddGroups extends React.Component {
         let token = localStorage.getItem('token')
         myHeaders.append("Authorization", token);
         let workers = []
-        for(let i of this.state.workers){
+        for(let i of this.state.select_workers){
             workers.push(i.value)
         }
+        workers =workers.join(' ')
         let actions = []
-        for(let i of this.state.actions){
+        for(let i of this.state.select_actions){
             actions.push(i.value)
         }
+        actions =actions.join(' ')
         console.log(workers,actions)
+        debugger;
         let formdata = new FormData();
         formdata.append("name", nameGroup);
+        formdata.append("actions", actions);
+        formdata.append("description", 'ffdsfds');
+        formdata.append("participants", workers);
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -88,13 +94,15 @@ class AddGroups extends React.Component {
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-        // document.location = 'view_groups'
+        document.location = 'view_groups'
         // alert('группа создана')
     }
     addActions=(event)=>{
-        this.setState({select_action:event})
+        console.log(event)
+        this.setState({select_actions:event})
     }
     addWorkers=(event)=>{
+        console.log(event)
         this.setState({select_workers:event})
     }
 
@@ -115,7 +123,6 @@ class AddGroups extends React.Component {
                             {/*    <Activity actions={this.state.actions}/>*/}
                             {/*</div>*/}
                             <Select
-                                className={'daaaa'}
                                 onChange = {this.addActions}
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
