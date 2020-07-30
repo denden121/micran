@@ -4,8 +4,22 @@ import './Navigation.css'
 // import {MenuFoldOutlined} from '@ant-design/icons';
 import {NavLink} from 'react-router-dom'
 import Calendar from './Calendar/Calendar';
-import Month from "react-calendar/dist/umd/YearView/Month";
-import rend from "../../../index";
+import rend from "../../../index";;
+
+const Month = {
+    'Янв':1,
+    'Фев':2,
+    'Март':3,
+    'Апр':4,
+    'Май':5,
+    'Июнь':6,
+    'Июль':7,
+    'Авг':8,
+    'Сен':9,
+    'Окт':10,
+    'Ноя':11,
+    'Дек':12
+}
 
 class Navigation extends Component{
     constructor(props){
@@ -14,15 +28,14 @@ class Navigation extends Component{
     }
     handleClick() {
         let wrapper = this.wrapperRef.current;
-        console.log(wrapper)
+        // console.log(wrapper)
         wrapper.classList.toggle('is-nav-open')
 
     }
     onClickDate = (event) =>{
         let month = event.target.textContent
-        month  = Month[month] ?Month[month]:localStorage.getItem('date').split(' ')[0]
+        month  = Month[month] ? Month[month]:localStorage.getItem('date').split(' ')[0]
         const temp_date=  localStorage.getItem('date').split(' ')[1]
-        console.log(temp_date)
         localStorage.setItem('date',`${month} ${temp_date}`)
         rend()
     }
@@ -33,7 +46,6 @@ class Navigation extends Component{
         rend()
     }
     onClickPrivious=()=>{
-        console.log('clicckk')
         const temp_month = localStorage.getItem('date').split(' ')[0]
         const temp_year = localStorage.getItem('date').split(' ')[1]
         localStorage.setItem('date',`${temp_month} ${parseInt(temp_year)-1}`)
@@ -47,10 +59,10 @@ class Navigation extends Component{
                     <div className="nav">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                         {localStorage.getItem('date')}
-                        {/* <MenuFoldOutlined
-                        className="nav__icon"
-                        type="menu-fold"
-                        onClick={this.handleClick.bind(this)}/> */}
+                        {/*<Icon*/}
+                        {/*className="nav__icon"*/}
+                        {/*type="menu-fold"*/}
+                        {/*onClick={this.handleClick.bind(this)}/>*/}
                         <div className="nav__body">
                         <div className="sidebar-sticky">
                             <Calendar onClickDate = {this.onClickDate}

@@ -4,3 +4,4 @@
 /server/cabinet/__pycache__/
 /server/db.sqlite3
 *.pyc
+./server/drf
