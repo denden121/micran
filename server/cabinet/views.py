@@ -318,7 +318,7 @@ def groups_with_permission(request):
             else:
                 fields = {'name': group.name, 'users': users, 'description': group.description}
                 users = []
-        data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+            data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
         return HttpResponse(json.dumps(data))
 
 
