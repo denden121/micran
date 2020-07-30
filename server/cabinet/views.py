@@ -321,7 +321,7 @@ def groups_with_permission(request):
 
 
 @csrf_exempt
-def logs(request):
+def logs_with_range(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
@@ -332,6 +332,18 @@ def logs(request):
             end_month = request.GET.get('end_month')
             end_day = request.GET.get('end_day')
             logs = Logging.objects.filter(date__gt=f'{start_year}-{start_month}-{start_day}', date__lte=f'{end_year}-{end_month}-{end_day}')
+            data = serializers.serialize('json', logs)
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def logs(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            logs = Logging.objects.filter(date__month=month, date__year=year)
             data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
