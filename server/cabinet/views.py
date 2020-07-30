@@ -325,9 +325,13 @@ def logs(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            year = request.GET.get('year')
-            month = request.GET.get('month')
-            logs = Logging.objects.filter(date__year=year, date__month=month)
+            start_year = request.GET.get('start_year')
+            start_month = request.GET.get('start_month')
+            start_day = request.GET.get('start_day')
+            end_year = request.GET.get('end_year')
+            end_month = request.GET.get('end_month')
+            end_day = request.GET.get('end_day')
+            logs = Logging.objects.filter(date__gt=f'{start_year}-{start_month}-{start_day}', date__lte=f'{end_year}-{end_month}-{end_day}')
             data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
@@ -338,7 +342,6 @@ def salary(request):
     if user:
         if request.method == "GET":
             workers = Profile.objects.filter(departament=user.profile.departament)
-            salary_common = SalaryCommon.objects.get(pk=1)
             data = []
             output = []
             year = request.GET.get('year')
@@ -354,11 +357,17 @@ def salary(request):
                 except SalaryIndividual.DoesNotExist:
                     salary = SalaryIndividual.objects.create(person=worker, common_part=salary_common)
                 salary.time_from_report = hour
-                salary.time_norm = salary_common.days_norm_common * 8
-                salary.save(update_fields=['time_from_report', 'time_norm'])
+                salary_common.time_norm_common = salary_common.days_norm_common * 8
+                salary.days_worked = salary_common.days_norm_common - (salary.day_off +
+                                                                       salary.vacation + salary.sick_leave)
+                salary.time_norm = 8 * salary.days_worked
+                if salary.is_penalty:
+                    salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary/salary.time_norm
+                salary.salary_hand = salary.plan_salary * salary.days_worked/salary_common.days_norm_common - salary.penalty + salary.award
+                salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
-                         'time_norm': salary.time_norm,
+                         'time_norm': salary.time_norm, 'penalty': salary.penalty,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'is_awarded': salary.is_awarded, 'award': salary.award, 'salary_hand': salary.salary_hand}
                 data.append({'pk': worker.pk, 'person': field})
@@ -433,8 +442,10 @@ def change_common_salary(request):
         year = request.POST.get('year')
         month = request.POST.get('month')
         days = request.POST.get('days_norm_common')
-        salary = SalaryCommon.objects.get(date__year=year, date__month=month)
+        salary, created = SalaryCommon.objects.get_or_create(date = f'{year}-{month}-1')
         salary.time_norm_common = int(days) * 8
+        salary.days_norm_common = days
+        salary.save()
         form = SalaryCommonForm(request.POST, instance=salary)
         if form.is_valid():
             form.save()

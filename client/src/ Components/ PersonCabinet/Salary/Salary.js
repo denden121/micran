@@ -34,12 +34,16 @@ class Salary extends React.Component {
     render() {
         return (
             <div className="container-fluid">
+                
                 <h3 className="text-left">Расчетный листок</h3>
                 <br/>
                 <h5 className="text-left">Начисления</h5>
+                <div className="stimul">
                 <table className="stimull table-bordered">
                     <Profit salary = {this.state.salary}/>
                 </table>
+                </div>
+                
                 <br/>
                 <h5 className="text-left">Итого</h5>
                 <div className="row">
