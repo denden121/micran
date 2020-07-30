@@ -348,22 +348,20 @@ def salary(request):
             month = request.GET.get('month')
             for worker in workers:
                 hour = get_time_from_reports(worker)
-                try:
-                    salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
-                except SalaryCommon.DoesNotExist:
-                    salary_common = SalaryCommon.objects.create(date__year=year, date__month=month)
-                try:
-                    salary = SalaryIndividual.objects.get(person=worker, date__year=year, date__month=month)
-                except SalaryIndividual.DoesNotExist:
-                    salary = SalaryIndividual.objects.create(person=worker, common_part=salary_common)
+                salary_common, cr = SalaryCommon.objects.get_or_create(date = f'{year}-{month}-1')
+                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date = f'{year}-{month}-1')
                 salary.time_from_report = hour
                 salary_common.time_norm_common = salary_common.days_norm_common * 8
                 salary.days_worked = salary_common.days_norm_common - (salary.day_off +
                                                                        salary.vacation + salary.sick_leave)
                 salary.time_norm = 8 * salary.days_worked
-                if salary.is_penalty:
-                    salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary/salary.time_norm
-                salary.salary_hand = salary.plan_salary * salary.days_worked/salary_common.days_norm_common - salary.penalty + salary.award
+                try:
+                    if salary.is_penalty:
+                        salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary/salary.time_norm
+                    salary.salary_hand = salary.plan_salary * salary.days_worked/salary_common.days_norm_common - salary.penalty + salary.award
+                except ZeroDivisionError:
+                    salary.penalty = 0
+                    salary.salary_hand = 0
                 salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
