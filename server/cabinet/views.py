@@ -38,10 +38,10 @@ def get_tokens_for_user(user):
 
 
 def get_access(action_num, user):
-    try:
-        Action.objects.get(group=user.profile.group, num=action_num)
-    except Action.DoesNotExist:
-        return False
+    # try:
+    #     Action.objects.get(group=user.profile.group, num=action_num)
+    # except Action.DoesNotExist:
+    #     return False
     return True
 
 
@@ -308,17 +308,18 @@ def groups_with_permission(request):
         groups = Group.objects.all()
         data = []
         for group in groups:
-            profiles = Profile.objects.filter(group=group)
-            users = []
-            for profile in profiles:
-                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-            if users:
-                fields = {'name': group.name, 'users': users, 'description': group.description}
+            for participant in group.participants.all():
+                profiles = Profile.objects.filter(pk=participant)
                 users = []
-            else:
-                fields = {'name': group.name, 'users': users, 'description': group.description}
-                users = []
-            data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+                for profile in profiles:
+                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                if users:
+                    fields = {'name': group.name, 'users': users, 'description': group.description}
+                    users = []
+                else:
+                    fields = {'name': group.name, 'users': users, 'description': group.description}
+                    users = []
+                data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
         return HttpResponse(json.dumps(data))
 
 
