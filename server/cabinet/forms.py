@@ -44,10 +44,10 @@ class ActionForm(forms.ModelForm):
 class SalaryCommonForm(forms.ModelForm):
     class Meta:
         model = SalaryCommon
-        fields = '__all__'
+        exclude = ('date',)
 
 
 class SalaryIndividualForm(forms.ModelForm):
     class Meta:
         model = SalaryIndividual
-        fields = ['vacation', 'sick_leave', 'day_off', 'time_orion', 'plan_salary', 'award', 'is_awarded']
+        fields = ['vacation', 'sick_leave', 'day_off', 'time_orion', 'plan_salary', 'award', 'penalty', 'is_penalty']

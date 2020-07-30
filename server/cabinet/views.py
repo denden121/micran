@@ -361,7 +361,8 @@ def salary(request):
                 salary.days_worked = salary_common.days_norm_common - (salary.day_off +
                                                                        salary.vacation + salary.sick_leave)
                 salary.time_norm = 8 * salary.days_worked
-                salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary/salary.time_norm
+                if salary.is_penalty:
+                    salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary/salary.time_norm
                 salary.salary_hand = salary.plan_salary * salary.days_worked/salary_common.days_norm_common - salary.penalty + salary.award
                 salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
@@ -441,8 +442,10 @@ def change_common_salary(request):
         year = request.POST.get('year')
         month = request.POST.get('month')
         days = request.POST.get('days_norm_common')
-        salary = SalaryCommon.objects.get(date__year=year, date__month=month)
+        salary, created = SalaryCommon.objects.get_or_create(date = f'{year}-{month}-1')
         salary.time_norm_common = int(days) * 8
+        salary.days_norm_common = days
+        salary.save()
         form = SalaryCommonForm(request.POST, instance=salary)
         if form.is_valid():
             form.save()

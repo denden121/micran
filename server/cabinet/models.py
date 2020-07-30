@@ -111,7 +111,6 @@ class SalaryIndividual(models.Model):
     award = models.FloatField(blank=True, default = 0)
     penalty = models.FloatField(blank=True, default = 0)
     is_penalty = models.BooleanField(blank=True, default = 0)
-    is_awarded = models.BooleanField(blank=True, default = 0)
     salary_hand = models.FloatField(blank=True, default = 0)
     person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
     date = models.DateField(blank=True, auto_now_add=True)
@@ -121,4 +120,4 @@ class SalaryIndividual(models.Model):
 class SalaryCommon(models.Model):
     days_norm_common = models.FloatField(blank=True, default = 0)
     time_norm_common = models.FloatField(blank=True, default = 0)
-    date = models.DateField(blank=True, auto_now_add=True, unique=True)
+    date = models.DateField(blank=True, unique=True)
