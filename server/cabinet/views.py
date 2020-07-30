@@ -422,7 +422,7 @@ def workers_departament(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.filter(departament=user.profile.departament)
+            workers = Profile.objects.all()
             data = serializers.serialize('json', workers)
             return HttpResponse(data)
 
