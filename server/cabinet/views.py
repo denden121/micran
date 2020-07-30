@@ -265,12 +265,14 @@ def group_view(request):
             if group.is_valid():
                 update = group.save(commit=False)
                 actions = request.POST['actions'].split()
-                for action in actions:
-                    print(action)
                 actions = [Action.objects.get(pk=int(action)) for action in actions]
                 if actions and group.is_valid():
                     group = group.save()
                     [group.available_actions.add(actions[i]) for i in range(len(actions))]
+                participants = request.POST['participants'].split()
+                participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                if participants:
+                    [group.participants.add(participants[i]) for i in range(len(participants))]
                     return HttpResponse("Success")
 
 

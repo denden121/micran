@@ -37,15 +37,6 @@ class Action(models.Model):
         return self.action
 
 
-class Group(models.Model):
-    name = models.CharField(max_length=30, blank=True, unique=True)
-    description = models.CharField(max_length=500, blank=True)
-    available_actions = models.ManyToManyField(Action, blank=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
     sex = models.CharField(max_length=5, blank=True)
@@ -60,11 +51,20 @@ class Profile(models.Model):
     shift = models.CharField(max_length=30, blank=True)
     part_time_job = models.CharField(max_length=30, blank=True)
     lateness = models.CharField(max_length=30, blank=True)
-    group = models.ForeignKey('Group', on_delete=models.PROTECT, blank=True, null=True)
     # first_time = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=30, blank=True, unique=True)
+    description = models.CharField(max_length=500, blank=True)
+    available_actions = models.ManyToManyField(Action, blank=True)
+    participants = models.ManyToManyField(Profile, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Project(models.Model):
