@@ -369,7 +369,7 @@ def salary(request):
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
-                         'is_awarded': salary.is_awarded, 'award': salary.award, 'salary_hand': salary.salary_hand}
+                         'award': salary.award, 'salary_hand': salary.salary_hand}
                 data.append({'pk': worker.pk, 'person': field})
             output.append({'fields': {'days_norm': salary_common.days_norm_common,
                                       'time_norm': salary_common.time_norm_common, 'persons': data}})
