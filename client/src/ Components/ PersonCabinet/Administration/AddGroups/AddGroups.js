@@ -6,10 +6,16 @@ import makeAnimated from 'react-select/animated';
 
 class AddGroups extends React.Component {
     state = {
-        actions: {}
+        actions: {},
+        workers: {},
+        select_actions:{},
+        select_workers:{}
     }
-
-    async componentDidMount() {
+    componentDidMount() {
+        this.loadActions()
+        this.loadWorkers()
+    }
+    loadActions= async () => {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -22,26 +28,56 @@ class AddGroups extends React.Component {
             .then(response =>  response.json())
             .then(result => this.setState({actions: result}))
             .catch(error => console.log('error', error))
-        console.log('state',this.state.actions)
-    }
-
-    createGroup = async () => {
-        let $activities = document.querySelectorAll('.activity')
-        let result = []
-        $activities.forEach(value =>{
-            if (value.checked) {
-                result.push(value.id.split('_')[1])
-            }
+        let temp = Array.from(this.state.actions)
+        temp = temp.map((action)=>{
+            console.log(action)
+            return {value:`${action.pk}`,label:`${action.fields.action}`}
         })
+        this.setState({actions:temp})
+    }
+    loadWorkers= async () =>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        await fetch("http://127.0.0.1:8000/workers/", requestOptions)
+            .then(response =>  response.json())
+            .then(result => this.setState({workers: result}))
+            .catch(error => console.log('error', error))
+        console.log('state',this.state.workers)
+        let temp = Array.from(this.state.workers)
+        temp = temp.map((worker)=>{
+            console.log(worker)
+            return {value:`${worker.pk}`,label:`${worker.fields.first_name}`}
+        })
+        this.setState({workers:temp})
+        console.log('state',this.state.workers)
+
+    }
+    createGroup = async () => {
+        console.log(this.state.select_actions)
+        console.log(this.state.select_workers)
         let nameGroup = document.querySelector('#nameGroup').value
-        console.log(result, nameGroup)
+        // console.log(result, nameGroup)
         let myHeaders = new Headers();
         let token = localStorage.getItem('token')
         myHeaders.append("Authorization", token);
-        var formdata = new FormData();
-        formdata.append("actions", result.join(' '));
+        let workers = []
+        for(let i of this.state.workers){
+            workers.push(i.value)
+        }
+        let actions = []
+        for(let i of this.state.actions){
+            actions.push(i.value)
+        }
+        console.log(workers,actions)
+        let formdata = new FormData();
         formdata.append("name", nameGroup);
-        var requestOptions = {
+        let requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: formdata,
@@ -52,17 +88,18 @@ class AddGroups extends React.Component {
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-        document.location = 'view_groups'
-        alert('группа создана')
+        // document.location = 'view_groups'
+        // alert('группа создана')
+    }
+    addActions=(event)=>{
+        this.setState({select_action:event})
+    }
+    addWorkers=(event)=>{
+        this.setState({select_workers:event})
     }
 
 
     render() {
-        const options = [
-            { value: 'chocolate', label: 'Chocolate' },
-            { value: 'strawberry', label: 'Strawberry' },
-            { value: 'vanilla', label: 'Vanilla' }
-        ]
         const animatedComponents = makeAnimated();
         return (
             <div className="container-fluid">
@@ -74,14 +111,23 @@ class AddGroups extends React.Component {
                             </div>
                             <input  id="nameGroup" type="text" className="form-control" placeholder="Новая группа"/>
                             <br/>
-                            <div className="form-check">
-                                <Activity actions={this.state.actions}/>
-                            </div>
+                            {/*<div className="form-check">*/}
+                            {/*    <Activity actions={this.state.actions}/>*/}
+                            {/*</div>*/}
                             <Select
+                                className={'daaaa'}
+                                onChange = {this.addActions}
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
                                 isMulti
-                                options={options}
+                                options={this.state.actions}
+                            />
+                            <Select
+                                onChange = {this.addWorkers}
+                                closeMenuOnSelect={false}
+                                components={animatedComponents}
+                                isMulti
+                                options={this.state.workers}
                             />
                             <br/>
                             <button className="btn btn-sm btn-primary groupps" type='submit'
