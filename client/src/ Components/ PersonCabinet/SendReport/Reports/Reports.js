@@ -21,7 +21,7 @@ const Reports =(props)=>{
         <div className="container-fluid">
             <div className="report">
                 <div className="row mb-2" >
-                    <div className="col-md-5">
+                    <div className="col-md-5 col-lg-12">
                         <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
 
@@ -61,7 +61,7 @@ const Reports =(props)=>{
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-7">
+                    <div className="col-md-7 col-lg-12">
                         <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static box">
                                 <div className="box-content">
