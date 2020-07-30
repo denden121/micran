@@ -18,32 +18,7 @@ import Register from "../Register/Register"
 import NewProject from "../Register/NewProject/NewProject";
 import UnitProjects from "../Register/UnitProjects/UnitProjects"
 
-const Month = {
-    'Янв':1,
-    'Фев':2,
-    'Март':3,
-    'Апр':4,
-    'Май':5,
-    'Июнь':6,
-    'Июль':7,
-    'Авг':8,
-    'Сен':9,
-    'Окт':10,
-    'Ноя':11,
-    'Дек':12,
-    '1':'Янв',
-    '2':'Фев',
-    '3':'Март',
-    '4':'Апр',
-    '5':'Май',
-    '6':'Июнь',
-    '7':'Июль',
-    '8':'Авг',
-    '9':'Сен',
-    '10':'Окт',
-    '11':'Ноя',
-    '12':'Дек',
-}
+
 
 class Main extends Component{
 

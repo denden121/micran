@@ -3,8 +3,27 @@ import RegisterTable from "./RegisterTable/RegisterTable"
 
 
 class Register extends React.Component{
+    componentDidMount() {
+        this.loadProjects()
+    }
+    state = {
+        projects:{}
+    }
+    loadProjects = async () =>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        await fetch("http://127.0.0.1:8000/cabinet/projects/", requestOptions)
+            .then(response => response.json())
+            .then(result => this.setState({projects:result}))
+        console.log('state',this.state)
+    }
     onClickNewProject = () =>{
-        // <Redirect to = "/cabinet/admin/new_project"/> 
         document.location='/cabinet/admin/new_project'
     }
     onClickBack= () =>{
@@ -16,7 +35,6 @@ class Register extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                
                 <div className="row">
                     <div className="col-md-12">
                         <h3 className="text-left">Реестр проектов</h3>
@@ -27,7 +45,7 @@ class Register extends React.Component{
                         </div>
                         <hr className="normal"/>
                         
-                        <RegisterTable/>
+                        <RegisterTable projects = {this.state.projects}/>
                     </div>
                 </div>
                 

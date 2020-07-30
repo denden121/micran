@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import Logs from "./Logs/Logs"
+import {Calendar} from "react-calendar";
 
 
 class ViewLogs extends React.Component{
@@ -27,7 +28,10 @@ class ViewLogs extends React.Component{
     }
     render(){
         return(
+
             <div className="container-fluid">
+                {/*    <Calendar/>*/}
+                {/*<Calendar/>*/}
                 <table className="table table-hover table-bordered">
                     <thead className="thead-dark">
                         <tr>
