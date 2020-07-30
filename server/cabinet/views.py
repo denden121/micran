@@ -308,18 +308,17 @@ def groups_with_permission(request):
         groups = Group.objects.all()
         data = []
         for group in groups:
-            for participant in group.participants.all():
-                profiles = Profile.objects.filter(pk=participant)
+            profiles = group.participants.all()
+            users = []
+            for profile in profiles:
+                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+            if users:
+                fields = {'name': group.name, 'users': users, 'description': group.description}
                 users = []
-                for profile in profiles:
-                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                if users:
-                    fields = {'name': group.name, 'users': users, 'description': group.description}
-                    users = []
-                else:
-                    fields = {'name': group.name, 'users': users, 'description': group.description}
-                    users = []
-                data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+            else:
+                fields = {'name': group.name, 'users': users, 'description': group.description}
+                users = []
+        data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
         return HttpResponse(json.dumps(data))
 
 
@@ -334,7 +333,8 @@ def logs_with_range(request):
             end_year = request.GET.get('end_year')
             end_month = request.GET.get('end_month')
             end_day = request.GET.get('end_day')
-            logs = Logging.objects.filter(date__gt=f'{start_year}-{start_month}-{start_day}', date__lte=f'{end_year}-{end_month}-{end_day}')
+            logs = Logging.objects.filter(date__gt=f'{start_year}-{start_month}-{start_day}',
+                                          date__lte=f'{end_year}-{end_month}-{end_day}')
             data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
@@ -363,8 +363,8 @@ def salary(request):
             month = request.GET.get('month')
             for worker in workers:
                 hour = get_time_from_reports(worker)
-                salary_common, cr = SalaryCommon.objects.get_or_create(date = f'{year}-{month}-1')
-                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date = f'{year}-{month}-1')
+                salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
+                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1')
                 salary.time_from_report = hour
                 salary_common.time_norm_common = salary_common.days_norm_common * 8
                 salary.days_worked = salary_common.days_norm_common - (salary.day_off +
@@ -372,8 +372,8 @@ def salary(request):
                 salary.time_norm = 8 * salary.days_worked
                 try:
                     if salary.is_penalty:
-                        salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary/salary.time_norm
-                    salary.salary_hand = salary.plan_salary * salary.days_worked/salary_common.days_norm_common - salary.penalty + salary.award
+                        salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary / salary.time_norm
+                    salary.salary_hand = salary.plan_salary * salary.days_worked / salary_common.days_norm_common - salary.penalty + salary.award
                 except ZeroDivisionError:
                     salary.penalty = 0
                     salary.salary_hand = 0
@@ -449,7 +449,7 @@ def change_common_salary(request):
         year = request.POST.get('year')
         month = request.POST.get('month')
         days = request.POST.get('days_norm_common')
-        salary, created = SalaryCommon.objects.get_or_create(date = f'{year}-{month}-1')
+        salary, created = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
         salary.time_norm_common = int(days) * 8
         salary.days_norm_common = days
         salary.save()
