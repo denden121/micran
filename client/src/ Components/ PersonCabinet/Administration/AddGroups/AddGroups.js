@@ -28,7 +28,7 @@ class AddGroups extends React.Component {
     createGroup = async () => {
         let $activities = document.querySelectorAll('.activity')
         let result = []
-        $activities.forEach(value => {
+        $activities.forEach(value =>{
             if (value.checked) {
                 result.push(value.id.split('_')[1])
             }
