@@ -5,7 +5,7 @@ const Profit = (props) =>{
     if(props.salary) {
         return (
             <tbody>
-            <tr>
+            <tr> 
                 <th scope="row" className="text-left">Плановая ЗП</th>
                 <td>{props.salary.plan_salary}</td>
             </tr>
