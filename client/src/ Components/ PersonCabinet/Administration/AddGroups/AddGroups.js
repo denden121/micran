@@ -120,23 +120,39 @@ class AddGroups extends React.Component {
                             {/*<div className="form-check">*/}
                             {/*    <Activity actions={this.state.actions}/>*/}
                             {/*</div>*/}
+                            <div className="row">
+                                <label className="col-md-2"><strong>Действия</strong></label>
+                            </div>
                             <Select
                                 onChange = {this.addActions}
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
                                 isMulti
                                 options={this.state.actions}
-                                placeholder="Действия"
+                                placeholder="Выбрать"
                              />                                                       
                             <br/>
+                            <div className="row">
+                                <label className="col-md-2"><strong>Участники</strong></label>
+                            </div>
                             <Select
                                 onChange = {this.addWorkers}
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
                                 isMulti
                                 options={this.state.workers}
-                                placeholder="Участники"
+                                placeholder="Выбрать"
                             />
+                            <br/>
+                            <div className="row">
+                                <label className="col-md-2"><strong>Описание</strong></label>
+                            </div>
+                            <textarea
+                                className="form-control"
+                                maxlength="10000"
+                                placeholder="Введите текст..."
+                                rows="3">
+                            </textarea>
                             <br/>
                             <button className="btn btn-sm btn-primary groupps" type='submit'
                                     onClick={this.createGroup}>Отправить
