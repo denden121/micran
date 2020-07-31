@@ -77,7 +77,6 @@ class AddGroups extends React.Component {
         }
         actions =actions.join(' ')
         console.log(workers,actions)
-        debugger;
         let formdata = new FormData();
         formdata.append("name", nameGroup);
         formdata.append("actions", actions);
@@ -95,7 +94,6 @@ class AddGroups extends React.Component {
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
         document.location = 'view_groups'
-        // alert('группа создана')
     }
     addActions=(event)=>{
         console.log(event)
