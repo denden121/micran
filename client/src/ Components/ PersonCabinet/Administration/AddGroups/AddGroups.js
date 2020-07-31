@@ -126,19 +126,24 @@ class AddGroups extends React.Component {
                                 components={animatedComponents}
                                 isMulti
                                 options={this.state.actions}
-                            />
+                                placeholder="Действия"
+                             />                                                       
+                            <br/>
                             <Select
                                 onChange = {this.addWorkers}
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
                                 isMulti
                                 options={this.state.workers}
+                                placeholder="Участники"
                             />
                             <br/>
                             <button className="btn btn-sm btn-primary groupps" type='submit'
                                     onClick={this.createGroup}>Отправить
                             </button>
-                            <button onClick={()=>{document.location='view_groups'}}>Назад</button>
+                            <br/>
+                            <br/>
+                            <button onClick={()=>{document.location='view_groups'}} className="btn btn-sm btn-primary groupps">Назад</button>
                         </div>
                     </div>
                 </div>
