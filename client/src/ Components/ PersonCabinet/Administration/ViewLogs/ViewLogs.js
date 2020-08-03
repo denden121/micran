@@ -21,7 +21,10 @@ class ViewLogs extends React.Component{
             .then(result => this.setState({logs:result}))
         console.log(this.state.logs)
     }
-    loadRangeLogs= async (day= 1,month= 1,year)=>{
+    loadRangeLogs= async ()=>{
+        const dateStart= document.querySelector('.start-date-logs').value
+        const dateFinish= document.querySelector('.finish-date-logs').value
+        console.log(dateStart,dateFinish)
         const token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -30,8 +33,7 @@ class ViewLogs extends React.Component{
             headers: myHeaders,
             redirect: 'follow'
         };
-        const date = localStorage.getItem('date').split(' ')
-        const url = `http://127.0.0.1:8000/admin/logs/?month=${date[0]}&year=${date[1]}`
+        const url = `http://127.0.0.1:8000/admin/logs_with_range/?start_date=${dateStart}&end_date=${dateFinish}`
         await fetch(url, requestOptions)
             .then(response => response.json())
             .then(result => this.setState({logs:result}))
@@ -50,16 +52,17 @@ class ViewLogs extends React.Component{
                 <div className="row">
                     <div className="col-md-4 col-lg-12 text-left">
                         <label className="text-left"><h5>Просмотр логов за промежуток</h5>
-                            <button className="btn btn-sm btn-primary">За неделю</button>
-                            <button className="btn btn-sm btn-primary" style={{marginLeft:"5px"}}>За месяц</button>
-                            <button className="btn btn-sm btn-primary" style={{marginLeft:"5px"}}>За год</button>
+                            {/*<button className="btn btn-sm btn-primary">За неделю</button>*/}
+                            {/*<button className="btn btn-sm btn-primary" style={{marginLeft:"5px"}}>За месяц</button>*/}
+                            {/*<button className="btn btn-sm btn-primary" style={{marginLeft:"5px"}}>За год</button>*/}
                             <br/>
                         </label>
                     </div>
-                    <div className="col-md-4 log">
+                    <div className="col-md-5 log">
                         <label className="text-left logg" style={{display:"flex"}}>
-                            <input type="date" placeholder="дд/мм/гггг" className="form-control"></input>
-                            <input type="date" placeholder="дд/мм/гггг" className="form-control" style={{marginLeft:"5px"}}></input>
+                            <input type="date" placeholder="дд/мм/гггг" className="form-control start-date-logs"></input>
+                            <input type="date" placeholder="дд/мм/гггг" className="form-control finish-date-logs" style={{marginLeft:"5px"}}></input>
+                            <button onClick={this.loadRangeLogs} className="btn btn-sm btn-primary" style={{marginLeft:"5px"}}>Показать</button>
                         </label>                       
                     </div>
                    
