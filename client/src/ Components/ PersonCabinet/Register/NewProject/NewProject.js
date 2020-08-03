@@ -6,12 +6,12 @@ const NewProject =(props)=>{
    return(
        <div className="container-fluid">
            <div className="row">
-               <div className="col-md-12">
+               <div className="col-lg-12">
                    <h3 className="text-left">Новый проект</h3>
-                   <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                   <div className="row no-gutters border rounded overflow-hidden flex-lg-row mb-4 shadow-sm h-lg-250 position-relative">
                    <div className="col p-4 d-flex flex-column position-static">
                        <div className="block1">
-                            <div className="input-group mb-3 input-group-sm">
+                            <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-2 text-left" style={{fontSize:"16px"}}>Направления</label>
                                     <select className="custom-select">
                                         <option selected>Выбрать</option>
