@@ -38,10 +38,10 @@ def get_tokens_for_user(user):
 
 
 def get_access(action_num, user):
-    try:
-        Action.objects.get(group=user.profile.group, num=action_num)
-    except Action.DoesNotExist:
-        return False
+    # try:
+    #     Action.objects.get(group=user.profile.group, num=action_num)
+    # except Action.DoesNotExist:
+    #     return False
     return True
 
 
@@ -257,21 +257,32 @@ def group_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            groups = Group.objects.all()
-            data = serializers.serialize('json', groups)
-            return HttpResponse(data)
+            pk = request.GET.get('pk')
+            group = Group.objects.get(pk=pk)
+            actions = group.available_actions.all()
+            participants = group.participants.all()
+            users = []
+            actions_output = []
+            for profile in participants:
+                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+            for action in actions:
+                actions_output.append(action.action + ' ' + str(action.num))
+            data = {'name': group.name, 'description': group.description, 'users': users, 'actions': actions_output}
+            return HttpResponse(json.dumps(data))
         if request.method == "POST":
             group = GroupForm(request.POST)
             if group.is_valid():
                 update = group.save(commit=False)
                 actions = request.POST['actions'].split()
-                for action in actions:
-                    print(action)
                 actions = [Action.objects.get(pk=int(action)) for action in actions]
                 if actions and group.is_valid():
                     group = group.save()
                     [group.available_actions.add(actions[i]) for i in range(len(actions))]
-                    return HttpResponse("Success")
+                participants = request.POST['participants'].split()
+                participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                if participants:
+                    [group.participants.add(participants[i]) for i in range(len(participants))]
+                return HttpResponse("Success")
 
 
 @csrf_exempt
@@ -302,22 +313,61 @@ def available_actions(request):
 @csrf_exempt
 def groups_with_permission(request):
     user = get_user_jwt(request)
-    if user and get_access(101, user):
-        groups = Group.objects.all()
-        data = []
-        for group in groups:
-            profiles = Profile.objects.filter(group=group)
-            users = []
-            for profile in profiles:
-                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-            if users:
-                fields = {'name': group.name, 'users': users, 'description': group.description}
+    if request.method == "GET":
+        if user and get_access(101, user):
+            groups = Group.objects.all()
+            data = []
+            for group in groups:
+                profiles = group.participants.all()
                 users = []
-            else:
-                fields = {'name': group.name, 'users': users, 'description': group.description}
-                users = []
-            data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
-        return HttpResponse(json.dumps(data))
+                actions = group.available_actions.all()
+                actions_output = []
+                for profile in profiles:
+                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                for action in actions:
+                    actions_output.append(action.action + ' ' + str(action.num))
+                fields = {'name': group.name, 'users': users, 'description': group.description, 'actions': actions_output}
+                data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+            return HttpResponse(json.dumps(data))
+    if request.method == "POST":
+        pk = request.POST.get('pk')
+        group_obj = Group.objects.get(pk=pk)
+        group = GroupForm(request.POST, instance=group_obj)
+        if group.is_valid():
+            update = group.save(commit=False)
+            if request.POST.get('actions'):
+                actions = request.POST['actions'].split()
+                try:
+                    actions = [Action.objects.get(pk=int(action)) for action in actions]
+                except Action.DoesNotExist:
+                    pass
+                if actions:
+                    [group_obj.available_actions.add(actions[i]) for i in range(len(actions))]
+            if request.POST.get('participants'):
+                participants = request.POST['participants'].split()
+                try:
+                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                except Profile.DoesNotExist:
+                    pass
+                if participants:
+                    [group_obj.participants.add(participants[i]) for i in range(len(participants))]
+            if group.is_valid():
+                group.save()
+                return HttpResponse("Success")
+            return HttpResponse("Something went wrong")
+
+
+@csrf_exempt
+def logs_with_range(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            start_date = request.GET.get('start_date')
+            end_date = request.GET.get('end_date')
+            logs = Logging.objects.filter(date__gt=start_date,
+                                          date__lte=end_date)
+            data = serializers.serialize('json', logs)
+            return HttpResponse(data)
 
 
 @csrf_exempt
@@ -325,13 +375,9 @@ def logs(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            start_year = request.GET.get('start_year')
-            start_month = request.GET.get('start_month')
-            start_day = request.GET.get('start_day')
-            end_year = request.GET.get('end_year')
-            end_month = request.GET.get('end_month')
-            end_day = request.GET.get('end_day')
-            logs = Logging.objects.filter(date__gt=f'{start_year}-{start_month}-{start_day}', date__lte=f'{end_year}-{end_month}-{end_day}')
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            logs = Logging.objects.filter(date__month=month, date__year=year)
             data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
@@ -348,22 +394,20 @@ def salary(request):
             month = request.GET.get('month')
             for worker in workers:
                 hour = get_time_from_reports(worker)
-                try:
-                    salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
-                except SalaryCommon.DoesNotExist:
-                    salary_common = SalaryCommon.objects.create(date__year=year, date__month=month)
-                try:
-                    salary = SalaryIndividual.objects.get(person=worker, date__year=year, date__month=month)
-                except SalaryIndividual.DoesNotExist:
-                    salary = SalaryIndividual.objects.create(person=worker, common_part=salary_common)
+                salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
+                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1', common_part=salary_common)
                 salary.time_from_report = hour
                 salary_common.time_norm_common = salary_common.days_norm_common * 8
                 salary.days_worked = salary_common.days_norm_common - (salary.day_off +
                                                                        salary.vacation + salary.sick_leave)
                 salary.time_norm = 8 * salary.days_worked
-                if salary.is_penalty:
-                    salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary/salary.time_norm
-                salary.salary_hand = salary.plan_salary * salary.days_worked/salary_common.days_norm_common - salary.penalty + salary.award
+                try:
+                    if salary.is_penalty:
+                        salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary / salary.time_norm
+                    salary.salary_hand = salary.plan_salary * salary.days_worked / salary_common.days_norm_common - salary.penalty + salary.award
+                except ZeroDivisionError:
+                    salary.penalty = 0
+                    salary.salary_hand = 0
                 salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
@@ -379,14 +423,8 @@ def salary(request):
             person = Profile.objects.get(pk=person)
             year = request.POST.get('year')
             month = request.POST.get('month')
-            try:
-                salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
-            except SalaryCommon.DoesNotExist:
-                salary_common = SalaryCommon.objects.create()
-            try:
-                salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
-            except SalaryIndividual.DoesNotExist:
-                salary = SalaryIndividual.objects.create(person=person, common_part=salary_common)
+            salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
+            salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
             salary.time_from_report = get_time_from_reports(person)
             form = SalaryIndividualForm(request.POST, instance=salary)
             if form.is_valid():
@@ -418,7 +456,7 @@ def workers_departament(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.filter(departament=user.profile.departament)
+            workers = Profile.objects.all()
             data = serializers.serialize('json', workers)
             return HttpResponse(data)
 
@@ -442,7 +480,7 @@ def change_common_salary(request):
         year = request.POST.get('year')
         month = request.POST.get('month')
         days = request.POST.get('days_norm_common')
-        salary, created = SalaryCommon.objects.get_or_create(date = f'{year}-{month}-1')
+        salary, created = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
         salary.time_norm_common = int(days) * 8
         salary.days_norm_common = days
         salary.save()

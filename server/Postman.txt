@@ -411,4 +411,25 @@ fetch("http://127.0.0.1:8000/admin/logs/?start_year=2020&start_month=7&start_day
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
 
+==================================REDACT_GROUPS=================================================================
+var myHeaders = new Headers();
+myHeaders.append("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTk3MjkzMjI3LCJqdGkiOiJjYzliYzljMjhmNjM0YzNiODI1OGM0ZTYxZGM4YWU2OCIsInVzZXJfaWQiOjF9.oI6KHFaaTYmdccOthw8BEEYWUI5ZDWwUk1QfLFuM8BY");
+
+var formdata = new FormData();
+formdata.append("pk", "6");
+formdata.append("name", "hjgkslsjgkrgbjklt");
+formdata.append("actions", "1 2 ");
+formdata.append("participants", "1 2 ");
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
   

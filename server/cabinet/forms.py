@@ -32,7 +32,7 @@ class ProjectForm(forms.ModelForm):
 class GroupForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = '__all__'
+        exclude = ['participants', 'actions']
 
 
 class ActionForm(forms.ModelForm):
