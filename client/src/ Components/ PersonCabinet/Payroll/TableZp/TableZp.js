@@ -76,7 +76,7 @@ const TableZp = (props) =>{
                 <div className="col-sm-12">
                     <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
                     <table className="table table-bordered table-sm">
-                <tbody onBlur={props.onBlurNormDay} className="zarplata">
+                <tbody onBlur={props.onBlurSalary} className="zarplata">
                     <tr>
                         <th colSpan="7" scope="colgroup"></th>
                         <th colSpan="3" scope="colgroup">Начисления</th>

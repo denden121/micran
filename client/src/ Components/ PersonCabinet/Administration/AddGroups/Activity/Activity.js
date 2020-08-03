@@ -4,7 +4,7 @@ const Activity =    (props) =>{
     let temp = Array.from(props.actions)
     return(
         temp.map((action,index) =>{
-            console.log(action)
+            // console.log(action)
             let tempId = 'activity_' +action.pk
             return(
                 <div className="checkBox">

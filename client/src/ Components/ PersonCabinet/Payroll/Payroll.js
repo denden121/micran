@@ -63,6 +63,37 @@ class Payroll extends React.Component{
         console.log('default',event.target.defaultValue)
         console.log('class',event.target.className)
     }
+    onBlurSalary=async (event)=>{
+        // console.log('value',event.target.value)
+        // console.log('default',event.target.defaultValue)
+        if (event.target.value !== event.target.defaultValue){
+            const token = localStorage.getItem('token')
+            let myHeaders = new Headers();
+            myHeaders.append("Authorization", token);
+            const date = localStorage.getItem('date').split(' ')
+            let formdata = new FormData();
+            let field = event.target.className.split(' ').pop()
+            let id = field.split('.')[0]
+            let nameField = field.split('.')[1]
+            console.log(id , nameField)
+            formdata.append("year", date[1]);
+            formdata.append("month", date[0]);
+            formdata.append("person", id);
+            formdata.append(nameField, event.target.value);
+
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
+            const url = `http://127.0.0.1:8000/salary/`
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+        }
+    }
     render(){
         return(
             <div className="container-fluid">
@@ -91,7 +122,7 @@ class Payroll extends React.Component{
                          <br/>
                          <TableZp
                              allSalary = {this.state.allSalary.persons}
-                             onBlurNormDay = {this.onBlurNormDay}
+                             onBlurSalary = {this.onBlurSalary}
                          />
                     </div>
                 </div>                                
