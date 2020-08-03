@@ -392,7 +392,7 @@ def salary(request):
             person = Profile.objects.get(pk=person)
             year = request.POST.get('year')
             month = request.POST.get('month')
-            salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
+            salary_common = SalaryCommon.objects.get(date__year=year, date__month=month, person=person)
             salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
             salary.time_from_report = get_time_from_reports(person)
             form = SalaryIndividualForm(request.POST, instance=salary)
