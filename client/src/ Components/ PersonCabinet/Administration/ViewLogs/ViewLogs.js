@@ -40,10 +40,11 @@ class ViewLogs extends React.Component{
                             <br/>
                         </label>
                     </div>
-                    <div className="col-md-4 log">
+                    <div className="col-md-5 log">
                         <label className="text-left logg" style={{display:"flex"}}>
                             <input type="date" placeholder="дд/мм/гггг" className="form-control"></input>
                             <input type="date" placeholder="дд/мм/гггг" className="form-control" style={{marginLeft:"5px"}}></input>
+                            <button className="btn btn-sm btn-primary" style={{marginLeft:"5px"}}>Показать</button>
                         </label>                       
                     </div>
                    
