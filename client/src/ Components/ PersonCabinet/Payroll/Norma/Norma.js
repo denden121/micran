@@ -7,7 +7,7 @@ const Norma = (props) => {
     return(
         <div className="norma">
             <div className="row no-gutters flex-md-row mb-4  h-md-250 position-relative">
-                 <div className="card col-md-3">
+                 <div className="card col-md-3 col-lg-4">
                     <div className="card-header text-left ">
                         Норма рабочих дней за месяц
                     </div>
@@ -17,7 +17,7 @@ const Norma = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="card col-md-3">
+                <div className="card col-md-3 col-lg-4">
                     <div className="card-header text-left ">
                         Норма рабочих часов за месяц
                     </div>
@@ -27,7 +27,7 @@ const Norma = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="card col-md-3">
+                <div className="card col-md-3 col-lg-4">
                     <div className="card-header text-left ">
                         Время изменения таблицы другим пользователем
                     </div>

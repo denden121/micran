@@ -73,7 +73,7 @@ const TableZp = (props) =>{
     return(
         <div className="tablezp">
             <div className="row">
-                <div className="col-sm-12">
+                <div className="col-md-12 col-lg-12">
                     <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
                     <table className="table table-bordered table-sm">
                 <tbody onBlur={props.onBlurSalary} className="zarplata">
@@ -84,9 +84,9 @@ const TableZp = (props) =>{
                     </tr>
                     <tr>
                         <th scope="col">№</th>
-                        <th scope="col" className="col-md-3 col-sm-4 col-lg-6">ФИО</th>
+                        <th scope="col" >ФИО</th>
                         <td className="ico"></td>
-                        <th scope="col" className="col-md-2 col-sm-3 col-lg-6">Отраб.дни
+                        <th scope="col" >Отраб.дни
                             <br/>(%)</th>
                         <th scope="col">Отчет,
                             <br/>час</th>
@@ -98,7 +98,7 @@ const TableZp = (props) =>{
                             руб</th>
                         <th colSpan="2" scope="colgroup">Депримирование за часы,
                             руб</th>
-                        <th colSpan="2" scope="colgroup" className="col-md-2 col-sm-3 col-lg-6">Премия</th>
+                        <th colSpan="2" scope="colgroup" >Премия</th>
                         <th scope="col">На руки,руб</th>
                         <th scope="col">Начислено,
                             <br/>руб</th>
