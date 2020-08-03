@@ -32,6 +32,7 @@ class ViewLogs extends React.Component{
             <div className="container-fluid">
                 {/*    <Calendar/>*/}
                 {/*<Calendar/>*/}
+                <div className="col-md-12 col-lg-12">
                 <table className="table table-hover table-bordered">
                     <thead className="thead-dark">
                         <tr>
@@ -47,6 +48,8 @@ class ViewLogs extends React.Component{
                         <Logs listLogs = {this.state.logs}/>
                     </tbody>
                 </table>
+                </div>
+                
             </div>
         )
     }
