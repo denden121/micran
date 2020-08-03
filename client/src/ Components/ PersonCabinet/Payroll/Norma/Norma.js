@@ -22,7 +22,7 @@ const Norma = (props) => {
                         Норма рабочих часов за месяц
                     </div>
                     <div className="card-body text-left">
-                        <div className="input-group">
+                        <div className="text-center input-group">
                             {props.normTime}
                         </div>
                     </div>

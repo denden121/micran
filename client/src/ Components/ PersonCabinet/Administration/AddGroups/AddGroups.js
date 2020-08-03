@@ -76,11 +76,12 @@ class AddGroups extends React.Component {
             actions.push(i.value)
         }
         actions =actions.join(' ')
-        console.log(workers,actions)
+        const description = document.querySelector('#description-group')
+        // console.log(workers,actions)
         let formdata = new FormData();
         formdata.append("name", nameGroup);
         formdata.append("actions", actions);
-        formdata.append("description", 'ffdsfds');
+        formdata.append("description", description.value);
         formdata.append("participants", workers);
         let requestOptions = {
             method: 'POST',
@@ -148,6 +149,7 @@ class AddGroups extends React.Component {
                                 <label className="col-md-2"><strong>Описание</strong></label>
                             </div>
                             <textarea
+                                id="description-group"
                                 className="form-control"
                                 maxlength="10000"
                                 placeholder="Введите текст..."
