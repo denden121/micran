@@ -27,6 +27,7 @@ urlpatterns = [
     path('workers/', views.workers_departament),
     path('available_actions/', views.available_actions),
     path('admin/logs/', views.logs),
+    path('admin/logs_with_range/', views.logs_with_range),
     path('admin/groups_admin/', views.groups_with_permission),
 ]
 
