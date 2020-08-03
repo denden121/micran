@@ -364,7 +364,7 @@ def salary(request):
             for worker in workers:
                 hour = get_time_from_reports(worker)
                 salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
-                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1')
+                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1', common_part=salary_common)
                 salary.time_from_report = hour
                 salary_common.time_norm_common = salary_common.days_norm_common * 8
                 salary.days_worked = salary_common.days_norm_common - (salary.day_off +
