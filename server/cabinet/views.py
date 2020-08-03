@@ -362,14 +362,10 @@ def logs_with_range(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            start_year = request.GET.get('start_year')
-            start_month = request.GET.get('start_month')
-            start_day = request.GET.get('start_day')
-            end_year = request.GET.get('end_year')
-            end_month = request.GET.get('end_month')
-            end_day = request.GET.get('end_day')
-            logs = Logging.objects.filter(date__gt=f'{start_year}-{start_month}-{start_day}',
-                                          date__lte=f'{end_year}-{end_month}-{end_day}')
+            start_date = request.GET.get('start_date')
+            end_date = request.GET.get('end_date')
+            logs = Logging.objects.filter(date__gt=start_date,
+                                          date__lte=end_date)
             data = serializers.serialize('json', logs)
             return HttpResponse(data)
 
