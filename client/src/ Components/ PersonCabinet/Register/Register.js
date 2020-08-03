@@ -40,8 +40,8 @@ class Register extends React.Component{
                         <h3 className="text-left">Реестр проектов</h3>
                         <div className="buttons text-left">
                             <button type="button" className="btn btn-success btn-sm" onClick={this.onClickNewProject}>Добавить новый</button>
-                            <button type="button" className="btn btn-danger btn-sm" onClick={this.onClickUnit}>Объединить</button>
-                            <button type="button" className="btn btn-primary btn-sm" >Экспорт результатов</button>
+                            <button type="button" className="btn btn-danger btn-sm" onClick={this.onClickUnit} style={{marginLeft:"5px"}}>Объединить</button>
+                            <button type="button" className="btn btn-primary btn-sm" style={{marginLeft:"5px"}}>Экспорт результатов</button>
                         </div>
                         <hr className="normal"/>
                         
