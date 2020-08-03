@@ -257,9 +257,18 @@ def group_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            groups = Group.objects.all()
-            data = serializers.serialize('json', groups)
-            return HttpResponse(data)
+            pk = request.GET.get('pk')
+            group = Group.objects.get(pk=pk)
+            actions = group.available_actions.all()
+            participants = group.participants.all()
+            users = []
+            actions_output = []
+            for profile in participants:
+                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+            for action in actions:
+                actions_output.append(action.action + ' ' + str(action.num))
+            data = {'name': group.name, 'description': group.description, 'users': users, 'actions': actions_output}
+            return HttpResponse(json.dumps(data))
         if request.method == "POST":
             group = GroupForm(request.POST)
             if group.is_valid():
@@ -273,7 +282,7 @@ def group_view(request):
                 participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
                 if participants:
                     [group.participants.add(participants[i]) for i in range(len(participants))]
-                    return HttpResponse("Success")
+                return HttpResponse("Success")
 
 
 @csrf_exempt
@@ -304,22 +313,48 @@ def available_actions(request):
 @csrf_exempt
 def groups_with_permission(request):
     user = get_user_jwt(request)
-    if user and get_access(101, user):
-        groups = Group.objects.all()
-        data = []
-        for group in groups:
-            profiles = group.participants.all()
-            users = []
-            for profile in profiles:
-                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-            if users:
-                fields = {'name': group.name, 'users': users, 'description': group.description}
+    if request.method == "GET":
+        if user and get_access(101, user):
+            groups = Group.objects.all()
+            data = []
+            for group in groups:
+                profiles = group.participants.all()
                 users = []
-            else:
-                fields = {'name': group.name, 'users': users, 'description': group.description}
-                users = []
-            data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
-        return HttpResponse(json.dumps(data))
+                actions = group.available_actions.all()
+                actions_output = []
+                for profile in profiles:
+                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                for action in actions:
+                    actions_output.append(action.action + ' ' + str(action.num))
+                fields = {'name': group.name, 'users': users, 'description': group.description, 'actions': actions_output}
+                data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+            return HttpResponse(json.dumps(data))
+    if request.method == "POST":
+        pk = request.POST.get('pk')
+        group_obj = Group.objects.get(pk=pk)
+        group = GroupForm(request.POST, instance=group_obj)
+        if group.is_valid():
+            update = group.save(commit=False)
+            if request.POST.get('actions'):
+                actions = request.POST['actions'].split()
+                try:
+                    actions = [Action.objects.get(pk=int(action)) for action in actions]
+                except Action.DoesNotExist:
+                    pass
+                if actions:
+                    [group_obj.available_actions.add(actions[i]) for i in range(len(actions))]
+            if request.POST.get('participants'):
+                participants = request.POST['participants'].split()
+                try:
+                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                except Profile.DoesNotExist:
+                    pass
+                if participants:
+                    [group_obj.participants.add(participants[i]) for i in range(len(participants))]
+            if group.is_valid():
+                group.save()
+                return HttpResponse("Success")
+            return HttpResponse("Something went wrong")
 
 
 @csrf_exempt
