@@ -364,7 +364,7 @@ def salary(request):
             for worker in workers:
                 hour = get_time_from_reports(worker)
                 salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
-                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1')
+                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1', common_part=salary_common)
                 salary.time_from_report = hour
                 salary_common.time_norm_common = salary_common.days_norm_common * 8
                 salary.days_worked = salary_common.days_norm_common - (salary.day_off +
@@ -377,7 +377,7 @@ def salary(request):
                 except ZeroDivisionError:
                     salary.penalty = 0
                     salary.salary_hand = 0
-                salary.update()
+                salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
