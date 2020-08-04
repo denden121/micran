@@ -1,0 +1,19 @@
+.checkBox{
+    display: flex;
+    margin-bottom: 10px;
+    
+}
+
+.Label1{
+    float: left;
+    font-size: 16px;
+}
+.groupps{
+    background: #11BCD3;
+    border: 1px solid #11BCD3;
+    width: 100%;
+}
+
+.checkBox:hover{
+     color: #11BCD3; 
+}

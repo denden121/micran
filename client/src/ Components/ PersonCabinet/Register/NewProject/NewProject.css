@@ -1,0 +1,8 @@
+.napr label{
+    font-size: 16px;
+}
+
+.vnutr label{
+    border: 1px solid red;
+    padding: 10px;
+}

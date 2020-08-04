@@ -1,0 +1,13 @@
+.koeff table{
+    width: 100%
+}
+
+.stimull{
+    display:table;
+    width:100%;
+    table-layout:fixed;
+    font-size: 16px;
+}
+/* .prof{
+    padding: 10px;
+} */

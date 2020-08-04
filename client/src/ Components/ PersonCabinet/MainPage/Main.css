@@ -1,0 +1,30 @@
+.container{
+    display: grid;
+    grid-template-areas: 
+    "head head"
+    "nav data";
+    grid-template-rows: 60px 6fr;
+    grid-template-rows: [row1-start] 1% [row1-end] 100px [third-line] auto [last-line];
+    grid-template-columns: 2fr  14fr;
+    
+}
+
+.Head{
+    grid-area: head;
+}
+
+.Nav{
+    grid-area: nav;
+}
+
+.Data{
+    grid-area: data;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 100%;
+    max-width: 1960px;
+    padding: 0 30px;
+}
+

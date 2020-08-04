@@ -1,0 +1,109 @@
+.winter{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+    cursor: pointer;
+    
+}
+.spring{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+    cursor: pointer;
+}
+.summer{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+    cursor: pointer;
+}
+.autumn{
+    padding: 10px;
+    width:30%;
+    display: inline-block;
+    border-style: outset;
+    cursor: pointer;
+}
+.winter:active{
+}
+.winter:focus{
+    color:green !important;
+}
+
+.spring{
+}
+.summer{
+}
+.autumn{
+}
+.winter:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #736A90;
+    }
+.spring:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #736A90
+}
+.summer:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #736A90
+}
+.autumn:hover{
+    color: #ffe; /* Цвет текста активного пункта */
+    background-color: #736A90
+}
+
+.year ul{
+    list-style-type: none;
+}
+
+.year {
+    display:inline-block;
+    padding: 5px 5px;
+    width: 90%;
+    /* background: #100927; */
+    text-align: center;
+}
+
+.year ul {
+    margin: 0;
+    padding: 0;
+}
+
+.year ul li{
+    color: white;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+/* .year a{
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding-top: 5px;
+} */
+.year .prev {
+    float: left;
+    padding-top: 1px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Next button */
+.year .next {
+    float: right;
+    padding-top: 1px;
+    color:white;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* .months div .active{
+    padding: 5px;
+    background: #1abc9c;
+    color: white 
+} */

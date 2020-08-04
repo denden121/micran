@@ -1,0 +1,17 @@
+.zarplata{
+    display:block;
+    max-height:800px;
+    overflow-y:auto;
+}
+.zarplata{
+    display:table;
+    /* width:200%; */
+    max-width: 1960px;
+    table-layout:fixed;
+}
+/* thead {
+    width: calc( 100% - 1em )
+}  */
+.ico td{
+    width:15px
+}

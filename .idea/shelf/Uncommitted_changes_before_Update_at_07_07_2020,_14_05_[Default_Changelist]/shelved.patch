@@ -1,0 +1,488 @@
+Index: client/src/ Components/ PersonCabinet/Navigation/Navigation.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport './Navigation.css'\nimport {NavLink} from 'react-router-dom'\nimport Calendar from 'react-calendar';\n\nconst Navigation =(props)=>{\n  // state={\n  //   date: new Date(),\n  // }\n  // onChange = date => this.setState({date})\n  return(\n      <div className=\"container-fluid\">\n        <div className=\"row\">\n          <nav className=\"col-md-2 d-none d-md-block bg-light sidebar\">\n            <div className=\"sidebar-sticky\">\n            <Calendar/>\n              <ul className=\"nav flex-column\">\n                <li className=\"nav-item\">                  \n                  <a className=\"nav-link\" href=\"http://localhost:3000/cabinet/send_reports\">\n                    <span data-feather=\"home\"></span>\n                    Отправка отчетов\n                    <span className=\"sr-only\"></span>\n                  </a>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"cabinet/look_reports\">\n                    <span data-feather=\"file\"></span>\n                    Просмотр отчетов\n                  </NavLink>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"#\">\n                    <span data-feather=\"shopping-cart\"></span>\n                    Реестр проектов\n                  </NavLink>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"/holiday\">\n                    <span data-feather=\"users\"></span>\n                    Отпуск\n                  </NavLink>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"cabinet/salary\">\n                    <span data-feather=\"bar-chart-2\"></span>\n                    Зарплата\n                  </NavLink>\n                </li>\n                <li className=\"nav-item\">\n                  <NavLink className=\"nav-link\" to=\"/help\">\n                    <span data-feather=\"layers\"></span>\n                    Помощь\n                  </NavLink>\n                </li>\n                <li className=\"nav-item\">\n                  <a className=\"nav-link\" href=\"http://localhost:3000/cabinet/admin\">\n                    <span data-feather=\"layers\"></span>\n                    admin\n                  </a>\n                </li>\n              </ul>\n            </div>\n          </nav>\n\n        </div>\n      </div>\n  )\n}\n\nexport default Navigation;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/Navigation/Navigation.js	(revision 2a20ec64f48f51512db685f4fde6770f6b443ea4)
++++ client/src/ Components/ PersonCabinet/Navigation/Navigation.js	(date 1594045186325)
+@@ -14,7 +14,7 @@
+         <div className="row">
+           <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+             <div className="sidebar-sticky">
+-            <Calendar/>
++            <Calendar className='calendar'/>
+               <ul className="nav flex-column">
+                 <li className="nav-item">                  
+                   <a className="nav-link" href="http://localhost:3000/cabinet/send_reports">
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { Component } from 'react';\nimport './App.css';\nimport Auth from \"./ Components/Auth/Auth\"\nimport {BrowserRouter, Route} from 'react-router-dom'\nimport {Redirect,Switch} from 'react-router-dom'\nimport Main from \"./ Components/ PersonCabinet/MainPage/Main\"\nimport Registration from \"./ Components/Registration/registration\";\nimport ReactDOM from \"react-dom\";\n\nclass  App extends Component {\n    state = {\n        token: '',\n    }\n    //обработка кнопки для авторизации\n    authHandler = async () => {\n\n        let myHeaders = new Headers();\n        myHeaders.append(\"Content-Type\", \"application/x-www-form-urlencoded\");\n        let login = document.getElementById(\"input-login\").value\n        let password = document.getElementById(\"input-password\").value\n        // console.log(login,password)\n        let urlencoded = new URLSearchParams();// Добавляем параметры запросы\n        urlencoded.append(\"username\", login);\n        urlencoded.append(\"password\", password);\n        let requestOptions = {\n            method: 'POST',\n            body: urlencoded,\n            redirect: 'follow',\n            headers: myHeaders\n        };\n        console.log(login,password)\n        //проверка логина и пароля(отправка запроса)\n        let sendUrl = \"http://127.0.0.1:8000/token/\"\n        await fetch(sendUrl, requestOptions)\n            .then(response => response.json())\n            .then(result => localStorage.setItem('token', result.access))\n            .catch(error => localStorage.setItem('token', ''));\n\n        // console.log('sssss',localStorage.getItem('token'))\n        // console.log(localStorage.getItem('token') === 'undefined')\n        if (localStorage.getItem('token') == 'undefined') {\n            alert('incorrect')\n        } else {\n            myHeaders = new Headers();\n            myHeaders.append(\"Authorization\",localStorage.getItem('token'));\n\n            requestOptions = {\n                method: 'GET',\n                headers: myHeaders,\n                redirect: 'follow'\n            };\n\n            await fetch(\"http://127.0.0.1:8000/check/\", requestOptions)\n                .then(response => response.text())\n                .then(result => localStorage.setItem('checkReg',result))\n                .catch(error => console.log('error', error));\n            ReactDOM.render(\n                <BrowserRouter>\n                    <React.StrictMode>\n                        <App/>\n                    </React.StrictMode>\n                </BrowserRouter>,\n                document.getElementById('root')\n            );\n        }\n        console.log('прошел всю кнопку')\n\n    }\n    sendReg= async ()=> {\n        let myHeaders = new Headers();\n        let token = localStorage.getItem('token')\n        myHeaders.append(\"Authorization\", token);\n\n        let formdata = new FormData();\n        let first_name = document.getElementById('name').value\n        let surname = document.getElementById('surname').value\n        let middle_name = document.getElementById('fatherName').value\n        formdata.append(\"first_name\", first_name);\n        formdata.append(\"second_name\", surname);\n        formdata.append(\"middle_name\", middle_name);\n        let requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n\n        await fetch(\"http://127.0.0.1:8000/cabinet/register/\", requestOptions)\n            .then(response => response.text())\n            .catch(error => console.log('error', error));\n        localStorage.setItem('checkReg', 'True')\n    }\n    render(){\n        const funcPersArea = () => {\n            let token = localStorage.getItem('token')\n            if (typeof token==='string' && token!=='') {\n                return <Main/>\n            } else {\n                return <Redirect to='/'/>\n            }\n        }\n        const funcAuth = () => {\n            let token = localStorage.getItem('token')\n            let reg = localStorage.getItem('checkReg')\n            console.log(token,reg)\n            console.log(typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True')\n            console.log(localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='')\n            if (typeof token=='string' && token!=='' && localStorage.getItem('checkReg') === 'True') {\n                return <Redirect to='/cabinet'/>\n            }\n            else if( localStorage.getItem('checkReg')=='False' &&typeof token=='string' && token!=='') {\n                return <Redirect to='reg'/>\n            }\n            else{\n                console.log('пошел на авторизацию')\n                return <Auth authHandler={this.authHandler}/>;\n            }\n        };\n        const funcReg = () =>{\n            let reg = localStorage.getItem('checkReg')\n            // debugger;\n            if(reg === 'False' ) {\n                return <Registration sendFunc={this.sendReg}/>\n            }\n            else{\n                return <Redirect to='/cabinet'/>;\n            }\n        }\n        return (\n            <div className='App'>\n                <Switch>\n                    <Route path='/' exact component = {funcAuth}/>\n                    <Route path='/reg' exact component = {funcReg}/>\n                    <Route path='/cabinet'  component = {funcPersArea}/>\n                    {/*<Redirect to='/cabinet'/>*/}\n                </Switch>\n            </div>\n        )\n    }\n}\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/App.js	(revision 2a20ec64f48f51512db685f4fde6770f6b443ea4)
++++ client/src/App.js	(date 1594105434479)
+@@ -6,14 +6,17 @@
+ import Main from "./ Components/ PersonCabinet/MainPage/Main"
+ import Registration from "./ Components/Registration/registration";
+ import ReactDOM from "react-dom";
++import axios from 'axios'
+ 
+ class  App extends Component {
+     state = {
+         token: '',
++        ip:''
+     }
+     //обработка кнопки для авторизации
+     authHandler = async () => {
+-
++        // let a= await axios.get('https://api.myip.com')
++        // console.log('aaa',a)
+         let myHeaders = new Headers();
+         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+         let login = document.getElementById("input-login").value
+@@ -35,7 +38,13 @@
+             .then(response => response.json())
+             .then(result => localStorage.setItem('token', result.access))
+             .catch(error => localStorage.setItem('token', ''));
+-
++        // const localUrl = require('local-ip-url')
++        // console.log('IP',localUrl('public'))
++        const publicIp = require('public-ip');
++        (async () => {
++            this.setState( {ip :await publicIp.v4()})
++        })();
++        // console.log('IP',this.state.ip)
+         // console.log('sssss',localStorage.getItem('token'))
+         // console.log(localStorage.getItem('token') === 'undefined')
+         if (localStorage.getItem('token') == 'undefined') {
+@@ -43,6 +52,7 @@
+         } else {
+             myHeaders = new Headers();
+             myHeaders.append("Authorization",localStorage.getItem('token'));
++            myHeaders.append("IP",this.state.ip);
+ 
+             requestOptions = {
+                 method: 'GET',
+Index: client/src/ Components/ PersonCabinet/SendReport/SendReport.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport Reports from \"./Reports/Reports\"\n\nclass SendReport extends React.Component{\n    state= {\n        report:{},\n        id:''\n    }\n     async componentDidMount() {\n         let token = localStorage.getItem('token')\n         let myHeaders = new Headers();\n         myHeaders.append(\"Authorization\", token);\n\n         let requestOptions = {\n             method: 'GET',\n             headers: myHeaders,\n             redirect: 'follow'\n         };\n         let now = new Date()\n         let month = now.getMonth() + 1, yaer = now.getFullYear()\n         let url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + yaer\n         await fetch(url, requestOptions)\n             .then(response => response.json())\n             .then(result => this.setState({report:result[0].fields,id:result[0].pk}))\n             .catch(error => console.log('error', error));\n         // console.log(this.state.report)\n         console.log('state',this.state.report)\n         console.log('id',this.state.id)\n     }\n\n    saveReport= async ()=>{\n        let time = document.getElementById('spend-time').value\n        let body = document.querySelector('.body_for_report').value\n        let token = localStorage.getItem('token')\n        let project = document.querySelector('.project-for-report').value\n        let myHeaders = new Headers()\n        myHeaders.append(\"Authorization\", token);\n        console.log(project)\n        let formdata = new FormData();\n        formdata.append(\"text\", body)\n        formdata.append(\"hour \", time)\n        formdata.append(\"project\", project)\n        console.log(body)\n        // formdata.append(\"id\", project)\n\n        let requestOptions = {\n            method: 'POST',\n            headers: myHeaders,\n            body: formdata,\n            redirect: 'follow'\n        };\n        let url = `http://127.0.0.1:8000/cabinet/report/${this.state.id}`\n        await fetch(url, requestOptions)\n            .then(response => response.text())\n            .then(result => console.log(result))\n            .catch(error => console.log('error', error));\n        alert('Отчет отправлен')\n        // document.getElementById('mentorProject').value = ''\n        // document.getElementById('spendTime').value= ''\n        // document.getElementById('bodeReport').value= ''\n    }\n\n    render() {\n        return (\n            <div>\n                <div className container-fluid>\n                    <Reports saveReport = {this.saveReport}\n                             report = {this.state.report}/>\n                </div>\n            </div>\n        )\n    }\n}\n\nexport default SendReport
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/SendReport/SendReport.js	(revision 2a20ec64f48f51512db685f4fde6770f6b443ea4)
++++ client/src/ Components/ PersonCabinet/SendReport/SendReport.js	(date 1594045354929)
+@@ -34,6 +34,8 @@
+         let body = document.querySelector('.body_for_report').value
+         let token = localStorage.getItem('token')
+         let project = document.querySelector('.project-for-report').value
++        let date = document.querySelector('.calendar')
++        console.log('date',date)
+         let myHeaders = new Headers()
+         myHeaders.append("Authorization", token);
+         console.log(project)
+Index: client/src/ Components/ PersonCabinet/MainPage/Main.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {Component} from \"react\"\nimport 'bootstrap/dist/css/bootstrap.min.css';\nimport Navigation from \"../Navigation/Navigation\";\nimport Header from \"../Header/Header\"\nimport SendReport from \"../SendReport/SendReport\"\nimport rend from '../../../index.js'\nimport PersonData from \"../PersonData/PersonData\";\nimport \"./Main.css\"\nimport Switch from \"react-bootstrap/cjs/Switch\";\nimport {Redirect, Route} from \"react-router-dom\";\nimport AddGroups from \"../AddGroups/AddGroups\";\nimport ManageGroupps from \"../ManageGroupps/ManageGroupps\";\n\nimport Projects from \"../Projects/Projects\"\nimport ProjectCard from \"../LookReport/ProjectCard/ProjectCard\";\nclass Main extends Component{\n    logOut = () =>{\n        localStorage.setItem('token','')\n        localStorage.setItem('checkReg','False')\n        // rend()\n    }\n    render() {\n        return (\n            <div className=\"container\">\n                <div className=\"Head\">\n                    <Header clickLogOut={this.logOut}/>\n                </div>\n\n                <div className='Nav'>\n                    <Navigation/>\n                </div>\n\n                <div className=\"Data\">\n\n                    <Switch>\n                        {/*<Route path='/cabinet/' component = {PersonData}/>*/}\n                        <Route path='/cabinet/admin'  component = {AddGroups}/>\n                        <Route path='/cabinet/manage_groups'  component = {ManageGroupps}/>\n                        <Route path='/cabinet/send_reports' exact  component = {SendReport}/>\n                        {/*<Redirect to='/cabinet'/>*/}\n                    </Switch>\n                </div>\n            </div>\n        )\n    }\n}\n\nexport default Main;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/src/ Components/ PersonCabinet/MainPage/Main.js	(revision 2a20ec64f48f51512db685f4fde6770f6b443ea4)
++++ client/src/ Components/ PersonCabinet/MainPage/Main.js	(date 1594095765942)
+@@ -33,7 +33,7 @@
+                 <div className="Data">
+ 
+                     <Switch>
+-                        {/*<Route path='/cabinet/' component = {PersonData}/>*/}
++                        <Route exact  path='/cabinet/'  component = {PersonData}/>
+                         <Route path='/cabinet/admin'  component = {AddGroups}/>
+                         <Route path='/cabinet/manage_groups'  component = {ManageGroupps}/>
+                         <Route path='/cabinet/send_reports' exact  component = {SendReport}/>
+Index: client/package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"name\": \"client\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"dependencies\": {\n    \"@testing-library/jest-dom\": \"^4.2.4\",\n    \"@testing-library/react\": \"^9.5.0\",\n    \"@testing-library/user-event\": \"^7.2.1\",\n    \"axios\": \"^0.19.2\",\n    \"bootstrap\": \"^4.5.0\",\n    \"bootstrap-icons\": \"^1.0.0-alpha4\",\n    \"create-react-app\": \"^3.4.1\",\n    \"django-react-csrftoken\": \"^1.0.4\",\n    \"js-cookie\": \"^2.2.1\",\n    \"react\": \"^16.13.1\",\n    \"react-bootstrap\": \"^1.0.1\",\n    \"react-calendar\": \"^3.1.0\",\n    \"react-day-picker\": \"^7.4.8\",\n    \"react-dom\": \"^16.13.1\",\n    \"react-router-dom\": \"^5.1.2\",\n    \"react-scripts\": \"3.4.1\",\n    \"router\": \"^1.3.5\",\n    \"simple-react-calendar\": \"^2.2.1\"\n  },\n  \"scripts\": {\n    \"start\": \"react-scripts start\",\n    \"build\": \"react-scripts build\",\n    \"test\": \"react-scripts test\",\n    \"eject\": \"react-scripts eject\"\n  },\n  \"eslintConfig\": {\n    \"extends\": \"react-app\"\n  },\n  \"browserslist\": {\n    \"production\": [\n      \">0.2%\",\n      \"not dead\",\n      \"not op_mini all\"\n    ],\n    \"development\": [\n      \"last 1 chrome version\",\n      \"last 1 firefox version\",\n      \"last 1 safari version\"\n    ]\n  }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/package.json	(revision 2a20ec64f48f51512db685f4fde6770f6b443ea4)
++++ client/package.json	(date 1594104526342)
+@@ -11,7 +11,9 @@
+     "bootstrap-icons": "^1.0.0-alpha4",
+     "create-react-app": "^3.4.1",
+     "django-react-csrftoken": "^1.0.4",
++    "ip": "^1.1.5",
+     "js-cookie": "^2.2.1",
++    "public-ip": "^4.0.1",
+     "react": "^16.13.1",
+     "react-bootstrap": "^1.0.1",
+     "react-calendar": "^3.1.0",
+@@ -42,5 +44,8 @@
+       "last 1 firefox version",
+       "last 1 safari version"
+     ]
++  },
++  "devDependencies": {
++    "local-ip-url": "^1.0.3"
+   }
+ }
+Index: client/package-lock.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- client/package-lock.json	(revision 2a20ec64f48f51512db685f4fde6770f6b443ea4)
++++ client/package-lock.json	(date 1594104526886)
+@@ -1341,6 +1341,11 @@
+       "resolved": "https://registry.npmjs.org/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.3.tgz",
+       "integrity": "sha512-DetpxZw1fzPD5xUBrIAoplLChO2VB8DlL5Gg+I1IR9b2wPqYIca2WSUxL5g1vLeR4MsQq1NeWriXAVffV+U1Fw=="
+     },
++    "@sindresorhus/is": {
++      "version": "0.14.0",
++      "resolved": "https://registry.npmjs.org/@sindresorhus/is/-/is-0.14.0.tgz",
++      "integrity": "sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ=="
++    },
+     "@svgr/babel-plugin-add-jsx-attribute": {
+       "version": "4.2.0",
+       "resolved": "https://registry.npmjs.org/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-4.2.0.tgz",
+@@ -1450,6 +1455,14 @@
+         "loader-utils": "^1.2.3"
+       }
+     },
++    "@szmarczak/http-timer": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/@szmarczak/http-timer/-/http-timer-1.1.2.tgz",
++      "integrity": "sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==",
++      "requires": {
++        "defer-to-connect": "^1.0.1"
++      }
++    },
+     "@testing-library/dom": {
+       "version": "6.16.0",
+       "resolved": "https://registry.npmjs.org/@testing-library/dom/-/dom-6.16.0.tgz",
+@@ -3270,6 +3283,40 @@
+         "unset-value": "^1.0.0"
+       }
+     },
++    "cacheable-request": {
++      "version": "6.1.0",
++      "resolved": "https://registry.npmjs.org/cacheable-request/-/cacheable-request-6.1.0.tgz",
++      "integrity": "sha512-Oj3cAGPCqOZX7Rz64Uny2GYAZNliQSqfbePrgAQ1wKAihYmCUnraBtJtKcGR4xz7wF+LoJC+ssFZvv5BgF9Igg==",
++      "requires": {
++        "clone-response": "^1.0.2",
++        "get-stream": "^5.1.0",
++        "http-cache-semantics": "^4.0.0",
++        "keyv": "^3.0.0",
++        "lowercase-keys": "^2.0.0",
++        "normalize-url": "^4.1.0",
++        "responselike": "^1.0.2"
++      },
++      "dependencies": {
++        "get-stream": {
++          "version": "5.1.0",
++          "resolved": "https://registry.npmjs.org/get-stream/-/get-stream-5.1.0.tgz",
++          "integrity": "sha512-EXr1FOzrzTfGeL0gQdeFEvOMm2mzMOglyiOXSTpPC+iAjAKftbr3jpCMWynogwYnM+eSj9sHGc6wjIcDvYiygw==",
++          "requires": {
++            "pump": "^3.0.0"
++          }
++        },
++        "lowercase-keys": {
++          "version": "2.0.0",
++          "resolved": "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-2.0.0.tgz",
++          "integrity": "sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA=="
++        },
++        "normalize-url": {
++          "version": "4.5.0",
++          "resolved": "https://registry.npmjs.org/normalize-url/-/normalize-url-4.5.0.tgz",
++          "integrity": "sha512-2s47yzUxdexf1OhyRi4Em83iQk0aPvwTddtFz4hnSSw9dCEsLEGf6SwIO8ss/19S9iBb5sJaOuTvTGDeZI00BQ=="
++        }
++      }
++    },
+     "call-me-maybe": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/call-me-maybe/-/call-me-maybe-1.0.1.tgz",
+@@ -3549,6 +3596,14 @@
+         "shallow-clone": "^0.1.2"
+       }
+     },
++    "clone-response": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/clone-response/-/clone-response-1.0.2.tgz",
++      "integrity": "sha1-0dyXOSAxTfZ/vrlCI7TuNQI56Ws=",
++      "requires": {
++        "mimic-response": "^1.0.0"
++      }
++    },
+     "co": {
+       "version": "4.6.0",
+       "resolved": "https://registry.npmjs.org/co/-/co-4.6.0.tgz",
+@@ -4430,6 +4485,14 @@
+       "resolved": "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.0.tgz",
+       "integrity": "sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU="
+     },
++    "decompress-response": {
++      "version": "3.3.0",
++      "resolved": "https://registry.npmjs.org/decompress-response/-/decompress-response-3.3.0.tgz",
++      "integrity": "sha1-gKTdMjdIOEv6JICDYirt7Jgq3/M=",
++      "requires": {
++        "mimic-response": "^1.0.0"
++      }
++    },
+     "deep-equal": {
+       "version": "1.1.1",
+       "resolved": "https://registry.npmjs.org/deep-equal/-/deep-equal-1.1.1.tgz",
+@@ -4457,6 +4520,11 @@
+         "ip-regex": "^2.1.0"
+       }
+     },
++    "defer-to-connect": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/defer-to-connect/-/defer-to-connect-1.1.3.tgz",
++      "integrity": "sha512-0ISdNousHvZT2EiFlZeZAHBUvSxmKswVCEf8hW7KWgG4a8MVEu/3Vb6uWYozkjylyCxe0JBIiRB1jV45S70WVQ=="
++    },
+     "define-properties": {
+       "version": "1.1.3",
+       "resolved": "https://registry.npmjs.org/define-properties/-/define-properties-1.1.3.tgz",
+@@ -4658,6 +4726,24 @@
+         "safe-buffer": "^5.0.1"
+       }
+     },
++    "dns-socket": {
++      "version": "4.2.1",
++      "resolved": "https://registry.npmjs.org/dns-socket/-/dns-socket-4.2.1.tgz",
++      "integrity": "sha512-fNvDq86lS522+zMbh31X8cQzYQd6xumCNlxsuZF5TKxQThF/e+rJbVM6K8mmlsdcSm6yNjKJQq3Sf38viAJj8g==",
++      "requires": {
++        "dns-packet": "^5.1.2"
++      },
++      "dependencies": {
++        "dns-packet": {
++          "version": "5.2.1",
++          "resolved": "https://registry.npmjs.org/dns-packet/-/dns-packet-5.2.1.tgz",
++          "integrity": "sha512-JHj2yJeKOqlxzeuYpN1d56GfhzivAxavNwHj9co3qptECel27B1rLY5PifJAvubsInX5pGLDjAHuCfCUc2Zv/w==",
++          "requires": {
++            "ip": "^1.1.5"
++          }
++        }
++      }
++    },
+     "dns-txt": {
+       "version": "2.0.2",
+       "resolved": "https://registry.npmjs.org/dns-txt/-/dns-txt-2.0.2.tgz",
+@@ -4810,6 +4896,11 @@
+         }
+       }
+     },
++    "duplexer3": {
++      "version": "0.1.4",
++      "resolved": "https://registry.npmjs.org/duplexer3/-/duplexer3-0.1.4.tgz",
++      "integrity": "sha1-7gHdHKwO08vH/b6jfcCo8c4ALOI="
++    },
+     "duplexify": {
+       "version": "3.7.1",
+       "resolved": "https://registry.npmjs.org/duplexify/-/duplexify-3.7.1.tgz",
+@@ -6293,6 +6384,24 @@
+         }
+       }
+     },
++    "got": {
++      "version": "9.6.0",
++      "resolved": "https://registry.npmjs.org/got/-/got-9.6.0.tgz",
++      "integrity": "sha512-R7eWptXuGYxwijs0eV+v3o6+XH1IqVK8dJOEecQfTmkncw9AV4dcw/Dhxi8MdlqPthxxpZyizMzyg8RTmEsG+Q==",
++      "requires": {
++        "@sindresorhus/is": "^0.14.0",
++        "@szmarczak/http-timer": "^1.1.2",
++        "cacheable-request": "^6.0.0",
++        "decompress-response": "^3.3.0",
++        "duplexer3": "^0.1.4",
++        "get-stream": "^4.1.0",
++        "lowercase-keys": "^1.0.1",
++        "mimic-response": "^1.0.1",
++        "p-cancelable": "^1.0.0",
++        "to-readable-stream": "^1.0.0",
++        "url-parse-lax": "^3.0.0"
++      }
++    },
+     "graceful-fs": {
+       "version": "4.2.3",
+       "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.3.tgz",
+@@ -6607,6 +6716,11 @@
+         }
+       }
+     },
++    "http-cache-semantics": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npmjs.org/http-cache-semantics/-/http-cache-semantics-4.1.0.tgz",
++      "integrity": "sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ=="
++    },
+     "http-deceiver": {
+       "version": "1.2.7",
+       "resolved": "https://registry.npmjs.org/http-deceiver/-/http-deceiver-1.2.7.tgz",
+@@ -7087,6 +7201,21 @@
+         "is-extglob": "^2.1.1"
+       }
+     },
++    "is-ip": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/is-ip/-/is-ip-3.1.0.tgz",
++      "integrity": "sha512-35vd5necO7IitFPjd/YBeqwWnyDWbuLH9ZXQdMfDA8TEo7pv5X8yfrvVO3xbJbLUlERCMvf6X0hTUamQxCYJ9Q==",
++      "requires": {
++        "ip-regex": "^4.0.0"
++      },
++      "dependencies": {
++        "ip-regex": {
++          "version": "4.1.0",
++          "resolved": "https://registry.npmjs.org/ip-regex/-/ip-regex-4.1.0.tgz",
++          "integrity": "sha512-pKnZpbgCTfH/1NLIlOduP/V+WRXzC2MOz3Qo8xmxk8C5GudJLgK5QyLVXOSWy3ParAH7Eemurl3xjv/WXYFvMA=="
++        }
++      }
++    },
+     "is-number": {
+       "version": "3.0.0",
+       "resolved": "https://registry.npmjs.org/is-number/-/is-number-3.0.0.tgz",
+@@ -8356,6 +8485,11 @@
+       "resolved": "https://registry.npmjs.org/jsesc/-/jsesc-2.5.2.tgz",
+       "integrity": "sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA=="
+     },
++    "json-buffer": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.0.tgz",
++      "integrity": "sha1-Wx85evx11ne96Lz8Dkfh+aPZqJg="
++    },
+     "json-parse-better-errors": {
+       "version": "1.0.2",
+       "resolved": "https://registry.npmjs.org/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz",
+@@ -8435,6 +8569,14 @@
+         "object.assign": "^4.1.0"
+       }
+     },
++    "keyv": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/keyv/-/keyv-3.1.0.tgz",
++      "integrity": "sha512-9ykJ/46SN/9KPM/sichzQ7OvXyGDYKGTaDlKMGCAlg2UK8KRy4jb0d8sFc+0Tt0YYnThq8X2RZgCg74RPxgcVA==",
++      "requires": {
++        "json-buffer": "3.0.0"
++      }
++    },
+     "killable": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/killable/-/killable-1.0.1.tgz",
+@@ -8589,6 +8731,12 @@
+         }
+       }
+     },
++    "local-ip-url": {
++      "version": "1.0.3",
++      "resolved": "https://registry.npmjs.org/local-ip-url/-/local-ip-url-1.0.3.tgz",
++      "integrity": "sha512-OyHVtNHgSmxr8B+6iA8sxlGrdNQJdr6M8db5/v83BdZA/cYe7+0i1XsyBQ0AoRj2nK32O3znEuPU9/b8TS6iww==",
++      "dev": true
++    },
+     "locate-path": {
+       "version": "2.0.0",
+       "resolved": "https://registry.npmjs.org/locate-path/-/locate-path-2.0.0.tgz",
+@@ -8671,6 +8819,11 @@
+         "tslib": "^1.10.0"
+       }
+     },
++    "lowercase-keys": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-1.0.1.tgz",
++      "integrity": "sha512-G2Lj61tXDnVFFOi8VZds+SoQjtQC3dgokKdDG2mTm1tx4m50NUHBOZSBwQQHyy0V12A0JTG4icfZQH+xPyh8VA=="
++    },
+     "lru-cache": {
+       "version": "5.1.1",
+       "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz",
+@@ -8903,6 +9056,11 @@
+       "resolved": "https://registry.npmjs.org/mimic-fn/-/mimic-fn-2.1.0.tgz",
+       "integrity": "sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg=="
+     },
++    "mimic-response": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/mimic-response/-/mimic-response-1.0.1.tgz",
++      "integrity": "sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ=="
++    },
+     "min-indent": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/min-indent/-/min-indent-1.0.0.tgz",
+@@ -9576,6 +9734,11 @@
+       "resolved": "https://registry.npmjs.org/os-tmpdir/-/os-tmpdir-1.0.2.tgz",
+       "integrity": "sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ="
+     },
++    "p-cancelable": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/p-cancelable/-/p-cancelable-1.1.0.tgz",
++      "integrity": "sha512-s73XxOZ4zpt1edZYZzvhqFa6uvQc1vwUa0K0BdtIZgQMAJj9IbebH+JkgKZc9h+B05PKHLOTl4ajG1BmNrVZlw=="
++    },
+     "p-defer": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/p-defer/-/p-defer-1.0.0.tgz",
+@@ -11000,6 +11163,16 @@
+         "safe-buffer": "^5.1.2"
+       }
+     },
++    "public-ip": {
++      "version": "4.0.1",
++      "resolved": "https://registry.npmjs.org/public-ip/-/public-ip-4.0.1.tgz",
++      "integrity": "sha512-uy7G5RtP7MH9KILMX6cschB9aOxxRwFo0zv7Lf+ZXIw5IrH4EfdKQfACIwUEFilEHtkgJ9lpRfggwi1GVzN2vw==",
++      "requires": {
++        "dns-socket": "^4.2.0",
++        "got": "^9.6.0",
++        "is-ip": "^3.1.0"
++      }
++    },
+     "pump": {
+       "version": "3.0.0",
+       "resolved": "https://registry.npmjs.org/pump/-/pump-3.0.0.tgz",
+@@ -12013,6 +12186,14 @@
+         }
+       }
+     },
++    "responselike": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/responselike/-/responselike-1.0.2.tgz",
++      "integrity": "sha1-kYcg7ztjHFZCvgaPFa3lpG9Loec=",
++      "requires": {
++        "lowercase-keys": "^1.0.0"
++      }
++    },
+     "restore-cursor": {
+       "version": "3.1.0",
+       "resolved": "https://registry.npmjs.org/restore-cursor/-/restore-cursor-3.1.0.tgz",
+@@ -13563,6 +13744,11 @@
+         "kind-of": "^3.0.2"
+       }
+     },
++    "to-readable-stream": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/to-readable-stream/-/to-readable-stream-1.0.0.tgz",
++      "integrity": "sha512-Iq25XBt6zD5npPhlLVXGFN3/gyR2/qODcKNNyTMd4vbm39HUaOiAM4PMq0eMVC/Tkxz+Zjdsc55g9yyz+Yq00Q=="
++    },
+     "to-regex": {
+       "version": "3.0.2",
+       "resolved": "https://registry.npmjs.org/to-regex/-/to-regex-3.0.2.tgz",
+@@ -13854,6 +14040,21 @@
+         "requires-port": "^1.0.0"
+       }
+     },
++    "url-parse-lax": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/url-parse-lax/-/url-parse-lax-3.0.0.tgz",
++      "integrity": "sha1-FrXK/Afb42dsGxmZF3gj1lA6yww=",
++      "requires": {
++        "prepend-http": "^2.0.0"
++      },
++      "dependencies": {
++        "prepend-http": {
++          "version": "2.0.0",
++          "resolved": "https://registry.npmjs.org/prepend-http/-/prepend-http-2.0.0.tgz",
++          "integrity": "sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc="
++        }
++      }
++    },
+     "use": {
+       "version": "3.1.1",
+       "resolved": "https://registry.npmjs.org/use/-/use-3.1.1.tgz",

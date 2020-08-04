@@ -1,0 +1,54 @@
+.Reports{
+     max-width: 600px;
+    height: auto;
+    border: 1 px solid #ccc;
+    /* margin-bottom: 10px; */
+    display: block;
+    padding: 19px 29px 29px;
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14);
+    border-radius: 5px;
+    /* float: right; */
+    /* margin: 0 auto 20px; */
+    
+}
+
+
+
+.Reports input{
+    font-size: 16px;
+    height: auto;
+    margin-bottom: 15px;
+    padding: 7px 9px;
+    
+}
+
+.Label2{
+    float:right;
+}
+
+.total{
+    text-align: right;
+    color:grey;
+    margin:0;
+    padding: 0;
+}
+
+
+.a,
+.b,
+.c{
+    display: inline-block;
+}
+
+.Label1{
+    float: left;
+    font-size: 16px;
+}
+
+.Reports button {
+    background: #11BCD3;
+    border: 1px solid #11BCD3;
+    width: 50%;
+    
+    
+  }

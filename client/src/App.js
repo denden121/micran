@@ -1,103 +1,145 @@
 import React, { Component } from 'react';
 import './App.css';
-import Auth1 from './Auth1/Auth1'
-import {Route} from 'react-router-dom'
+import Auth from "./ Components/Auth/Auth"
+import {BrowserRouter, Route} from 'react-router-dom'
 import {Redirect,Switch} from 'react-router-dom'
-import PersArea from "./Components/homePage/PersArea";
-import Report from "./Components/homePage/Report/Report";
-import LookMain from "./Components/homePage/lookReport/lookMain/lookMain";
+import Main from "./ Components/ PersonCabinet/MainPage/Main"
+import Registration from "./ Components/Registration/registration";
+import ReactDOM from "react-dom";
+import rend from "./index";
 
-class  App extends Component{
+class  App extends Component {
     state = {
-        token:'',
-        cabinet:{}
+        token: '',
     }
     //обработка кнопки для авторизации
-    authHandler = async () =>{
-        let login = document.getElementById("input-login").value
-        let password = document.getElementById("input-password").value
-        let formdata = new FormData();
-        formdata.append("username", login);
-        formdata.append("password", password);
+    authHandler = async () => {
+        //написать валидацию и изменить окно неправильных данных
+        //получение побличного ip для логирования
+        const publicIp = require('public-ip');
+        const ip = String(await publicIp.v4())
+        //сбор данных для отправки на авторизацию
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        const login = document.getElementById("input-login").value
+        const password = document.getElementById("input-password").value
+        let urlencoded = new URLSearchParams();// Добавляем параметры запросы
+        urlencoded.append("username", login);
+        urlencoded.append("password", password);
+        urlencoded.append("IP", ip);
         let requestOptions = {
             method: 'POST',
-            body: formdata,
-            redirect: 'follow'
+            body: urlencoded,
+            redirect: 'follow',
+            headers: myHeaders
         };
-        //проверка логина и пароля
-        await fetch("http://127.0.0.1:8000/token/", requestOptions)
+        console.log(login,password)
+        //проверка логина и пароля(отправка запроса)
+        const sendUrl = "http://127.0.0.1:8000/token/"
+        await fetch(sendUrl, requestOptions)
             .then(response => response.json())
-            .then(result =>console.log(this.setState({token:result.access})))
-            .catch(error => this.setState({token:''}));
-        if(this.state.token ===undefined) {
+            .then(result => localStorage.setItem('token', result.access))
+            .catch(error => localStorage.setItem('token', ''));
+        //проверка верны данные или нет
+        if (localStorage.getItem('token') == '') {
             alert('incorrect')
+        } else {
+            //проверка прав
+            myHeaders = new Headers();
+            myHeaders.append("Authorization",localStorage.getItem('token'));
+            requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+            let url = "http://127.0.0.1:8000/check_admin/"
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => localStorage.setItem('admin',result))
+                .catch(error => console.log('error'));
+            //проверка зарегистрирован пользователь или нет
+            url = "http://127.0.0.1:8000/check/"
+            await fetch(url, requestOptions)
+                .then(response => response.text())
+                .then(result => localStorage.setItem('checkReg',result))
+                .catch(error => console.log('error'));
+            const time = new Date()
+            localStorage.setItem('date',`${time.getMonth()+1} ${time.getFullYear()}`)
+            rend()
         }
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization",this.state.token);
-        let requestOptions1 = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow'
-        };
-        //запрос на получение данных для личного кабинета
-        fetch("http://127.0.0.1:8000/cabinet/1/", requestOptions1)
-            .then(response =>response.json())
-            .then(result => this.setState({cabinet:result[0].fields}))
-            .catch(error => console.log('error', error));
     }
-    sendReport=()=>{
-        const hours = document.getElementById("count_hours").value
-        const report = document.getElementById("report_text").value
-        const nameProject = document.getElementById("name_project_text").value
-        const curator = document.getElementById("curator_name").value
+    //функция отправки регистрации
+    sendReg = async ()=> {
+        //написать валидацию
+        const token = localStorage.getItem('token')
         let myHeaders = new Headers();
-        myHeaders.append("Authorization", this.state.token);
-        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        let urlencoded = new URLSearchParams();
-        urlencoded.append("project", nameProject);
-        urlencoded.append("text", report);
-        urlencoded.append("curator",curator );
-        urlencoded.append("hour", hours);
-
+        myHeaders.append("Authorization", token);
+        let formdata = new FormData();
+        const first_name = document.getElementById('name').value
+        const surname = document.getElementById('surname').value
+        const middle_name = document.getElementById('fatherName').value
+        formdata.append("first_name", first_name);
+        formdata.append("last_name", surname);
+        formdata.append("middle_name", middle_name);
         const requestOptions = {
             method: 'POST',
             headers: myHeaders,
-            body: urlencoded,
+            body: formdata,
             redirect: 'follow'
         };
-
-        fetch("http://127.0.0.1:8000/cabinet/reports/", requestOptions)
+        const url = "http://127.0.0.1:8000/cabinet/register/"
+        await fetch(url , requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+            .catch(error => console.log('error'));
+        localStorage.setItem('checkReg', 'True')
     }
-    render() {
-         const funcPersArea = () =>{
-            return < PersArea date = {this.state.cabinet} />;
+    render(){
+
+        const funcPersArea = () => {
+            let token = localStorage.getItem('token')
+            if (typeof token==='string' && token!=='') {
+                return <Main/>
+            } else {
+                return <Redirect to='/'/>
+            }
         }
-        const funcAuth =()=> {
-            if (this.state.token !== '') {
-                return <Redirect to = '/cabinet'/>
-            }else {
-                return <Auth1 authHandler = {this.authHandler} changeLogin = {this.changeLogin}
-                             changePassword = {this.changePassword}/>;
+        const funcAuth = () => {
+            const token = localStorage.getItem('token')
+            const reg = localStorage.getItem('checkReg')
+            if (typeof token=='string' &&
+                token!=='' &&
+                localStorage.getItem('checkReg') === 'True')
+            {
+                return <Redirect to='/cabinet'/>
+            }
+            else if( localStorage.getItem('checkReg')=='False'
+                && typeof token=='string' && token!=='')
+            {
+                return <Redirect to='reg'/>
+            }
+            else{
+                return <Auth authHandler={this.authHandler}/>;
             }
         };
-        const funcReport= () =>{
-            return <Report sendReport = {this.sendReport}/>
+        const funcReg = () =>{
+            const reg = localStorage.getItem('checkReg')
+
+            if (reg === 'False' ) {
+                return <Registration sendFunc={this.sendReg}/>
+            }
+            else{
+                return <Redirect to='/cabinet'/>;
+            }
         }
         return (
-           <div className = 'App' >
-               <Switch>
-                   <Route path='/' exact component = {funcAuth} />
-                   <Route path='/cabinet' exact component={funcPersArea}/>
-                   {/*<Route path ='/cabinet/report' exact component={funcReport}/>*/}
-                   {/*<Route path='/cabinet/look' exact component={LookMain}/>*/}
-                   <Redirect to = '/cabinet'/>
-               </Switch>
-           </div >
-        );
+            <div className='App'>
+                <Switch>
+                    <Route path='/' exact component = {funcAuth}/>
+                    <Route path='/reg' exact component = {funcReg}/>
+                    <Route path='/cabinet'  component = {funcPersArea}/>
+                </Switch>
+            </div>
+        )
     }
 }
-
 export default App;
