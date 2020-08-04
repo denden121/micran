@@ -326,7 +326,8 @@ def groups_with_permission(request):
                     users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
                 for action in actions:
                     actions_output.append(action.action + ' ' + str(action.num))
-                fields = {'name': group.name, 'users': users, 'description': group.description, 'actions': actions_output}
+                fields = {'name': group.name, 'users': users, 'description': group.description,
+                          'actions': actions_output}
                 data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
             return HttpResponse(json.dumps(data))
     if request.method == "POST":
@@ -395,7 +396,8 @@ def salary(request):
             for worker in workers:
                 hour = get_time_from_reports(worker)
                 salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
-                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1', common_part=salary_common)
+                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
+                                                                    common_part=salary_common)
                 salary.time_from_report = hour
                 salary_common.time_norm_common = salary_common.days_norm_common * 8
                 salary.days_worked = salary_common.days_norm_common - (salary.day_off +
@@ -456,7 +458,17 @@ def workers_departament(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.all()
+            workers = Profile.objects.all().exclude(position="Top")
+            data = serializers.serialize('json', workers)
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def managers(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            workers = Profile.objects.filter(position="Top")
             data = serializers.serialize('json', workers)
             return HttpResponse(data)
 

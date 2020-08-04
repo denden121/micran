@@ -12,7 +12,7 @@ const Total = (props) =>{
                         Начислено
                     </div>
                     <div className="card-body text-left">
-                        {props.salary.award + props.salary.salary_hand}
+                        {props.salary.award + props.salary.plan_salary}
                     </div>
                 </div>
                 <div className="prof card col-md-4">
@@ -20,7 +20,7 @@ const Total = (props) =>{
                          На руки
                     </div>
                     <div className="card-body text-left">
-                        {props.salary.salary_hand}
+                        {props.salary.salary_hand * 0.87}
                     </div>
                 </div>
                  <div className="prof card col-md-4">

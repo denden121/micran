@@ -25,6 +25,7 @@ urlpatterns = [
     path('salary/individual/', views.salary_individual),
     path('salary/change_common/', views.change_common_salary),
     path('workers/', views.workers_departament),
+    path('workers/managers/', views.managers),
     path('available_actions/', views.available_actions),
     path('admin/logs/', views.logs),
     path('admin/logs_with_range/', views.logs_with_range),
