@@ -8,7 +8,13 @@ import TableZp from "./TableZp/TableZp"
 
 class Payroll extends React.Component{
     state = {
-        allSalary:{}
+        allSalary:{},
+        filtersSalary:{},
+        hideSalary:false,
+        hideNormTime:false,
+        hideZeroReport:false,
+        hideTechnician:false,
+        hideAnotherPeople:false
     }
     componentDidMount() {
         this.loadAllSalary()
@@ -63,9 +69,7 @@ class Payroll extends React.Component{
         console.log('default',event.target.defaultValue)
         console.log('class',event.target.className)
     }
-    onBlurSalary=async (event)=>{
-        // console.log('value',event.target.value)
-        // console.log('default',event.target.defaultValue)
+    onBlurSalary= async (event)=>{
         if (event.target.value !== event.target.defaultValue){
             const token = localStorage.getItem('token')
             let myHeaders = new Headers();
@@ -94,7 +98,53 @@ class Payroll extends React.Component{
                 .catch(error => console.log('error', error));
         }
     }
+    onChangeFilter=(event)=>{
+        switch (event.target.value){
+            case 'hide-salary':
+                if (this.state.hideSalary){
+                    this.setState({hideSalary:false})
+                }
+                else{
+                    this.setState({hideSalary:true})
+                }
+                break;
+            case 'hide-norm-time':
+                if (this.state.hideNormTime){
+                    this.setState({hideNormTime:false})
+                    let temp = this.state.allSalary
+                }
+                else{
+                    this.setState({hideNormTime:true})
+                }
+                break;
+            case 'hide-zero-report':
+                if (this.state.hideZeroReport){
+                    this.setState({hideZeroReport:false})
+                }
+                else{
+                    this.setState({hideZeroReport:true})
+                }
+                break;
+            case 'hide-technician':
+                if (this.state.hideTechnician){
+                    this.setState({hideTechnician:false})
+                }
+                else{
+                    this.setState({hideTechnician:true})
+                }
+                break;
+            case 'hide-another-people':
+                if (this.state.hideAnotherPeople){
+                    this.setState({hideAnotherPeople:false})
+                }
+                else{
+                    this.setState({hideAnotherPeople:true})
+                }
+                break;
+        }
+    }
     render(){
+        console.log('dfsf',this.state)
         return(
             <div className="container-fluid">
                 <div className="row">
@@ -104,7 +154,7 @@ class Payroll extends React.Component{
                             <div className="row">
                                 <div className="col-md-12 col-lg-12 card">
                                      <div className="card-body">
-                                        <PayrollCheck/>                            
+                                        <PayrollCheck onChangeFilter={this.onChangeFilter}/>
                                      </div>
                                  </div>
                             </div>
@@ -121,6 +171,7 @@ class Payroll extends React.Component{
                          />
                          <br/>
                          <TableZp
+                             Filter = {this.state}
                              allSalary = {this.state.allSalary.persons}
                              onBlurSalary = {this.onBlurSalary}
                          />
