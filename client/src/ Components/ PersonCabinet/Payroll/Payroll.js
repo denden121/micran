@@ -36,6 +36,11 @@ class Payroll extends React.Component{
             .catch(error => console.log('error', error));
         console.log(this.state.allSalary)
     }
+    onChangeSalary=(event)=>{
+        console.log(event.target.value)
+        console.log(event.target.placeholder)
+        // console.log(event.target)
+    }
     onBlurNormDay =async (event)=>{
         console.log('value',event.target.value)
         console.log('default',event.target.defaultValue)
@@ -76,9 +81,10 @@ class Payroll extends React.Component{
             myHeaders.append("Authorization", token);
             const date = localStorage.getItem('date').split(' ')
             let formdata = new FormData();
-            let field = event.target.className.split(' ').pop()
-            let id = field.split('.')[0]
-            let nameField = field.split('.')[1]
+            let field = event.target.id.split('.')
+            console.log('filed',field)
+            let id = field[0]
+            let nameField = field[1]
             console.log(id , nameField)
             formdata.append("year", date[1]);
             formdata.append("month", date[0]);
@@ -171,6 +177,7 @@ class Payroll extends React.Component{
                          />
                          <br/>
                          <TableZp
+                             onChangeSalary={this.onChangeSalary}
                              Filter = {this.state}
                              allSalary = {this.state.allSalary.persons}
                              onBlurSalary = {this.onBlurSalary}
