@@ -177,8 +177,13 @@ class SendReport extends React.Component{
     render() {
         return (
             <div>
-                <label><strong>Отчет о проделанной работе</strong></label>
                 <div className container-fluid>
+                    <div className="row">
+                        <div className="col-md-4">
+                            <label className="text-left"><strong><h5>Отчет о проделанной работе</h5></strong></label>
+                        </div>
+                    </div>
+                
                     <Reports
                         onClickDeleteCard = {this.onClickDeleteCard}
                         onClickCard = {this.onClickCard}
