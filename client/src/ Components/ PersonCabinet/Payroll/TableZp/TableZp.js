@@ -9,8 +9,10 @@ const FieldSalary = (props) =>{
     if (props.allSalary) {
         let result = Array.from(props.allSalary)
         return result.map((fields, index) => {
+            console.log(fields.person.position)
             return (
-                !props.Filters.hideZeroReport | fields.person.hours_worked != 0
+                (!props.Filters.hideZeroReport | fields.person.hours_worked != 0) &
+                (!props.Filters.hideTechnician | fields.person.position !== 'Лаборант')
                     // !props.Filters.hideTechnician & fields.person.position != 'лаборант' &
                     // !props.Filters.hideAnotherPeople
                 ?<tr>
