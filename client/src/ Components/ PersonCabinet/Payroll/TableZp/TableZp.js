@@ -4,77 +4,94 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import "./TableZp.css"
 import BootstrapTable from 'react-bootstrap-table-next';
 
-const FieldSalary = (props) =>{
-
+const FieldSalary = (props) =>{ // Все зп
     if (props.allSalary) {
         let result = Array.from(props.allSalary)
         return result.map((fields, index) => {
             console.log(fields.person.position)
+            const fullName = fields.person.full_name, // ФИО
+            workDays = fields.person.work_days, // Отработаные дни
+            reportHours = fields.person.hours_worked, // Время по отчету
+            normTime = fields.person.time_norm, // Норма времени
+            timeOff = fields.person.time_off, // Пропущенные часы
+            isAward = fields.person.is_awarded, // Депримирование
+
+            isHideZeroReport = !props.Filters.hideZeroReport | fields.person.hours_worked !== 0, // условия для вывода( нулевых отчетов)
+            isHideTechnician = !props.Filters.hideTechnician | fields.person.position !== 'Лаборант'
             return (
-                (!props.Filters.hideZeroReport | fields.person.hours_worked != 0) &
-                (!props.Filters.hideTechnician | fields.person.position !== 'Лаборант')
-                    // !props.Filters.hideTechnician & fields.person.position != 'лаборант' &
-                    // !props.Filters.hideAnotherPeople
+                isHideZeroReport & isHideTechnician
                 ?<tr>
                     <td scope="col">
                         <div>{index+1}</div>
                     </td>
                     <td scope="col">
-                        <div>{fields.person.full_name}</div>
+                        <div>{fullName}</div>
                     </td>
                     <td scope="col">
                         <div></div>
                     </td>
                     <td scope="col">
-                        <div>{fields.person.work_days}</div>
+                        <div>{workDays}</div>
                     </td>
                     <td scope="col">
-                        <div>{fields.person.hours_worked}</div>
+                        <div>{reportHours}</div>
                     </td>
-                    {!props.Filters.hideNormTime
+                    {!props.Filters.hideNormTime//фильтр (убрать норму времени)
                         ?<td scope="col">
-                            <div>{fields.person.time_norm}</div>
+                            <div>{normTime}</div>
                         </td>
                         :''
                     }
                     <td scope="col" className="red">
-                        <div>{fields.person.time_off}</div>
+                        <div>{timeOff}</div>
                     </td>
                     <td scope="col">
-                        <input type="text" defaultValue={fields.person.plan_salary} className={`in form-control ${fields.pk}.plan_salary`} placeholder="0.00%"></input>
+                        <input type="number"
+                               id={`${fields.pk}.plan_salary`}
+                               defaultValue={fields.person.plan_salary}
+                               className={`in form-control`}
+                               placeholder="0.00%">
+                        </input>
                     </td>
                     <td scope="col">
                         <div></div>
                     </td>
                     <td scope="col">
                         <label className="checkbox Label2">
-                            {fields.person.is_awarded
+                            {isAward // проверка чекбокса на депремирование
                             ? <input type="checkbox"  className="form-check-input" checked/>
                             : <input type="checkbox"  className="form-check-input" />}
                         </label>
                     </td>
-                    {!props.Filters.hideSalary
+                    {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
-                            <input type="text" className="in form-control" defaultValue={(100*fields.person.award)/fields.person.plan_salary}  placeholder="0.00%"/>
+                            <input type="number"
+                                   className="in form-control"
+                                   defaultValue={(100*fields.person.award)/fields.person.plan_salary}
+                                   placeholder="0.00%"/>
                         </td>:''}
-                    {!props.Filters.hideSalary
+                    {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
-                            <input type="text" className={`in form-control ${fields.pk}.award`}defaultValue={fields.person.award} placeholder="0.00руб"/>
+                            <input type="number"
+                                   id={`${fields.pk}.award`}
+                                   className={`in form-control`}
+                                   defaultValue={fields.person.award}
+                                   placeholder="0.00руб"/>
                         </td>:''}
-                    {!props.Filters.hideSalary
+                    {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
                             <div>{fields.person.salary_hand}</div>
                         </td>:''}
-                    {!props.Filters.hideSalary
+                    {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
                             <div>{(fields.person.salary_hand*1.13).toFixed(2)}</div>
                         </td>:''}
-                    {!props.Filters.hideSalary
+                    {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
                             <div></div>
                         </td>:''}
                 </tr>
-                :''
+                :''// вывод если поле не подходт по условию фильтра
             )
         })
     }
@@ -89,7 +106,7 @@ const TableZp = (props) =>{
                 <div className="col-md-12 col-lg-12">
                     <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
                     <table className="table table-bordered table-sm">
-                <tbody onBlur={props.onBlurSalary} className="zarplata">
+                <tbody onChange={props.onChangeSalary} onBlur={props.onBlurSalary} className="zarplata">
                     <tr>
                         <th colSpan="7" scope="colgroup"></th>
                         <th colSpan="3" scope="colgroup">Начисления</th>
