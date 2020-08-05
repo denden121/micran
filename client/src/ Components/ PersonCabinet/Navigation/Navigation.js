@@ -108,6 +108,12 @@ class Navigation extends Component{
                                                 Register
                                             </a>
                                         </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/employees">
+                                                <span data-feather="layers"></span>
+                                                Employees
+                                            </a>
+                                        </li>
                                     </div>
                                     :
                                     <div></div>
