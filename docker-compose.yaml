@@ -22,6 +22,8 @@ services:
     ports:
       - "3000:3000"
     command: npm start
+    environment:
+      COMPOSE_HTTP_TIMEOUT: 360
 
   db:
     image: "postgres:12"
