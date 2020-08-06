@@ -412,7 +412,7 @@ def salary(request):
                     salary.salary_hand = 0
                 salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
-                         'position': worker.position,
+                         'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,

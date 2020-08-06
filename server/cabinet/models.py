@@ -51,6 +51,7 @@ class Profile(models.Model):
     shift = models.CharField(max_length=30, blank=True)
     part_time_job = models.CharField(max_length=30, blank=True)
     lateness = models.CharField(max_length=30, blank=True)
+    SRI_SAS = models.BooleanField(blank=True, default='False')
 
     def __str__(self):
         return self.user.username
