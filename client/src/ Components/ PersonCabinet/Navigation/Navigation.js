@@ -114,6 +114,12 @@ class Navigation extends Component{
                                                 Employees
                                             </a>
                                         </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/calendar">
+                                                <span data-feather="layers"></span>
+                                                Трудовой календарь
+                                            </a>
+                                        </li>
                                     </div>
                                     :
                                     <div></div>
