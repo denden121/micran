@@ -415,6 +415,7 @@ def salary(request):
                          'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
+                         'is_penalty': salary.is_penalty,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'award': salary.award, 'salary_hand': salary.salary_hand}
                 data.append({'pk': worker.pk, 'person': field})
@@ -446,7 +447,7 @@ def salary_individual(request):
             month = request.GET.get('month')
             salary = get_object_or_404(SalaryIndividual, person=person, date__year=year, date__month=month)
             data = {'salary_hand': salary.salary_hand, 'day_off': salary.day_off, 'award': salary.award,
-                    'days_worked': salary.days_worked,
+                    'days_worked': salary.days_worked, 'is_penalty': salary.is_penalty,
                     'vacation': salary.vacation, 'sick_leave': salary.sick_leave,
                     'time_from_report': salary.time_from_report,
                     'time_orion': salary.time_orion, 'time_norm': salary.time_norm, 'time_off': salary.time_off,
