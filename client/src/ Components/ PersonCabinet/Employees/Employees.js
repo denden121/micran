@@ -9,24 +9,21 @@ import { Modal, Button } from 'antd';
 
 
 class Employees extends React.Component{
-<<<<<<< HEAD
     state = {
-        workers:{}
+        workers:{},
+        visible: false
     }
-=======
-    state = { visible: false };
     showModal = () => {
         this.setState({
           visible: true,
         });
       };
-    
-      handleOk = e => {
-        console.log(e);
-        this.setState({
-          visible: false,
-        });
-      };
+    handleOk = e => {
+      console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
     
       handleCancel = e => {
         console.log(e);
@@ -34,11 +31,6 @@ class Employees extends React.Component{
           visible: false,
         });
       };
->>>>>>> origin/Deploy
-    onClickPerson = ()=>{
-        document.querySelector('.background-modal').style.display = 'flex'
-        console.log('person',document.querySelector('.background-modal').style.display)
-    }
     loadWorkers = async () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
@@ -66,27 +58,17 @@ class Employees extends React.Component{
                 <h4 className="text-left">Список сотрудников</h4>
                 <div className="row">
                     <div className="col-md-12 col-lg-12">
-                        
-<<<<<<< HEAD
-                        <ListEmp workers={this.state.workers} onClickPerson={this.onClickPerson}/>
+                        <ListEmp onClickShowModal={this.showModal} workers={this.state.workers} onClickPerson={this.onClickPerson}/>
                     </div>
                 </div>
-=======
-                        <ListEmp onClickShowModal={this.showModal}/>
-                    </div>
-                </div>
-                                
                 <Modal
                     title="Карточка сотрудника"
                     visible={this.state.visible}
                     onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <CardModal/>
+                    onCancel={this.handleCancel}>
 
+                    <CardModal/>
                 </Modal>
-                
->>>>>>> origin/Deploy
             </div>
         )
     }
