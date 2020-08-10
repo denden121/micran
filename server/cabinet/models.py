@@ -33,7 +33,7 @@ class Action(models.Model):
     action = models.CharField(max_length=30, blank=True)
     num = models.IntegerField()
 
-    def __str__(self): й
+    def __str__(self):
         return self.action
 
 

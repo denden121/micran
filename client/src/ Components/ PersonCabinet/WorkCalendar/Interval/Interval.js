@@ -68,8 +68,67 @@ class Interval extends React.Component {
                                         <div className="symbol1 rounded">12</div>
                                         <div className="lab">
                                             <label className="LabelL" >- Не определено (не влияет на норму часов)</label>
-                                        </div>                                      
-                                                                              
+                                        </div>                                                                     
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                    </div>
+                                    <div className="col-md-8" style={{marginTop:"-10px"}}>
+                                        <div className="symbol2 rounded">12</div>
+                                        <div className="lab">
+                                            <label className="LabelL" >- Оплачиваемый отпуск</label>
+                                        </div>                                                                     
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                    </div>
+                                    <div className="col-md-8" style={{marginTop:"-5px"}}>
+                                        <div className="symbol3 rounded">12</div>
+                                        <div className="lab">
+                                            <label className="LabelL" >- Отпуск без содержания</label>
+                                        </div>                                                                     
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                    </div>
+                                    <div className="col-md-8" style={{marginTop:"-5px"}}>
+                                        <div className="symbol4 rounded">12</div>
+                                        <div className="lab">
+                                            <label className="LabelL" >- Больничный лист</label>
+                                        </div>                                                                     
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                    </div>
+                                    <div className="col-md-8" style={{marginTop:"-5px"}}>
+                                        <div className="symbol5 rounded">12</div>
+                                        <div className="lab">
+                                            <label className="LabelL" >- Прогул</label>
+                                        </div>                                                                     
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                    </div>
+                                    <div className="col-md-8" style={{marginTop:"-5px"}}>
+                                        <div className="symbol6 rounded">12</div>
+                                        <div className="lab">
+                                            <label className="LabelL" >- Планируемое событие(не влияет на норму часов)</label>
+                                        </div>                                                                     
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                    </div>
+                                    <div className="col-md-8" style={{marginTop:"-5px"}}>
+                                        <div className="symbol8 rounded">12</div>
+                                        <div className="lab">
+                                            <label className="LabelL" >- Планируемый ежегодный отпуск(не влияет на норму часов)</label>
+                                        </div>                                                                     
                                     </div>
                                 </div>
                             </div>
