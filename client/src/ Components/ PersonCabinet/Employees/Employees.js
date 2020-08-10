@@ -43,16 +43,19 @@ class Employees extends React.Component{
                         <ListEmp onClickShowModal={this.showModal}/>
                     </div>
                 </div>
-                                
+                <div style={{width:"700px"}} >
                 <Modal
                     title="Карточка сотрудника"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    width={720}
                 >
                     <CardModal/>
 
                 </Modal>
+                </div>          
+                
                 
             </div>
         )

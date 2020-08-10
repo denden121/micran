@@ -3,6 +3,8 @@ import "./CardModal.css"
 // import "./avatar.png"
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
+
 
 
 
@@ -37,8 +39,8 @@ const CardModal =(props)=>{
                                     </div>
                                     <div className="col-md-12"><hr className="normal"/></div>
                                         <div className="col-md-7">
-                                            <label className="Label2"><b>Дата</b></label>
-                                            <label className="Label2" style={{marginTop:"-10px"}}><b>трудоустройства</b></label>
+                                            <label className="Label2"><b>Дата трудоустройства</b></label>
+                                            {/* <label className="Label2" ><b>трудоустройства</b></label> */}
                                         </div>
                                         <div className="col-md-5">
                                             <label className="text-left">06.06.1998</label>                                                
@@ -47,8 +49,15 @@ const CardModal =(props)=>{
                                             <label className="Label2"><b>Стаж</b></label>
                                         </div>
                                         <div className="col-md-5">
-                                            <label className="LabelL">5</label>                                                
-                                        </div>                                            
+                                            <label className="LabelL">5</label>                                                                                          
+                                        </div>   
+                                        <div className="col-md-7">
+                                            <label className="Label2"><b>Допустимое время</b></label>
+                                            <label className="Label2" style={{marginTop:"-10px"}}><b>опоздания</b></label>
+                                        </div>
+                                        <div className="col-md-5">
+                                            <input className="form-control sm" placeholder="Basic usage" />                                                 
+                                        </div>                                         
                                         </div>
                                     </div>        
                                 </div>
