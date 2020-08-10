@@ -42,7 +42,21 @@ const ListEmp =(props)=>{
                     </tr>
                 </thead>
                 <tbody>
+<<<<<<< HEAD
                     <Workers workers={props.workers}/>
+=======
+                    <tr>
+                    <th scope="row">1</th>
+                    <td>1</td>
+                    <td><a href="#" onClick={props.onClickShowModal} style={{cursor:"pointer"}}>Осеева Анастасия Михайловна</a></td>
+                    <td>12.02.2020</td>
+                    <td>папрпа</td>
+                    <td>иапиа</td>
+                    <td>пвдлпо</td>
+                    <td>пвапвп</td>
+                    <td>пиаиапи</td>
+                    </tr>                                       
+>>>>>>> origin/Deploy
                 </tbody>
                 </table>
             </div>
