@@ -1,6 +1,28 @@
 import React from "react"
 import CardModal from "./CardModal/CardModal"
 
+const Workers = (props) =>{
+    let workers = Array.from(props.workers)
+    console.log(workers)
+    return workers.map((worker,index)=>{
+        console.log(worker)
+        return(
+            <tr>
+                <th scope="row">1</th>
+                <td>{worker.person['№ db']}</td>
+                <td><a onClick={props.onClickPerson} style={{cursor:"pointer"}}>{worker.person.full_name}</a></td>
+                <td>{worker.person.date}</td>
+                <td>{worker.person.shift}</td>
+                <td>{worker.person.SRI_SAS ? 'да' : 'нет'}</td>
+                <td>{worker.person.ockladnaya}</td>
+                <td>{worker.person.groups.join(' ')}</td>
+                <td>{worker.person.position}</td>
+            </tr>
+        )
+})
+
+}
+
 const ListEmp =(props)=>{
     return(
         <div className="row">
@@ -20,17 +42,7 @@ const ListEmp =(props)=>{
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                    <th scope="row">1</th>
-                    <td>1</td>
-                    <td><a onClick={props.onClickPerson} style={{cursor:"pointer"}}>Осеева Анастасия Михайловна</a></td>
-                    <td>12.02.2020</td>
-                    <td>папрпа</td>
-                    <td>иапиа</td>
-                    <td>пвдлпо</td>
-                    <td>пвапвп</td>
-                    <td>пиаиапи</td>
-                    </tr>                                       
+                    <Workers workers={props.workers}/>
                 </tbody>
                 </table>
             </div>

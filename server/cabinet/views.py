@@ -472,14 +472,18 @@ def workers_info(request):
         if request.method == "GET":
             persons = Profile.objects.all()
             data = []
+            group_field = []
             for person in persons:
-                group = Group.objects.get(participants=person)
+                groups = Group.objects.filter(participants=person)
+                for group in groups:
+                    group_field.append(group.name)
                 field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
                         'position': person.position, 'SRI_SAS': person.SRI_SAS,
                         'shift': person.shift, 'date': "2009-01-01",
                         '№ db': "321", '№ 1c': "3059",
                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
-                        'group': group.name}
+                        'groups': group_field}
+                group_field = []
                 data.append({'pk': person.pk, 'person': field})
             return HttpResponse(json.dumps(data))
 
@@ -503,6 +507,18 @@ def projects_for_reports(request):
             data = []
             for project in projects:
                 data.append({'pk': project.pk, 'project_name': project.name})
+            return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def direction(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            data = []
+            directions = ['up', 'down', 'left', 'right']
+            for direction in directions:
+                data.append({'directions': direction})
             return HttpResponse(json.dumps(data))
 
 
