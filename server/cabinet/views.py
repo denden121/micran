@@ -465,6 +465,25 @@ def workers_departament(request):
 
 
 @csrf_exempt
+def workers_info(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            persons = Profile.objects.all()
+            data = []
+            for person in persons:
+                group = Group.objects.get(participants=person)
+                field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
+                        'position': person.position, 'SRI_SAS': person.SRI_SAS,
+                        'shift': person.shift, 'date': "2009-01-01",
+                        '№ db': "321", '№ 1c': "3059",
+                        'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
+                        'group': group.name}
+                data.append({'pk': person.pk, 'person': field})
+            return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
 def managers(request):
     user = get_user_jwt(request)
     if user:
