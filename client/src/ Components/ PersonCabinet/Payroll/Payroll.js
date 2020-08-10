@@ -240,7 +240,7 @@ class Payroll extends React.Component{
         return(
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-12 col-lg-12">
+                    <div className="col-sm-12 col-md-12 col-lg-12">
                         <h3 className="text-left">Расчет зарплат(оклад)</h3>
                         <h5 className="text-left">Параметры отображения</h5>
                             <div className="row">

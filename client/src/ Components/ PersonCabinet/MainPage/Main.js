@@ -18,6 +18,7 @@ import Register from "../Register/Register"
 import NewProject from "../Register/NewProject/NewProject";
 import UnitProjects from "../Register/UnitProjects/UnitProjects"
 import Employees from "../Employees/Employees"
+import Interval from "../WorkCalendar/Interval/Interval"
 
 
 
@@ -60,7 +61,8 @@ class Main extends Component{
                         <Route path='/cabinet/admin/register' exact  component = {Register}/>  
                         <Route path='/cabinet/admin/new_project' exact  component = {NewProject}/>
                         <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>   
-                        <Route path='/cabinet/admin/employees' exact  component = {Employees}/>                        
+                        <Route path='/cabinet/admin/employees' exact  component = {Employees}/>  
+                        <Route path='/cabinet/admin/calendar' exact  component = {Interval}/> 
                     </Switch>
                 </div>
             </div>
