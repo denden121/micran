@@ -23,7 +23,7 @@ const ListEmp =(props)=>{
                     <tr>
                     <th scope="row">1</th>
                     <td>1</td>
-                    <td><a onClick={props.onClickPerson} style={{cursor:"pointer"}}>Осеева Анастасия Михайловна</a></td>
+                    <td><a href="#" onClick={props.onClickShowModal} style={{cursor:"pointer"}}>Осеева Анастасия Михайловна</a></td>
                     <td>12.02.2020</td>
                     <td>папрпа</td>
                     <td>иапиа</td>
