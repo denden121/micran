@@ -59,6 +59,8 @@ class Employees extends React.Component{
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     width={720}
+                    cancelText="Права доступа"
+                    okText="Сохранить"
                 >
                     <CardModal onChangeRadio={this.onChange}/>
 
