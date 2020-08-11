@@ -17,26 +17,25 @@ class Employees extends React.Component{
             index:''
         }
     }
-    showModal = (e) => {
-        console.log()
-        this.setState({
-          visible: true,
 
+    showModal = () => {
+        this.setState({
+            visible: true,
         });
-      };
+    };
     handleOk = e => {
-      console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-    
-      handleCancel = e => {
         console.log(e);
         this.setState({
-          visible: false,
+            visible: false,
         });
-      };
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
     loadWorkers = async () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
@@ -72,7 +71,9 @@ class Employees extends React.Component{
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}>
-
+                    onCancel={this.handleCancel}
+                    width={720}
+                    >
                     <CardModal Workers ={this.state.workers}/>
                 </Modal>
             </div>
