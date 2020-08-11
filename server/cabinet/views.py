@@ -552,3 +552,13 @@ def get_subdepartaments(request):
             data.append({'subdepartament': subdepartament, 'pk': i})
             i += 1
         return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def workers_project(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            workers = Profile.objects.all()
+            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            return HttpResponse(data)
