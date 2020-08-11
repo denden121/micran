@@ -516,8 +516,10 @@ def direction(request):
         if request.method == "GET":
             data = []
             directions = ['up', 'down', 'left', 'right']
+            i = 0
             for direction in directions:
-                data.append({'directions': direction})
+                data.append({'direction': direction, 'pk': i})
+                i += 1
             return HttpResponse(json.dumps(data))
 
 
@@ -537,3 +539,26 @@ def change_common_salary(request):
             form.save()
             return HttpResponse("Success")
         return HttpResponse("Fail")
+
+
+@csrf_exempt
+def get_subdepartaments(request):
+    user = get_user_jwt(request)
+    if request.method == "GET":
+        subdepartaments = ['subdepartament_1', 'subdepartament_2', 'subdepartament_3']
+        i = 0
+        data = []
+        for subdepartament in subdepartaments:
+            data.append({'subdepartament': subdepartament, 'pk': i})
+            i += 1
+        return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def workers_project(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            workers = Profile.objects.all()
+            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            return HttpResponse(data)
