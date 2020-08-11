@@ -3,7 +3,7 @@ import "./CardModal.css"
 // import "./avatar.png"
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
+import { Radio } from 'antd';
 
 
 
@@ -56,8 +56,17 @@ const CardModal =(props)=>{
                                             <label className="Label2" style={{marginTop:"-10px"}}><b>опоздания</b></label>
                                         </div>
                                         <div className="col-md-5">
-                                            <input className="form-control sm" placeholder="Basic usage" />                                                 
-                                        </div>                                         
+                                            <div className="form-control form-control-sm"/>                                                 
+                                        </div>
+                                        <div className="col-md-7">
+                                            <label className="Label2"><b>Смена</b></label>
+                                        </div>
+                                        <div className="col-md-5">
+                                            <Radio.Group onChange={props.onChangeRadio}>
+                                                <Radio  value={1}>A</Radio>
+                                                <Radio  value={2}>B</Radio>        
+                                            </Radio.Group>                                                 
+                                        </div>                                     
                                         </div>
                                     </div>        
                                 </div>

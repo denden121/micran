@@ -9,7 +9,16 @@ import { Modal, Button } from 'antd';
 
 
 class Employees extends React.Component{
-    state = { visible: false };
+    state =
+      { visible: false, value:1 };
+
+    onChange = e => {    
+        // this.setState({
+        //   value: e.target.value,
+        // }); 
+        // e.target
+        console.log(e.target)
+    } ;  
     showModal = () => {
         this.setState({
           visible: true,
@@ -51,7 +60,7 @@ class Employees extends React.Component{
                     onCancel={this.handleCancel}
                     width={720}
                 >
-                    <CardModal/>
+                    <CardModal onChangeRadio={this.onChange}/>
 
                 </Modal>
                 </div>          
