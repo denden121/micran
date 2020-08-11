@@ -121,7 +121,7 @@ const TableZp = (props) =>{
                     <tr>
                         <th colSpan={!props.Filter.hideNormTime ?'6':'5'} scope="colgroup"></th>
                         <th colSpan="3" scope="colgroup">Начисления</th>
-                        {!props.Filter.hideSalarypenalty
+                        {!props.Filter.hideSalary
                             ?<th colSpan="5" scope="colgroup">Рассчитанные данные</th>
                             :''}
                     </tr>

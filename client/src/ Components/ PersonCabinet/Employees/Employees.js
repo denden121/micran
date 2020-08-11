@@ -11,11 +11,17 @@ import { Modal, Button } from 'antd';
 class Employees extends React.Component{
     state = {
         workers:{},
-        visible: false
+        visible: false,
+        select_worker:{
+            id:'',
+            index:''
+        }
     }
-    showModal = () => {
+    showModal = (e) => {
+        console.log()
         this.setState({
           visible: true,
+
         });
       };
     handleOk = e => {
@@ -67,7 +73,7 @@ class Employees extends React.Component{
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}>
 
-                    <CardModal/>
+                    <CardModal Workers ={this.state.workers}/>
                 </Modal>
             </div>
         )
