@@ -3,6 +3,7 @@ import "./CardModal.css"
 // import "./avatar.png"
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { Checkbox } from 'antd';
 import { Radio } from 'antd';
 
 
@@ -12,7 +13,7 @@ const CardModal =(props)=>{
     return(
             <div className="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div class="col p-4 d-flex flex-column position-static">
                                 {/* <img src={picture} alt="" className="img-fluid"></img> */}
@@ -21,7 +22,7 @@ const CardModal =(props)=>{
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div class="col p-4 d-flex flex-column position-static">         
                                 <div className="row">                                            
@@ -63,10 +64,41 @@ const CardModal =(props)=>{
                                         </div>
                                         <div className="col-md-5">
                                             <Radio.Group onChange={props.onChangeRadio}>
-                                                <Radio  value={1}>A</Radio>
-                                                <Radio  value={2}>B</Radio>        
-                                            </Radio.Group>                                                 
-                                        </div>                                     
+                                                <Radio  value={1}>дневная</Radio><br/>
+                                                <Radio  value={2}>ночная</Radio>        
+                                            </Radio.Group>                                              
+                                        </div>                                        
+                                        <div className="col-md-7">
+                                            <label className="Label2" style={{marginTop:"10px"}}><b>Совместительство</b></label>
+                                        </div>
+                                        <div className="col-md-5">                                              
+                                            <Checkbox style={{marginTop:"10px"}}>НИИ СЭС</Checkbox>                                            
+                                        </div>   
+                                        <div className="col-md-7">
+                                                <label className="Label2" style={{marginTop:"10px"}}><b>Окладная СОТ</b></label>
+                                        </div>
+                                        <div className="col-md-5">                                              
+                                            <Checkbox style={{marginTop:"10px"}}>использовать</Checkbox>                                            
+                                        </div>   
+                                        <div className="col-md-12"><hr className="normal"/></div>      
+                                        <div className="col-md-7">
+                                            <label className="Label2" ><b>Входит в группы</b></label>
+                                        </div>     
+                                        <div className="col-md-5">
+                                            <div>Администратор</div>
+                                        </div> 
+                                        <div className="col-md-7">
+                                            <label className="Label2" ><b>Подразделение, должность</b></label>
+                                        </div>     
+                                        <div className="col-md-5">
+                                            <div>Администратор</div>
+                                        </div> 
+                                        <div className="col-md-7">
+                                            <label className="Label2" ><b>История трудоустройства</b></label>
+                                        </div>     
+                                        <div className="col-md-5">
+                                            <div>Администратор</div>
+                                        </div>                          
                                         </div>
                                     </div>        
                                 </div>

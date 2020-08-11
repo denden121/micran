@@ -101,3 +101,11 @@
 .LabelL{
     float: left;
 }
+
+.day{
+    border:3px solid grey;
+    background-color: grey;
+    color:white;
+    border-radius: 7px;
+    font-size: 12px;
+}
