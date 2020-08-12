@@ -6,6 +6,8 @@ import makeAnimated from "react-select/animated/dist/react-select.esm";
 
 class NewProject extends React.Component{
     state={
+        people:{},
+        directors:{},
         directions:{},
         select_direction:'',
     }
@@ -18,40 +20,42 @@ class NewProject extends React.Component{
             headers: myHeaders,
             redirect: 'follow'
         };
+        let directionValue;
+        let directorValue;
+        let peopleValue;
         await fetch("http://127.0.0.1:8000/directions/", requestOptions)
             .then(response => response.json())
             .then(result =>{
-                let temp = Array.from(result)
-                temp = temp.map(direction => {
+                directionValue = Array.from(result)
+                directionValue = directionValue.map(direction => {
                     return {value:`${direction.pk}`,label:`${direction.direction}`}
                 })
-                console.log(temp)
-                this.setState({directions:temp})
+                console.log(directionValue)
             } )
             .catch(error => console.log('error', error));
-        await fetch("http://127.0.0.1:8000/directions/", requestOptions)
+        await fetch("http://127.0.0.1:8000/workers/project/managers/", requestOptions)
             .then(response => response.json())
             .then(result =>{
-                let temp = Array.from(result)
-                temp = temp.map(direction => {
-                    return {value:`${direction.pk}`,label:`${direction.direction}`}
+                directorValue = Array.from(result)
+                directorValue = directorValue.map(director => {
+                    return {value:`${director.pk}`,label:`${director.fields.last_name + ' ' + director.fields.first_name+' '+director.fields.middle_name}`}
                 })
-                console.log(temp)
-                this.setState({directions:temp})
             } )
+            .catch(error => console.log('error', error))
+        await fetch("http://127.0.0.1:8000/workers/project/", requestOptions)
+            .then(response => response.json())
+            .then(result =>{
+                peopleValue = Array.from(result)
+                peopleValue = peopleValue.map(director => {
+                    return {value:`${director.pk}`,label:`${director.fields.last_name + ' ' + director.fields.first_name+' '+director.fields.middle_name}`}
+                })
+            })
             .catch(error => console.log('error', error));
-        // await fetch("http://127.0.0.1:8000/directions/", requestOptions)
-        //     .then(response => response.json())
-        //     .then(result =>{
-        //         let temp = Array.from(result)
-        //         temp = temp.map(direction => {
-        //             return {value:`${direction.pk}`,label:`${direction.direction}`}
-        //         })
-        //         console.log(temp)
-        //         this.setState({directions:temp})
-        //     } )
-        //     .catch(error => console.log('error', error));
-
+        this.setState({
+            people: peopleValue,
+            directions: directionValue,
+            directors:directorValue
+        })
     }
     onChangeSelectDirection=(event)=>{
         this.setState({select_direction:event})
@@ -100,23 +104,36 @@ class NewProject extends React.Component{
                                     <div className="input-group mb-3 input-group-sm">
                                         <label className="napr col-sm-2 text-left"
                                                style={{fontSize: "16px"}}>Руководитель</label>
-                                        <select className="custom-select">
-                                            <option selected>Выбрать</option>
-                                        </select>
+                                        <Select
+                                            onChange = {this.onChangeSelectDirection}
+                                            closeMenuOnSelect={true}
+                                            components={animatedComponents}
+                                            options={this.state.directors.length ? this.state.directors :''}
+                                            placeholder="Выбрать"
+                                        />
                                     </div>
                                     <div className="input-group mb-3 input-group-sm">
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Главный
                                             конструктор</label>
-                                        <select className="custom-select">
-                                            <option selected>Выбрать</option>
-                                        </select>
+                                        <Select
+                                            onChange = {this.onChangeSelectManager}
+                                            closeMenuOnSelect={true}
+                                            components={animatedComponents}
+                                            options={this.state.directors.length ? this.state.directors :''}
+                                            placeholder="Выбрать"
+                                        />
                                     </div>
                                     <div className="input-group mb-3 input-group-sm">
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Зам.главного
                                             конструктора</label>
-                                        <select className="custom-select">
-                                            <option selected>Выбрать</option>
-                                        </select>
+                                        <Select
+                                            onChange = {this.onChangeSelec}
+                                            closeMenuOnSelect={true}
+                                            components={animatedComponents}
+                                            options={this.state.people.length ? this.state.people :''}
+                                            placeholder="Выбрать"
+                                            width = {'700pxgit '}
+                                        />
                                     </div>
                                     <hr className="normal"/>
                                 </div>

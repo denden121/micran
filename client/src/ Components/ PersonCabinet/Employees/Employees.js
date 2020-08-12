@@ -70,10 +70,10 @@ class Employees extends React.Component{
                     title="Карточка сотрудника"
                     visible={this.state.visible}
                     onOk={this.handleOk}
-                    onCancel={this.handleCancel}>
                     onCancel={this.handleCancel}
                     width={720}
-                    >
+                    cancelText="Права доступа"
+                    okText="Сохранить" >
                     <CardModal Workers ={this.state.workers}/>
                 </Modal>
             </div>
