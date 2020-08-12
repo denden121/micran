@@ -58,13 +58,14 @@ class Navigation extends Component{
                     <div ref={this.wrapperRef} className="wrapper">
                     <div className="nav">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {localStorage.getItem('date')}
+                        
                         {/*<Icon*/}
                         {/*className="nav__icon"*/}
                         {/*type="menu-fold"*/}
                         {/*onClick={this.handleClick.bind(this)}/>*/}
                         <div className="nav__body">
                         <div className="sidebar-sticky">
+                        
                             <Calendar onClickDate = {this.onClickDate}
                                       onClickNext = {this.onClickNext}
                                       onClickPrevios = {this.onClickPrivious}/>

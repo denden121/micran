@@ -12,6 +12,12 @@
     display: none;
 
 }
+
+.cancelButton{
+background-color: seagreen;
+}
+
+
 /* свойства модального окна по умолчанию */
 .modal {
     /* position: fixed; фиксированное положение */

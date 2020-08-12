@@ -61,6 +61,7 @@ class Employees extends React.Component{
                     width={720}
                     cancelText="Права доступа"
                     okText="Сохранить"
+                    
                 >
                     <CardModal onChangeRadio={this.onChange}/>
 
