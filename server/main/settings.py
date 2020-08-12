@@ -5,21 +5,20 @@ import ldap
 from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 
+AUTH_LDAP_SERVER_URI = "ldap.micran.ru:389"
 
-# Baseline configuration.
-AUTH_LDAP_SERVER_URI = "0.0.0.0:9000"
-
-AUTH_LDAP_BIND_DN = "cn=django-agent,dc=localnet,dc=micran"
-AUTH_LDAP_BIND_PASSWORD = "phlebotinum"
+AUTH_LDAP_BIND_DN = ""
+AUTH_LDAP_BIND_PASSWORD = ""
+AUTH_LDAP_START_TLS = True
 AUTH_LDAP_USER_SEARCH = LDAPSearch(
     "ou=People,dc=localnet,dc=micran", ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
 )
 
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-    "ou=django,ou=groups,dc=example,dc=com",
-    ldap.SCOPE_SUBTREE,
-    "(objectClass=groupOfNames)",
-)
+# AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+#     "ou=django,ou=groups,dc=example,dc=com",
+#     ldap.SCOPE_SUBTREE,
+#     "(objectClass=groupOfNames)",
+# )
 AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
 
 # Simple group restrictions
@@ -53,7 +52,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'k+y%ss&0pz#*^8kt@dak42!&ms-&udwb=rl_=fe*w==+a=9y_*'
 AUTHENTICATION_BACKENDS = (
     "django_auth_ldap.backend.LDAPBackend",
-    "django.contrib.auth.backends.ModelBackend",
+    # "django.contrib.auth.backends.ModelBackend",
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
