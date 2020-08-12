@@ -52,7 +52,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'k+y%ss&0pz#*^8kt@dak42!&ms-&udwb=rl_=fe*w==+a=9y_*'
 AUTHENTICATION_BACKENDS = (
     "django_auth_ldap.backend.LDAPBackend",
-    # "django.contrib.auth.backends.ModelBackend",
+    "django.contrib.auth.backends.ModelBackend",
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
