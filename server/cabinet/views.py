@@ -220,9 +220,10 @@ def all_projects_view(request):
                 field = {'name': project.name, 'direction': project.direction, 'manager': manager,
                          'deputy_chief_designer': deputy_chief_designer, 'chief_designer': chief_designer,
                          'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
-                         'contract': project.contract, 'type': project.type, 'status' project.status,
+                         'contract': project.contract, 'type': project.type, 'status': project.status,
                          'report_availability': project.report_availability, 'acceptance_vp': acceptance_vp}
                 data.append({'pk': project.pk, 'project': field})
+                return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
             if form.is_valid():
