@@ -121,6 +121,12 @@ class Navigation extends Component{
                                                 Трудовой календарь
                                             </a>
                                         </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/system_time">
+                                                <span data-feather="layers"></span>
+                                                Система учета времени
+                                            </a>
+                                        </li>
                                     </div>
                                     :
                                     <div></div>
