@@ -113,11 +113,11 @@ class NewProject extends React.Component{
         const productionOrder = document.querySelector('#production-order-new-project').value
         const comment = document.querySelector('#comment-to-co-workers-new-project').value
         console.log(direction,director,disigner,deputyDesigner,state,type,availability,vp,nameproject,number,order,productionOrder,comment)
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", );
-
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization",token );
         var formdata = new FormData();
-        formdata.append("pk", "6");
+        formdata.append("", "6");
         formdata.append("name", "hjgkslsjgkrgbjklt");
         formdata.append("actions", "1 2 ");
         formdata.append("participants", "1 2 ");
