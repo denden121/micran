@@ -104,6 +104,7 @@ class NewProject extends React.Component{
                                             components={animatedComponents}
                                             options={this.state.directions.length ? this.state.directions :''}
                                             placeholder="Выбрать"
+                                            style={{width:"500px"}}
                                         />
                                     </div>
                                     <br/>
