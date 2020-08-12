@@ -480,7 +480,8 @@ def workers_info(request):
                 field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
                         'position': person.position, 'SRI_SAS': person.SRI_SAS,
                         'shift': person.shift, 'date': "2009-01-01",
-                        '№ db': "321", '№ 1c': "3059",
+                        '№ db': "321", '№ 1c': "3059", "sex": person.sex,
+                        'birth_date': person.birth_date,
                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
                         'groups': group_field}
                 group_field = []
