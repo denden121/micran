@@ -9,50 +9,63 @@ import { Modal, Button } from 'antd';
 
 
 class Employees extends React.Component{
-    state =
-      { visible: false, value:1 };
+    state = {
+        workers:{},
+        visible: false,
+        select_worker:{
+            id:'',
+            index:''
+        }
+    }
 
-    onChange = e => {    
-        // this.setState({
-        //   value: e.target.value,
-        // }); 
-        // e.target
-        console.log(e.target)
-    } ;  
     showModal = () => {
         this.setState({
-          visible: true,
+            visible: true,
         });
-      };
-    
-      handleOk = e => {
+    };
+    handleOk = e => {
         console.log(e);
         this.setState({
-          visible: false,
+            visible: false,
         });
-      };
-    
-      handleCancel = e => {
+    };
+
+    handleCancel = e => {
         console.log(e);
         this.setState({
-          visible: false,
+            visible: false,
         });
-      };
-    onClickPerson = ()=>{
-        document.querySelector('.background-modal').style.display = 'flex'
-        console.log('person',document.querySelector('.background-modal').style.display)
+    };
+    loadWorkers = async () =>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        const url = `http://127.0.0.1:8000/workers/all/`
+        await fetch(url, requestOptions)
+            .then(response =>  response.json())
+            .then(result => this.setState({workers: result}))
+            .catch(error => console.log('error', error))
+        console.log('state',this.state.workers)
+
     }
+    componentDidMount() {
+        this.loadWorkers()
+    }
+
     render(){
         return(
             <div className="container-fluid">
                 <h4 className="text-left">Список сотрудников</h4>
                 <div className="row">
                     <div className="col-md-12 col-lg-12">
-                        
-                        <ListEmp onClickShowModal={this.showModal}/>
+                        <ListEmp onClickShowModal={this.showModal} workers={this.state.workers} onClickPerson={this.onClickPerson}/>
                     </div>
                 </div>
-                <div style={{width:"700px"}} >
                 <Modal
                     title="Карточка сотрудника"
                     visible={this.state.visible}
@@ -60,15 +73,9 @@ class Employees extends React.Component{
                     onCancel={this.handleCancel}
                     width={720}
                     cancelText="Права доступа"
-                    okText="Сохранить"
-                    
-                >
-                    <CardModal onChangeRadio={this.onChange}/>
-
+                    okText="Сохранить" >
+                    <CardModal Workers ={this.state.workers}/>
                 </Modal>
-                </div>          
-                
-                
             </div>
         )
     }

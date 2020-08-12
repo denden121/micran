@@ -7,88 +7,99 @@ import BootstrapTable from 'react-bootstrap-table-next';
 const FieldSalary = (props) =>{ // Все зп
     if (props.allSalary) {
         let result = Array.from(props.allSalary)
-        return result.map((fields, index) => {
-            console.log(fields.person.position)
+        console.log(props)
+        return result.map((fields, key) => {
+            // console.log(props.Filters.hideAnotherPeople, fields.person.SRI_SAS)
             const fullName = fields.person.full_name, // ФИО
-            workDays = fields.person.work_days, // Отработаные дни
-            reportHours = fields.person.hours_worked, // Время по отчету
-            normTime = fields.person.time_norm, // Норма времени
-            timeOff = fields.person.time_off, // Пропущенные часы
-            isAward = fields.person.is_awarded, // Депримирование
-
-            isHideZeroReport = !props.Filters.hideZeroReport | fields.person.hours_worked !== 0, // условия для вывода( нулевых отчетов)
-            isHideTechnician = !props.Filters.hideTechnician | fields.person.position !== 'Лаборант'
+                workDays = fields.person.work_days, // Отработаные дни
+                reportHours = fields.person.hours_worked, // Время по отчету
+                normTime = fields.person.time_norm, // Норма времени
+                timeOff = fields.person.time_off, // Пропущенные часы
+                isAward = fields.person.is_penalty , // Депримирование
+                penalty = fields.person.penalty , // Депримирование
+                planSalary = fields.person.plan_salary, // Плановая зп
+                allSalary = ((document.getElementById(``)) + fields.person.award).toFixed(2), // Начисленно
+                handSalary = (allSalary * 0.87).toFixed(2), // зп на руки
+                hoursCoast = (allSalary / normTime).toFixed(2), // стоимость часов
+                pk = fields.pk,
+                interestAward = (100 * fields.person.award)/fields.person.plan_salary,
+                award = fields.person.award,
+                isHideZeroReport = !props.Filters.hideZeroReport | fields.person.hours_worked !== 0, // условия для вывода( нулевых отчетов)
+                isHideTechnician = !props.Filters.hideTechnician | fields.person.position !== 'Лаборант', // условие для вывода(лаборатнов)
+                isHideAnotherPeople = !props.Filters.hideAnotherPeople | fields.person.SRI_SAS
             return (
-                isHideZeroReport & isHideTechnician
+                isHideZeroReport & isHideTechnician & isHideAnotherPeople
                 ?<tr>
                     <td scope="col">
-                        <div>{index+1}</div>
+                        <div>{key + 1}</div>
                     </td>
                     <td scope="col">
                         <div>{fullName}</div>
                     </td>
-                    <td scope="col">
-                        <div></div>
-                    </td>
+                    {/*<td scope="col">*/}
+                    {/*    <div></div>*/}
+                    {/*</td>*/}
                     <td scope="col">
                         <div>{workDays}</div>
                     </td>
                     <td scope="col">
                         <div>{reportHours}</div>
                     </td>
-                    {!props.Filters.hideNormTime//фильтр (убрать норму времени)
+                    {!props.Filters.hideNormTime // фильтр (убрать норму времени)
                         ?<td scope="col">
-                            <div>{normTime}</div>
+                            <div id={`${pk}.norm-time`}>{normTime}</div>
                         </td>
                         :''
                     }
                     <td scope="col" className="red">
-                        <div>{timeOff}</div>
+                        <div id={`${pk}.timeoff`}>{timeOff}</div>
                     </td>
                     <td scope="col">
                         <input type="number"
-                               id={`${fields.pk}.plan_salary`}
-                               defaultValue={fields.person.plan_salary}
+                               id={`${pk}.plan_salary`}
+                               defaultValue={planSalary}
                                className={`in form-control`}
-                               placeholder="0.00%">
+                               placeholder="0.00">
                         </input>
                     </td>
                     <td scope="col">
-                        <div></div>
+                        <div>{penalty}</div>
                     </td>
                     <td scope="col">
                         <label className="checkbox Label2">
-                            {isAward // проверка чекбокса на депремирование
-                            ? <input type="checkbox"  className="form-check-input" checked/>
-                            : <input type="checkbox"  className="form-check-input" />}
+                            <input  type="checkbox"
+                                    id={`${key}.${pk}.penalty`}
+                                    className="form-check-input"
+                                    defaultChecked={isAward}/>
                         </label>
                     </td>
                     {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
                             <input type="number"
+                                   id={`${pk}.award_interest`}
                                    className="in form-control"
-                                   defaultValue={(100*fields.person.award)/fields.person.plan_salary}
+                                   defaultValue={interestAward.toFixed(2)}
                                    placeholder="0.00%"/>
                         </td>:''}
                     {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
                             <input type="number"
-                                   id={`${fields.pk}.award`}
+                                   id={`${pk}.award`}
                                    className={`in form-control`}
-                                   defaultValue={fields.person.award}
+                                   defaultValue={award}
                                    placeholder="0.00руб"/>
                         </td>:''}
                     {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
-                            <div>{fields.person.salary_hand}</div>
+                            <div id={`${pk}.salary_hand`}>{handSalary}</div>
                         </td>:''}
                     {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
-                            <div>{(fields.person.salary_hand*1.13).toFixed(2)}</div>
+                            <div id = {`${pk}.salary`}>{allSalary}</div>
                         </td>:''}
                     {!props.Filters.hideSalary // фильтр (убрать расчетные данные)
                         ?<td scope="col">
-                            <div></div>
+                            <div id={`${pk}.cost`}>{hoursCoast}</div>
                         </td>:''}
                 </tr>
                 :''// вывод если поле не подходт по условию фильтра
@@ -99,7 +110,7 @@ const FieldSalary = (props) =>{ // Все зп
 }
 
 const TableZp = (props) =>{
-    console.log(props)
+    // console.log(props)
     return(
         <div className="tablezp">
             <div className="row">
@@ -108,7 +119,7 @@ const TableZp = (props) =>{
                     <table className="table table-bordered table-sm">
                 <tbody onChange={props.onChangeSalary} onBlur={props.onBlurSalary} className="zarplata">
                     <tr>
-                        <th colSpan="7" scope="colgroup"></th>
+                        <th colSpan={!props.Filter.hideNormTime ?'6':'5'} scope="colgroup"></th>
                         <th colSpan="3" scope="colgroup">Начисления</th>
                         {!props.Filter.hideSalary
                             ?<th colSpan="5" scope="colgroup">Рассчитанные данные</th>
@@ -117,7 +128,6 @@ const TableZp = (props) =>{
                     <tr>
                         <th scope="col">№</th>
                         <th scope="col" >ФИО</th>
-                        <td className="ico"></td>
                         <th scope="col" >Отраб.дни
                             <br/>(%)</th>
                         <th scope="col">Отчет,
