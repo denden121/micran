@@ -10,6 +10,9 @@ class NewProject extends React.Component{
         directors:{},
         directions:{},
         select_direction:'',
+        select_director:'',
+        select_designer:'',
+        select_deputy_designer:'',
     }
     loadDate = async () =>{
         let myHeaders = new Headers();
@@ -61,6 +64,19 @@ class NewProject extends React.Component{
         this.setState({select_direction:event})
         // console.log(this.state)
     }
+    onChangeSelectDirector=(event)=>{
+        this.setState({select_director:event})
+        // console.log(this.state)
+    }
+    onChangeSelectDesigner=(event)=>{
+        this.setState({select_designer:event})
+        // console.log(this.state)
+    }
+    onChangeSelectDeputyDesigner=(event)=>{
+
+        this.setState({select_deputy_designer:event})
+        // console.log(this.state)
+    }
     componentDidMount() {
         this.loadDate()
     }
@@ -93,6 +109,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Новый
                                             проект</label>
                                         <textarea
+                                            id={'name-project-new-project'}
                                             className="form-control"
                                             rows="2"
                                             placeholder="Новый проект">
@@ -105,7 +122,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left"
                                                style={{fontSize: "16px"}}>Руководитель</label>
                                         <Select
-                                            onChange = {this.onChangeSelectDirection}
+                                            onChange = {this.onChangeSelectDirector}
                                             closeMenuOnSelect={true}
                                             components={animatedComponents}
                                             options={this.state.directors.length ? this.state.directors :''}
@@ -116,7 +133,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Главный
                                             конструктор</label>
                                         <Select
-                                            onChange = {this.onChangeSelectManager}
+                                            onChange = {this.onChangeSelectDesigner}
                                             closeMenuOnSelect={true}
                                             components={animatedComponents}
                                             options={this.state.directors.length ? this.state.directors :''}
@@ -127,7 +144,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Зам.главного
                                             конструктора</label>
                                         <Select
-                                            onChange = {this.onChangeSelec}
+                                            onChange = {this.onChangeSelectDeputyDesigner}
                                             closeMenuOnSelect={true}
                                             components={animatedComponents}
                                             options={this.state.people.length ? this.state.people :''}
@@ -142,6 +159,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>№
                                             договора</label>
                                         <textarea
+                                            id={'number-contract-new-project'}
                                             className="form-control"
                                             rows="2"
                                             placeholder="№ договора">
@@ -151,6 +169,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left"
                                                style={{fontSize: "16px"}}>Заказчик</label>
                                         <textarea
+                                            id={'order-new-project'}
                                             className="form-control"
                                             rows="2"
                                             placeholder="Заказчик">
@@ -160,6 +179,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Заказ на
                                             производство</label>
                                         <textarea
+                                            id={'production-order-new-project'}
                                             className="form-control"
                                             rows="2"
                                             placeholder="Заказ на производство">
@@ -169,6 +189,7 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Комментарий
                                             для сотрудников</label>
                                         <textarea
+                                            id={'comment-to-co-workers-new-project'}
                                             className="form-control"
                                             rows="2"
                                             placeholder="Описание">
