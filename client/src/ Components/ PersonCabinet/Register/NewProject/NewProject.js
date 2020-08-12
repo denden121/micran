@@ -4,6 +4,7 @@ import Register from "../Register"
 import {Select} from "antd";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
 import { Radio } from 'antd';
+import { Checkbox } from 'antd';
 
 class NewProject extends React.Component{
     state={
@@ -273,16 +274,16 @@ class NewProject extends React.Component{
                                         <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Приемка
                                             ВП</label>
                                         <div className="checkbox checkbox-inline ">
-                                            <Radio.Group>
-                                                <Radio value={6}><label for="inlineCheckbox1" style={{
+                                            <Checkbox>
+                                                <label for="inlineCheckbox1" style={{
                                                 border: "3px solid #454545",
                                                 background: "#454545",
                                                 color: "white",
                                                 borderRadius: "7px",
                                                 fontSize: "12px",
                                                 marginLeft: "5px"
-                                            }}>ПП</label></Radio>
-                                            </Radio.Group>                                            
+                                                }}>ПП</label>
+                                            </Checkbox>                                                                                           
                                         </div>
                                     </div>
                                     <hr className="normal"/>
