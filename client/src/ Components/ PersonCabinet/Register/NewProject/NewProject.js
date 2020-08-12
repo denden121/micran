@@ -78,6 +78,16 @@ class NewProject extends React.Component{
         this.setState({select_deputy_designer:event})
         // console.log(this.state)
     }
+    onChangeType=(e)=>{
+        console.log(e.target.type)
+        console.log(e.target.value)
+    }
+
+    onChangeState=()=>{
+    }
+
+    onChangeAvailability=()=>{
+    }
     componentDidMount() {
         this.loadDate()
     }
@@ -196,100 +206,102 @@ class NewProject extends React.Component{
                                             placeholder="Описание">
                                     </textarea>
                                     </div>
-                                    <div className="input-group mb-3 input-group-sm">
-                                        <label className="napr col-sm-2 text-left"
-                                               style={{fontSize: "16px"}}>Тип</label>
-                                        <div className="checkbox checkbox-inline ">
-                                            <Radio.Group>
-                                                <Radio value={1}><label for="inlineCheckbox1" style={{
-                                                border: "3px solid grey",
-                                                background: "grey",
-                                                color: "white",
-                                                borderRadius: "7px",
-                                                fontSize: "12px",
-                                                marginLeft: "5px"
-                                            }}> Внутр</label></Radio>
-                                                <Radio value={2}><label for="inlineCheckbox1" style={{
-                                                border: "3px solid #FF7A36",
-                                                background: "#FF7A36",
-                                                color: "white",
-                                                borderRadius: "7px",
-                                                fontSize: "12px",
-                                                marginLeft: "5px"
-                                                }}>Внеш</label></Radio>
-                                            </Radio.Group>
-                                            
-                                        </div>                                        
-                                    </div>
-                                    <div className="input-group mb-3 input-group-sm">
-                                        <label className="napr col-sm-2 text-left"
-                                               style={{fontSize: "16px"}}>Состояние</label>
-                                        <div className="checkbox checkbox-inline ">
-                                            <Radio.Group>
-                                                <Radio value={3}><label for="inlineCheckbox1" style={{
-                                                border: "3px solid #6FD76F",
-                                                background: "#6FD76F",
-                                                color: "white",
-                                                borderRadius: "7px",
-                                                fontSize: "12px",
-                                                marginLeft: "5px"
-                                                }}>Открыт</label></Radio>
-                                                <Radio value={4}><label for="inlineCheckbox1" style={{
-                                                border: "3px solid #E23C3C",
-                                                background: "#E23C3C",
-                                                color: "white",
-                                                borderRadius: "7px",
-                                                fontSize: "12px",
-                                                marginLeft: "5px"
-                                                }}>Закрыт</label></Radio>
-                                            </Radio.Group>                                            
+                                    <div onChange={this.onChangeType}>
+                                        <div className="input-group mb-3 input-group-sm">
+                                            <label className="napr col-sm-2 text-left"
+                                                   style={{fontSize: "16px"}}>Тип</label>
+                                            <div className="checkbox checkbox-inline ">
+                                                <Radio.Group onChange={this.onChangeType}>
+                                                    <Radio value={1}><label for="inlineCheckbox1" style={{
+                                                        border: "3px solid grey",
+                                                        background: "grey",
+                                                        color: "white",
+                                                        borderRadius: "7px",
+                                                        fontSize: "12px",
+                                                        marginLeft: "5px"
+                                                    }}> Внутр</label></Radio>
+                                                    <Radio value={2}><label for="inlineCheckbox1" style={{
+                                                        border: "3px solid #FF7A36",
+                                                        background: "#FF7A36",
+                                                        color: "white",
+                                                        borderRadius: "7px",
+                                                        fontSize: "12px",
+                                                        marginLeft: "5px"
+                                                    }}>Внеш</label></Radio>
+                                                </Radio.Group>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="input-group mb-3 input-group-sm">
-                                        <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Доступность
-                                            для отчетов сотрудников</label>
-                                        <div className="checkbox checkbox-inline ">
-                                            <Radio.Group>
-                                                <Radio value={4}><label for="inlineCheckbox1" style={{
-                                                border: "3px solid #6FD76F",
-                                                background: "#6FD76F",
-                                                color: "white",
-                                                borderRadius: "7px",
-                                                fontSize: "12px",
-                                                marginLeft: "5px"
-                                                }}>Досупен</label></Radio>
-                                                <Radio value={5}><label for="inlineCheckbox1" style={{
-                                                border: "3px solid #E23C3C",
-                                                background: "#E23C3C",
-                                                color: "white",
-                                                borderRadius: "7px",
-                                                fontSize: "12px",
-                                                marginLeft: "5px"
-                                                }}>Недоступен</label></Radio>
-                                            </Radio.Group>                                            
-                                        </div>                                        
-                                    </div>
-                                    <div className="input-group mb-3 input-group-sm">
-                                        <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Приемка
-                                            ВП</label>
-                                        <div className="checkbox checkbox-inline ">
-                                            <Radio.Group>
-                                                <Radio value={6}><label for="inlineCheckbox1" style={{
-                                                border: "3px solid #454545",
-                                                background: "#454545",
-                                                color: "white",
-                                                borderRadius: "7px",
-                                                fontSize: "12px",
-                                                marginLeft: "5px"
-                                            }}>ПП</label></Radio>
-                                            </Radio.Group>                                            
+                                        <div className="input-group mb-3 input-group-sm">
+                                            <label className="napr col-sm-2 text-left"
+                                                   style={{fontSize: "16px"}}>Состояние</label>
+                                            <div className="checkbox checkbox-inline ">
+                                                <Radio.Group>
+                                                    <Radio value={3}><label for="inlineCheckbox1" style={{
+                                                        border: "3px solid #6FD76F",
+                                                        background: "#6FD76F",
+                                                        color: "white",
+                                                        borderRadius: "7px",
+                                                        fontSize: "12px",
+                                                        marginLeft: "5px"
+                                                    }}>Открыт</label></Radio>
+                                                    <Radio value={4}><label for="inlineCheckbox1" style={{
+                                                        border: "3px solid #E23C3C",
+                                                        background: "#E23C3C",
+                                                        color: "white",
+                                                        borderRadius: "7px",
+                                                        fontSize: "12px",
+                                                        marginLeft: "5px"
+                                                    }}>Закрыт</label></Radio>
+                                                </Radio.Group>
+                                            </div>
+                                        </div>
+                                        <div className="input-group mb-3 input-group-sm">
+                                            <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Доступность
+                                                для отчетов сотрудников</label>
+                                            <div className="checkbox checkbox-inline ">
+                                                <Radio.Group className={'radio-type'}>
+                                                    <Radio value={4}><label for="inlineCheckbox1" style={{
+                                                        border: "3px solid #6FD76F",
+                                                        background: "#6FD76F",
+                                                        color: "white",
+                                                        borderRadius: "7px",
+                                                        fontSize: "12px",
+                                                        marginLeft: "5px"
+                                                    }}>Досупен</label></Radio>
+                                                    <Radio value={5}><label for="inlineCheckbox1" style={{
+                                                        border: "3px solid #E23C3C",
+                                                        background: "#E23C3C",
+                                                        color: "white",
+                                                        borderRadius: "7px",
+                                                        fontSize: "12px",
+                                                        marginLeft: "5px"
+                                                    }}>Недоступен</label></Radio>
+                                                </Radio.Group>
+                                            </div>
+                                        </div>
+                                        <div className="input-group mb-3 input-group-sm">
+                                            <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Приемка
+                                                ВП</label>
+                                            <div className="checkbox checkbox-inline ">
+                                                <Radio.Group>
+                                                    <Radio value={6}><label for="inlineCheckbox1" style={{
+                                                        border: "3px solid #454545",
+                                                        background: "#454545",
+                                                        color: "white",
+                                                        borderRadius: "7px",
+                                                        fontSize: "12px",
+                                                        marginLeft: "5px"
+                                                    }}>ПП</label></Radio>
+                                                </Radio.Group>
+                                            </div>
                                         </div>
                                     </div>
                                     <hr className="normal"/>
                                 </div>
                                 <div className="block4 text-right">
                                     {/* <button type="button" className="btn btn-primary btn-sm" onClick={()=>document.location='/cabinet/admin/register'}>Назад</button> */}
-                                    <button type="button" className="btn btn-success btn-sm"
+                                    <button onClick={this.onClickCreateGroup} type="button" className="btn btn-success btn-sm"
                                             style={{marginLeft: "5px"}}>Сохранить
                                     </button>
                                     <button type="button" className="btn btn-secondary btn-sm"
