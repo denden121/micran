@@ -2,22 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-TYPE_PROJECT = [
-    ('INTERIOR', 'Interior'),
-    ('EXTERNAL', 'External'),
-]
-
-STATUS_PROJECT = [
-    ('CLOSE', 'Close'),
-    ('OPEN', 'Open'),
-]
-
-REPORT_PROJECT = [
-    ('AVAILABLE', 'Available'),
-    ('UNAVAILABLE', 'Unavailable'),
-]
-
-
 class Logging(models.Model):
     IP = models.GenericIPAddressField()
     login = models.CharField(max_length=30, blank=True)
@@ -77,9 +61,9 @@ class Project(models.Model):
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.IntegerField(blank=True, default=1)
-    type = models.CharField(max_length=10, blank=True, choices=TYPE_PROJECT)
-    status = models.CharField(max_length=10, blank=True, choices=STATUS_PROJECT)
-    report_availability = models.CharField(max_length=15, blank=True, choices=REPORT_PROJECT)
+    type = models.BooleanField(blank=True, default='False')
+    status = models.BooleanField(blank=True, default='False')
+    report_availability = models.BooleanField(blank=True, default='False')
     acceptance_vp = models.BooleanField(blank=True, default='False')
 
     def __str__(self):
