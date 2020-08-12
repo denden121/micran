@@ -4,6 +4,7 @@ import Register from "../Register"
 import {Select} from "antd";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
 import { Radio } from 'antd';
+import { Checkbox } from 'antd';
 
 class NewProject extends React.Component{
     state={
@@ -14,6 +15,10 @@ class NewProject extends React.Component{
         select_director:'',
         select_designer:'',
         select_deputy_designer:'',
+        type:'',
+        state_project:'',
+        availability:'',
+        vp:''
     }
     loadDate = async () =>{
         let myHeaders = new Headers();
@@ -79,14 +84,55 @@ class NewProject extends React.Component{
         // console.log(this.state)
     }
     onChangeType=(e)=>{
-        console.log(e.target.type)
-        console.log(e.target.value)
+        this.setState({type:e.target.value})
     }
 
-    onChangeState=()=>{
+    onChangeState=(e)=>{
+        this.setState({state_project:e.target.value})
     }
 
-    onChangeAvailability=()=>{
+    onChangeAvailability=(e)=>{
+        this.setState({availability:e.target.value})
+
+    }
+    onChangeVp=(e)=>{
+        this.setState({vp:e.target.checked})
+    }
+    onClickCreateGroup=async ()=>{
+        const direction = this.state.select_direction
+        const director = this.state.select_director
+        const disigner = this.state.select_designer
+        const deputyDesigner = this.state.select_deputy_designer
+        const state = this.state.state_project
+        const type = this.state.type
+        const availability = this.state.availability
+        const vp = this.state.vp
+        const nameproject = document.querySelector('#name-project-new-project').value
+        const number = document.querySelector('#number-contract-new-project').value
+        const order = document.querySelector('#order-new-project').value
+        const productionOrder = document.querySelector('#production-order-new-project').value
+        const comment = document.querySelector('#comment-to-co-workers-new-project').value
+        console.log(direction,director,disigner,deputyDesigner,state,type,availability,vp,nameproject,number,order,productionOrder,comment)
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", );
+
+        var formdata = new FormData();
+        formdata.append("pk", "6");
+        formdata.append("name", "hjgkslsjgkrgbjklt");
+        formdata.append("actions", "1 2 ");
+        formdata.append("participants", "1 2 ");
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     }
     componentDidMount() {
         this.loadDate()
@@ -94,7 +140,7 @@ class NewProject extends React.Component{
 
     render() {
         const animatedComponents = makeAnimated();
-        console.log(this.state)
+        // console.log(this.state)
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -206,13 +252,13 @@ class NewProject extends React.Component{
                                             placeholder="Описание">
                                     </textarea>
                                     </div>
-                                    <div onChange={this.onChangeType}>
+                                    <div>
                                         <div className="input-group mb-3 input-group-sm">
                                             <label className="napr col-sm-2 text-left"
                                                    style={{fontSize: "16px"}}>Тип</label>
                                             <div className="checkbox checkbox-inline ">
-                                                <Radio.Group onChange={this.onChangeType}>
-                                                    <Radio value={1}><label for="inlineCheckbox1" style={{
+                                                <Radio.Group  onChange={this.onChangeType}>
+                                                    <Radio value={0}><label for="inlineCheckbox1" style={{
                                                         border: "3px solid grey",
                                                         background: "grey",
                                                         color: "white",
@@ -220,7 +266,7 @@ class NewProject extends React.Component{
                                                         fontSize: "12px",
                                                         marginLeft: "5px"
                                                     }}> Внутр</label></Radio>
-                                                    <Radio value={2}><label for="inlineCheckbox1" style={{
+                                                    <Radio value={1}><label for="inlineCheckbox1" style={{
                                                         border: "3px solid #FF7A36",
                                                         background: "#FF7A36",
                                                         color: "white",
@@ -236,8 +282,8 @@ class NewProject extends React.Component{
                                             <label className="napr col-sm-2 text-left"
                                                    style={{fontSize: "16px"}}>Состояние</label>
                                             <div className="checkbox checkbox-inline ">
-                                                <Radio.Group>
-                                                    <Radio value={3}><label for="inlineCheckbox1" style={{
+                                                <Radio.Group onChange={this.onChangeState}>
+                                                    <Radio value={0}><label for="inlineCheckbox1" style={{
                                                         border: "3px solid #6FD76F",
                                                         background: "#6FD76F",
                                                         color: "white",
@@ -245,7 +291,7 @@ class NewProject extends React.Component{
                                                         fontSize: "12px",
                                                         marginLeft: "5px"
                                                     }}>Открыт</label></Radio>
-                                                    <Radio value={4}><label for="inlineCheckbox1" style={{
+                                                    <Radio value={1}><label for="inlineCheckbox1" style={{
                                                         border: "3px solid #E23C3C",
                                                         background: "#E23C3C",
                                                         color: "white",
@@ -260,8 +306,8 @@ class NewProject extends React.Component{
                                             <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Доступность
                                                 для отчетов сотрудников</label>
                                             <div className="checkbox checkbox-inline ">
-                                                <Radio.Group className={'radio-type'}>
-                                                    <Radio value={4}><label for="inlineCheckbox1" style={{
+                                                <Radio.Group onChange={this.onChangeAvailability}>
+                                                    <Radio value={0}><label for="inlineCheckbox1" style={{
                                                         border: "3px solid #6FD76F",
                                                         background: "#6FD76F",
                                                         color: "white",
@@ -269,7 +315,7 @@ class NewProject extends React.Component{
                                                         fontSize: "12px",
                                                         marginLeft: "5px"
                                                     }}>Досупен</label></Radio>
-                                                    <Radio value={5}><label for="inlineCheckbox1" style={{
+                                                    <Radio value={1}><label for="inlineCheckbox1" style={{
                                                         border: "3px solid #E23C3C",
                                                         background: "#E23C3C",
                                                         color: "white",
@@ -284,16 +330,16 @@ class NewProject extends React.Component{
                                             <label className="napr col-sm-2 text-left" style={{fontSize: "16px"}}>Приемка
                                                 ВП</label>
                                             <div className="checkbox checkbox-inline ">
-                                                <Radio.Group>
-                                                    <Radio value={6}><label for="inlineCheckbox1" style={{
-                                                        border: "3px solid #454545",
-                                                        background: "#454545",
-                                                        color: "white",
-                                                        borderRadius: "7px",
-                                                        fontSize: "12px",
-                                                        marginLeft: "5px"
-                                                    }}>ПП</label></Radio>
-                                                </Radio.Group>
+                                                <Checkbox onChange={this.onChangeVp}>
+                                                    <label for="inlineCheckbox1" style={{
+                                                    border: "3px solid #454545",
+                                                    background: "#454545",
+                                                    color: "white",
+                                                    borderRadius: "7px",
+                                                    fontSize: "12px",
+                                                    marginLeft: "5px"
+                                                    }}>ПП</label>
+                                                </Checkbox>
                                             </div>
                                         </div>
                                     </div>
