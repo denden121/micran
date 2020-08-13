@@ -3,9 +3,9 @@ import CardModal from "./CardModal/CardModal"
 
 const Workers = (props) =>{
     let workers = Array.from(props.workers)
-    console.log(workers)
+    // console.log(workers)
     return workers.map((worker,index)=>{
-        console.log(worker)
+        // console.log(worker)
         return(
             <tr>
                 <th scope="row">1</th>

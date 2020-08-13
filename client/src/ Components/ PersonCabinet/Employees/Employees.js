@@ -17,21 +17,23 @@ class Employees extends React.Component{
     }
 
     showModal = (index) => {
+        const id = this.state.workers[index].pk
+        console.log(index,id)
         this.setState({
             visible: true,
             select_worker_index:index,
-            // select_worker_id:
+            select_worker_id: id
         });
     };
     handleOk = e => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
     };
 
     handleCancel = e => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
@@ -50,7 +52,7 @@ class Employees extends React.Component{
             .then(response =>  response.json())
             .then(result => this.setState({workers: result}))
             .catch(error => console.log('error', error))
-        console.log('state',this.state.workers)
+        // console.log('state',this.state.workers)
 
     }
     componentDidMount() {
@@ -74,7 +76,7 @@ class Employees extends React.Component{
                     width={720}
                     cancelText="Права доступа"
                     okText="Сохранить" >
-                    <CardModal Workers ={this.state.workers}/>
+                    <CardModal Workers ={this.state}/>
                 </Modal>
             </div>
         )
