@@ -212,8 +212,18 @@ def all_projects_view(request):
     if user:
         if request.method == "GET":
             projects = Project.objects.all()
-            data = serializers.serialize('json', projects)
-            return HttpResponse(data)
+            data = []
+            for project in projects:
+                chief_designer = Profile.objects.filter(pk=project.chief_designer)
+                deputy_chief_designer = Profile.objects.filter(pk=project.deputy_chief_designer)
+                manager = Profile.objects.filter(pk=project.manager)
+                field = {'name': project.name, 'direction': project.direction, 'manager': manager,
+                         'deputy_chief_designer': deputy_chief_designer, 'chief_designer': chief_designer,
+                         'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
+                         'contract': project.contract, 'type': project.type, 'status': project.status,
+                         'report_availability': project.report_availability, 'acceptance_vp': acceptance_vp}
+                data.append({'pk': project.pk, 'project': field})
+                return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
             if form.is_valid():

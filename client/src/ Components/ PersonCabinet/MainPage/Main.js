@@ -23,6 +23,7 @@ import SystemTime from "../SystemTime/SystemTime"
 
 
 
+
 class Main extends Component{
 
     logOut = () =>{
@@ -49,6 +50,7 @@ class Main extends Component{
                         onClickPrivious = {this.onClickPrivious}
                     />
                 </div>
+                
 
                 <div className="Data">
                     <Switch>
