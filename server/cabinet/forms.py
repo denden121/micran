@@ -26,7 +26,7 @@ class ProfileForm(forms.ModelForm):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        exclude = '__all__'
+        fields = '__all__'
 
 
 class GroupForm(forms.ModelForm):

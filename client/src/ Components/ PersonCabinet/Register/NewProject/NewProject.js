@@ -107,32 +107,41 @@ class NewProject extends React.Component{
         const type = this.state.type
         const availability = this.state.availability
         const vp = this.state.vp
-        const nameproject = document.querySelector('#name-project-new-project').value
+        const nameProject = document.querySelector('#name-project-new-project').value
         const number = document.querySelector('#number-contract-new-project').value
         const order = document.querySelector('#order-new-project').value
         const productionOrder = document.querySelector('#production-order-new-project').value
         const comment = document.querySelector('#comment-to-co-workers-new-project').value
-        console.log(direction,director,disigner,deputyDesigner,state,type,availability,vp,nameproject,number,order,productionOrder,comment)
+        console.log(direction,director,disigner,deputyDesigner,state,type,availability,vp,nameProject,number,order,productionOrder,comment)
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization",token );
         var formdata = new FormData();
-        formdata.append("", "6");
-        formdata.append("name", "hjgkslsjgkrgbjklt");
-        formdata.append("actions", "1 2 ");
-        formdata.append("participants", "1 2 ");
-
-        var requestOptions = {
+        formdata.append("name", nameProject);
+        formdata.append("direction", direction);
+        formdata.append("manager", director);
+        formdata.append("client", order);
+        formdata.append("chief_designer", disigner);
+        formdata.append("deputy_chief_designer", deputyDesigner);
+        formdata.append("production_order", productionOrder);
+        formdata.append("commet_for_employees", comment);
+        formdata.append("contract", number);
+        formdata.append("type", type);
+        formdata.append("status", state);
+        formdata.append("report_availability", availability);
+        formdata.append("acceptance_vp", vp);
+        let requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: formdata,
             redirect: 'follow'
         };
 
-        fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
+        await fetch("http://127.0.0.1:8000/cabinet/projects/", requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
+
     }
     componentDidMount() {
         this.loadDate()
