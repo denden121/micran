@@ -214,16 +214,28 @@ def all_projects_view(request):
             projects = Project.objects.all()
             data = []
             for project in projects:
-                chief_designer = Profile.objects.filter(pk=project.chief_designer)
-                deputy_chief_designer = Profile.objects.filter(pk=project.deputy_chief_designer)
-                manager = Profile.objects.filter(pk=project.manager)
-                field = {'name': project.name, 'direction': project.direction, 'manager': manager,
-                         'deputy_chief_designer': deputy_chief_designer, 'chief_designer': chief_designer,
+                if project.manager.isdigit():
+                    manager = Profile.objects.get(pk=project.manager)
+                    manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
+                else:
+                    manager_name = project.manager
+                if project.manager.isdigit():
+                    chief_designer = Profile.objects.get(pk=project.chief_designer)
+                    chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                else:
+                    chief_designer_name = project.chief_designer
+                if project.manager.isdigit():
+                    deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
+                    deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
+                else:
+                    deputy_chief_designer_name = project.deputy_chief_designer
+                field = {'name': project.name, 'direction': project.direction, 'manager': manager_name,
+                         'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
                          'contract': project.contract, 'type': project.type, 'status': project.status,
                          'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
                 data.append({'pk': project.pk, 'project': field})
-                return HttpResponse(json.dumps(data))
+            return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
             if form.is_valid():
