@@ -27,11 +27,7 @@ class SystemTime extends React.Component{
                         <CollapseParametr/>
                     </Panel>
                     </Collapse>                    
-                    </div>
-                    
-                    
-                    
-                    
+                    </div>                  
                     {/* <label className="text-left col-md-12" style={{marginTop:"-15px"}}>Параметры отображения</label>                                          */}
                 </div> 
                 
