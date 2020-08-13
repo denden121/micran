@@ -234,7 +234,7 @@ def all_projects_view(request):
                          'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
                          'contract': project.contract, 'type': project.type, 'status': project.status,
                          'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
-                data.append({'pk': project.pk, 'project': field})
+                data.append({'pk': project.pk, 'fields': field})
             return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)

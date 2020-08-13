@@ -141,7 +141,7 @@ class NewProject extends React.Component{
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
-
+        document.location = '/cabinet/admin/register'
     }
     componentDidMount() {
         this.loadDate()

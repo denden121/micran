@@ -12,15 +12,15 @@ class Employees extends React.Component{
     state = {
         workers:{},
         visible: false,
-        select_worker:{
-            id:'',
-            index:''
-        }
+        select_worker_index:'',
+        select_worker_id:''
     }
 
-    showModal = () => {
+    showModal = (index) => {
         this.setState({
             visible: true,
+            select_worker_index:index,
+            // select_worker_id:
         });
     };
     handleOk = e => {
