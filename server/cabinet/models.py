@@ -54,10 +54,10 @@ class Group(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=True)
     direction = models.CharField(max_length=100, blank=True)
-    manager = models.CharField(max_length=100, blank=True)
+    manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.PROTECT)
     client = models.CharField(max_length=100, blank=True)
-    chief_designer = models.CharField(max_length=100, blank=True)
-    deputy_chief_designer = models.CharField(max_length=100, blank=True)
+    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.PROTECT)
+    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.PROTECT)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.IntegerField(blank=True, default=1)
@@ -79,29 +79,29 @@ class Report(models.Model):
     date = models.DateField(blank=True)
 
     # def __str__(self):
-        # return self.name
+    # return self.name
 
 
 class SalaryIndividual(models.Model):
-    days_worked = models.FloatField(blank=True, default = 0)
-    vacation = models.FloatField(blank=True, default = 0)
-    sick_leave = models.FloatField(blank=True, default = 0)
-    day_off = models.FloatField(blank=True, default = 0)
-    time_from_report = models.FloatField(blank=True, default = 0)
-    time_orion = models.FloatField(blank=True, default = 0)
-    time_norm = models.FloatField(blank=True, default = 0)
-    time_off = models.FloatField(blank=True, default = 0)
-    plan_salary = models.FloatField(blank=True, default = 0)
-    award = models.FloatField(blank=True, default = 0)
-    penalty = models.FloatField(blank=True, default = 0)
-    is_penalty = models.BooleanField(blank=True, default = 0)
-    salary_hand = models.FloatField(blank=True, default = 0)
+    days_worked = models.FloatField(blank=True, default=0)
+    vacation = models.FloatField(blank=True, default=0)
+    sick_leave = models.FloatField(blank=True, default=0)
+    day_off = models.FloatField(blank=True, default=0)
+    time_from_report = models.FloatField(blank=True, default=0)
+    time_orion = models.FloatField(blank=True, default=0)
+    time_norm = models.FloatField(blank=True, default=0)
+    time_off = models.FloatField(blank=True, default=0)
+    plan_salary = models.FloatField(blank=True, default=0)
+    award = models.FloatField(blank=True, default=0)
+    penalty = models.FloatField(blank=True, default=0)
+    is_penalty = models.BooleanField(blank=True, default=0)
+    salary_hand = models.FloatField(blank=True, default=0)
     person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
     date = models.DateField(blank=True)
     common_part = models.ForeignKey('SalaryCommon', on_delete=models.PROTECT)
 
 
 class SalaryCommon(models.Model):
-    days_norm_common = models.FloatField(blank=True, default = 0)
-    time_norm_common = models.FloatField(blank=True, default = 0)
+    days_norm_common = models.FloatField(blank=True, default=0)
+    time_norm_common = models.FloatField(blank=True, default=0)
     date = models.DateField(blank=True, unique=True)

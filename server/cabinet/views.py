@@ -214,21 +214,12 @@ def all_projects_view(request):
             projects = Project.objects.all()
             data = []
             for project in projects:
-                if project.manager.isdigit():
-                    manager = Profile.objects.get(pk=project.manager)
-                    manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
-                else:
-                    manager_name = project.manager
-                if project.manager.isdigit():
-                    chief_designer = Profile.objects.get(pk=project.chief_designer)
-                    chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
-                else:
-                    chief_designer_name = project.chief_designer
-                if project.manager.isdigit():
-                    deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
-                    deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
-                else:
-                    deputy_chief_designer_name = project.deputy_chief_designer
+                manager = Profile.objects.get(pk=project.manager)
+                manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
+                chief_designer = Profile.objects.get(pk=project.chief_designer)
+                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
+                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
                 field = {'name': project.name, 'direction': project.direction, 'manager': manager_name,
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
@@ -503,7 +494,7 @@ def workers_info(request):
                         'position': person.position, 'SRI_SAS': person.SRI_SAS,
                         'shift': person.shift, 'date': "2009-01-01",
                         '№ db': "321", '№ 1c': "3059", "sex": person.sex,
-                        'birth_date': person.birth_date,
+                        'birth_date': str(person.birth_date),
                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
                         'groups': group_field}
                 group_field = []
