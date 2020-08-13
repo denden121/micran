@@ -214,16 +214,19 @@ def all_projects_view(request):
             projects = Project.objects.all()
             data = []
             for project in projects:
-                chief_designer = Profile.objects.filter(pk=project.chief_designer)
-                deputy_chief_designer = Profile.objects.filter(pk=project.deputy_chief_designer)
-                manager = Profile.objects.filter(pk=project.manager)
-                field = {'name': project.name, 'direction': project.direction, 'manager': manager,
-                         'deputy_chief_designer': deputy_chief_designer, 'chief_designer': chief_designer,
+                manager = Profile.objects.get(pk=project.manager)
+                manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
+                chief_designer = Profile.objects.get(pk=project.chief_designer)
+                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
+                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
+                field = {'name': project.name, 'direction': project.direction, 'manager': manager_name,
+                         'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
                          'contract': project.contract, 'type': project.type, 'status': project.status,
-                         'report_availability': project.report_availability, 'acceptance_vp': acceptance_vp}
-                data.append({'pk': project.pk, 'project': field})
-                return HttpResponse(json.dumps(data))
+                         'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
+                data.append({'pk': project.pk, 'fields': field})
+            return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
             if form.is_valid():
@@ -491,7 +494,7 @@ def workers_info(request):
                         'position': person.position, 'SRI_SAS': person.SRI_SAS,
                         'shift': person.shift, 'date': "2009-01-01",
                         '№ db': "321", '№ 1c': "3059", "sex": person.sex,
-                        'birth_date': person.birth_date,
+                        'birth_date': str(person.birth_date),
                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
                         'groups': group_field}
                 group_field = []

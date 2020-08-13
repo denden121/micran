@@ -3,14 +3,14 @@ import CardModal from "./CardModal/CardModal"
 
 const Workers = (props) =>{
     let workers = Array.from(props.workers)
-    console.log(workers)
+    // console.log(workers)
     return workers.map((worker,index)=>{
-        console.log(worker)
+        // console.log(worker)
         return(
             <tr>
                 <th scope="row">1</th>
                 <td>{worker.person['№ db']}</td>
-                <td><a onClick={props.onClickShowModal} style={{cursor:"pointer"}}>{worker.person.full_name}</a></td>
+                <td><a onClick={props.onClickShowModal.bind(this,index)} style={{cursor:"pointer"}}>{worker.person.full_name}</a></td>
                 <td>{worker.person.date}</td>
                 <td>{worker.person.shift}</td>
                 <td>{worker.person.SRI_SAS ? 'да' : 'нет'}</td>
