@@ -127,6 +127,12 @@ class Navigation extends Component{
                                                 Система учета времени
                                             </a>
                                         </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/structure">
+                                                <span data-feather="layers"></span>
+                                                Структура подразделений
+                                            </a>
+                                        </li>
                                     </div>
                                     :
                                     <div></div>
