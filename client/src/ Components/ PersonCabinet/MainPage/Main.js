@@ -17,6 +17,11 @@ import Payroll from "../Payroll/Payroll"
 import Register from "../Register/Register"
 import NewProject from "../Register/NewProject/NewProject";
 import UnitProjects from "../Register/UnitProjects/UnitProjects"
+import Employees from "../Employees/Employees"
+import Interval from "../WorkCalendar/Interval/Interval"
+import SystemTime from "../SystemTime/SystemTime"
+import Structure from "../Tree/Structure"
+
 
 
 
@@ -46,6 +51,7 @@ class Main extends Component{
                         onClickPrivious = {this.onClickPrivious}
                     />
                 </div>
+                
 
                 <div className="Data">
                     <Switch>
@@ -58,7 +64,11 @@ class Main extends Component{
                         <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
                         <Route path='/cabinet/admin/register' exact  component = {Register}/>  
                         <Route path='/cabinet/admin/new_project' exact  component = {NewProject}/>
-                        <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>                         
+                        <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>   
+                        <Route path='/cabinet/admin/employees' exact  component = {Employees}/>  
+                        <Route path='/cabinet/admin/calendar' exact  component = {Interval}/> 
+                        <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/> 
+                        <Route path='/cabinet/admin/structure' exact  component = {Structure}/> 
                     </Switch>
                 </div>
             </div>

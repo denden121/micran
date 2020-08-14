@@ -58,13 +58,14 @@ class Navigation extends Component{
                     <div ref={this.wrapperRef} className="wrapper">
                     <div className="nav">
                     <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-                        {localStorage.getItem('date')}
+                        
                         {/*<Icon*/}
                         {/*className="nav__icon"*/}
                         {/*type="menu-fold"*/}
                         {/*onClick={this.handleClick.bind(this)}/>*/}
                         <div className="nav__body">
                         <div className="sidebar-sticky">
+                        
                             <Calendar onClickDate = {this.onClickDate}
                                       onClickNext = {this.onClickNext}
                                       onClickPrevios = {this.onClickPrivious}/>
@@ -106,6 +107,30 @@ class Navigation extends Component{
                                             <a className="nav-link" href="http://localhost:3000/cabinet/admin/register">
                                                 <span data-feather="layers"></span>
                                                 Register
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/employees">
+                                                <span data-feather="layers"></span>
+                                                Employees
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/calendar">
+                                                <span data-feather="layers"></span>
+                                                Трудовой календарь
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/system_time">
+                                                <span data-feather="layers"></span>
+                                                Система учета времени
+                                            </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a className="nav-link" href="http://localhost:3000/cabinet/admin/structure">
+                                                <span data-feather="layers"></span>
+                                                Структура подразделений
                                             </a>
                                         </li>
                                     </div>

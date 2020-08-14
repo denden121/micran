@@ -212,8 +212,21 @@ def all_projects_view(request):
     if user:
         if request.method == "GET":
             projects = Project.objects.all()
-            data = serializers.serialize('json', projects)
-            return HttpResponse(data)
+            data = []
+            for project in projects:
+                manager = Profile.objects.get(pk=project.manager)
+                manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
+                chief_designer = Profile.objects.get(pk=project.chief_designer)
+                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
+                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
+                field = {'name': project.name, 'direction': project.direction, 'manager': manager_name,
+                         'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
+                         'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
+                         'contract': project.contract, 'type': project.type, 'status': project.status,
+                         'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
+                data.append({'pk': project.pk, 'fields': field})
+            return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
             if form.is_valid():
@@ -412,8 +425,10 @@ def salary(request):
                     salary.salary_hand = 0
                 salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
+                         'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
+                         'is_penalty': salary.is_penalty,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'award': salary.award, 'salary_hand': salary.salary_hand}
                 data.append({'pk': worker.pk, 'person': field})
@@ -445,7 +460,7 @@ def salary_individual(request):
             month = request.GET.get('month')
             salary = get_object_or_404(SalaryIndividual, person=person, date__year=year, date__month=month)
             data = {'salary_hand': salary.salary_hand, 'day_off': salary.day_off, 'award': salary.award,
-                    'days_worked': salary.days_worked,
+                    'days_worked': salary.days_worked, 'is_penalty': salary.is_penalty,
                     'vacation': salary.vacation, 'sick_leave': salary.sick_leave,
                     'time_from_report': salary.time_from_report,
                     'time_orion': salary.time_orion, 'time_norm': salary.time_norm, 'time_off': salary.time_off,
@@ -461,6 +476,30 @@ def workers_departament(request):
             workers = Profile.objects.all().exclude(position="Top")
             data = serializers.serialize('json', workers)
             return HttpResponse(data)
+
+
+@csrf_exempt
+def workers_info(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            persons = Profile.objects.all()
+            data = []
+            group_field = []
+            for person in persons:
+                groups = Group.objects.filter(participants=person)
+                for group in groups:
+                    group_field.append(group.name)
+                field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
+                        'position': person.position, 'SRI_SAS': person.SRI_SAS,
+                        'shift': person.shift, 'date': "2009-01-01",
+                        '№ db': "321", '№ 1c': "3059", "sex": person.sex,
+                        'birth_date': str(person.birth_date),
+                        'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
+                        'groups': group_field}
+                group_field = []
+                data.append({'pk': person.pk, 'person': field})
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
@@ -486,6 +525,20 @@ def projects_for_reports(request):
 
 
 @csrf_exempt
+def direction(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            data = []
+            directions = ['up', 'down', 'left', 'right']
+            i = 0
+            for direction in directions:
+                data.append({'direction': direction, 'pk': i})
+                i += 1
+            return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
 def change_common_salary(request):
     user = get_user_jwt(request)
     if user:
@@ -501,3 +554,36 @@ def change_common_salary(request):
             form.save()
             return HttpResponse("Success")
         return HttpResponse("Fail")
+
+
+@csrf_exempt
+def get_subdepartaments(request):
+    user = get_user_jwt(request)
+    if request.method == "GET":
+        subdepartaments = ['subdepartament_1', 'subdepartament_2', 'subdepartament_3']
+        i = 0
+        data = []
+        for subdepartament in subdepartaments:
+            data.append({'subdepartament': subdepartament, 'pk': i})
+            i += 1
+        return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def workers_project(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            workers = Profile.objects.all()
+            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def managers_project(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            workers = Profile.objects.all()
+            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            return HttpResponse(data)

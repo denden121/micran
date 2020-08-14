@@ -18,7 +18,7 @@ const Profit = (props) =>{
                 <td>{props.salary.salary_hand}</td>
             </tr>
             <tr>
-                <th scope="row" className="text-left">ПНачислено</th>
+                <th scope="row" className="text-left">Начислено</th>
                 <td>{props.salary.salary_hand + props.salary.plan_salary}</td>
             </tr>
             </tbody>

@@ -1,0 +1,87 @@
+.symbol1{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color:#A5A6AA;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.symbol2{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color:#FF7373;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.symbol3{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color:#95D37E;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.symbol4{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color:#76D3ED;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.symbol5{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color: #EDDA76;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.symbol6{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color: #F090C1;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.symbol7{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color: #B190F0;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+.symbol8{
+    padding: 2px;
+    width:4%;
+    display: inline-block;
+    background-color: #FAD2AA;
+    color: #fff;
+    float: left;
+    margin-right: 10px;
+    font-size: 10px;
+}

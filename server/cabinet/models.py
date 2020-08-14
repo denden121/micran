@@ -2,22 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-TYPE_PROJECT = [
-    ('INTERIOR', 'Interior'),
-    ('EXTERNAL', 'External'),
-]
-
-STATUS_PROJECT = [
-    ('CLOSE', 'Close'),
-    ('OPEN', 'Open'),
-]
-
-REPORT_PROJECT = [
-    ('AVAILABLE', 'Available'),
-    ('UNAVAILABLE', 'Unavailable'),
-]
-
-
 class Logging(models.Model):
     IP = models.GenericIPAddressField()
     login = models.CharField(max_length=30, blank=True)
@@ -51,7 +35,7 @@ class Profile(models.Model):
     shift = models.CharField(max_length=30, blank=True)
     part_time_job = models.CharField(max_length=30, blank=True)
     lateness = models.CharField(max_length=30, blank=True)
-    # first_time = models.BooleanField(default=False)
+    SRI_SAS = models.BooleanField(blank=True, default='False')
 
     def __str__(self):
         return self.user.username
@@ -70,16 +54,16 @@ class Group(models.Model):
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=True)
     direction = models.CharField(max_length=100, blank=True)
-    manager = models.CharField(max_length=100, blank=True)
+    manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.PROTECT)
     client = models.CharField(max_length=100, blank=True)
-    chief_designer = models.CharField(max_length=100, blank=True)
-    deputy_chief_designer = models.CharField(max_length=100, blank=True)
+    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.PROTECT)
+    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.PROTECT)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.IntegerField(blank=True, default=1)
-    type = models.CharField(max_length=10, blank=True, choices=TYPE_PROJECT)
-    status = models.CharField(max_length=10, blank=True, choices=STATUS_PROJECT)
-    report_availability = models.CharField(max_length=15, blank=True, choices=REPORT_PROJECT)
+    type = models.BooleanField(blank=True, default='False')
+    status = models.BooleanField(blank=True, default='False')
+    report_availability = models.BooleanField(blank=True, default='False')
     acceptance_vp = models.BooleanField(blank=True, default='False')
 
     def __str__(self):
@@ -95,29 +79,29 @@ class Report(models.Model):
     date = models.DateField(blank=True)
 
     # def __str__(self):
-        # return self.name
+    # return self.name
 
 
 class SalaryIndividual(models.Model):
-    days_worked = models.FloatField(blank=True, default = 0)
-    vacation = models.FloatField(blank=True, default = 0)
-    sick_leave = models.FloatField(blank=True, default = 0)
-    day_off = models.FloatField(blank=True, default = 0)
-    time_from_report = models.FloatField(blank=True, default = 0)
-    time_orion = models.FloatField(blank=True, default = 0)
-    time_norm = models.FloatField(blank=True, default = 0)
-    time_off = models.FloatField(blank=True, default = 0)
-    plan_salary = models.FloatField(blank=True, default = 0)
-    award = models.FloatField(blank=True, default = 0)
-    penalty = models.FloatField(blank=True, default = 0)
-    is_penalty = models.BooleanField(blank=True, default = 0)
-    salary_hand = models.FloatField(blank=True, default = 0)
+    days_worked = models.FloatField(blank=True, default=0)
+    vacation = models.FloatField(blank=True, default=0)
+    sick_leave = models.FloatField(blank=True, default=0)
+    day_off = models.FloatField(blank=True, default=0)
+    time_from_report = models.FloatField(blank=True, default=0)
+    time_orion = models.FloatField(blank=True, default=0)
+    time_norm = models.FloatField(blank=True, default=0)
+    time_off = models.FloatField(blank=True, default=0)
+    plan_salary = models.FloatField(blank=True, default=0)
+    award = models.FloatField(blank=True, default=0)
+    penalty = models.FloatField(blank=True, default=0)
+    is_penalty = models.BooleanField(blank=True, default=0)
+    salary_hand = models.FloatField(blank=True, default=0)
     person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
     date = models.DateField(blank=True)
     common_part = models.ForeignKey('SalaryCommon', on_delete=models.PROTECT)
 
 
 class SalaryCommon(models.Model):
-    days_norm_common = models.FloatField(blank=True, default = 0)
-    time_norm_common = models.FloatField(blank=True, default = 0)
+    days_norm_common = models.FloatField(blank=True, default=0)
+    time_norm_common = models.FloatField(blank=True, default=0)
     date = models.DateField(blank=True, unique=True)

@@ -5,21 +5,20 @@ import ldap
 from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
 
 
+AUTH_LDAP_SERVER_URI = "ldap.micran.ru:389"
 
-# Baseline configuration.
-AUTH_LDAP_SERVER_URI = "0.0.0.0:9000"
-
-AUTH_LDAP_BIND_DN = "cn=django-agent,dc=localnet,dc=micran"
-AUTH_LDAP_BIND_PASSWORD = "phlebotinum"
+AUTH_LDAP_BIND_DN = ""
+AUTH_LDAP_BIND_PASSWORD = ""
+AUTH_LDAP_START_TLS = True
 AUTH_LDAP_USER_SEARCH = LDAPSearch(
     "ou=People,dc=localnet,dc=micran", ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
 )
 
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-    "ou=django,ou=groups,dc=example,dc=com",
-    ldap.SCOPE_SUBTREE,
-    "(objectClass=groupOfNames)",
-)
+# AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+#     "ou=django,ou=groups,dc=example,dc=com",
+#     ldap.SCOPE_SUBTREE,
+#     "(objectClass=groupOfNames)",
+# )
 AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr="cn")
 
 # Simple group restrictions

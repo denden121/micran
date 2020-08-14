@@ -1,0 +1,43 @@
+.background-modal{
+    /* font-size: 16px; */
+    /* font-weight: 400; */
+    /* line-height: 1.5; */
+    /* color: #292b2c; */
+    position: absolute;
+    align-items: center;
+    /* background-color: #292b2c ; */
+    top:0 ;
+    width:100%;
+    height: 100%;
+    display: none;
+
+}
+
+.cancelButton{
+background-color: seagreen;
+}
+
+
+/* свойства модального окна по умолчанию */
+.modal {
+    /* position: fixed; фиксированное положение */
+    /* top: 0; */
+    /* right: 0; */
+    /* bottom: 0; */
+    /* left: 0; */
+    /* background: rgba(0,0,0,0.5);  */
+    /* z-index: 1050; */
+    /* opacity: 0; по умолчанию модальное окно прозрачно */
+    /* -webkit-transition: opacity 200ms ease-in;  */
+    /* -moz-transition: opacity 200ms ease-in; */
+    /* transition: opacity 200ms ease-in; анимация перехода */
+    /* pointer-events: none; элемент невидим для событий мыши */
+    /* margin: 0; */
+    /* padding: 0; */
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 600px;
+    height: 600px;
+
+}
