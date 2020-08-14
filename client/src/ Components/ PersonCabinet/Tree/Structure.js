@@ -31,7 +31,7 @@ const treeData = [
         key: '0-1',
         icon: <FolderOutlined/>,
         children: [
-          {
+          { 
             title: 'leaf',
             key: '0-1-0',
             icon: <FolderOpenOutlined />,
