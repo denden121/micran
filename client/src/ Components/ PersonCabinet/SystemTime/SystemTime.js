@@ -5,7 +5,7 @@ import {Select} from "antd";
 import CollapseParametr from "./CollapseParametr/CollapseParametr"
 import { Collapse } from 'antd';
 import { Button } from 'antd';
-
+import TimeTable from "./TimeTable/TimeTable"
 class SystemTime extends React.Component{
     
     render(){
@@ -27,13 +27,18 @@ class SystemTime extends React.Component{
                         <CollapseParametr/>
                     </Panel>
                     </Collapse>                    
-                    </div>
+                    </div>  
+                    <br/>
+                    <br/>   
                     
                     
                     
-                    
+                              
                     {/* <label className="text-left col-md-12" style={{marginTop:"-15px"}}>Параметры отображения</label>                                          */}
                 </div> 
+                <br/>
+                <br/>
+                <TimeTable/>  
                 
             </div>
         )

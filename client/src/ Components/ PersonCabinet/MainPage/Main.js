@@ -20,6 +20,7 @@ import UnitProjects from "../Register/UnitProjects/UnitProjects"
 import Employees from "../Employees/Employees"
 import Interval from "../WorkCalendar/Interval/Interval"
 import SystemTime from "../SystemTime/SystemTime"
+import Structure from "../Tree/Structure"
 
 
 
@@ -67,6 +68,7 @@ class Main extends Component{
                         <Route path='/cabinet/admin/employees' exact  component = {Employees}/>  
                         <Route path='/cabinet/admin/calendar' exact  component = {Interval}/> 
                         <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/> 
+                        <Route path='/cabinet/admin/structure' exact  component = {Structure}/> 
                     </Switch>
                 </div>
             </div>

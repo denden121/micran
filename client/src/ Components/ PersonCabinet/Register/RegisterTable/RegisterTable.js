@@ -14,9 +14,9 @@ const ListProjects = (props) => {
                 <td>{project.fields.production_order}</td>
                 <td>{project.fields.contract}</td>
                 <td>{project.fields.client}</td>
-                <td>{project.fields.type}</td>
-                <td>{project.fields.status}</td>
-                <td>{project.fields.report_availability}</td>
+                <td>{project.fields.type ? 'Внешний' : 'Внутрений'}</td>
+                <td>{project.fields.status ? 'Зыкрыт' : 'Открыт'}</td>
+                <td>{project.fields.report_availability ? 'Недоступен' : 'Доступен'}</td>
                 <td>{project.fields.acceptance_vp?'да':'нет*'}</td>
             </tr>
         )

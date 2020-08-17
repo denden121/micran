@@ -33,6 +33,7 @@ class Register extends React.Component{
         document.location='/cabinet/admin/unit_projects'
     }
     render(){
+        console.log(this.state)
         return(
             <div className="container-fluid">
                 <div className="row">
