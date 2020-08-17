@@ -21,11 +21,19 @@ class Action(models.Model):
         return self.action
 
 
+class Direction(models.Model):
+    direction = models.CharField(max_length=30, blank=True)
+    num = models.IntegerField()
+
+    def __str__(self):
+        return self.direction
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
     sex = models.CharField(max_length=5, blank=True)
     subdivision = models.CharField(max_length=30, blank=True)
-    departament = models.CharField(max_length=30, blank=True)
+    departament = models.ForeignKey('Departament', related_name='departament_id', on_delete=models.PROTECT)
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
@@ -60,7 +68,7 @@ class Project(models.Model):
     deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.PROTECT)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
-    contract = models.IntegerField(blank=True, default=1)
+    contract = models.CharField(max_length=100)
     type = models.BooleanField(blank=True, default='False')
     status = models.BooleanField(blank=True, default='False')
     report_availability = models.BooleanField(blank=True, default='False')
@@ -82,6 +90,12 @@ class Report(models.Model):
     # return self.name
 
 
+class Departament(models.Model):
+    subdepartment_code = models.CharField(max_length=50)
+    subdepartment_name = models.CharField(max_length=100)
+    department_code = models.CharField(max_length=50)
+
+
 class SalaryIndividual(models.Model):
     days_worked = models.FloatField(blank=True, default=0)
     vacation = models.FloatField(blank=True, default=0)
@@ -99,6 +113,17 @@ class SalaryIndividual(models.Model):
     person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
     date = models.DateField(blank=True)
     common_part = models.ForeignKey('SalaryCommon', on_delete=models.PROTECT)
+
+    def calculate(self, salary_common):
+        self.days_worked = salary_common.days_norm_common - (self.day_off + self.vacation + self.sick_leave)
+        self.time_norm = 8 * self.days_worked
+        try:
+            if self.is_penalty:
+                self.penalty = (self.time_norm - self.time_orion) * self.plan_salary / self.time_norm
+            self.salary_hand = self.plan_salary * self.days_worked / salary_common.days_norm_common - self.penalty + self.award
+        except ZeroDivisionError:
+            self.penalty = 0
+            self.salary_hand = 0
 
 
 class SalaryCommon(models.Model):

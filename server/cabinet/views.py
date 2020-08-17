@@ -10,7 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
-from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual
+from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Departament, Direction
 
 
 def get_user_jwt(request):
@@ -59,6 +59,7 @@ def token(request):
         status = True
         token_json = get_tokens_for_user(user)
         logging(request, username=username, status=status, action=action)
+        print(json.dumps(token_json))
         return HttpResponse(json.dumps(token_json))
     else:
         status = False
@@ -224,6 +225,7 @@ def all_projects_view(request):
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
                          'contract': project.contract, 'type': project.type, 'status': project.status,
+                         'client': project.client,
                          'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
                 data.append({'pk': project.pk, 'fields': field})
             return HttpResponse(json.dumps(data))
@@ -232,6 +234,7 @@ def all_projects_view(request):
             if form.is_valid():
                 form.save()
                 return HttpResponse("Success")
+            print(form.errors)
             return HttpResponse("Something went wrong")
         return HttpResponse("Method not allowed")
     return HttpResponse("Authentication error")
@@ -412,18 +415,6 @@ def salary(request):
                 salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
                                                                     common_part=salary_common)
                 salary.time_from_report = hour
-                salary_common.time_norm_common = salary_common.days_norm_common * 8
-                salary.days_worked = salary_common.days_norm_common - (salary.day_off +
-                                                                       salary.vacation + salary.sick_leave)
-                salary.time_norm = 8 * salary.days_worked
-                try:
-                    if salary.is_penalty:
-                        salary.penalty = (salary.time_norm - salary.time_orion) * salary.plan_salary / salary.time_norm
-                    salary.salary_hand = salary.plan_salary * salary.days_worked / salary_common.days_norm_common - salary.penalty + salary.award
-                except ZeroDivisionError:
-                    salary.penalty = 0
-                    salary.salary_hand = 0
-                salary.save()
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
@@ -440,12 +431,15 @@ def salary(request):
             person = Profile.objects.get(pk=person)
             year = request.POST.get('year')
             month = request.POST.get('month')
+            hour = get_time_from_reports(person)
             salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
             salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
-            salary.time_from_report = get_time_from_reports(person)
             form = SalaryIndividualForm(request.POST, instance=salary)
             if form.is_valid():
                 form.save()
+                salary.time_from_report = hour
+                salary.calculate(salary_common)
+                salary.save()
                 return HttpResponse("Success")
             return HttpResponse(form.errors.as_data())
 
@@ -493,6 +487,7 @@ def workers_info(request):
                 field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
                         'position': person.position, 'SRI_SAS': person.SRI_SAS,
                         'shift': person.shift, 'date': "2009-01-01",
+                        'experience': person.experience, 'lateness': person.lateness,
                         '№ db': "321", '№ 1c': "3059", "sex": person.sex,
                         'birth_date': str(person.birth_date),
                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
@@ -586,4 +581,24 @@ def managers_project(request):
         if request.method == "GET":
             workers = Profile.objects.all()
             data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def departament_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            departaments = Departament.objects.all()
+            data = serializers.serialize('json', departaments)
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def direction_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            directions = Direction.objects.all()
+            data = serializers.serialize('json', directions)
             return HttpResponse(data)
