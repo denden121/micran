@@ -133,13 +133,12 @@ class AddGroups extends React.Component {
                         <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="row">
-                                    {/* <div className="col-md-8 text-center">                                        
-                                         <label>Название группы 
-                                        <Input id="nameGroup" placeholder="Введите название группы" /></label>                                         
-                                    </div> */}
-                                    {/* <div className="col-md-7 text-center">
-                                       
-                                    </div> */}
+                                    <div className="col-md-5 text-center">                                        
+                                         <label>Название группы</label>                                                                                 
+                                    </div>
+                                    <div className="col-md-7 text-center">
+                                    <Input id="nameGroup" placeholder="Введите название группы" style={{marginLeft:"-200px"}}/>
+                                    </div>
                                     <br/>
                                     <br/>
                                     <div className="col-md-5 text-center">

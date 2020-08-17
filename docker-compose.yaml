@@ -37,6 +37,11 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
   pgbackups:
     container_name: Backup
@@ -59,7 +64,6 @@ services:
       - BACKUP_KEEP_WEEKS=4
       - BACKUP_KEEP_MONTHS=6
       - HEALTHCHECK_PORT=81
-
 
 volumes:
   dbdata:
