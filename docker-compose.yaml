@@ -44,7 +44,7 @@ services:
       - 8080:8080
 
   pgbackups:
-    container_name: Backup
+    container_name: Backup_ldap
     image: prodrigestivill/postgres-backup-local
     restart: always
     volumes:

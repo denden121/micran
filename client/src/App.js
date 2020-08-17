@@ -19,8 +19,8 @@ class  App extends Component {
         const publicIp = require('public-ip');
         const ip = String(await publicIp.v4())
         //сбор данных для отправки на авторизацию
-        let myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        // let myHeaders = new Headers();
+        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         const login = document.getElementById("input-login").value
         const password = document.getElementById("input-password").value
         let urlencoded = new URLSearchParams();// Добавляем параметры запросы
@@ -31,21 +31,23 @@ class  App extends Component {
             method: 'POST',
             body: urlencoded,
             redirect: 'follow',
-            headers: myHeaders
+            // headers: myHeaders
         };
         console.log(login,password)
         //проверка логина и пароля(отправка запроса)
         const sendUrl = "http://127.0.0.1:8000/token/"
         await fetch(sendUrl, requestOptions)
+        // console.log(a)
             .then(response => response.json())
             .then(result => localStorage.setItem('token', result.access))
             .catch(error => localStorage.setItem('token', ''));
+            // .catch(error => console.log(error));
         //проверка верны данные или нет
         if (localStorage.getItem('token') == '') {
             alert('incorrect')
         } else {
             //проверка прав
-            myHeaders = new Headers();
+            let myHeaders = new Headers();
             myHeaders.append("Authorization",localStorage.getItem('token'));
             requestOptions = {
                 method: 'GET',
