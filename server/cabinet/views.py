@@ -491,7 +491,7 @@ def workers_info(request):
                         'experience': person.experience, 'lateness': person.lateness,
                         '№ db': "321", '№ 1c': "3059", "sex": person.sex,
                         'birth_date': str(person.birth_date),
-                        'ockladnaya': "ne_ponyal", 'subdivision': person.subdivision,
+                        'ockladnaya': "ne_ponyal", 'subdivision': person.subdepartment.subdepartment_name,
                         'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
@@ -607,6 +607,16 @@ def subdepartament_view(request):
 
 @csrf_exempt
 def direction_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            directions = Direction.objects.all()
+            data = serializers.serialize('json', directions)
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def time_control_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
