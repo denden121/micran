@@ -10,7 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
-from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Departament, Direction
+from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, Direction, Subdepartment
 
 
 def get_user_jwt(request):
@@ -60,6 +60,7 @@ def token(request):
         token_json = get_tokens_for_user(user)
         logging(request, username=username, status=status, action=action)
         print(json.dumps(token_json))
+        print(HttpResponse(json.dumps(token_json)))
         return HttpResponse(json.dumps(token_json))
     else:
         status = False
@@ -221,7 +222,7 @@ def all_projects_view(request):
                 chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
                 deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
-                field = {'name': project.name, 'direction': project.direction, 'manager': manager_name,
+                field = {'name': project.name, 'direction': project.direction.direction, 'manager': manager_name,
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
                          'contract': project.contract, 'type': project.type, 'status': project.status,
@@ -404,7 +405,7 @@ def salary(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.filter(departament=user.profile.departament)
+            workers = Profile.objects.filter(department=user.profile.department)
             data = []
             output = []
             year = request.GET.get('year')
@@ -589,8 +590,18 @@ def departament_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            departaments = Departament.objects.all()
+            departaments = Department.objects.all()
             data = serializers.serialize('json', departaments)
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def subdepartament_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            subdepartaments = Subdepartment.objects.all()
+            data = serializers.serialize('json', subdepartaments)
             return HttpResponse(data)
 
 
