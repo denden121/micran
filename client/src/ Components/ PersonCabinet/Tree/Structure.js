@@ -46,8 +46,32 @@ const treeData = [
   ];
   
 class Structure extends React.Component {
-    render(){
-        return(
+    state ={
+        tree:{}
+    }
+    loadTree =async ()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+
+        myHeaders.append("Authorization", token);
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/departments/", requestOptions)
+            .then(response => response.json())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    }
+    componentDidMount() {
+        this.loadTree()
+    }
+
+        render(){
+    return(
             <div className="container-fluid">
                 <div className="label row">                
                     <label className="text-left col-md-12">
@@ -64,7 +88,6 @@ class Structure extends React.Component {
                         defaultSelectedKeys={['0-0-0']}
                         switcherIcon={<DownOutlined />}
                         treeData={treeData}
-                        
                     />,
                     </div>
                 </div>
