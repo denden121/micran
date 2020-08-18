@@ -10,7 +10,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
-from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, Direction, Subdepartment
+from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, \
+    Direction, Subdepartment, TimeCard
 
 
 def get_user_jwt(request):
@@ -224,7 +225,8 @@ def all_projects_view(request):
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
                 field = {'name': project.name, 'direction': project.direction.direction, 'manager': manager_name,
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
-                         'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
+                         'production_order': project.production_order,
+                         'comment_for_employees': project.comment_for_employees,
                          'contract': project.contract, 'type': project.type, 'status': project.status,
                          'client': project.client,
                          'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
@@ -486,13 +488,13 @@ def workers_info(request):
                 for group in groups:
                     group_field.append(group.name)
                 field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
-                        'position': person.position, 'SRI_SAS': person.SRI_SAS,
-                        'shift': person.shift, 'date': "2009-01-01",
-                        'experience': person.experience, 'lateness': person.lateness,
-                        '№ db': "321", '№ 1c': "3059", "sex": person.sex,
-                        'birth_date': str(person.birth_date),
-                        'ockladnaya': "ne_ponyal", 'subdivision': person.subdepartment.subdepartment_name,
-                        'groups': group_field}
+                         'position': person.position, 'SRI_SAS': person.SRI_SAS,
+                         'shift': person.shift, 'date': "2009-01-01",
+                         'experience': person.experience, 'lateness': person.lateness,
+                         '№ db': "321", '№ 1c': "3059", "sex": person.sex,
+                         'birth_date': str(person.birth_date),
+                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdepartment.subdepartment_name,
+                         'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
             return HttpResponse(json.dumps(data))
@@ -571,7 +573,7 @@ def workers_project(request):
     if user:
         if request.method == "GET":
             workers = Profile.objects.all()
-            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
             return HttpResponse(data)
 
 
@@ -581,7 +583,7 @@ def managers_project(request):
     if user:
         if request.method == "GET":
             workers = Profile.objects.all()
-            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
             return HttpResponse(data)
 
 
@@ -616,10 +618,15 @@ def direction_view(request):
 
 
 @csrf_exempt
-def time_control_view(request):
+def time_control_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            directions = Direction.objects.all()
-            data = serializers.serialize('json', directions)
-            return HttpResponse(data)
+            if user_id=='default':
+                times_cards = TimeCard.objects.filter(user=user.id)
+                data = serializers.serialize('json', times_cards)
+                return HttpResponse(data)
+            else:
+                times_cards = TimeCard.objects.filter(user=user_id)
+                data = serializers.serialize('json', times_cards)
+                return HttpResponse(data)

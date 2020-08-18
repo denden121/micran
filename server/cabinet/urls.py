@@ -13,6 +13,8 @@ urlpatterns = [
     path('cabinet/<int:user_id>/reports/', views.all_report_view),
     path('cabinet/<int:user_id>/report/<int:report_id>', views.report_view),
     path('cabinet/report/<int:report_id>', views.report_view),
+    path('cabinet/time_card/<int:user_id>/', views.time_control_view),
+    path('cabinet/time_card/', views.time_control_view),
     # projects
     path('cabinet/projects/', views.all_projects_view),
     path('cabinet/projects_for_reports/', views.projects_for_reports),
