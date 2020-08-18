@@ -31,9 +31,9 @@ class Direction(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
-    sex = models.CharField(max_length=5, blank=True)
-    subdivision = models.CharField(max_length=30, blank=True)
-    departament = models.ForeignKey('Departament', related_name='departament_id', on_delete=models.PROTECT)
+    sex = models.CharField(max_length=10, blank=True)
+    subdepartment = models.ForeignKey('Subdepartment', related_name='subdepartment_id', on_delete=models.PROTECT, blank=True, null=True)
+    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.PROTECT, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
@@ -61,7 +61,7 @@ class Group(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=True)
-    direction = models.CharField(max_length=100, blank=True)
+    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.PROTECT, blank=True, null=True)
     manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.PROTECT)
     client = models.CharField(max_length=100, blank=True)
     chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.PROTECT)
@@ -69,10 +69,10 @@ class Project(models.Model):
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.CharField(max_length=100)
-    type = models.BooleanField(blank=True, default='False')
-    status = models.BooleanField(blank=True, default='False')
-    report_availability = models.BooleanField(blank=True, default='False')
-    acceptance_vp = models.BooleanField(blank=True, default='False')
+    type = models.BooleanField(blank=True, default='False') # False is inside True is outer
+    status = models.BooleanField(blank=True, default='False') # False is Open True is close
+    report_availability = models.BooleanField(blank=True, default='False') # False is Available True is Inavailable
+    acceptance_vp = models.BooleanField(blank=True, default='False') # False in False True is True
 
     def __str__(self):
         return self.name
@@ -90,10 +90,21 @@ class Report(models.Model):
     # return self.name
 
 
-class Departament(models.Model):
-    subdepartment_code = models.CharField(max_length=50)
-    subdepartment_name = models.CharField(max_length=100)
-    department_code = models.CharField(max_length=50)
+class Department(models.Model):
+    department_code = models.CharField(max_length=50, blank=True)
+    department_name = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.department_name
+
+
+class Subdepartment(models.Model):
+    department = models.ForeignKey('Department', on_delete=models.PROTECT)
+    subdepartment = models.CharField(max_length=50, blank=True)
+    subdepartment_name = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.subdepartment_name
 
 
 class SalaryIndividual(models.Model):
@@ -130,3 +141,15 @@ class SalaryCommon(models.Model):
     days_norm_common = models.FloatField(blank=True, default=0)
     time_norm_common = models.FloatField(blank=True, default=0)
     date = models.DateField(blank=True, unique=True)
+
+
+class TimeCard(models.Model):
+    user = models.IntegerField(blank=True, default=0)
+    orion_id = models.IntegerField(blank=True, default=0)
+    intellect_id = models.IntegerField(blank=True, default=0)
+    leaving = models.TimeField(blank=True)
+    late = models.TimeField(blank=True)
+    fine_late = models.TimeField(blank=True, default="09:00:00")
+    hooky = models.TimeField(blank=True)
+    hours_worked = models.TimeField(blank=True)
+    date = models.DateField(blank=True)
