@@ -2,6 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+TYPE_CALENDAR_MARK = [
+    ('undefined', 'undefined'),
+    ('paid_holiday', 'paid_holiday'),
+    ('unpaid_holiday', 'unpaid_holiday'),
+    ('sick_leave', 'sick_leave'),
+    ('hooky', 'hooky'),
+    ('event', 'event'),
+    ('study_holiday', 'study_holiday'),
+    ('planned_holiday', 'planned_holiday'),
+]
+
+
 class Logging(models.Model):
     IP = models.GenericIPAddressField()
     login = models.CharField(max_length=30, blank=True)
@@ -153,3 +165,9 @@ class TimeCard(models.Model):
     hooky = models.TimeField(blank=True)
     hours_worked = models.TimeField(blank=True)
     date = models.DateField(blank=True)
+
+
+class CalendarMark(models.Model):
+    type = models.CharField(blank=True, max_length=50, choices=TYPE_CALENDAR_MARK)
+    start_date = models.DateField(blank=True)
+    end_date = models.DateField(blank=True)
