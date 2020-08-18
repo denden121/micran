@@ -568,11 +568,18 @@ def departament_view(request):
             departments = Department.objects.all()
             data = []
             subdepartments_field = []
+            direction_field = []
             for department in departments:
                 subdepartments = Subdepartment.objects.filter(department=department)
                 for subdepartment in subdepartments:
+                    directions = Direction.objects.filter(subdepartment=subdepartment)
+                    for direction in directions:
+                        direction_field.append({'direction':direction.direction,
+                                                'direction_num':direction.num})
                     subdepartments_field.append({'subdepartment_name':subdepartment.subdepartment_name,
-                                                 'subdepartment_code':subdepartment.subdepartment})
+                                                 'subdepartment_code':subdepartment.subdepartment,
+                                                 'directions': direction_field})
+                    direction_field = []
                 field = {'department_code': department.department_code,
                          'department_name': department.department_name,
                          'subdepartments': subdepartments_field}
