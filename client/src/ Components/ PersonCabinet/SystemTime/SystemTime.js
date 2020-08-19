@@ -8,7 +8,38 @@ import { Button } from 'antd';
 import TimeTable from "./TimeTable/TimeTable"
 import TableTime from "./TableTime/TableTime"
 class SystemTime extends React.Component{
-    
+    state={
+        departments:[]
+    }
+    loadSubdepartment=()=>{
+        const token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://127.0.0.1:8000/departments/simple/", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                let departments = Array.from(result)
+                departments.map((department,index)=>{
+                    const name = department.fields.code + ' ' + department.fields.code
+                    const pk = department.pk
+                    console.log(name,pk)
+                })
+
+            })
+            .catch(error => console.log('error', error));
+
+    }
+    componentDidMount() {
+        this.loadSubdepartment()
+    }
     render(){
         const { Panel } = Collapse;
         function callback(key) {
