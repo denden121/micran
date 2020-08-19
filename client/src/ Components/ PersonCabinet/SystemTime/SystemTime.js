@@ -10,7 +10,9 @@ class SystemTime extends React.Component{
     
     render(){
         const { Panel } = Collapse;
-        
+        function callback(key) {
+            console.log(key);
+          }
         return(
             <div className="container-fluid">
                 <div className="label row">                
@@ -22,8 +24,8 @@ class SystemTime extends React.Component{
                 </div>
                 <div className="row text-left">
                     <div className="col-md-12">
-                    <Collapse accordion>
-                    <Panel header="Параметры отображения">
+                    <Collapse accordion defaultActiveKey={['1']} onChange={callback}>
+                    <Panel header="Параметры отображения" key="1">
                         <CollapseParametr/>
                     </Panel>
                     </Collapse>                    
