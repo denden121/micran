@@ -468,7 +468,7 @@ def salary_individual(request):
 
 
 @csrf_exempt
-def workers_departament(request, department_id):
+def workers_department(request, department_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
