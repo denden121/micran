@@ -66,6 +66,7 @@ class Structure extends React.Component {
         fetch("http://127.0.0.1:8000/departments/", requestOptions)
             .then(response => response.json())
             .then(result => {
+                console.log(result)
                 tree = Array.from(result)
 
                 console.log(tree)
@@ -78,10 +79,20 @@ class Structure extends React.Component {
                             key: '0-'+index_dep,
                         icon: <FolderOutlined/>,
                         children: temp1.map((subdepartment,index)=>{
+
+                            let directions = Array.from(subdepartment.directions)
+                            // console.log('directions',directions)
                             return {
                                 title: subdepartment.subdepartment_name,
                                 key: `0-${index_dep}-${index}`,
-                                icon: <FolderOpenOutlined />
+                                icon: <FolderOpenOutlined />,
+                                children:directions.map((direction,index_direction)=>{
+                                    return{
+                                        title: direction.direction,
+                                        key: `0-${index_dep}-${index}-${index_direction}`,
+                                        icon: <FolderOpenOutlined />
+                                    }
+                                })
                             }
                         })
                     }

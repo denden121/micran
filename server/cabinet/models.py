@@ -34,6 +34,7 @@ class Action(models.Model):
 
 
 class Direction(models.Model):
+    subdepartment = models.ForeignKey('Subdepartment', on_delete=models.SET_NULL, null=True)
     direction = models.CharField(max_length=30, blank=True)
     num = models.IntegerField()
 
@@ -44,8 +45,8 @@ class Direction(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
     sex = models.CharField(max_length=10, blank=True)
-    subdepartment = models.ForeignKey('Subdepartment', related_name='subdepartment_id', on_delete=models.PROTECT, blank=True, null=True)
-    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.PROTECT, blank=True)
+    subdepartment = models.ForeignKey('Subdepartment', related_name='subdepartment_id', on_delete=models.SET_NULL, blank=True, null=True)
+    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.SET_NULL, blank=True, null=True)
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
@@ -73,11 +74,11 @@ class Group(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=True)
-    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.PROTECT, blank=True, null=True)
-    manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.PROTECT)
+    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True, null=True)
+    manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.SET_NULL, null=True)
     client = models.CharField(max_length=100, blank=True)
-    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.PROTECT)
-    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.PROTECT)
+    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.SET_NULL, null=True)
+    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.SET_NULL, null=True)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.CharField(max_length=100)
@@ -92,8 +93,8 @@ class Project(models.Model):
 
 class Report(models.Model):
     status = models.BooleanField(blank=True)
-    creator_id = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
-    project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.PROTECT)
+    creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
+    project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
     date = models.DateField(blank=True)
@@ -111,7 +112,7 @@ class Department(models.Model):
 
 
 class Subdepartment(models.Model):
-    department = models.ForeignKey('Department', on_delete=models.PROTECT)
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
     subdepartment = models.CharField(max_length=50, blank=True)
     subdepartment_name = models.CharField(max_length=100, blank=True)
 
@@ -133,9 +134,9 @@ class SalaryIndividual(models.Model):
     penalty = models.FloatField(blank=True, default=0)
     is_penalty = models.BooleanField(blank=True, default=0)
     salary_hand = models.FloatField(blank=True, default=0)
-    person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
+    person = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
     date = models.DateField(blank=True)
-    common_part = models.ForeignKey('SalaryCommon', on_delete=models.PROTECT)
+    common_part = models.ForeignKey('SalaryCommon', on_delete=models.SET_NULL, null=True)
 
     def calculate(self, salary_common):
         self.days_worked = salary_common.days_norm_common - (self.day_off + self.vacation + self.sick_leave)
