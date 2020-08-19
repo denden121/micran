@@ -574,14 +574,14 @@ def departament_view(request):
                 for subdepartment in subdepartments:
                     directions = Direction.objects.filter(subdepartment=subdepartment)
                     for direction in directions:
-                        direction_field.append({'direction':direction.direction,
+                        direction_field.append({'name':direction.direction,
                                                 'num':direction.num})
-                    subdepartments_field.append({'subdepartment':subdepartment.subdepartment_name,
+                    subdepartments_field.append({'name':subdepartment.subdepartment_name,
                                                  'code':subdepartment.subdepartment,
                                                  'directions': direction_field})
                     direction_field = []
                 field = {'code': department.department_code,
-                         'department': department.department_name,
+                         'name': department.department_name,
                          'subdepartments': subdepartments_field}
                 subdepartments_field = []
                 data.append({'pk': department.pk, 'department': field})
@@ -633,6 +633,6 @@ def calendar_control_view(request, user_id='default'):
                 data = serializers.serialize('json', marks)
                 return HttpResponse(data)
             else:
-                times_cards = TimeCard.objects.filter(user=user_id)
-                data = serializers.serialize('json', times_cards)
+                marks = CalendarMark.objects.filter(user=user_id)
+                data = serializers.serialize('json', marks)
                 return HttpResponse(data)
