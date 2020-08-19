@@ -6,11 +6,14 @@ import CollapseParametr from "./CollapseParametr/CollapseParametr"
 import { Collapse } from 'antd';
 import { Button } from 'antd';
 import TimeTable from "./TimeTable/TimeTable"
+import TableTime from "./TableTime/TableTime"
 class SystemTime extends React.Component{
     
     render(){
         const { Panel } = Collapse;
-        
+        function callback(key) {
+            console.log(key);
+          }
         return(
             <div className="container-fluid">
                 <div className="label row">                
@@ -22,8 +25,8 @@ class SystemTime extends React.Component{
                 </div>
                 <div className="row text-left">
                     <div className="col-md-12">
-                    <Collapse accordion>
-                    <Panel header="Параметры отображения">
+                    <Collapse accordion defaultActiveKey={['1']} onChange={callback}>
+                    <Panel header="Параметры отображения" key="1">
                         <CollapseParametr/>
                     </Panel>
                     </Collapse>                    
@@ -38,7 +41,7 @@ class SystemTime extends React.Component{
                 </div> 
                 <br/>
                 <br/>
-                <TimeTable/>  
+                <TableTime/> 
                 
             </div>
         )
