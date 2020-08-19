@@ -523,20 +523,6 @@ def projects_for_reports(request):
 
 
 @csrf_exempt
-def direction(request):
-    user = get_user_jwt(request)
-    if user:
-        if request.method == "GET":
-            data = []
-            directions = ['up', 'down', 'left', 'right']
-            i = 0
-            for direction in directions:
-                data.append({'direction': direction, 'pk': i})
-                i += 1
-            return HttpResponse(json.dumps(data))
-
-
-@csrf_exempt
 def change_common_salary(request):
     user = get_user_jwt(request)
     if user:
@@ -552,19 +538,6 @@ def change_common_salary(request):
             form.save()
             return HttpResponse("Success")
         return HttpResponse("Fail")
-
-
-@csrf_exempt
-def get_subdepartaments(request):
-    user = get_user_jwt(request)
-    if request.method == "GET":
-        subdepartaments = ['subdepartament_1', 'subdepartament_2', 'subdepartament_3']
-        i = 0
-        data = []
-        for subdepartament in subdepartaments:
-            data.append({'subdepartament': subdepartament, 'pk': i})
-            i += 1
-        return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
@@ -592,18 +565,29 @@ def departament_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            departaments = Department.objects.all()
-            data = serializers.serialize('json', departaments)
-            return HttpResponse(data)
+            departments = Department.objects.all()
+            data = []
+            subdepartments_field = []
+            for department in departments:
+                subdepartments = Subdepartment.objects.filter(department=department)
+                for subdepartment in subdepartments:
+                    subdepartments_field.append({'subdepartment_name':subdepartment.subdepartment_name,
+                                                 'subdepartment_code':subdepartment.subdepartment})
+                field = {'department_code': department.department_code,
+                         'department_name': department.department_name,
+                         'subdepartments': subdepartments_field}
+                subdepartments_field = []
+                data.append({'pk': department.pk, 'department': field})
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
-def subdepartament_view(request):
+def subdepartment_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            subdepartaments = Subdepartment.objects.all()
-            data = serializers.serialize('json', subdepartaments)
+            subdepartments = Subdepartment.objects.all()
+            data = serializers.serialize('json', subdepartments)
             return HttpResponse(data)
 
 

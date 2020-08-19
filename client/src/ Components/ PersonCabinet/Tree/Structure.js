@@ -44,33 +44,59 @@ const treeData = [
         ],
       },
   ];
+
+
   
 class Structure extends React.Component {
     state ={
-        tree:{}
+        tree:''
     }
-    loadTree =async ()=>{
+    loadTree = ()=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
 
         myHeaders.append("Authorization", token);
 
-        var requestOptions = {
+        let requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
-
+        let tree = {}
         fetch("http://127.0.0.1:8000/departments/", requestOptions)
             .then(response => response.json())
-            .then(result => console.log(result))
+            .then(result => {
+                tree = Array.from(result)
+
+                console.log(tree)
+                tree = tree.map((department,index_dep)=>{
+                    console.log()
+
+                    let temp1 = Array.from(department.department.subdepartments)
+                    return {
+                        title: department.department.department_name,
+                            key: '0-'+index_dep,
+                        icon: <FolderOutlined/>,
+                        children: temp1.map((subdepartment,index)=>{
+                            return {
+                                title: subdepartment.subdepartment_name,
+                                key: `0-${index_dep}-${index}`,
+                                icon: <FolderOpenOutlined />
+                            }
+                        })
+                    }
+                })
+                this.setState({tree:tree})
+                console.log(tree)
+                console.log(treeData)
+            })
             .catch(error => console.log('error', error));
     }
     componentDidMount() {
         this.loadTree()
     }
 
-        render(){
+    render(){
     return(
             <div className="container-fluid">
                 <div className="label row">                
@@ -82,12 +108,12 @@ class Structure extends React.Component {
                 </div>
                 <div className="row" >
                     <div className="col-md-6" style={{backgroundColor:"rgba(0,0,0,0)"}}>
-                    <Tree
+                        <Tree
                         showIcon
                         defaultExpandAll
                         defaultSelectedKeys={['0-0-0']}
                         switcherIcon={<DownOutlined />}
-                        treeData={treeData}
+                        treeData={this.state.tree }
                     />,
                     </div>
                 </div>
