@@ -11,7 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
 from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, \
-    Direction, Subdepartment, TimeCard
+    Direction, Subdepartment, TimeCard, CalendarMark
 
 
 def get_user_jwt(request):
@@ -575,13 +575,13 @@ def departament_view(request):
                     directions = Direction.objects.filter(subdepartment=subdepartment)
                     for direction in directions:
                         direction_field.append({'direction':direction.direction,
-                                                'direction_num':direction.num})
-                    subdepartments_field.append({'subdepartment_name':subdepartment.subdepartment_name,
-                                                 'subdepartment_code':subdepartment.subdepartment,
+                                                'num':direction.num})
+                    subdepartments_field.append({'subdepartment':subdepartment.subdepartment_name,
+                                                 'code':subdepartment.subdepartment,
                                                  'directions': direction_field})
                     direction_field = []
-                field = {'department_code': department.department_code,
-                         'department_name': department.department_name,
+                field = {'code': department.department_code,
+                         'department': department.department_name,
                          'subdepartments': subdepartments_field}
                 subdepartments_field = []
                 data.append({'pk': department.pk, 'department': field})
@@ -616,6 +616,21 @@ def time_control_view(request, user_id='default'):
             if user_id=='default':
                 times_cards = TimeCard.objects.filter(user=user.id)
                 data = serializers.serialize('json', times_cards)
+                return HttpResponse(data)
+            else:
+                times_cards = TimeCard.objects.filter(user=user_id)
+                data = serializers.serialize('json', times_cards)
+                return HttpResponse(data)
+
+
+@csrf_exempt
+def calendar_control_view(request, user_id='default'):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            if user_id=='default':
+                marks = CalendarMark.objects.filter(user=user.id)
+                data = serializers.serialize('json', marks)
                 return HttpResponse(data)
             else:
                 times_cards = TimeCard.objects.filter(user=user_id)

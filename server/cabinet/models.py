@@ -169,6 +169,7 @@ class TimeCard(models.Model):
 
 
 class CalendarMark(models.Model):
+    person = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
     type = models.CharField(blank=True, max_length=50, choices=TYPE_CALENDAR_MARK)
     start_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True)
