@@ -19,8 +19,8 @@ class  App extends Component {
         const publicIp = require('public-ip');
         const ip = String(await publicIp.v4())
         //сбор данных для отправки на авторизацию
-        // let myHeaders = new Headers();
-        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         const login = document.getElementById("input-login").value
         const password = document.getElementById("input-password").value
         let urlencoded = new URLSearchParams();// Добавляем параметры запросы
@@ -31,7 +31,7 @@ class  App extends Component {
             method: 'POST',
             body: urlencoded,
             redirect: 'follow',
-            // headers: myHeaders
+            headers: myHeaders
         };
         console.log(login,password)
         //проверка логина и пароля(отправка запроса)
@@ -144,4 +144,6 @@ class  App extends Component {
         )
     }
 }
+
+
 export default App;

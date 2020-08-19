@@ -9,8 +9,10 @@ from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
-from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, Direction, Subdepartment
+from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm, \
+    CalendarMarkForm
+from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, \
+    Direction, Subdepartment, TimeCard, CalendarMark
 
 
 def get_user_jwt(request):
@@ -224,7 +226,8 @@ def all_projects_view(request):
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
                 field = {'name': project.name, 'direction': project.direction.direction, 'manager': manager_name,
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
-                         'production_order': project.production_order, 'comment_for_employees': project.comment_for_employees,
+                         'production_order': project.production_order,
+                         'comment_for_employees': project.comment_for_employees,
                          'contract': project.contract, 'type': project.type, 'status': project.status,
                          'client': project.client,
                          'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
@@ -486,13 +489,13 @@ def workers_info(request):
                 for group in groups:
                     group_field.append(group.name)
                 field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
-                        'position': person.position, 'SRI_SAS': person.SRI_SAS,
-                        'shift': person.shift, 'date': "2009-01-01",
-                        'experience': person.experience, 'lateness': person.lateness,
-                        '№ db': "321", '№ 1c': "3059", "sex": person.sex,
-                        'birth_date': str(person.birth_date),
-                        'ockladnaya': "ne_ponyal", 'subdivision': person.subdepartment.subdepartment_name,
-                        'groups': group_field}
+                         'position': person.position, 'SRI_SAS': person.SRI_SAS,
+                         'shift': person.shift, 'date': "2009-01-01",
+                         'experience': person.experience, 'lateness': person.lateness,
+                         '№ db': "321", '№ 1c': "3059", "sex": person.sex,
+                         'birth_date': str(person.birth_date),
+                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdepartment.subdepartment_name,
+                         'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
             return HttpResponse(json.dumps(data))
@@ -521,20 +524,6 @@ def projects_for_reports(request):
 
 
 @csrf_exempt
-def direction(request):
-    user = get_user_jwt(request)
-    if user:
-        if request.method == "GET":
-            data = []
-            directions = ['up', 'down', 'left', 'right']
-            i = 0
-            for direction in directions:
-                data.append({'direction': direction, 'pk': i})
-                i += 1
-            return HttpResponse(json.dumps(data))
-
-
-@csrf_exempt
 def change_common_salary(request):
     user = get_user_jwt(request)
     if user:
@@ -553,25 +542,12 @@ def change_common_salary(request):
 
 
 @csrf_exempt
-def get_subdepartaments(request):
-    user = get_user_jwt(request)
-    if request.method == "GET":
-        subdepartaments = ['subdepartament_1', 'subdepartament_2', 'subdepartament_3']
-        i = 0
-        data = []
-        for subdepartament in subdepartaments:
-            data.append({'subdepartament': subdepartament, 'pk': i})
-            i += 1
-        return HttpResponse(json.dumps(data))
-
-
-@csrf_exempt
 def workers_project(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             workers = Profile.objects.all()
-            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
             return HttpResponse(data)
 
 
@@ -581,7 +557,7 @@ def managers_project(request):
     if user:
         if request.method == "GET":
             workers = Profile.objects.all()
-            data = serializers.serialize('json', workers, fields = ('first_name', 'last_name', 'middle_name'))
+            data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
             return HttpResponse(data)
 
 
@@ -590,18 +566,44 @@ def departament_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            departaments = Department.objects.all()
-            data = serializers.serialize('json', departaments)
-            return HttpResponse(data)
+            departments = Department.objects.all()
+            data = []
+            subdepartments_field = []
+            direction_field = []
+            profile_field = []
+            for department in departments:
+                subdepartments = Subdepartment.objects.filter(department=department)
+                for subdepartment in subdepartments:
+                    directions = Direction.objects.filter(subdepartment=subdepartment)
+                    for direction in directions:
+                        profiles = Profile.objects.filter(direction=direction)
+                        for profile in profiles:
+                            profile_field.append(
+                                {'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                                 'position': profile.position})
+                        direction_field.append({'name': direction.direction_name,
+                                                'code': direction.direction_code,
+                                                'users': profile_field})
+                        profile_field = []
+                    subdepartments_field.append({'name': subdepartment.subdepartment_name,
+                                                 'code': subdepartment.subdepartment_code,
+                                                 'directions': direction_field})
+                    direction_field = []
+                field = {'code': department.department_code,
+                         'name': department.department_name,
+                         'subdepartments': subdepartments_field}
+                subdepartments_field = []
+                data.append({'pk': department.pk, 'department': field})
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
-def subdepartament_view(request):
+def subdepartment_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            subdepartaments = Subdepartment.objects.all()
-            data = serializers.serialize('json', subdepartaments)
+            subdepartments = Subdepartment.objects.all()
+            data = serializers.serialize('json', subdepartments)
             return HttpResponse(data)
 
 
@@ -616,10 +618,36 @@ def direction_view(request):
 
 
 @csrf_exempt
-def time_control_view(request):
+def time_control_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            directions = Direction.objects.all()
-            data = serializers.serialize('json', directions)
-            return HttpResponse(data)
+            if user_id == 'default':
+                times_cards = TimeCard.objects.filter(user=user.id)
+                data = serializers.serialize('json', times_cards)
+                return HttpResponse(data)
+            else:
+                times_cards = TimeCard.objects.filter(user=user_id)
+                data = serializers.serialize('json', times_cards)
+                return HttpResponse(data)
+
+
+@csrf_exempt
+def calendar_control_view(request, user_id='default'):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            if user_id == 'default':
+                marks = CalendarMark.objects.filter(person=user.id)
+                data = serializers.serialize('json', marks, fields=("type", "start_date", "end_date"))
+                return HttpResponse(data)
+            else:
+                marks = CalendarMark.objects.filter(person=user_id)
+                data = serializers.serialize('json', marks)
+                return HttpResponse(data)
+        if request.method == "POST":
+            mark = CalendarMarkForm(request.POST)
+            if mark.is_valid():
+                mark.save()
+                return HttpResponse("Success")
+            return HttpResponse(mark.errors)

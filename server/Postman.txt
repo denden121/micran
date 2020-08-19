@@ -448,4 +448,17 @@ fetch("http://127.0.0.1:8000/workers/", requestOptions)
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
 
-  
+  =================================================GET+TIME============================================================
+  var myHeaders = new Headers();
+myHeaders.append("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTk4NTkxOTUxLCJqdGkiOiJlYWNjY2FjYjdmNGI0NDJmYTc4YmRmZDIzYjFjYTFjZSIsInVzZXJfaWQiOjF9.PlDUP3pmYzDfGBR6gygNUUlBUce-Rxt3w0-gcRBYsaY");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("http://127.0.0.1:8000/cabinet/time_card/?user_id=1", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));

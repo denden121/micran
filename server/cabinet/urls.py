@@ -13,6 +13,10 @@ urlpatterns = [
     path('cabinet/<int:user_id>/reports/', views.all_report_view),
     path('cabinet/<int:user_id>/report/<int:report_id>', views.report_view),
     path('cabinet/report/<int:report_id>', views.report_view),
+    path('cabinet/time_card/<int:user_id>/', views.time_control_view),
+    path('cabinet/time_card/', views.time_control_view),
+    path('cabinet/calendar/<int:user_id>/', views.calendar_control_view),
+    path('cabinet/calendar/', views.calendar_control_view),
     # projects
     path('cabinet/projects/', views.all_projects_view),
     path('cabinet/projects_for_reports/', views.projects_for_reports),
@@ -31,8 +35,9 @@ urlpatterns = [
     path('workers/managers/', views.managers),
     path('available_actions/', views.available_actions),
     path('admin/logs/', views.logs),
-    path('directions/', views.direction),
-    path('subdepartaments/', views.get_subdepartaments),
+    path('directions/', views.direction_view),
+    path('subdepartments/', views.subdepartment_view),
+    path('departments/', views.departament_view),
     path('admin/logs_with_range/', views.logs_with_range),
     path('admin/groups_admin/', views.groups_with_permission),
 ]

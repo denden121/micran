@@ -2,6 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+TYPE_CALENDAR_MARK = [
+    ('undefined', 'undefined'),
+    ('paid_holiday', 'paid_holiday'),
+    ('unpaid_holiday', 'unpaid_holiday'),
+    ('sick_leave', 'sick_leave'),
+    ('hooky', 'hooky'),
+    ('event', 'event'),
+    ('study_holiday', 'study_holiday'),
+    ('planned_holiday', 'planned_holiday'),
+]
+
+
 class Logging(models.Model):
     IP = models.GenericIPAddressField()
     login = models.CharField(max_length=30, blank=True)
@@ -22,18 +34,20 @@ class Action(models.Model):
 
 
 class Direction(models.Model):
-    direction = models.CharField(max_length=30, blank=True)
-    num = models.IntegerField()
+    subdepartment = models.ForeignKey('Subdepartment', on_delete=models.SET_NULL, null=True)
+    direction_name = models.CharField(max_length=30, blank=True)
+    direction_code = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return self.direction
+        return self.direction_name
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
     sex = models.CharField(max_length=10, blank=True)
-    subdepartment = models.ForeignKey('Subdepartment', related_name='subdepartment_id', on_delete=models.PROTECT, blank=True, null=True)
-    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.PROTECT, blank=True)
+    subdepartment = models.ForeignKey('Subdepartment', related_name='subdepartment_id', on_delete=models.SET_NULL, blank=True, null=True)
+    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.SET_NULL, blank=True, null=True)
+    direction = models.ForeignKey('Direction', related_name='direction', on_delete=models.SET_NULL, blank=True, null=True)
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
@@ -61,11 +75,11 @@ class Group(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=True)
-    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.PROTECT, blank=True, null=True)
-    manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.PROTECT)
+    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True, null=True)
+    manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.SET_NULL, null=True)
     client = models.CharField(max_length=100, blank=True)
-    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.PROTECT)
-    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.PROTECT)
+    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.SET_NULL, null=True)
+    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.SET_NULL, null=True)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.CharField(max_length=100)
@@ -80,8 +94,8 @@ class Project(models.Model):
 
 class Report(models.Model):
     status = models.BooleanField(blank=True)
-    creator_id = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
-    project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.PROTECT)
+    creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
+    project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
     date = models.DateField(blank=True)
@@ -99,8 +113,8 @@ class Department(models.Model):
 
 
 class Subdepartment(models.Model):
-    department = models.ForeignKey('Department', on_delete=models.PROTECT)
-    subdepartment = models.CharField(max_length=50, blank=True)
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
+    subdepartment_code = models.CharField(max_length=50, blank=True)
     subdepartment_name = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
@@ -121,9 +135,9 @@ class SalaryIndividual(models.Model):
     penalty = models.FloatField(blank=True, default=0)
     is_penalty = models.BooleanField(blank=True, default=0)
     salary_hand = models.FloatField(blank=True, default=0)
-    person = models.ForeignKey('Profile', on_delete=models.PROTECT, to_field='user')
+    person = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
     date = models.DateField(blank=True)
-    common_part = models.ForeignKey('SalaryCommon', on_delete=models.PROTECT)
+    common_part = models.ForeignKey('SalaryCommon', on_delete=models.SET_NULL, null=True)
 
     def calculate(self, salary_common):
         self.days_worked = salary_common.days_norm_common - (self.day_off + self.vacation + self.sick_leave)
@@ -153,3 +167,10 @@ class TimeCard(models.Model):
     hooky = models.TimeField(blank=True)
     hours_worked = models.TimeField(blank=True)
     date = models.DateField(blank=True)
+
+
+class CalendarMark(models.Model):
+    person = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
+    type = models.CharField(blank=True, max_length=50, choices=TYPE_CALENDAR_MARK)
+    start_date = models.DateField(blank=True)
+    end_date = models.DateField(blank=True)
