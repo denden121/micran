@@ -482,9 +482,12 @@ def departament_simple_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Department.objects.all()
-            data = serializers.serialize('json', workers)
-            return HttpResponse(data)
+            departments = Department.objects.all()
+            data = []
+            for department in departments:
+                data.append({'pk': department.pk, 'fields': {'code': department.department_code,
+                             'name': department.department_name}})
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt

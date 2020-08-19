@@ -8,7 +8,7 @@ import { Input } from 'antd';
 const CollapseParametr =(props)=>{
     function onChange(date, dateString) {
         console.log(date, dateString);
-      }
+    }
     return(
         <div className="container-fluid">
             <div className="row">
@@ -25,6 +25,8 @@ const CollapseParametr =(props)=>{
                                         <Select
                                         placeholder="Выбрать"
                                         style={{width:"50%"}}
+                                        options={props.Departments}
+                                        onChange={props.onChangeDepartments}
                                         />
                                     </div>
                                     <br/>
@@ -63,7 +65,6 @@ const CollapseParametr =(props)=>{
                                         <Button style={{backgroundColor:"#95de64"}}>Сформировать</Button>
                                         <Button style={{backgroundColor:"#87e8de",marginLeft:"5px"}}>Экспорт</Button>
                                     </div>
-                                    
                                 </div>                                
                             </div>
                         </div>
