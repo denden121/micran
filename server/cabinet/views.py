@@ -423,7 +423,8 @@ def salary(request):
                          'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
-                         'is_penalty': salary.is_penalty,
+                         'is_penalty': salary.is_penalty, 'department': worker.department,
+                         'subdepartment': worker.subdepartment, 'direction': worker.direction,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'award': salary.award, 'salary_hand': salary.salary_hand}
                 data.append({'pk': worker.pk, 'person': field})

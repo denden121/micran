@@ -37,7 +37,6 @@ class  App extends Component {
         //проверка логина и пароля(отправка запроса)
         const sendUrl = "http://127.0.0.1:8000/token/"
         await fetch(sendUrl, requestOptions)
-        // console.log(a)
             .then(response => response.json())
             .then(result => localStorage.setItem('token', result.access))
             .catch(error => localStorage.setItem('token', ''));
