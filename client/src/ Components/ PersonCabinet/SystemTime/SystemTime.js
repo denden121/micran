@@ -6,6 +6,7 @@ import CollapseParametr from "./CollapseParametr/CollapseParametr"
 import { Collapse } from 'antd';
 import { Button } from 'antd';
 import TimeTable from "./TimeTable/TimeTable"
+import TableTime from "./TableTime/TableTime"
 class SystemTime extends React.Component{
     
     render(){
@@ -40,7 +41,7 @@ class SystemTime extends React.Component{
                 </div> 
                 <br/>
                 <br/>
-                <TimeTable/>  
+                <TableTime/> 
                 
             </div>
         )
