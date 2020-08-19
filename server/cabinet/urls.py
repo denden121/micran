@@ -28,7 +28,6 @@ urlpatterns = [
     path('salary/', views.salary),
     path('salary/individual/', views.salary_individual),
     path('salary/change_common/', views.change_common_salary),
-    path('workers/', views.workers_departament),
     path('workers/project/', views.workers_project),
     path('workers/project/managers/', views.managers_project),
     path('workers/all/', views.workers_info),
@@ -40,6 +39,7 @@ urlpatterns = [
     path('departments/', views.departament_view),
     path('departments/simple/', views.departament_simple_view),
     path('workers/subdepartments/<int:subdepartment_id>', views.workers_subdepartment),
+    path('workers/departments/<int:department_id>', views.workers_department),
     path('admin/logs_with_range/', views.logs_with_range),
     path('admin/groups_admin/', views.groups_with_permission),
 ]
