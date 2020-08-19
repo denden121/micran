@@ -38,6 +38,8 @@ urlpatterns = [
     path('directions/', views.direction_view),
     path('subdepartments/', views.subdepartment_view),
     path('departments/', views.departament_view),
+    path('departments/simple/', views.departament_simple_view),
+    path('workers/subdepartments/<int:subdepartment_id>', views.workers_subdepartment),
     path('admin/logs_with_range/', views.logs_with_range),
     path('admin/groups_admin/', views.groups_with_permission),
 ]

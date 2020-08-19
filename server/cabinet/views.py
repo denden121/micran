@@ -472,7 +472,17 @@ def workers_departament(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.all().exclude(position="Top")
+            workers = Profile.objects.all()
+            data = serializers.serialize('json', workers)
+            return HttpResponse(data)
+
+
+@csrf_exempt
+def departament_simple_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            workers = Department.objects.all()
             data = serializers.serialize('json', workers)
             return HttpResponse(data)
 
@@ -652,3 +662,13 @@ def calendar_control_view(request, user_id='default'):
                 mark.save()
                 return HttpResponse("Success")
             return HttpResponse(mark.errors)
+
+
+@csrf_exempt
+def workers_subdepartment(request, subdepartment_id):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            workers = Profile.objects.filter(subdepartment=subdepartment_id)
+            data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
+            return HttpResponse(data)
