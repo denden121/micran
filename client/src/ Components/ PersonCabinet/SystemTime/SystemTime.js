@@ -55,16 +55,16 @@ class SystemTime extends React.Component{
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-                // let departments = Array.from(result)
-                // departments =  departments.map((department,index)=>{
-                //     const name = department.fields.code + ' ' + department.fields.name
-                //     const pk = department.pk
-                //     return (
-                //         {value:pk,label:name}
-                //     )
-                // })
-                // console.log(departments)
-                // this.setState({departments:departments})
+                let workers = Array.from(result)
+                workers =  workers.map((workers,index)=>{
+                    const name = workers.fields.code + ' ' + department.fields.name
+                    const pk = department.pk
+                    return (
+                        {value:pk,label:name}
+                    )
+                })
+                console.log(departments)
+                this.setState({departments:departments})
             })
             .catch(error => console.log('error', error));
     }
