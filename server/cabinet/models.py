@@ -35,11 +35,11 @@ class Action(models.Model):
 
 class Direction(models.Model):
     subdepartment = models.ForeignKey('Subdepartment', on_delete=models.SET_NULL, null=True)
-    direction = models.CharField(max_length=30, blank=True)
-    num = models.IntegerField()
+    direction_name = models.CharField(max_length=30, blank=True)
+    direction_code = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return self.direction
+        return self.direction_name
 
 
 class Profile(models.Model):
@@ -47,6 +47,7 @@ class Profile(models.Model):
     sex = models.CharField(max_length=10, blank=True)
     subdepartment = models.ForeignKey('Subdepartment', related_name='subdepartment_id', on_delete=models.SET_NULL, blank=True, null=True)
     department = models.ForeignKey('Department', related_name='department_id', on_delete=models.SET_NULL, blank=True, null=True)
+    direction = models.ForeignKey('Direction', related_name='direction', on_delete=models.SET_NULL, blank=True, null=True)
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
@@ -113,7 +114,7 @@ class Department(models.Model):
 
 class Subdepartment(models.Model):
     department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
-    subdepartment = models.CharField(max_length=50, blank=True)
+    subdepartment_code = models.CharField(max_length=50, blank=True)
     subdepartment_name = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
