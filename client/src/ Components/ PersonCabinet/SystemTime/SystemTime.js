@@ -42,7 +42,7 @@ class SystemTime extends React.Component{
 
     }
     onChangeDepartments=(e)=>{
-        console.log(e)
+        // console.log(e)
         const token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -51,21 +51,20 @@ class SystemTime extends React.Component{
             headers: myHeaders,
             redirect: 'follow'
         };
-
-        fetch("http://127.0.0.1:8000/departments/simple/", requestOptions)
+        fetch(`http://127.0.0.1:8000/workers/departments/${e}`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-                let departments = Array.from(result)
-                departments =  departments.map((department,index)=>{
-                    const name = department.fields.code + ' ' + department.fields.name
-                    const pk = department.pk
-                    return (
-                        {value:pk,label:name}
-                    )
-                })
-                console.log(departments)
-                this.setState({departments:departments})
+                // let departments = Array.from(result)
+                // departments =  departments.map((department,index)=>{
+                //     const name = department.fields.code + ' ' + department.fields.name
+                //     const pk = department.pk
+                //     return (
+                //         {value:pk,label:name}
+                //     )
+                // })
+                // console.log(departments)
+                // this.setState({departments:departments})
             })
             .catch(error => console.log('error', error));
     }

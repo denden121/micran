@@ -468,11 +468,11 @@ def salary_individual(request):
 
 
 @csrf_exempt
-def workers_departament(request):
+def workers_departament(request, department_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.all()
+            workers = Profile.objects.filter(department=department_id)
             data = serializers.serialize('json', workers)
             return HttpResponse(data)
 
