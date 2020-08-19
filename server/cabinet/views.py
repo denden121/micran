@@ -473,7 +473,7 @@ def workers_department(request, department_id):
     if user:
         if request.method == "GET":
             workers = Profile.objects.filter(department=department_id)
-            data = serializers.serialize('json', workers)
+            data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
             return HttpResponse(data)
 
 
