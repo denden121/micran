@@ -68,27 +68,21 @@ class Structure extends React.Component {
             .then(result => {
                 console.log(result)
                 tree = Array.from(result)
-
-                console.log(tree)
                 tree = tree.map((department,index_dep)=>{
-                    console.log()
-
                     let temp1 = Array.from(department.department.subdepartments)
                     return {
-                        title: department.department.department_name,
-                            key: '0-'+index_dep,
+                        title: department.department.code + ' ' + department.department.name,
+                        key: '0-'+index_dep,
                         icon: <FolderOutlined/>,
                         children: temp1.map((subdepartment,index)=>{
-
                             let directions = Array.from(subdepartment.directions)
-                            // console.log('directions',directions)
                             return {
-                                title: subdepartment.subdepartment_name,
+                                title:subdepartment.code + ' ' + subdepartment.name,
                                 key: `0-${index_dep}-${index}`,
                                 icon: <FolderOpenOutlined />,
                                 children:directions.map((direction,index_direction)=>{
                                     return{
-                                        title: direction.direction,
+                                        title: direction.code + ' ' + direction.name,
                                         key: `0-${index_dep}-${index}-${index_direction}`,
                                         icon: <FolderOpenOutlined />
                                     }
@@ -98,8 +92,6 @@ class Structure extends React.Component {
                     }
                 })
                 this.setState({tree:tree})
-                console.log(tree)
-                console.log(treeData)
             })
             .catch(error => console.log('error', error));
     }

@@ -575,7 +575,7 @@ def departament_view(request):
                     directions = Direction.objects.filter(subdepartment=subdepartment)
                     for direction in directions:
                         direction_field.append({'name':direction.direction,
-                                                'num':direction.num})
+                                                'code':direction.num})
                     subdepartments_field.append({'name':subdepartment.subdepartment_name,
                                                  'code':subdepartment.subdepartment,
                                                  'directions': direction_field})
