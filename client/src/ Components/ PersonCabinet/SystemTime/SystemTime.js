@@ -94,7 +94,7 @@ class SystemTime extends React.Component{
         const month = months[date[1]]
         const day = date[2]
         const year = date[3]
-        this.setState({date:`${month}-${day}-${year}`})
+        this.setState({date:`${year}-${month}-${day}`})
     }
     onClickButtomGetTime =()=>{
         console.log(this.state)
@@ -104,24 +104,13 @@ class SystemTime extends React.Component{
         myHeaders.append("Authorization", token);
 
         let requestOptions = {
-            method: 'POST',
+            method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
-        fetch(`http://127.0.0.1:8000/workers/departments/${e}`, requestOptions)
+        fetch(`http://127.0.0.1:8000/cabinet/time_card/?date=${this.state.date}&user_id=${this.state.worker}`, requestOptions)
             .then(response => response.json())
-            .then(result => {
-                console.log(result)
-                let workers = Array.from(result)
-                workers =  workers.map((worker,index)=>{
-                    const name = worker.name
-                    const pk =  worker.pk
-                    return (
-                        {value:pk,label:name}
-                    )
-                })
-                this.setState({workers:workers})
-            })
+            .then(result => console.log(result))
             .catch(error => console.log('error', error));
     }
     render(){

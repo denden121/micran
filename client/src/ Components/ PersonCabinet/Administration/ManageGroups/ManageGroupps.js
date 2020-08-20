@@ -17,8 +17,9 @@ class ManageGroups extends React.Component{
         };
         await fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({groups:result}))
-        console.log('state',this.state.groups)
+            .then(result =>{
+                this.setState({groups:result})
+            })
     }
     state = {
         groups:{}
