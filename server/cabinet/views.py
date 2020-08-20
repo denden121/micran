@@ -655,11 +655,9 @@ def time_control_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            year = request.GET.get('year')
-            month = request.GET.get('month')
-            day = request.GET.get('day')
+            date = request.GET.get('date')
             user_id = request.GET.get('user_id')
-            times_cards = TimeCard.objects.filter(user=user_id, date__month=month, date__year=year, date__day=day)
+            times_cards = TimeCard.objects.filter(user=user_id, date=date)
             data = serializers.serialize('json', times_cards)
             return HttpResponse(data)
 
