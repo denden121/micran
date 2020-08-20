@@ -99,17 +99,14 @@ class AddGroups extends React.Component {
         document.location = 'view_groups'
     }
     addActions=(event)=>{
-        // console.log(event)
         this.setState({select_actions:event})
     }
     addWorkers=(event)=>{
-        // console.log(event)
         this.setState({select_workers:event})
     }
 
 
     render() {
-        // const { value } = this.state;
         const animatedComponents = makeAnimated();
         return (
             <div className="container-fluid">

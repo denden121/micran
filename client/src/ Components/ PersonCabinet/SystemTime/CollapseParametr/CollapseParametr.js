@@ -6,9 +6,9 @@ import { Button } from 'antd';
 import { Input } from 'antd';
 
 const CollapseParametr =(props)=>{
-    function onChange(date, dateString) {
-        console.log(date, dateString);
-    }
+    // function onChange(date, dateString) {
+    //     console.log(date, dateString);
+    // }
     return(
         <div className="container-fluid">
             <div className="row">
@@ -34,8 +34,9 @@ const CollapseParametr =(props)=>{
                                     <div className="col-md-11 text-left">
                                         <Select
                                             options={props.Workers}
-                                        placeholder="Выбрать"
-                                        style={{width:"50%"}}
+                                            placeholder="Выбрать"
+                                            style={{width:"50%"}}
+                                            onChange={props.onChangeWokers}
                                         />
                                     </div>
                                     <br/>
@@ -46,10 +47,10 @@ const CollapseParametr =(props)=>{
                                     <div className="col-md-9 text-left" style={{marginTop:"7px"}}>
                                         <DatePicker 
                                             placeholder="Выбрать"
-                                            onChange={onChange} 
+                                            onChange={props.onChangeDate}
                                             style={{marginRight:"15px"}}
                                         />  
-                                        <Button>Выгрузить</Button>
+                                        <Button onClick={props.onClickButtomGetTime}>Выгрузить</Button>
                                     </div>  
                                     <br/>
                                     <br/> 
@@ -58,7 +59,7 @@ const CollapseParametr =(props)=>{
                                         <Input></Input>
                                     </div> 
                                     <div className="col-md-4">
-                                        <Button>Выгрузить одного человека по user id</Button>
+                                        <Button >Выгрузить одного человека по user id</Button>
                                     </div>       
                                     <br/>
                                     <br/>
