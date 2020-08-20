@@ -33,6 +33,7 @@ const CollapseParametr =(props)=>{
                                     <br/>
                                     <div className="col-md-11 text-left">
                                         <Select
+                                            options={props.Workers}
                                         placeholder="Выбрать"
                                         style={{width:"50%"}}
                                         />

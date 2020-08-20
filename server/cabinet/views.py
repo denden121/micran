@@ -473,8 +473,10 @@ def workers_department(request, department_id):
     if user:
         if request.method == "GET":
             workers = Profile.objects.filter(department=department_id)
-            data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
-            return HttpResponse(data)
+            data = []
+            for worker in workers:
+                data.append({'pk': worker.pk, 'name': " ".join([worker.last_name, worker.first_name, worker.middle_name])})
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt

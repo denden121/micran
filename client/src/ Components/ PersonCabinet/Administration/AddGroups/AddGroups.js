@@ -26,7 +26,7 @@ class AddGroups extends React.Component {
         this.setState({ value });
       };
 
-    loadActions= async () => {
+    loadActions= () => {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -35,7 +35,7 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        await fetch("http://127.0.0.1:8000/actions/", requestOptions)
+        fetch("http://127.0.0.1:8000/actions/", requestOptions)
             .then(response =>  response.json())
             .then(result => this.setState({actions: result}))
             .catch(error => console.log('error', error))
@@ -46,7 +46,7 @@ class AddGroups extends React.Component {
         })
         this.setState({actions:temp})
     }
-    loadWorkers= async () =>{
+    loadWorkers= () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -55,9 +55,11 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        await fetch("http://127.0.0.1:8000/workers/", requestOptions)
+        fetch("http://127.0.0.1:8000/workers/all/", requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({workers: result}))
+            .then(result => {
+                console.log(result)
+                this.setState({workers: result})})
             .catch(error => console.log('error', error))
         console.log('state',this.state.workers)
         let temp = Array.from(this.state.workers)

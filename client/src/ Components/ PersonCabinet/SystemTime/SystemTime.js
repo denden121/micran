@@ -11,6 +11,7 @@ class SystemTime extends React.Component{
     state={
         departments:[],
         users:[],
+        workers:[]
     }
     loadSubdepartment=()=>{
         const token = localStorage.getItem('token')
@@ -56,15 +57,14 @@ class SystemTime extends React.Component{
             .then(result => {
                 console.log(result)
                 let workers = Array.from(result)
-                workers =  workers.map((workers,index)=>{
-                    const name = workers.fields.code + ' ' + department.fields.name
-                    const pk = department.pk
+                workers =  workers.map((worker,index)=>{
+                    const name = worker.name
+                    const pk =  worker.pk
                     return (
                         {value:pk,label:name}
                     )
                 })
-                console.log(departments)
-                this.setState({departments:departments})
+                this.setState({workers:workers})
             })
             .catch(error => console.log('error', error));
     }
@@ -90,6 +90,7 @@ class SystemTime extends React.Component{
                     <Collapse accordion defaultActiveKey={['1']} onChange={callback}>
                     <Panel header="Параметры отображения" key="1">
                         <CollapseParametr Departments = {this.state.departments}
+                                          Workers = {this.state.workers}
                                           onChangeDepartments={this.onChangeDepartments}/>
                     </Panel>
                     </Collapse>                    
