@@ -311,7 +311,7 @@ def action_view(request):
     if user:
         if request.method == "GET":
             actions = Action.objects.all()
-            data = serializers.serialize('json', actions)
+            data = serializers.serialize('json', actions, fields=('action', ))
             return HttpResponse(data)
         if request.method == "POST":
             action = ActionForm(request.POST)
