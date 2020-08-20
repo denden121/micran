@@ -37,7 +37,9 @@ class AddGroups extends React.Component {
         }
         fetch("http://127.0.0.1:8000/actions/", requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({actions: result}))
+            .then(result => {
+                console.log(result)
+                this.setState({actions: result})})
             .catch(error => console.log('error', error))
         let temp = Array.from(this.state.actions)
         temp = temp.map((action)=>{
@@ -55,21 +57,16 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        fetch("http://127.0.0.1:8000/workers/all/", requestOptions)
+        fetch("http://127.0.0.1:8000/workers/all/simple", requestOptions)
             .then(response =>  response.json())
             .then(result => {
                 console.log(result)
-                this.setState({workers: result})})
+                let workers = Array.from(result)
+                workers = workers.map((worker)=>{
+                    return {value:`${worker.pk}`,label:`${worker.full_name}`}
+                })
+                this.setState({workers: workers})})
             .catch(error => console.log('error', error))
-        console.log('state',this.state.workers)
-        let temp = Array.from(this.state.workers)
-        temp = temp.map((worker)=>{
-            console.log(worker)
-            return {value:`${worker.pk}`,label:`${worker.fields.first_name}`}
-        })
-        this.setState({workers:temp})
-        console.log('state',this.state.workers)
-
     }
     createGroup = async () => {
         console.log(this.state.select_actions)

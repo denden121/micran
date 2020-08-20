@@ -418,13 +418,16 @@ def salary(request):
                 salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
                 salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
                                                                     common_part=salary_common)
+                department = worker.department.department_name
+                direction = worker.direction.direction_name
+                subdepartment = worker.subdepartment.subdepartment_name
                 salary.time_from_report = hour
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
-                         'is_penalty': salary.is_penalty, 'department': worker.department,
-                         'subdepartment': worker.subdepartment, 'direction': worker.direction,
+                         'is_penalty': salary.is_penalty, 'department': department,
+                         'subdepartment': subdepartment, 'direction': direction,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'award': salary.award, 'salary_hand': salary.salary_hand}
                 data.append({'pk': worker.pk, 'person': field})
@@ -514,6 +517,18 @@ def workers_info(request):
                          'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
+            return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def workers_info_simple(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            persons = Profile.objects.all()
+            data = []
+            for person in persons:
+                data.append({'pk': person.pk, 'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name})
             return HttpResponse(json.dumps(data))
 
 
@@ -634,18 +649,17 @@ def direction_view(request):
 
 
 @csrf_exempt
-def time_control_view(request, user_id='default'):
+def time_control_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            if user_id == 'default':
-                times_cards = TimeCard.objects.filter(user=user.id)
-                data = serializers.serialize('json', times_cards)
-                return HttpResponse(data)
-            else:
-                times_cards = TimeCard.objects.filter(user=user_id)
-                data = serializers.serialize('json', times_cards)
-                return HttpResponse(data)
+            year = request.GET.get('year')
+            month = request.GET.get('month')
+            day = request.GET.get('day')
+            user_id = request.GET.get('user_id')
+            times_cards = TimeCard.objects.filter(user=user_id, date__month=month, date__year=year, date__day=day)
+            data = serializers.serialize('json', times_cards)
+            return HttpResponse(data)
 
 
 @csrf_exempt
