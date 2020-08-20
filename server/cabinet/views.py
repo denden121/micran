@@ -311,8 +311,10 @@ def action_view(request):
     if user:
         if request.method == "GET":
             actions = Action.objects.all()
-            data = serializers.serialize('json', actions, fields=('action', ))
-            return HttpResponse(data)
+            data = []
+            for action in actions:
+                data.append({'pk': action.pk, 'name': action.action})
+            return HttpResponse(json.dumps(data))
         if request.method == "POST":
             action = ActionForm(request.POST)
             if action.is_valid():
