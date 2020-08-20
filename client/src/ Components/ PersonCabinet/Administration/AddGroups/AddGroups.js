@@ -26,12 +26,7 @@ class AddGroups extends React.Component {
         this.loadActions()
         this.loadWorkers()
     }
-
-    onChange = ({ target: { value } }) => {
-        this.setState({ value });
-      };
-
-    loadActions= async () => {
+    loadActions= () => {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -40,18 +35,17 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        await fetch("http://127.0.0.1:8000/actions/", requestOptions)
+        fetch("http://127.0.0.1:8000/actions/", requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({actions: result}))
+            .then(result => {
+                let actions = Array.from(result).map((action)=>{
+                    console.log(action)
+                    return {value:`${action.pk}`,label:`${action.name}`}
+                })
+                this.setState({actions: actions})})
             .catch(error => console.log('error', error))
-        let temp = Array.from(this.state.actions)
-        temp = temp.map((action)=>{
-            console.log(action)
-            return {value:`${action.pk}`,label:`${action.fields.action}`}
-        })
-        this.setState({actions:temp})
     }
-    loadWorkers= async () =>{
+    loadWorkers= () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -60,28 +54,30 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        await fetch("http://127.0.0.1:8000/workers/", requestOptions)
+<<<<<<< HEAD
+        fetch("http://127.0.0.1:8000/workers/all/simple/", requestOptions)
+=======
+        fetch("http://127.0.0.1:8000/workers/all/simple", requestOptions)
+>>>>>>> d86ff0fef405c43adb32161412fb075a3d6d2e06
             .then(response =>  response.json())
-            .then(result => this.setState({workers: result}))
+            .then(result => {
+                console.log(result)
+                let workers = Array.from(result)
+                workers = workers.map((worker)=>{
+                    return {value:`${worker.pk}`,label:`${worker.full_name}`}
+                })
+                this.setState({workers: workers})})
             .catch(error => console.log('error', error))
-        console.log('state',this.state.workers)
-        let temp = Array.from(this.state.workers)
-        temp = temp.map((worker)=>{
-            console.log(worker)
-            return {value:`${worker.pk}`,label:`${worker.fields.first_name}`}
-        })
-        this.setState({workers:temp})
-        console.log('state',this.state.workers)
-
     }
     createGroup = async () => {
-        console.log(this.state.select_actions)
-        console.log(this.state.select_workers)
+        console.log('actions',this.state.select_actions)
+        console.log('workers',this.state.select_workers)
         let nameGroup = document.querySelector('#nameGroup').value
-        // console.log(result, nameGroup)
-        let myHeaders = new Headers();
+
         let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
+
         let workers = []
         for(let i of this.state.select_workers){
             workers.push(i.value)
@@ -105,18 +101,18 @@ class AddGroups extends React.Component {
             redirect: 'follow'
         };
 
-        await fetch("http://127.0.0.1:8000/groups/", requestOptions)
+        fetch("http://127.0.0.1:8000/groups/", requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
         document.location = 'view_groups'
     }
     addActions=(event)=>{
-        console.log(event)
+        // console.log(event)
         this.setState({select_actions:event})
     }
     addWorkers=(event)=>{
-        console.log(event)
+        // console.log(event)
         this.setState({select_workers:event})
     }
 
@@ -139,7 +135,7 @@ class AddGroups extends React.Component {
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Действия</label>
                                     <Select 
-                                        onChange = {this.addWorkers}
+                                        onChange = {this.addActions}
                                         closeMenuOnSelect={false}
                                         mode="multiple"
                                         components={animatedComponents}
