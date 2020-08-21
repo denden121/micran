@@ -16,12 +16,34 @@ class Interval extends React.Component {
     }
     onClickInterval=(e)=>{
         let a = e.target.id
-
-        console.log(a)
-        if(a =='year' && a ==='month'){
-            console.log('fdsfdfsdfsd')
+        if(a ==='year' || a ==='month'){
+            this.setState({range:a})
         }
     }
+    componentDidMount() {
+        this.loadDepartments()
+    }
+    loadDepartments=()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch("http://127.0.0.1:8000/departments/simple/", requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                let actions = Array.from(result).map((department)=>{
+                    console.log(department)
+                    return {value:`${department.pk}`,label:`${department.name}`}
+                })
+                this.setState({departments: actions})})
+            .catch(error => console.log('error', error))
+    }
+
+
     render(){
         const animatedComponents = makeAnimated();
         return(
@@ -58,7 +80,7 @@ class Interval extends React.Component {
                                         <div style={{marginBottom:"7px"}}>
                                             <Select                                
                                             components={animatedComponents}
-                                            isMulti                                
+
                                             placeholder="Выбрать"
                                             /> 
                                         </div>
