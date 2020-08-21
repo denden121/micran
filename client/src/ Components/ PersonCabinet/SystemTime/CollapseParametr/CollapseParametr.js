@@ -6,9 +6,9 @@ import { Button } from 'antd';
 import { Input } from 'antd';
 
 const CollapseParametr =(props)=>{
-    function onChange(date, dateString) {
-        console.log(date, dateString);
-    }
+    // function onChange(date, dateString) {
+    //     console.log(date, dateString);
+    // }
     return(
         <div className="container-fluid">
             <div className="row">
@@ -17,14 +17,14 @@ const CollapseParametr =(props)=>{
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="row">
                                     <div className="col-md-6 text-left">
-                                    <Checkbox>Детализировать</Checkbox>
+                                    {/*<Checkbox>Детализировать</Checkbox>*/}
                                     </div>
                                     <br/>
                                     <br/>
                                     <div className="col-md-11 text-left">
                                         <Select
-                                        placeholder="Выбрать"
-                                        style={{width:"50%"}}
+                                        placeholder="Выбрать депортамент"
+                                        style={{width:"100%"}}
                                         options={props.Departments}
                                         onChange={props.onChangeDepartments}
                                         />
@@ -34,8 +34,9 @@ const CollapseParametr =(props)=>{
                                     <div className="col-md-11 text-left">
                                         <Select
                                             options={props.Workers}
-                                        placeholder="Выбрать"
-                                        style={{width:"50%"}}
+                                            placeholder="Выбрать соотрудника"
+                                            style={{width:"100%"}}
+                                            onChange={props.onChangeWokers}
                                         />
                                     </div>
                                     <br/>
@@ -46,26 +47,26 @@ const CollapseParametr =(props)=>{
                                     <div className="col-md-9 text-left" style={{marginTop:"7px"}}>
                                         <DatePicker 
                                             placeholder="Выбрать"
-                                            onChange={onChange} 
+                                            onChange={props.onChangeDate}
                                             style={{marginRight:"15px"}}
                                         />  
-                                        <Button>Выгрузить</Button>
+                                        <Button onClick={props.onClickButtomGetTime}>Выгрузить</Button>
                                     </div>  
                                     <br/>
                                     <br/> 
                                     <br/>
-                                    <div className="col-md-4" style={{marginRight:"1px"}}>
-                                        <Input></Input>
-                                    </div> 
-                                    <div className="col-md-4">
-                                        <Button>Выгрузить одного человека по user id</Button>
-                                    </div>       
-                                    <br/>
-                                    <br/>
-                                    <div className="col-md-9 text-left">
-                                        <Button style={{backgroundColor:"#95de64"}}>Сформировать</Button>
-                                        <Button style={{backgroundColor:"#87e8de",marginLeft:"5px"}}>Экспорт</Button>
-                                    </div>
+                                    {/*<div className="col-md-4" style={{marginRight:"1px"}}>*/}
+                                    {/*    <Input></Input>*/}
+                                    {/*</div> */}
+                                    {/*<div className="col-md-4">*/}
+                                    {/*    <Button >Выгрузить одного человека по user id</Button>*/}
+                                    {/*</div>       */}
+                                    {/*<br/>*/}
+                                    {/*<br/>*/}
+                                    {/*<div className="col-md-9 text-left">*/}
+                                    {/*    <Button style={{backgroundColor:"#95de64"}}>Сформировать</Button>*/}
+                                    {/*    <Button style={{backgroundColor:"#87e8de",marginLeft:"5px"}}>Экспорт</Button>*/}
+                                    {/*</div>*/}
                                 </div>                                
                             </div>
                         </div>

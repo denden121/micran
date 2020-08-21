@@ -1,17 +1,17 @@
 import React from "react"
 import {FieldTimeOutlined} from '@ant-design/icons'
 import { Checkbox } from 'antd';
-import {Select} from "antd";
 import CollapseParametr from "./CollapseParametr/CollapseParametr"
 import { Collapse } from 'antd';
 import { Button } from 'antd';
-import TimeTable from "./TimeTable/TimeTable"
 import TableTime from "./TableTime/TableTime"
 class SystemTime extends React.Component{
     state={
         departments:[],
+        workers:[],
         users:[],
-        workers:[]
+        date:'',
+        worker:''
     }
     loadSubdepartment=()=>{
         const token = localStorage.getItem('token')
@@ -43,10 +43,11 @@ class SystemTime extends React.Component{
 
     }
     onChangeDepartments=(e)=>{
-        // console.log(e)
         const token = localStorage.getItem('token')
+
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
+
         let requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -71,11 +72,60 @@ class SystemTime extends React.Component{
     componentDidMount() {
         this.loadSubdepartment()
     }
+    onChangeWokers=(e)=>{
+        console.log(e)
+        this.setState({worker:e})
+    }
+    onChangeDate=(e)=>{
+        const months = {
+            "Jan" : 1,
+            "Feb" : 2,
+            "Mar" : 3,
+            "Apr" : 4,
+            "May" : 5,
+            "Jun" : 6,
+            "Jul" : 7,
+            "Aug" : 8,
+            "Sep" : 9,
+            "Oct" : 10,
+            "Nov" : 11,
+            "Dec" : 12,
+        }
+        const date = String(e._d).split(' ')
+        const month = months[date[1]]
+        const day = date[2]
+        const year = date[3]
+        this.setState({date:`${year}-${month}-${day}`})
+    }
+    onClickButtomGetTime =()=>{
+        console.log(this.state)
+        const token = localStorage.getItem('token')
+
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        fetch(`http://127.0.0.1:8000/cabinet/time_card/?date=${this.state.date}&user_id=${this.state.worker}`, requestOptions)
+            .then(response => response.json())
+            .then(result =>{
+
+                result = Array.from(result)
+                let a = result.pop()
+                for(let i =0;i<20;i++){
+                    result.push(a)
+                }
+                this.setState({users:result})})
+            .catch(error => console.log('error', error));
+    }
     render(){
         const { Panel } = Collapse;
         function callback(key) {
             console.log(key);
-          }
+        }
         return(
             <div className="container-fluid">
                 <div className="label row">                
@@ -91,7 +141,11 @@ class SystemTime extends React.Component{
                     <Panel header="Параметры отображения" key="1">
                         <CollapseParametr Departments = {this.state.departments}
                                           Workers = {this.state.workers}
-                                          onChangeDepartments={this.onChangeDepartments}/>
+                                          onChangeWokers = {this.onChangeWokers}
+                                          onChangeDepartments={this.onChangeDepartments}
+                                          onChangeDate={this.onChangeDate}
+                                          onClickButtomGetTime={this.onClickButtomGetTime}
+                        />
                     </Panel>
                     </Collapse>                    
                     </div>  
@@ -101,7 +155,7 @@ class SystemTime extends React.Component{
                 </div> 
                 <br/>
                 <br/>
-                <TableTime/> 
+                <TableTime Date = {this.state.users}/>
                 
             </div>
         )

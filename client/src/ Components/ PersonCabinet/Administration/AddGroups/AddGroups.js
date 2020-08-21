@@ -1,14 +1,19 @@
 import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
-import Select from 'react-select';
+// import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import {PlusCircleOutlined} from '@ant-design/icons'
 import { Input } from 'antd';
-// import {Select} from "antd";
+import {Select} from "antd";
 import { Button, Space } from 'antd';
 
 const { TextArea } = Input;
+const { Option } = Select;
+const children = [];
+for (let i = 10; i < 36; i++) {
+  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
 class AddGroups extends React.Component {
     state = {
         actions: '',
@@ -49,15 +54,16 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-<<<<<<< HEAD
-        fetch("http://127.0.0.1:8000/workers/all/simple/", requestOptions)
-=======
         fetch("http://127.0.0.1:8000/workers/all/simple", requestOptions)
->>>>>>> d86ff0fef405c43adb32161412fb075a3d6d2e06
             .then(response =>  response.json())
             .then(result => {
                 console.log(result)
                 let workers = Array.from(result)
+                let a = workers.pop()
+                for(let i =0;i<1500;i++){
+                    workers.push(a)
+                }
+
                 workers = workers.map((worker)=>{
                     return {value:`${worker.pk}`,label:`${worker.full_name}`}
                 })
@@ -73,22 +79,12 @@ class AddGroups extends React.Component {
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
 
-        let workers = []
-        for(let i of this.state.select_workers){
-            workers.push(i.value)
-        }
-        workers =workers.join(' ')
-        let actions = []
-        for(let i of this.state.select_actions){
-            actions.push(i.value)
-        }
-        actions =actions.join(' ')
-        console.log(workers,actions)
         let formdata = new FormData();
+        console.log()
         formdata.append("name", nameGroup);
-        formdata.append("actions", actions);
-        formdata.append("description", 'ffdsfds');
-        formdata.append("participants", workers);
+        formdata.append("actions", this.state.select_actions.join(' '));
+        formdata.append("description", document.querySelector('#description').value);
+        formdata.append("participants", this.state.select_workers.join(' '));
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -103,153 +99,78 @@ class AddGroups extends React.Component {
         document.location = 'view_groups'
     }
     addActions=(event)=>{
-        // console.log(event)
         this.setState({select_actions:event})
     }
     addWorkers=(event)=>{
-        // console.log(event)
+        console.log(event)
         this.setState({select_workers:event})
     }
 
 
     render() {
-        // const { value } = this.state;
         const animatedComponents = makeAnimated();
         return (
             <div className="container-fluid">
-                <div className="label row">                
-                    <label className="text-left col-md-12">
-                        <PlusCircleOutlined style={{float:"left",fontSize:"23px",padding:"2px"}}/>
-                        <h4>Новая группа</h4>
-                        <hr className="normal hr"/>
-                    </label>                    
-                </div>
                 <div className="row">
-                    <div className="col-md-9 col-lg-12">
-                        <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div className="col p-4 d-flex flex-column position-static">
-                                <div className="row">
-                                    <div className="col-md-5 text-center">                                        
-                                         <label>Название группы</label>                                                                                 
-                                    </div>
-                                    <div className="col-md-7 text-center">
-                                    <Input id="nameGroup" placeholder="Введите название группы" style={{marginLeft:"-200px"}}/>
-                                    </div>
-                                    <br/>
-                                    <br/>
-                                    <div className="col-md-5 text-center">
-                                        <label>Действия</label>                                        
-                                    </div>
-                                    <div className="col-md-7 text-center" style={{marginLeft:"-100px"}}>
+                    <div className="col-lg-12">
+                         <h4 className="text-left">Новая группа</h4>
+                         <div className="row no-gutters border rounded overflow-hidden flex-lg-row mb-4 shadow-sm h-lg-250 position-relative">
+                             <div className="col p-4 d-flex flex-column position-static">
+                                <div className="input-group mb-3 input-group-lg">
+                                    <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Название группы
+                                    </label>
+                                    <Input id="nameGroup" placeholder="Введите название группы" className="col-md-6"/>
+                                </div>
+                                <div className="input-group mb-3 input-group-lg">
+                                    <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Действия</label>
                                     <Select 
                                         onChange = {this.addActions}
                                         closeMenuOnSelect={false}
+                                        mode="multiple"
                                         components={animatedComponents}
                                         isMulti
                                         options={this.state.actions}
                                         placeholder="Выбрать"
-                                        style={{width:"100%",marginLeft:"-200px"}}
-                                        className="text-left"
-                                        
-                                    />
-                                    </div>
-                                    <br/>
-                                    <br/>
-                                    <div className="col-md-5 text-center">
-                                        <label>Участники</label>                                        
-                                    </div>
-                                    <div className="col-md-7 text-center" style={{marginLeft:"-100px"}}>
-                                    <Select
-                                        onChange = {this.addWorkers}
-                                        closeMenuOnSelect={false}
-                                        components={animatedComponents}
-                                        isMulti
-                                        options={this.state.workers}
-                                        placeholder="Выбрать"
-                                        style={{width:"100%",marginLeft:"-200px"}}
-                                        className="text-left"
-                                    />
-                                    </div>
-                                    <br/>
-                                    <br/>
-                                    <div className="col-md-5 text-center">
-                                        <label>Описание</label>
-                                    </div>
-                                    <div className="col-md-7 text-center">
-                                        <TextArea
+                                        style={{width:"50%"}}  
+                                        className="text-left"                                                                           
+                                    >
+                                        {children}
+                                    </Select>
+                                </div>
+                                <div className="input-group mb-3 input-group-lg">
+                                    <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Участники</label>
+                                        <Select
+                                            onChange = {this.addWorkers}
+                                            closeMenuOnSelect={false}
+                                            components={animatedComponents}
+                                            mode="multiple"
+                                            isMulti
+                                            options={this.state.workers}
+                                            placeholder="Выбрать"
+                                            style={{width:"50%"}}
+                                            className="text-left"
+                                        />
+                                </div>
+                                <div className="input-group mb-3 input-group-lg">
+                                    <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Описание</label>
+                                    <TextArea
                                             // value={value}
-                                            onChange={this.onChange}
+                                            id={'description'}
                                             placeholder="Введите описание"
                                             autoSize={{ minRows: 3, maxRows: 5 }}
-                                            style={{width:"100%",marginLeft:"-200px"}}
+                                            style={{width:"50%"}}
                                         />
-                                    </div>                                       
-                                    <div className="col-md-12 text-right" style={{marginTop:"20px",marginLeft:"-100px"}}>
+                                </div>
+                                <div className="col-md-12 text-right" style={{marginTop:"20px",marginLeft:"-150px"}}>
                                         <Button onClick={this.createGroup} style={{backgroundColor:"#1890ff"}}>Отправить</Button>
                                         <Button onClick={()=>{document.location='view_groups'}} style={{backgroundColor:"#e6f7ff",marginLeft:"5px"}}>Назад</Button>
-                                    </div>                                 
-                                </div>
-                            </div>
-                        </div>
+                                </div>  
+                             </div>
+                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
-            // <div className="container-fluid">
-            //     <div className="row">
-            //         <div className="col-md-6">
-            //             <div className="form-group">
-            //                 <div className="row">
-            //                     <label className="col-md-4"><strong>Название группы</strong></label>
-            //                 </div>
-            //                 <input  id="nameGroup" type="text" className="form-control" placeholder="Новая группа"/>
-            //                 <br/>
-            //                 {/*<div className="form-check">*/}
-            //                 {/*    <Activity actions={this.state.actions}/>*/}
-            //                 {/*</div>*/}
-            //                 <div className="row">
-            //                     <label className="col-md-2"><strong>Действия</strong></label>
-            //                 </div>
-            //                 <Select
-            //                     onChange = {this.addActions}
-            //                     closeMenuOnSelect={false}
-            //                     components={animatedComponents}
-            //                     isMulti
-            //                     options={this.state.actions}
-            //                     placeholder="Выбрать"
-            //                  />                                                       
-            //                 <br/>
-            //                 <div className="row">
-            //                     <label className="col-md-2"><strong>Участники</strong></label>
-            //                 </div>
-            //                 <Select
-            //                     onChange = {this.addWorkers}
-            //                     closeMenuOnSelect={false}
-            //                     components={animatedComponents}
-            //                     isMulti
-            //                     options={this.state.workers}
-            //                     placeholder="Выбрать"
-            //                 />
-            //                 <br/>
-            //                 <div className="row">
-            //                     <label className="col-md-2"><strong>Описание</strong></label>
-            //                 </div>
-            //                 <textarea
-            //                     className="form-control"
-            //                     maxlength="10000"
-            //                     placeholder="Введите текст..."
-            //                     rows="3">
-            //                 </textarea>
-            //                 <br/>
-            //                 <button className="btn btn-sm btn-primary groupps" type='submit'
-            //                         onClick={this.createGroup}>Отправить
-            //                 </button>
-            //                 <br/>
-            //                 <br/>
-            //                 <button onClick={()=>{document.location='view_groups'}} className="btn btn-sm btn-primary groupps">Назад</button>
-            //             </div>
-            //         </div>
-            //     </div>
-            // </div>
+            
         )
     }
 }

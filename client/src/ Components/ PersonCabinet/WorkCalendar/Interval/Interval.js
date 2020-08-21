@@ -3,12 +3,25 @@ import {ArrowsAltOutlined} from '@ant-design/icons'
 import {PartitionOutlined} from '@ant-design/icons'
 import {BlockOutlined} from '@ant-design/icons'
 import 'antd/dist/antd.css';
-import {Button} from 'antd';
+import {Select} from 'antd';
 import "./Interval.css"
-import Select from 'react-select';
+// import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 class Interval extends React.Component {
+    state ={
+        range:'',
+        departments:'',
+        subdepartments:'',
+    }
+    onClickInterval=(e)=>{
+        let a = e.target.id
+
+        console.log(a)
+        if(a =='year' && a ==='month'){
+            console.log('fdsfdfsdfsd')
+        }
+    }
     render(){
         const animatedComponents = makeAnimated();
         return(
@@ -30,9 +43,9 @@ class Interval extends React.Component {
                                         <ArrowsAltOutlined style={{float:"left", padding:"2px",color:"#3A4F84"}}/>
                                         <label className="LabelL"><h6>Интервал</h6></label>   
                                     </div>
-                                    <div className="text-left col-md-8">
-                                        <Button type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</Button>
-                                        <Button type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</Button>
+                                    <div onClick={this.onClickInterval}  className="text-left col-md-8">
+                                        <button  id = {'month'} className="btn btn-primary btn-sm"  style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</button>
+                                        <button  id = {'year'} className="btn btn-primary btn-sm" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</button>
                                     </div>
                                 </div>
                                 <br/>
@@ -47,13 +60,17 @@ class Interval extends React.Component {
                                             components={animatedComponents}
                                             isMulti                                
                                             placeholder="Выбрать"
+                                            style={{width:"100%"}}
+                                            className="text-left"
                                             /> 
                                         </div>
                                         <div>
                                             <Select                                
                                             components={animatedComponents}
                                             isMulti                                
-                                            placeholder="Выбрать"                                        
+                                            placeholder="Выбрать" 
+                                            style={{width:"100%"}}
+                                            className="text-left"                                       
                                             /> 
                                         </div>                                    
                                     </div>                                    

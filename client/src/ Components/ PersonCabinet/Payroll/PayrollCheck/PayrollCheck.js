@@ -1,5 +1,6 @@
 import React from 'react'
 import "../Payroll.css"
+import {Select} from "antd"
 
 const PayrollCheck =(props)=>{
     return(
@@ -31,16 +32,21 @@ const PayrollCheck =(props)=>{
             </label>
         </div>
         <hr className="normal"/>
-        <select className="custom-select">
-            <option selected>Выбрать</option>
-            <option>Департамент СВЧ электроники</option>
-        </select> 
+        <div className="col-md-6 col-lg-12 text-left">
+        <Select 
+        placeholder="Выбрать"
+        style={{width:"100%"}}  
+        className="text-left" >            
+        </Select> 
+        </div>
         <br/>
-        <br/>
-        <select className="custom-select">
-            <option selected>Выбрать</option>
-            <option>Департамент СВЧ электроники</option>
-        </select> 
+        <div className="col-md-6 col-lg-12 text-left">
+        <Select 
+        placeholder="Выбрать"
+        style={{width:"100%"}}  
+        className="text-left" >            
+        </Select> 
+        </div>
         </div>
     )
 }
