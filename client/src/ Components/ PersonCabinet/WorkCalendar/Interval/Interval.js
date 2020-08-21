@@ -3,9 +3,9 @@ import {ArrowsAltOutlined} from '@ant-design/icons'
 import {PartitionOutlined} from '@ant-design/icons'
 import {BlockOutlined} from '@ant-design/icons'
 import 'antd/dist/antd.css';
-import {Button} from 'antd';
+import {Select} from 'antd';
 import "./Interval.css"
-import Select from 'react-select';
+// import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 class Interval extends React.Component {
@@ -60,13 +60,17 @@ class Interval extends React.Component {
                                             components={animatedComponents}
                                             isMulti                                
                                             placeholder="Выбрать"
+                                            style={{width:"100%"}}
+                                            className="text-left"
                                             /> 
                                         </div>
                                         <div>
                                             <Select                                
                                             components={animatedComponents}
                                             isMulti                                
-                                            placeholder="Выбрать"                                        
+                                            placeholder="Выбрать" 
+                                            style={{width:"100%"}}
+                                            className="text-left"                                       
                                             /> 
                                         </div>                                    
                                     </div>                                    
