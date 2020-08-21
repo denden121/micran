@@ -698,16 +698,20 @@ def calendar_control_view(request):
             profiles = Profile.objects.filter(subdepartment=subdepartment)
             if time == "month":
                 data = []
-                fields = []
+                type_fields = {}
                 for profile in profiles:
                     calendars = CalendarMark.objects.filter(person=profile, start_date__month=current_date.month,
                                                            start_date__year=current_date.year)
                     for calendar in calendars:
-                        fields.append({'start_date':str(calendar.start_date), 'end_date': str(calendar.end_date),
-                                       'type': calendar.type})
+                        date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
+                        if calendar.type in type_fields:
+                            type_fields[calendar.type].append(date_fields)
+                        else:
+                            type_fields[calendar.type] = []
+                            type_fields[calendar.type].append(date_fields)
                     data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
-                                 'fields': fields})
-                    fields = []
+                                 'types': type_fields})
+                    type_fields={}
                 return HttpResponse(json.dumps(data))
 
 
