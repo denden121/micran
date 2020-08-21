@@ -44,8 +44,8 @@ class Interval extends React.Component {
                                         <label className="LabelL"><h6>Интервал</h6></label>   
                                     </div>
                                     <div onClick={this.onClickInterval}  className="text-left col-md-8">
-                                        <Button  id = {'month'}  style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</Button>
-                                        <Button  id = {'year'} type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</Button>
+                                        <button  id = {'month'} className="btn btn-primary btn-sm"  style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</button>
+                                        <button  id = {'year'} className="btn btn-primary btn-sm" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</button>
                                     </div>
                                 </div>
                                 <br/>
