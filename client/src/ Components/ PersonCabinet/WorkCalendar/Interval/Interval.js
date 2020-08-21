@@ -15,7 +15,12 @@ class Interval extends React.Component {
         subdepartments:'',
     }
     onClickInterval=(e)=>{
-        console.log(e)
+        let a = e.target.id
+
+        console.log(a)
+        if(a =='year' && a ==='month'){
+            console.log('fdsfdfsdfsd')
+        }
     }
     render(){
         const animatedComponents = makeAnimated();
@@ -38,9 +43,9 @@ class Interval extends React.Component {
                                         <ArrowsAltOutlined style={{float:"left", padding:"2px",color:"#3A4F84"}}/>
                                         <label className="LabelL"><h6>Интервал</h6></label>   
                                     </div>
-                                    <div onClick={this.onClickInterval} className="text-left col-md-8">
-                                        <Button id={'month'} type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</Button>
-                                        <Button id={'year'} type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</Button>
+                                    <div onClick={this.onClickInterval}  className="text-left col-md-8">
+                                        <Button  id = {'month'}  style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</Button>
+                                        <Button  id = {'year'} type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</Button>
                                     </div>
                                 </div>
                                 <br/>
