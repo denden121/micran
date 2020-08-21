@@ -9,6 +9,14 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 class Interval extends React.Component {
+    state ={
+        range:'',
+        departments:'',
+        subdepartments:'',
+    }
+    onClickInterval=(e)=>{
+        console.log(e)
+    }
     render(){
         const animatedComponents = makeAnimated();
         return(
@@ -30,9 +38,9 @@ class Interval extends React.Component {
                                         <ArrowsAltOutlined style={{float:"left", padding:"2px",color:"#3A4F84"}}/>
                                         <label className="LabelL"><h6>Интервал</h6></label>   
                                     </div>
-                                    <div className="text-left col-md-8">
-                                        <Button type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</Button>
-                                        <Button type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</Button>
+                                    <div onClick={this.onClickInterval} className="text-left col-md-8">
+                                        <Button id={'month'} type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</Button>
+                                        <Button id={'year'} type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</Button>
                                     </div>
                                 </div>
                                 <br/>

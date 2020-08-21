@@ -9,6 +9,7 @@ class SystemTime extends React.Component{
     state={
         departments:[],
         workers:[],
+        users:[],
         date:'',
         worker:''
     }
@@ -110,7 +111,14 @@ class SystemTime extends React.Component{
         };
         fetch(`http://127.0.0.1:8000/cabinet/time_card/?date=${this.state.date}&user_id=${this.state.worker}`, requestOptions)
             .then(response => response.json())
-            .then(result => console.log(result))
+            .then(result =>{
+
+                result = Array.from(result)
+                let a = result.pop()
+                for(let i =0;i<20;i++){
+                    result.push(a)
+                }
+                this.setState({users:result})})
             .catch(error => console.log('error', error));
     }
     render(){
@@ -147,7 +155,7 @@ class SystemTime extends React.Component{
                 </div> 
                 <br/>
                 <br/>
-                <TableTime/> 
+                <TableTime Date = {this.state.users}/>
                 
             </div>
         )
