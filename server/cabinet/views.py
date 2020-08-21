@@ -641,6 +641,17 @@ def subdepartment_view(request):
 
 
 @csrf_exempt
+def subdepartment_from_departments_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            department = request.GET.get(['department'])
+            subdepartments = Subdepartment.objects.filter(department=department)
+            data = serializers.serialize('json', subdepartments)
+            return HttpResponse(data)
+
+
+@csrf_exempt
 def direction_view(request):
     user = get_user_jwt(request)
     if user:
@@ -663,24 +674,44 @@ def time_control_view(request):
 
 
 @csrf_exempt
-def calendar_control_view(request, user_id='default'):
+def time_control_view_detail(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            if user_id == 'default':
-                marks = CalendarMark.objects.filter(person=user.id)
-                data = serializers.serialize('json', marks, fields=("type", "start_date", "end_date"))
-                return HttpResponse(data)
-            else:
-                marks = CalendarMark.objects.filter(person=user_id)
-                data = serializers.serialize('json', marks)
-                return HttpResponse(data)
-        if request.method == "POST":
-            mark = CalendarMarkForm(request.POST)
-            if mark.is_valid():
-                mark.save()
-                return HttpResponse("Success")
-            return HttpResponse(mark.errors)
+            fields = []
+            for i in range(5):
+                if i%2 == 0:
+                    fields.append({'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран вход'})
+                else:
+                    fields.append({'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран выход'})
+            return HttpResponse(json.dumps(fields))
+
+
+@csrf_exempt
+def calendar_control_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            subdepartment = request.GET.get('subdepartment')
+            current_date = datetime.now()
+            time = request.GET.get('time')
+            profiles = Profile.objects.filter(subdepartment=subdepartment)
+            if time == "month":
+                data = []
+                fields = []
+                for profile in profiles:
+                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=current_date.month,
+                                                           start_date__year=current_date.year)
+                    for calendar in calendars:
+                        fields.append({'start_date':str(calendar.start_date), 'end_date': str(calendar.end_date),
+                                       'type': calendar.type})
+                    data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                                 'fields': fields})
+                    fields = []
+                return HttpResponse(json.dumps(data))
+
+
+
 
 
 @csrf_exempt
