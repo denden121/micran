@@ -54,7 +54,7 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        fetch("http://127.0.0.1:8000/workers/all/simple/", requestOptions)
+        fetch("http://127.0.0.1:8000/workers/all/simple", requestOptions)
             .then(response =>  response.json())
             .then(result => {
                 console.log(result)
