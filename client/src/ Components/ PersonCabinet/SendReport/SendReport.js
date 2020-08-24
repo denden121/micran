@@ -39,20 +39,37 @@ class SendReport extends React.Component{
         if(this.state.select_report){
             let url = `http://127.0.0.1:8000/cabinet/report/${this.state.select_report}`
             fetch(url, requestOptions)
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(result => {
                     let report  = result;
+                    let temp = [...this.state.reports]
+                    console.log('dssffs',temp,this.state.select_report)
 
+                    for(let i = 0;i<temp.length;i++ ){
+                        // console.log(temp[o])
+                        if(temp[i].pk == this.state.select_report){
+
+                            temp[i]=report;
+                            break;
+                        }
+                    }
+                    console.log(temp)
+                    this.setState({reports:temp})
                 })
                 .catch(error => console.log('error', error));
         }
         else{
             const url = `http://127.0.0.1:8000/cabinet/reports/`
             fetch(url, requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
+                .then(response => response.json())
+                .then(result => {
+                    let report  = result;
+                    let temp = [...this.state.reports];
+                    console.log('fdsfsdf',  report, temp)
+                    temp.push(result);
+                    this.setState({reports:temp})
+                })
                 .catch(error => console.log('error', error));
-            this.loadReport()
         }
         console.log(this.state)
     }

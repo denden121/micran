@@ -148,9 +148,12 @@ def all_report_view(request, user_id='default'):
                 if form.is_valid():
                     report = form.save(commit=False)
                     report.creator_id = profile
-                    print(request.POST)
                     report.save()
-                    return HttpResponse("Success")
+                    data = []
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
+                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
@@ -181,14 +184,19 @@ def report_view(request, report_id, user_id='default'):
                 year, month, day = date.split('-')
                 reports = Report.objects.filter(creator_id=user.id, date__year=year,
                                                 date__month=month, project=project_pk)
-                if reports:
-                    return HttpResponse("Already have a report")
+                for report in reports:
+                    if report.pk != report_id:
+                        return HttpResponse("Already have a report")
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
                 if form.is_valid():
                     update = form.save()
-                    return HttpResponse("Success")
+                    data = []
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
+                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             elif request.method == "DELETE":
                 report = get_object_or_404(Report, pk=report_id)
@@ -224,7 +232,8 @@ def all_projects_view(request):
                 chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
                 deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
-                field = {'name': project.name, 'direction': project.direction.direction, 'manager': manager_name,
+                direction = Direction.objects.get(pk=project.direction.pk)
+                field = {'name': project.name, 'direction': direction.direction_name, 'manager': manager_name,
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order,
                          'comment_for_employees': project.comment_for_employees,
@@ -698,16 +707,20 @@ def calendar_control_view(request):
             profiles = Profile.objects.filter(subdepartment=subdepartment)
             if time == "month":
                 data = []
-                fields = []
+                type_fields = {}
                 for profile in profiles:
                     calendars = CalendarMark.objects.filter(person=profile, start_date__month=current_date.month,
                                                            start_date__year=current_date.year)
                     for calendar in calendars:
-                        fields.append({'start_date':str(calendar.start_date), 'end_date': str(calendar.end_date),
-                                       'type': calendar.type})
+                        date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
+                        if calendar.type in type_fields:
+                            type_fields[calendar.type].append(date_fields)
+                        else:
+                            type_fields[calendar.type] = []
+                            type_fields[calendar.type].append(date_fields)
                     data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
-                                 'fields': fields})
-                    fields = []
+                                 'types': type_fields})
+                    type_fields={}
                 return HttpResponse(json.dumps(data))
 
 
