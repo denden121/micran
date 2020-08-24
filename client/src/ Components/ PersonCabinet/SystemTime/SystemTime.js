@@ -10,7 +10,7 @@ class SystemTime extends React.Component{
         departments:[],
         workers:[],
         users:[],
-        date:'',
+        date:[],
         worker:''
     }
     loadSubdepartment=()=>{
@@ -114,11 +114,14 @@ class SystemTime extends React.Component{
             .then(result =>{
 
                 result = Array.from(result)
-                let a = result.pop()
-                for(let i =0;i<20;i++){
-                    result.push(a)
+                if (result.length !=0){
+                    let a = result.pop()
+                    for(let i =0;i<20;i++){
+                        result.push(a)
+                    }
+                    this.setState({users:result})
                 }
-                this.setState({users:result})})
+            })
             .catch(error => console.log('error', error));
     }
     render(){

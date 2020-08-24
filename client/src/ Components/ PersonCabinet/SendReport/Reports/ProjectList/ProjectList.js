@@ -17,7 +17,7 @@ const Reports = (props) =>{
                 {cardReport.fields.hour} ч.                                
                 </div>
                 <div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
-                    <Button onClick={props.onClickDeleteCard.bind(this,cardReport.pk)} type="primary" danger size="small">
+                    <Button onClick={props.onClickDeleteCard.bind(this,cardReport.pk,index)} type="primary" danger size="small">
                         Удалить
                     </Button>
                 </div>
