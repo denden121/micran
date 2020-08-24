@@ -654,8 +654,10 @@ def subdepartment_from_departments_view(request, department_id):
     if user:
         if request.method == "GET":
             subdepartments = Subdepartment.objects.filter(department=department_id)
-            data = serializers.serialize('json', subdepartments)
-            return HttpResponse(data)
+            for subdepartment in subdepartments:
+                data = {{'pk': subdepartment.pk, 'fields': {'code': subdepartment.department_code,
+                                                             'name': subdepartment.department_name}}}
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
