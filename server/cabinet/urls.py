@@ -37,7 +37,7 @@ urlpatterns = [
     path('directions/', views.direction_view),
     path('subdepartments/', views.subdepartment_view),
     path('departments/', views.departament_view),
-    path('departments/subdepartments', views.subdepartment_from_departments_view),
+    path('departments/subdepartments/', views.subdepartment_from_departments_view),
     path('departments/simple/', views.departament_simple_view),
     path('workers/subdepartments/<int:subdepartment_id>', views.workers_subdepartment),
     path('workers/departments/<int:department_id>', views.workers_department),

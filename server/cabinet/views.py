@@ -168,7 +168,6 @@ def all_report_view(request, user_id='default'):
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
 
-
 @csrf_exempt
 def report_view(request, report_id, user_id='default'):
     if user_id == 'default':
@@ -710,6 +709,23 @@ def calendar_control_view(request):
                 type_fields = {}
                 for profile in profiles:
                     calendars = CalendarMark.objects.filter(person=profile, start_date__month=current_date.month,
+                                                           start_date__year=current_date.year)
+                    for calendar in calendars:
+                        date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
+                        if calendar.type in type_fields:
+                            type_fields[calendar.type].append(date_fields)
+                        else:
+                            type_fields[calendar.type] = []
+                            type_fields[calendar.type].append(date_fields)
+                    data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                                 'types': type_fields})
+                    type_fields={}
+                return HttpResponse(json.dumps(data))
+            if time == "year":
+                data = []
+                type_fields = {}
+                for profile in profiles:
+                    calendars = CalendarMark.objects.filter(person=profile,
                                                            start_date__year=current_date.year)
                     for calendar in calendars:
                         date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
