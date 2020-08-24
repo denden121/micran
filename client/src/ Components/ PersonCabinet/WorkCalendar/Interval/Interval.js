@@ -63,9 +63,25 @@ class Interval extends React.Component {
                 this.setState({subdepartments: subdepartments})})
             .catch(error => console.log('error', error))
     }
-
-У
-
+    onChangeSelectSubdepartment=(e)=>{
+        let token = localStorage.getItem('token')
+        let date = localStorage.getItem('date').split(' ')
+        console.log('date',date)
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const url = `http://127.0.0.1:8000/cabinet/calendar/?subdepartment=${e}&current=${date.join('-')}&range=${this.state.range})}`
+        fetch(url, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => console.log('error', error))
+    }
     render(){
         const animatedComponents = makeAnimated();
         return(
@@ -110,9 +126,10 @@ class Interval extends React.Component {
                                             /> 
                                         </div>
                                         <div>
-                                            <Select                                
+                                            <Select
+                                            onChange={this.onChangeSelectSubdepartment}
                                             components={animatedComponents}
-                                            options={this.state.subdepartmentssudo }
+                                            options={this.state.subdepartments }
                                             placeholder="Выбрать" 
                                             style={{width:"100%"}}
                                             className="text-left"                                       
