@@ -303,6 +303,43 @@ ALTER SEQUENCE public.cabinet_action_id_seq OWNED BY public.cabinet_action.id;
 
 
 --
+-- Name: cabinet_calendarmark; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cabinet_calendarmark (
+    id integer NOT NULL,
+    type character varying(50) NOT NULL,
+    start_date date NOT NULL,
+    end_date date NOT NULL,
+    person_id integer
+);
+
+
+ALTER TABLE public.cabinet_calendarmark OWNER TO postgres;
+
+--
+-- Name: cabinet_calendarmark_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cabinet_calendarmark_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cabinet_calendarmark_id_seq OWNER TO postgres;
+
+--
+-- Name: cabinet_calendarmark_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cabinet_calendarmark_id_seq OWNED BY public.cabinet_calendarmark.id;
+
+
+--
 -- Name: cabinet_department; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -343,8 +380,9 @@ ALTER SEQUENCE public.cabinet_department_id_seq OWNED BY public.cabinet_departme
 
 CREATE TABLE public.cabinet_direction (
     id integer NOT NULL,
-    direction character varying(30) NOT NULL,
-    num integer NOT NULL
+    direction_name character varying(30) NOT NULL,
+    subdepartment_id integer,
+    direction_code character varying(50) NOT NULL
 );
 
 
@@ -532,8 +570,9 @@ CREATE TABLE public.cabinet_profile (
     part_time_job character varying(30) NOT NULL,
     lateness character varying(30) NOT NULL,
     "SRI_SAS" boolean NOT NULL,
-    department_id integer NOT NULL,
-    subdepartment_id integer
+    department_id integer,
+    subdepartment_id integer,
+    direction_id integer
 );
 
 
@@ -555,9 +594,9 @@ CREATE TABLE public.cabinet_project (
     status boolean NOT NULL,
     report_availability boolean NOT NULL,
     acceptance_vp boolean NOT NULL,
-    chief_designer_id integer NOT NULL,
-    deputy_chief_designer_id integer NOT NULL,
-    manager_id integer NOT NULL
+    chief_designer_id integer,
+    deputy_chief_designer_id integer,
+    manager_id integer
 );
 
 
@@ -595,8 +634,8 @@ CREATE TABLE public.cabinet_report (
     text text NOT NULL,
     hour double precision NOT NULL,
     date date NOT NULL,
-    creator_id_id integer NOT NULL,
-    project_id integer NOT NULL
+    creator_id_id integer,
+    project_id integer
 );
 
 
@@ -680,8 +719,8 @@ CREATE TABLE public.cabinet_salaryindividual (
     is_penalty boolean NOT NULL,
     salary_hand double precision NOT NULL,
     date date NOT NULL,
-    common_part_id integer NOT NULL,
-    person_id integer NOT NULL
+    common_part_id integer,
+    person_id integer
 );
 
 
@@ -715,9 +754,9 @@ ALTER SEQUENCE public.cabinet_salaryindividual_id_seq OWNED BY public.cabinet_sa
 
 CREATE TABLE public.cabinet_subdepartment (
     id integer NOT NULL,
-    subdepartment character varying(50) NOT NULL,
+    subdepartment_code character varying(50) NOT NULL,
     subdepartment_name character varying(100) NOT NULL,
-    department_id integer NOT NULL
+    department_id integer
 );
 
 
@@ -962,6 +1001,13 @@ ALTER TABLE ONLY public.cabinet_action ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: cabinet_calendarmark id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_calendarmark ALTER COLUMN id SET DEFAULT nextval('public.cabinet_calendarmark_id_seq'::regclass);
+
+
+--
 -- Name: cabinet_department id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1163,6 +1209,10 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 74	Can change Token	19	change_token
 75	Can delete Token	19	delete_token
 76	Can view Token	19	view_token
+77	Can add calendar mark	20	add_calendarmark
+78	Can change calendar mark	20	change_calendarmark
+79	Can delete calendar mark	20	delete_calendarmark
+80	Can view calendar mark	20	view_calendarmark
 \.
 
 
@@ -1209,6 +1259,25 @@ COPY public.authtoken_token (key, created, user_id) FROM stdin;
 --
 
 COPY public.cabinet_action (id, action, num) FROM stdin;
+5	101	101
+6	100	100
+7	11	11
+8	12	12
+9	13	13
+\.
+
+
+--
+-- Data for Name: cabinet_calendarmark; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cabinet_calendarmark (id, type, start_date, end_date, person_id) FROM stdin;
+1	undefined	2020-08-19	2020-08-25	1
+2	undefined	2020-09-01	2020-09-20	1
+3	undefined	2020-09-21	2020-09-21	1
+4	undefined	2020-08-21	2020-08-21	1
+5	paid_holiday	2020-08-21	2020-08-21	1
+6	undefined	2020-08-21	2020-08-21	2
 \.
 
 
@@ -1227,10 +1296,10 @@ COPY public.cabinet_department (id, department_code, department_name) FROM stdin
 -- Data for Name: cabinet_direction; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cabinet_direction (id, direction, num) FROM stdin;
-1	Administrating	47
-2	Development	1412
-3	Maintenance	12
+COPY public.cabinet_direction (id, direction_name, subdepartment_id, direction_code) FROM stdin;
+1	Administrating	\N	
+3	Maintenance	1	
+2	Development	2	
 \.
 
 
@@ -1239,6 +1308,9 @@ COPY public.cabinet_direction (id, direction, num) FROM stdin;
 --
 
 COPY public.cabinet_group (id, name, description) FROM stdin;
+1	Gods	
+2	Default	
+3	Admins	Топ группа
 \.
 
 
@@ -1247,6 +1319,19 @@ COPY public.cabinet_group (id, name, description) FROM stdin;
 --
 
 COPY public.cabinet_group_available_actions (id, group_id, action_id) FROM stdin;
+1	1	5
+2	1	6
+3	1	7
+4	1	8
+5	1	9
+6	2	8
+7	2	9
+8	2	7
+9	3	5
+10	3	6
+11	3	7
+12	3	8
+13	3	9
 \.
 
 
@@ -1255,6 +1340,15 @@ COPY public.cabinet_group_available_actions (id, group_id, action_id) FROM stdin
 --
 
 COPY public.cabinet_group_participants (id, group_id, profile_id) FROM stdin;
+1	1	1
+2	1	2
+3	1	6
+4	2	3
+5	2	4
+6	2	5
+7	3	3
+8	3	4
+9	3	5
 \.
 
 
@@ -1264,6 +1358,18 @@ COPY public.cabinet_group_participants (id, group_id, profile_id) FROM stdin;
 
 COPY public.cabinet_logging (id, "IP", login, action, status, date) FROM stdin;
 1	185.210.141.96	admin	login	t	2020-08-18 04:15:12.765452+00
+2	22.22.22.22	admin	login	t	2020-08-18 05:19:11.549938+00
+3	185.210.141.96	admin	login	f	2020-08-18 05:35:22.718901+00
+4	185.210.141.96	admin	login	t	2020-08-18 05:35:45.672183+00
+5	185.210.141.96	admin	login	t	2020-08-18 05:36:24.045761+00
+6	22.22.22.22	admin	login	t	2020-08-19 03:24:01.437314+00
+7	185.210.140.250	admin	login	t	2020-08-20 03:09:17.124368+00
+8	185.210.140.250	admin	login	t	2020-08-20 03:11:42.46401+00
+9	22.22.22.22	admin	login	t	2020-08-20 03:39:17.417384+00
+10	22.22.22.22	admin	login	t	2020-08-21 02:31:20.958452+00
+11	22.22.22.22	admin	login	t	2020-08-21 02:45:57.345689+00
+12	31.173.243.86	admin	login	t	2020-08-24 02:27:08.781063+00
+13	22.22.22.22	admin	login	t	2020-08-24 03:11:10.20574+00
 \.
 
 
@@ -1271,13 +1377,13 @@ COPY public.cabinet_logging (id, "IP", login, action, status, date) FROM stdin;
 -- Data for Name: cabinet_profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cabinet_profile (user_id, sex, birth_date, "position", middle_name, first_name, last_name, experience, shift, part_time_job, lateness, "SRI_SAS", department_id, subdepartment_id) FROM stdin;
-1	Male	2000-08-18	Financist	Ivanovich	Ivan	Ivanov	0	Full	Day		f	1	1
-2	Male	2000-06-18	Financist	Petrovich	Ivan	Ivanov	0	Full	Day		f	1	2
-3	Female	2001-08-18	Farmer	Alexandrovna	Anna	Ivanovna	0	Half	Day		f	2	3
-4	Female	1999-02-18	Farmer	Petrovna	Olga	Petrova	0	Full	Day		f	2	4
-5	Male	2000-08-18	Controller	Petrovich	Ivan	Ivanov	0	Full	Night		f	3	5
-6	Female	1999-02-01	Controller	Alexandrovna	Anna	Petrova	0	Full	Day		f	3	6
+COPY public.cabinet_profile (user_id, sex, birth_date, "position", middle_name, first_name, last_name, experience, shift, part_time_job, lateness, "SRI_SAS", department_id, subdepartment_id, direction_id) FROM stdin;
+3	Female	2001-08-18	Farmer	Alexandrovna	Anna	Ivanovna	0	Half	Day		f	2	3	\N
+4	Female	1999-02-18	Farmer	Petrovna	Olga	Petrova	0	Full	Day		f	2	4	\N
+5	Male	2000-08-18	Controller	Petrovich	Ivan	Ivanov	0	Full	Night		f	3	5	\N
+6	Female	1999-02-01	Controller	Alexandrovna	Anna	Petrova	0	Full	Day		f	3	6	\N
+1	Male	2000-08-18	Financist	Ivanovich	Ivan	Ivanov	0	Full	Day		f	1	1	1
+2	Male	2000-06-18	Financist	Petrovich	Ivan	Ivanov	0	Full	Day		f	1	1	2
 \.
 
 
@@ -1297,6 +1403,7 @@ COPY public.cabinet_project (id, name, direction_id, client, production_order, c
 --
 
 COPY public.cabinet_report (id, status, text, hour, date, creator_id_id, project_id) FROM stdin;
+3	f	Что то сделал	12	2020-07-03	1	1
 \.
 
 
@@ -1305,7 +1412,9 @@ COPY public.cabinet_report (id, status, text, hour, date, creator_id_id, project
 --
 
 COPY public.cabinet_salarycommon (id, days_norm_common, time_norm_common, date) FROM stdin;
-1	20	160	2020-08-01
+1	12	96	2020-08-01
+2	0	0	2020-10-01
+3	20	160	2020-07-01
 \.
 
 
@@ -1316,6 +1425,11 @@ COPY public.cabinet_salarycommon (id, days_norm_common, time_norm_common, date) 
 COPY public.cabinet_salaryindividual (id, days_worked, vacation, sick_leave, day_off, time_from_report, time_orion, time_norm, time_off, plan_salary, award, penalty, is_penalty, salary_hand, date, common_part_id, person_id) FROM stdin;
 1	20	0	0	0	0	0	160	0	10000	2500	0	f	12500	2020-08-01	1	1
 2	20	0	0	0	0	0	160	0	15000	2000	0	f	17000	2020-08-01	1	2
+3	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-08-01	1	3
+4	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-10-01	2	1
+5	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-10-01	2	2
+6	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-07-01	3	1
+7	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-07-01	3	2
 \.
 
 
@@ -1323,7 +1437,7 @@ COPY public.cabinet_salaryindividual (id, days_worked, vacation, sick_leave, day
 -- Data for Name: cabinet_subdepartment; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cabinet_subdepartment (id, subdepartment, subdepartment_name, department_id) FROM stdin;
+COPY public.cabinet_subdepartment (id, subdepartment_code, subdepartment_name, department_id) FROM stdin;
 1	432	Aid	1
 2	65	Salary	1
 3	78	Bread	2
@@ -1338,6 +1452,7 @@ COPY public.cabinet_subdepartment (id, subdepartment, subdepartment_name, depart
 --
 
 COPY public.cabinet_timecard (id, "user", orion_id, intellect_id, leaving, late, fine_late, hooky, hours_worked, date) FROM stdin;
+1	1	0	0	17:00:00	00:00:00	09:00:00	00:00:00	08:00:00	2020-08-18
 \.
 
 
@@ -1376,6 +1491,33 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 28	2020-08-18 04:20:44.591353+00	3	Maintain the site	1	[{"added": {}}]	12	1
 29	2020-08-18 04:20:55.463507+00	3	Maintain the site	2	[{"changed": {"fields": ["Type", "Report availability"]}}]	12	1
 30	2020-08-18 04:21:18.843013+00	3	Maintain the site	2	[{"changed": {"fields": ["Report availability"]}}]	12	1
+31	2020-08-18 05:17:54.316897+00	1	TimeCard object (1)	1	[{"added": {}}]	14	1
+32	2020-08-18 06:42:26.933394+00	3	Maintenance	2	[{"changed": {"fields": ["Subdepartment"]}}]	9	1
+33	2020-08-18 06:42:37.450656+00	2	Development	2	[{"changed": {"fields": ["Subdepartment"]}}]	9	1
+34	2020-08-19 03:23:11.121486+00	1	CalendarMark object (1)	1	[{"added": {}}]	20	1
+35	2020-08-19 03:51:16.334005+00	1	admin	2	[{"changed": {"fields": ["Direction"]}}]	11	1
+36	2020-08-19 03:51:51.752385+00	2	user_1	2	[{"changed": {"fields": ["Direction"]}}]	11	1
+37	2020-08-20 03:57:30.856904+00	1	12	1	[{"added": {}}]	7	1
+38	2020-08-20 04:01:24.351895+00	2	123	1	[{"added": {}}]	7	1
+39	2020-08-20 04:01:27.678892+00	3	123124	1	[{"added": {}}]	7	1
+40	2020-08-21 05:56:27.307959+00	2	CalendarMark object (2)	2	[]	20	1
+41	2020-08-21 05:56:39.566972+00	3	CalendarMark object (3)	1	[{"added": {}}]	20	1
+42	2020-08-21 05:56:51.570416+00	4	CalendarMark object (4)	1	[{"added": {}}]	20	1
+43	2020-08-21 05:56:59.093398+00	5	CalendarMark object (5)	1	[{"added": {}}]	20	1
+44	2020-08-21 05:59:41.368154+00	6	CalendarMark object (6)	1	[{"added": {}}]	20	1
+45	2020-08-21 06:00:02.599587+00	2	user_1	2	[{"changed": {"fields": ["Subdepartment"]}}]	11	1
+46	2020-08-24 02:39:33.851481+00	4	God	1	[{"added": {}}]	7	1
+47	2020-08-24 02:41:25.696701+00	4	God	3		7	1
+48	2020-08-24 02:41:25.701598+00	3	123124	3		7	1
+49	2020-08-24 02:41:25.703227+00	2	123	3		7	1
+50	2020-08-24 02:41:25.704898+00	1	12	3		7	1
+51	2020-08-24 02:41:35.677697+00	5	101	1	[{"added": {}}]	7	1
+52	2020-08-24 02:41:42.712708+00	6	100	1	[{"added": {}}]	7	1
+53	2020-08-24 02:41:47.437407+00	7	11	1	[{"added": {}}]	7	1
+54	2020-08-24 02:41:51.616758+00	8	12	1	[{"added": {}}]	7	1
+55	2020-08-24 02:41:55.421833+00	9	13	1	[{"added": {}}]	7	1
+56	2020-08-24 02:42:20.037442+00	1	Gods	1	[{"added": {}}]	18	1
+57	2020-08-24 02:42:37.670807+00	2	Default	1	[{"added": {}}]	18	1
 \.
 
 
@@ -1403,6 +1545,7 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 17	cabinet	report
 18	cabinet	group
 19	authtoken	token
+20	cabinet	calendarmark
 \.
 
 
@@ -1435,6 +1578,12 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 22	cabinet	0003_auto_20200818_0317	2020-08-18 03:17:18.642985+00
 23	cabinet	0004_auto_20200818_0334	2020-08-18 03:34:18.955728+00
 24	cabinet	0005_auto_20200818_0338	2020-08-18 03:38:56.960428+00
+25	cabinet	0006_calendarmark	2020-08-18 05:54:34.747166+00
+26	cabinet	0007_auto_20200818_0608	2020-08-18 06:08:30.288643+00
+27	cabinet	0008_auto_20200818_0638	2020-08-18 06:38:13.636585+00
+28	cabinet	0009_calendarmark_person	2020-08-19 03:04:15.709666+00
+29	cabinet	0010_auto_20200819_0337	2020-08-19 03:37:36.34036+00
+30	cabinet	0011_auto_20200819_0340	2020-08-19 03:40:34.336504+00
 \.
 
 
@@ -1465,7 +1614,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 76, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 80, true);
 
 
 --
@@ -1493,7 +1642,14 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: cabinet_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_action_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cabinet_action_id_seq', 9, true);
+
+
+--
+-- Name: cabinet_calendarmark_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cabinet_calendarmark_id_seq', 6, true);
 
 
 --
@@ -1514,28 +1670,28 @@ SELECT pg_catalog.setval('public.cabinet_direction_id_seq', 3, true);
 -- Name: cabinet_group_available_actions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_group_available_actions_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cabinet_group_available_actions_id_seq', 13, true);
 
 
 --
 -- Name: cabinet_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_group_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cabinet_group_id_seq', 3, true);
 
 
 --
 -- Name: cabinet_group_participants_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_group_participants_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cabinet_group_participants_id_seq', 9, true);
 
 
 --
 -- Name: cabinet_logging_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_logging_id_seq', 1, true);
+SELECT pg_catalog.setval('public.cabinet_logging_id_seq', 13, true);
 
 
 --
@@ -1549,21 +1705,21 @@ SELECT pg_catalog.setval('public.cabinet_project_id_seq', 3, true);
 -- Name: cabinet_report_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_report_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cabinet_report_id_seq', 14, true);
 
 
 --
 -- Name: cabinet_salarycommon_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_salarycommon_id_seq', 1, true);
+SELECT pg_catalog.setval('public.cabinet_salarycommon_id_seq', 3, true);
 
 
 --
 -- Name: cabinet_salaryindividual_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_salaryindividual_id_seq', 2, true);
+SELECT pg_catalog.setval('public.cabinet_salaryindividual_id_seq', 7, true);
 
 
 --
@@ -1577,28 +1733,28 @@ SELECT pg_catalog.setval('public.cabinet_subdepartment_id_seq', 6, true);
 -- Name: cabinet_timecard_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_timecard_id_seq', 1, false);
+SELECT pg_catalog.setval('public.cabinet_timecard_id_seq', 1, true);
 
 
 --
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 30, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 57, true);
 
 
 --
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 19, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 20, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 24, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 30, true);
 
 
 --
@@ -1719,6 +1875,14 @@ ALTER TABLE ONLY public.authtoken_token
 
 ALTER TABLE ONLY public.cabinet_action
     ADD CONSTRAINT cabinet_action_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cabinet_calendarmark cabinet_calendarmark_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_calendarmark
+    ADD CONSTRAINT cabinet_calendarmark_pkey PRIMARY KEY (id);
 
 
 --
@@ -1968,6 +2132,20 @@ CREATE INDEX authtoken_token_key_10f0b77e_like ON public.authtoken_token USING b
 
 
 --
+-- Name: cabinet_calendarmark_person_id_670a308e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX cabinet_calendarmark_person_id_670a308e ON public.cabinet_calendarmark USING btree (person_id);
+
+
+--
+-- Name: cabinet_direction_subdepartment_id_900a5f0c; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX cabinet_direction_subdepartment_id_900a5f0c ON public.cabinet_direction USING btree (subdepartment_id);
+
+
+--
 -- Name: cabinet_group_available_actions_action_id_24ff4321; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2007,6 +2185,13 @@ CREATE INDEX cabinet_group_participants_profile_id_1b37e97a ON public.cabinet_gr
 --
 
 CREATE INDEX cabinet_profile_department_id_043cc896 ON public.cabinet_profile USING btree (department_id);
+
+
+--
+-- Name: cabinet_profile_direction_id_260a5be7; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX cabinet_profile_direction_id_260a5be7 ON public.cabinet_profile USING btree (direction_id);
 
 
 --
@@ -2172,6 +2357,22 @@ ALTER TABLE ONLY public.authtoken_token
 
 
 --
+-- Name: cabinet_calendarmark cabinet_calendarmark_person_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_calendarmark
+    ADD CONSTRAINT cabinet_calendarmark_person_id_fkey FOREIGN KEY (person_id) REFERENCES public.cabinet_profile(user_id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: cabinet_direction cabinet_direction_subdepartment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_direction
+    ADD CONSTRAINT cabinet_direction_subdepartment_id_fkey FOREIGN KEY (subdepartment_id) REFERENCES public.cabinet_subdepartment(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: cabinet_group_available_actions cabinet_group_availa_action_id_24ff4321_fk_cabinet_a; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2212,11 +2413,19 @@ ALTER TABLE ONLY public.cabinet_profile
 
 
 --
--- Name: cabinet_profile cabinet_profile_subdepartment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: cabinet_profile cabinet_profile_direction_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.cabinet_profile
-    ADD CONSTRAINT cabinet_profile_subdepartment_id_fkey FOREIGN KEY (subdepartment_id) REFERENCES public.cabinet_subdepartment(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT cabinet_profile_direction_id_fkey FOREIGN KEY (direction_id) REFERENCES public.cabinet_direction(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: cabinet_profile cabinet_profile_subdepartment_id_54ca756d_fk_cabinet_s; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_profile
+    ADD CONSTRAINT cabinet_profile_subdepartment_id_54ca756d_fk_cabinet_s FOREIGN KEY (subdepartment_id) REFERENCES public.cabinet_subdepartment(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --

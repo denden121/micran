@@ -148,9 +148,12 @@ def all_report_view(request, user_id='default'):
                 if form.is_valid():
                     report = form.save(commit=False)
                     report.creator_id = profile
-                    print(request.POST)
                     report.save()
-                    return HttpResponse("Success")
+                    data = []
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
+                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
@@ -164,7 +167,6 @@ def all_report_view(request, user_id='default'):
                 return HttpResponse(data)
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
-
 
 @csrf_exempt
 def report_view(request, report_id, user_id='default'):
@@ -181,14 +183,19 @@ def report_view(request, report_id, user_id='default'):
                 year, month, day = date.split('-')
                 reports = Report.objects.filter(creator_id=user.id, date__year=year,
                                                 date__month=month, project=project_pk)
-                if reports:
-                    return HttpResponse("Already have a report")
+                for report in reports:
+                    if report.pk != report_id:
+                        return HttpResponse("Already have a report")
                 report = Report.objects.get(creator_id_id=user.id, id=report_id)
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
                 if form.is_valid():
                     update = form.save()
-                    return HttpResponse("Success")
+                    data = []
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
+                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             elif request.method == "DELETE":
                 report = get_object_or_404(Report, pk=report_id)
@@ -224,7 +231,8 @@ def all_projects_view(request):
                 chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
                 deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
-                field = {'name': project.name, 'direction': project.direction.direction, 'manager': manager_name,
+                direction = Direction.objects.get(pk=project.direction.pk)
+                field = {'name': project.name, 'direction': direction.direction_name, 'manager': manager_name,
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order,
                          'comment_for_employees': project.comment_for_employees,
@@ -641,6 +649,20 @@ def subdepartment_view(request):
 
 
 @csrf_exempt
+def subdepartment_from_departments_view(request, department_id):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            subdepartments = Subdepartment.objects.filter(department=department_id)
+            data = []
+            for subdepartment in subdepartments:
+                data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.subdepartment_code,
+                                                                'name': subdepartment.subdepartment_name}})
+            print(data)
+            return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
 def direction_view(request):
     user = get_user_jwt(request)
     if user:
@@ -663,24 +685,66 @@ def time_control_view(request):
 
 
 @csrf_exempt
-def calendar_control_view(request, user_id='default'):
+def time_control_view_detail(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            if user_id == 'default':
-                marks = CalendarMark.objects.filter(person=user.id)
-                data = serializers.serialize('json', marks, fields=("type", "start_date", "end_date"))
-                return HttpResponse(data)
-            else:
-                marks = CalendarMark.objects.filter(person=user_id)
-                data = serializers.serialize('json', marks)
-                return HttpResponse(data)
-        if request.method == "POST":
-            mark = CalendarMarkForm(request.POST)
-            if mark.is_valid():
-                mark.save()
-                return HttpResponse("Success")
-            return HttpResponse(mark.errors)
+            fields = []
+            for i in range(5):
+                if i%2 == 0:
+                    fields.append({'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран вход'})
+                else:
+                    fields.append({'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран выход'})
+            return HttpResponse(json.dumps(fields))
+
+
+@csrf_exempt
+def calendar_control_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            subdepartment = request.GET.get('subdepartment')
+            current_date = request.GET.get('current_date')
+            month, year = current_date.split('-')
+            range = request.GET.get('range')
+            profiles = Profile.objects.filter(subdepartment=subdepartment)
+            if range == "month":
+                data = []
+                type_fields = {}
+                for profile in profiles:
+                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
+                                                           start_date__year=year)
+                    for calendar in calendars:
+                        date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
+                        if calendar.type in type_fields:
+                            type_fields[calendar.type].append(date_fields)
+                        else:
+                            type_fields[calendar.type] = []
+                            type_fields[calendar.type].append(date_fields)
+                    data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                                 'types': type_fields})
+                    type_fields={}
+                return HttpResponse(json.dumps(data))
+            if range == "year":
+                data = []
+                type_fields = {}
+                for profile in profiles:
+                    calendars = CalendarMark.objects.filter(person=profile,
+                                                           start_date__year=year)
+                    for calendar in calendars:
+                        date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
+                        if calendar.type in type_fields:
+                            type_fields[calendar.type].append(date_fields)
+                        else:
+                            type_fields[calendar.type] = []
+                            type_fields[calendar.type].append(date_fields)
+                    data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                                 'types': type_fields})
+                    type_fields={}
+                return HttpResponse(json.dumps(data))
+
+
+
 
 
 @csrf_exempt
