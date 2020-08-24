@@ -7,12 +7,15 @@ import {Select} from 'antd';
 import "./Interval.css"
 // import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import Calendar from "../Calendar/Calendar";
 
 class Interval extends React.Component {
     state ={
         range:'',
         departments:'',
         subdepartments:'',
+        persons:'',
+        show:false
     }
     onClickInterval=(e)=>{
         let a = e.target.id
@@ -78,7 +81,8 @@ class Interval extends React.Component {
         fetch(url, requestOptions)
             .then(response =>  response.json())
             .then(result => {
-                console.log(result)
+                this.setState({persons:result,
+                                    show:true})
             })
             .catch(error => console.log('error', error))
     }
@@ -207,11 +211,18 @@ class Interval extends React.Component {
                                         <div className="symbol8 rounded">12</div>
                                         <div className="lab">
                                             <label className="LabelL" >- Планируемый ежегодный отпуск(не влияет на норму часов)</label>
-                                        </div>                                                                     
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-md-12">
+                        {this.state.show ?
+                            <Calendar date={this.state.persons}/> :
+                            ''
+                        }
                     </div>
                 </div>
             </div>
