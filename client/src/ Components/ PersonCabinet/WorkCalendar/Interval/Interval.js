@@ -7,6 +7,7 @@ import {Select} from 'antd';
 import "./Interval.css"
 // import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import Calendar from "../Calendar/Calendar"
 
 class Interval extends React.Component {
     state ={
@@ -193,6 +194,9 @@ class Interval extends React.Component {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-md-12">
+                        <Calendar/>
                     </div>
                 </div>
             </div>
