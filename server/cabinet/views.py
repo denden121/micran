@@ -709,22 +709,41 @@ def calendar_control_view(request):
             range = request.GET.get('range')
             profiles = Profile.objects.filter(subdepartment=subdepartment)
             if range == "month":
-                data = []
                 type_fields = {}
+                output = []
                 for profile in profiles:
                     calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
                                                            start_date__year=year)
+                    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    # for calendar in calendars:
+                    #     date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
+                    #     if calendar.type in type_fields:
+                    #         type_fields[calendar.type].append(date_fields)
+                    #     else:
+                    #         type_fields[calendar.type] = []
+                    #         type_fields[calendar.type].append(date_fields)
+                    # data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                    #              'types': type_fields})
+                    # type_fields={}
                     for calendar in calendars:
-                        date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
-                        if calendar.type in type_fields:
-                            type_fields[calendar.type].append(date_fields)
-                        else:
-                            type_fields[calendar.type] = []
-                            type_fields[calendar.type].append(date_fields)
-                    data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
-                                 'types': type_fields})
-                    type_fields={}
-                return HttpResponse(json.dumps(data))
+                        if calendar.type == 'undefined':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [1] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'paid_holiday':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [2] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'unpaid_holiday':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [3] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'sick_leave':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [4] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'hooky':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [5] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'event':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [6] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'study_holiday':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [7] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'planned_holiday':
+                            data[calendar.start_date.day-1:calendar.end_date.day-1] = [8] * ((calendar.end_date.day - calendar.start_date.day) + 1)
+                    output.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]), 'fields': data})
+            return HttpResponse(json.dumps(output))
             if range == "year":
                 data = []
                 type_fields = {}
