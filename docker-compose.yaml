@@ -37,9 +37,14 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
   pgbackups:
-    container_name: Backup
+    container_name: Backup_ldap
     image: prodrigestivill/postgres-backup-local
     restart: always
     volumes:
@@ -59,7 +64,6 @@ services:
       - BACKUP_KEEP_WEEKS=4
       - BACKUP_KEEP_MONTHS=6
       - HEALTHCHECK_PORT=81
-
 
 volumes:
   dbdata:

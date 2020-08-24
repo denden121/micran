@@ -40,12 +40,13 @@ class  App extends Component {
             .then(response => response.json())
             .then(result => localStorage.setItem('token', result.access))
             .catch(error => localStorage.setItem('token', ''));
+            // .catch(error => console.log(error));
         //проверка верны данные или нет
         if (localStorage.getItem('token') == '') {
             alert('incorrect')
         } else {
             //проверка прав
-            myHeaders = new Headers();
+            let myHeaders = new Headers();
             myHeaders.append("Authorization",localStorage.getItem('token'));
             requestOptions = {
                 method: 'GET',
@@ -142,4 +143,6 @@ class  App extends Component {
         )
     }
 }
+
+
 export default App;

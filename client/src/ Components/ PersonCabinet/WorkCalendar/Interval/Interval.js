@@ -3,12 +3,67 @@ import {ArrowsAltOutlined} from '@ant-design/icons'
 import {PartitionOutlined} from '@ant-design/icons'
 import {BlockOutlined} from '@ant-design/icons'
 import 'antd/dist/antd.css';
-import {Button} from 'antd';
+import {Select} from 'antd';
 import "./Interval.css"
-import Select from 'react-select';
+// import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 class Interval extends React.Component {
+    state ={
+        range:'',
+        departments:'',
+        subdepartments:'',
+    }
+    onClickInterval=(e)=>{
+        let a = e.target.id
+        if(a ==='year' || a ==='month'){
+            this.setState({range:a})
+        }
+    }
+    componentDidMount() {
+        this.loadDepartments()
+    }
+    loadDepartments=()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch("http://127.0.0.1:8000/departments/simple/", requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                let actions = Array.from(result).map((department)=>{
+                    console.log(department)
+                    return {value:`${department.pk}`,label:`${department.fields.code +' '+ department.fields.name}`}
+                })
+                this.setState({departments: actions})})
+            .catch(error => console.log('error', error))
+    }
+
+    onChangeSelectDepartments=(e)=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch("http://127.0.0.1:8000/departments/subdepartments/", requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                let subdepartments = Array.from(result).map((subdepartment)=>{
+                    console.log(subdepartment)
+                    return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
+                })
+                this.setState({subdepartments: subdepartments})})
+            .catch(error => console.log('error', error))
+    }
+
+
     render(){
         const animatedComponents = makeAnimated();
         return(
@@ -30,9 +85,9 @@ class Interval extends React.Component {
                                         <ArrowsAltOutlined style={{float:"left", padding:"2px",color:"#3A4F84"}}/>
                                         <label className="LabelL"><h6>Интервал</h6></label>   
                                     </div>
-                                    <div className="text-left col-md-8">
-                                        <Button type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</Button>
-                                        <Button type="primary" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</Button>
+                                    <div onClick={this.onClickInterval}  className="text-left col-md-8">
+                                        <button  id = {'month'} className="btn btn-primary btn-sm"  style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8"}}>Месяц</button>
+                                        <button  id = {'year'} className="btn btn-primary btn-sm" style={{backgroundColor:"#7F98D8", borderColor:"#7F98D8", marginLeft:"5px"}}>Год</button>
                                     </div>
                                 </div>
                                 <br/>
@@ -43,17 +98,22 @@ class Interval extends React.Component {
                                     </div>
                                     <div className="col-md-8">
                                         <div style={{marginBottom:"7px"}}>
-                                            <Select                                
+                                            <Select
+                                            onChange={this.onChangeSelectDepartments}
                                             components={animatedComponents}
-                                            isMulti                                
+                                            options={this.state.departments}
                                             placeholder="Выбрать"
+                                            style={{width:"100%"}}
+                                            className="text-left"
                                             /> 
                                         </div>
                                         <div>
                                             <Select                                
                                             components={animatedComponents}
-                                            isMulti                                
-                                            placeholder="Выбрать"                                        
+                                            options={this.state.subdepartmentssudo }
+                                            placeholder="Выбрать" 
+                                            style={{width:"100%"}}
+                                            className="text-left"                                       
                                             /> 
                                         </div>                                    
                                     </div>                                    
