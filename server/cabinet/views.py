@@ -654,9 +654,10 @@ def subdepartment_from_departments_view(request, department_id):
     if user:
         if request.method == "GET":
             subdepartments = Subdepartment.objects.filter(department=department_id)
+            data = []
             for subdepartment in subdepartments:
-                data = {'pk': subdepartment.pk, 'fields': {'code': subdepartment.subdepartment_code,
-                                                             'name': subdepartment.subdepartment_name}}
+                data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.subdepartment_code,
+                                                             'name': subdepartment.subdepartment_name}})
             print(data)
             return HttpResponse(json.dumps(data))
 
