@@ -657,6 +657,7 @@ def subdepartment_from_departments_view(request, department_id):
             for subdepartment in subdepartments:
                 data = {'pk': subdepartment.pk, 'fields': {'code': subdepartment.subdepartment_code,
                                                              'name': subdepartment.subdepartment_name}}
+            print(data)
             return HttpResponse(json.dumps(data))
 
 
