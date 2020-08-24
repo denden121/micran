@@ -55,6 +55,7 @@ class Interval extends React.Component {
         fetch(`http://127.0.0.1:8000/departments/${e}/subdepartments/`, requestOptions)
             .then(response =>  response.json())
             .then(result => {
+                console.log('sub',result)
                 let subdepartments = Array.from(result).map((subdepartment)=>{
                     console.log(subdepartment)
                     return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
@@ -63,6 +64,7 @@ class Interval extends React.Component {
             .catch(error => console.log('error', error))
     }
 
+У
 
     render(){
         const animatedComponents = makeAnimated();
