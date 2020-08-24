@@ -657,7 +657,7 @@ def subdepartment_from_departments_view(request, department_id):
             data = []
             for subdepartment in subdepartments:
                 data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.subdepartment_code,
-                                                             'name': subdepartment.subdepartment_name}})
+                                                                'name': subdepartment.subdepartment_name}})
             print(data)
             return HttpResponse(json.dumps(data))
 
@@ -704,15 +704,16 @@ def calendar_control_view(request):
     if user:
         if request.method == "GET":
             subdepartment = request.GET.get('subdepartment')
-            current_date = datetime.now()
-            time = request.GET.get('time')
+            current_date = request.GET.get('current_date')
+            month, year = current_date.split('-')
+            range = request.GET.get('range')
             profiles = Profile.objects.filter(subdepartment=subdepartment)
-            if time == "month":
+            if range == "month":
                 data = []
                 type_fields = {}
                 for profile in profiles:
-                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=current_date.month,
-                                                           start_date__year=current_date.year)
+                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
+                                                           start_date__year=year)
                     for calendar in calendars:
                         date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
                         if calendar.type in type_fields:
@@ -724,12 +725,12 @@ def calendar_control_view(request):
                                  'types': type_fields})
                     type_fields={}
                 return HttpResponse(json.dumps(data))
-            if time == "year":
+            if range == "year":
                 data = []
                 type_fields = {}
                 for profile in profiles:
                     calendars = CalendarMark.objects.filter(person=profile,
-                                                           start_date__year=current_date.year)
+                                                           start_date__year=year)
                     for calendar in calendars:
                         date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
                         if calendar.type in type_fields:
