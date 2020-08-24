@@ -649,12 +649,11 @@ def subdepartment_view(request):
 
 
 @csrf_exempt
-def subdepartment_from_departments_view(request):
+def subdepartment_from_departments_view(request, department_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            department = request.GET.get(['department'])
-            subdepartments = Subdepartment.objects.filter(department=department)
+            subdepartments = Subdepartment.objects.filter(department=department_id)
             data = serializers.serialize('json', subdepartments)
             return HttpResponse(data)
 

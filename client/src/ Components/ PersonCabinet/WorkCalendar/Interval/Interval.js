@@ -52,7 +52,7 @@ class Interval extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        fetch("http://127.0.0.1:8000/departments/subdepartments/", requestOptions)
+        fetch(`http://127.0.0.1:8000/departments/${e}/subdepartments/`, requestOptions)
             .then(response =>  response.json())
             .then(result => {
                 let subdepartments = Array.from(result).map((subdepartment)=>{
