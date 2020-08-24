@@ -10,7 +10,7 @@ def connect(username, password):
     filter = "uid=" + username
     search_atr = ["sn", "cn", "mail", "employeeNumber", "entryUUID"]
     con.simple_bind(login, password)
-    con_result = con.search(basedn, con.SCOPE_SUBTREE, filter, search_atr)
+    con_result = con.search(basedn, ldap.SCOPE_SUBTREE, filter, search_atr)
     print(con_result)
     con.unbind_s()
 
