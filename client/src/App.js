@@ -14,6 +14,12 @@ class  App extends Component {
     }
     //обработка кнопки для авторизации
     authHandler = async () => {
+         if (document.getElementById("input-login").value ==='' || document.getElementById("input-password").value ==='') {
+             document.querySelector(".error-label-1").style.display = 'none'
+             document.querySelector(".error-label-2").style.display = 'block'
+             return
+         }
+        document.querySelector(".error-label-2").style.display = 'none'
         //написать валидацию и изменить окно неправильных данных
         //получение побличного ip для логирования
         const publicIp = require('public-ip');
@@ -43,31 +49,32 @@ class  App extends Component {
             // .catch(error => console.log(error));
         //проверка верны данные или нет
         if (localStorage.getItem('token') == '') {
-            alert('incorrect')
-        } else {
-            //проверка прав
-            let myHeaders = new Headers();
-            myHeaders.append("Authorization",localStorage.getItem('token'));
-            requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow'
-            };
-            let url = "http://127.0.0.1:8000/check_admin/"
-            await fetch(url, requestOptions)
-                .then(response => response.text())
-                .then(result => localStorage.setItem('admin',result))
-                .catch(error => console.log('error'));
-            //проверка зарегистрирован пользователь или нет
-            url = "http://127.0.0.1:8000/check/"
-            await fetch(url, requestOptions)
-                .then(response => response.text())
-                .then(result => localStorage.setItem('checkReg',result))
-                .catch(error => console.log('error'));
-            const time = new Date()
-            localStorage.setItem('date',`${time.getMonth()+1} ${time.getFullYear()}`)
-            rend()
+            document.querySelector(".error-label-1").style.display = 'block'
+            return
         }
+        //проверка прав
+        myHeaders = new Headers();
+        myHeaders.append("Authorization",localStorage.getItem('token'));
+        requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        let url = "http://127.0.0.1:8000/check_admin/"
+        await fetch(url, requestOptions)
+            .then(response => response.text())
+            .then(result => localStorage.setItem('admin',result))
+            .catch(error => console.log('error'));
+        //проверка зарегистрирован пользователь или нет
+        url = "http://127.0.0.1:8000/check/"
+        await fetch(url, requestOptions)
+            .then(response => response.text())
+            .then(result => localStorage.setItem('checkReg',result))
+            .catch(error => console.log('error'));
+        const time = new Date()
+        localStorage.setItem('date',`${time.getMonth()+1} ${time.getFullYear()}`)
+        rend()
+
     }
     //функция отправки регистрации
     sendReg = async ()=> {
