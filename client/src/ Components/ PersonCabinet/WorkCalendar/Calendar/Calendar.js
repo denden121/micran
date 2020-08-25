@@ -15,6 +15,17 @@ const dates={
     11:30,
     12:31
 }
+const colors = {
+    0:'',
+    1:'neopred',
+    2:'opl_otpusk',
+    3:'otpusk_bezs',
+    4:'bol_list',
+    5:'progul',
+    6:'plansob',
+    7:'plan_otpusk',
+    8:'',
+}
 const Persons =()=>{
 
 }
