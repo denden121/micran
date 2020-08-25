@@ -23,17 +23,31 @@ const colors = {
     4:'bol_list',
     5:'progul',
     6:'plansob',
-    7:'plan_otpusk',
-    8:'',
+    7:'ucheb_otpusk',
+    8:'plan_otpusk',
 }
-const Persons =()=>{
+const Persons =(props)=>{
+    console.log('props',props)
+    let people = props.date;
+    console.log('people',people)
+
+    return people.map((man)=>{
+        console.log('man',man)
+        return (<tr>
+            <td>{man.name}</td>
+            {man.fields.map((field)=>{
+                console.log(field)
+                return <td scope="col" className={colors[field]}></td>
+            })}
+        </tr>);
+    })
 
 }
-const Days = ()=>{
+const Days = (props)=>{
     let date = localStorage.getItem('date').split(' ')
     console.log('date',date)
     let a = []
-    for (let i = 0;i<dates[date[0]];i++){
+    for (let i = 0;i<props.range-1;i++){
         a.push(i+1)
     }
 
@@ -44,33 +58,32 @@ const Days = ()=>{
 
 const Calendar =(props)=>{
     console.log(props)
+
     let date = localStorage.getItem('date').split(' ')
+    let range = ''
+    if (props.date.range ==='year'){
+        range = 54
+    }
+    else if(props.date.range ==='month'){
+        range = dates[date[0]]+1
+    }
     return(
         <div>
             <table className="table table-bordered table-sm">
                 <tbody>
                     <tr>
-                        <td colspan="32" scope="colgroup">2020 год</td>
+                        <td colspan={range} scope="colgroup">2020 год</td>
                     </tr>
                     <tr>
                         <td scope="col">ФИО</td>
 
                         {/*<td scope="col" className="Day"></td>*/}
-                        <Days/>
+                        <Days range ={range}/>
                     </tr>
                     <tr>
-                        <td colspan={dates[date[0]]+1} scope="colgroup" className="table-secondary">Отдел</td>
+                        <td colspan={range} scope="colgroup" className="table-secondary">Отдел</td>
                     </tr>
-                    <tr>
-                        <td>Осеева Анастасия Михайловна</td>
-                        <td scope="col" className="neopred"></td>
-                        <td scope="col" className="opl_otpusk"></td>
-                        <td scope="col" className="otpusk_bezs"></td>
-                        <td scope="col" className="bol_list"></td>
-                        <td scope="col" className="progul"></td>
-                        <td scope="col" className="plansob"></td>
-                        <td scope="col" className="plan_otpusk"></td>
-                    </tr>
+                    <Persons date = {props.date.persons}/>
                 </tbody>
             </table>
         </div>
