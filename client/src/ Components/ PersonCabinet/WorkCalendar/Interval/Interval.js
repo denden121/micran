@@ -8,7 +8,6 @@ import "./Interval.css"
 // import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import Calendar from "../Calendar/Calendar";
-
 class Interval extends React.Component {
     state ={
         range:'',
