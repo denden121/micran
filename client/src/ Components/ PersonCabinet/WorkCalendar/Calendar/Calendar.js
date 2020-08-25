@@ -25,6 +25,7 @@ const Calendar =(props)=>{
                         <td scope="col" className="bol_list"></td>
                         <td scope="col" className="progul"></td>
                         <td scope="col" className="plansob"></td>
+                        <td scope="col" className="ucheb_otpusk"></td>
                         <td scope="col" className="plan_otpusk"></td>
                     </tr>
                 </tbody>
