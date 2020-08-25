@@ -7,13 +7,14 @@ import {Select} from 'antd';
 import "./Interval.css"
 // import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import Calendar from "../Calendar/Calendar"
-
+import Calendar from "../Calendar/Calendar";
 class Interval extends React.Component {
     state ={
         range:'',
         departments:'',
         subdepartments:'',
+        persons:'',
+        show:false
     }
     onClickInterval=(e)=>{
         let a = e.target.id
@@ -53,9 +54,10 @@ class Interval extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        fetch("http://127.0.0.1:8000/departments/subdepartments/", requestOptions)
+        fetch(`http://127.0.0.1:8000/departments/${e}/subdepartments/`, requestOptions)
             .then(response =>  response.json())
             .then(result => {
+                console.log('sub',result)
                 let subdepartments = Array.from(result).map((subdepartment)=>{
                     console.log(subdepartment)
                     return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
@@ -63,8 +65,27 @@ class Interval extends React.Component {
                 this.setState({subdepartments: subdepartments})})
             .catch(error => console.log('error', error))
     }
-
-
+    onChangeSelectSubdepartment=(e)=>{
+        let token = localStorage.getItem('token')
+        let date = localStorage.getItem('date').split(' ')
+        console.log('date',date)
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const url = `http://127.0.0.1:8000/cabinet/calendar/?subdepartment=${e}&current_date=${date.join('-')}&range=${this.state.range}`
+        fetch(url, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                console.log('result',result)
+                this.setState({persons:result,
+                                    show:true})
+            })
+            .catch(error => console.log('error', error))
+    }
     render(){
         const animatedComponents = makeAnimated();
         return(
@@ -109,9 +130,10 @@ class Interval extends React.Component {
                                             /> 
                                         </div>
                                         <div>
-                                            <Select                                
+                                            <Select
+                                            onChange={this.onChangeSelectSubdepartment}
                                             components={animatedComponents}
-                                            options={this.state.subdepartmentssudo }
+                                            options={this.state.subdepartments }
                                             placeholder="Выбрать" 
                                             style={{width:"100%"}}
                                             className="text-left"                                       
@@ -199,14 +221,18 @@ class Interval extends React.Component {
                                         <div className="symbol8 rounded">12</div>
                                         <div className="lab">
                                             <label className="LabelL" >- Планируемый ежегодный отпуск(не влияет на норму часов)</label>
-                                        </div>                                                                     
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="col-md-12">
-                        <Calendar/>
+                        {this.state.show ?
+                            <Calendar date={this.state}/> :
+                            ''
+                        }
                     </div>
                 </div>
             </div>
