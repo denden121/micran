@@ -80,6 +80,13 @@ def check_view(request):
 
 
 @csrf_exempt
+def check_group_name(request):
+    name = request.POST.get('name')
+    groups = Group.objects.filter(name=name)
+    return HttpResponse(bool(groups))
+
+
+@csrf_exempt
 def check_admin_view(request):
     user = get_user_jwt(request)
     return HttpResponse(get_access(100, user))
@@ -758,9 +765,9 @@ def calendar_control_view(request):
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                     for calendar in calendars:
                         start_week = date(calendar.start_date.year, calendar.start_date.month,
-                                             calendar.start_date.day).isocalendar()[1]
+                                          calendar.start_date.day).isocalendar()[1]
                         end_week = date(calendar.end_date.year, calendar.end_date.month,
-                                             calendar.end_date.day).isocalendar()[1]
+                                        calendar.end_date.day).isocalendar()[1]
                         if calendar.type == 'undefined':
                             data[start_week - 1:end_week] = [1] * (
                                     (end_week - start_week) + 1)
