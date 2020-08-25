@@ -755,7 +755,7 @@ def calendar_control_view(request):
                     calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
                                                             start_date__year=year)
                     data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                     for calendar in calendars:
                         start_week = date(calendar.start_date.year, calendar.start_date.month,
                                              calendar.start_date.day).isocalendar()[1]
