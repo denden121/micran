@@ -186,6 +186,16 @@ class Interval extends React.Component {
                                     <div className="col-md-4">
                                     </div>
                                     <div className="col-md-8" style={{marginTop:"-5px"}}>
+                                        <div className="symbol7 rounded">12</div>
+                                        <div className="lab">
+                                            <label className="LabelL" >- Учебный отпуск</label>
+                                        </div>                                                                     
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-4">
+                                    </div>
+                                    <div className="col-md-8" style={{marginTop:"-5px"}}>
                                         <div className="symbol8 rounded">12</div>
                                         <div className="lab">
                                             <label className="LabelL" >- Планируемый ежегодный отпуск(не влияет на норму часов)</label>
