@@ -159,7 +159,7 @@ class NewProject extends React.Component{
                         <h3 className="text-left">Новый проект</h3>
                         <div
                             className="row no-gutters border rounded overflow-hidden flex-lg-row mb-4 shadow-sm h-lg-250 position-relative">
-                            <div className="c">
+                            <div className="col p-4 d-flex flex-column position-static">
                                 <div className="block1">
                                     <div className="input-group mb-3 input-group-lg">
                                         <label className="napr col-sm-4 text-right"
