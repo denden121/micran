@@ -19,8 +19,10 @@ class Interval extends React.Component {
     onClickInterval=(e)=>{
         let a = e.target.id
         if(a ==='year' || a ==='month'){
-            this.setState({range:a})
+            this.setState({range:a,
+                                show:false})
         }
+
     }
     componentDidMount() {
         this.loadDepartments()

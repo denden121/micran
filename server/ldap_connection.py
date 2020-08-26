@@ -10,9 +10,12 @@ def connect(username, password):
     filter = "uid=" + username
     search_atr = ["sn", "cn", "mail", "employeeNumber", "entryUUID"]
     con.simple_bind(login, password)
-    con_result = con.search(basedn, ldap.SCOPE_ONELEVEL, filter, search_atr)
-    con_result = con.search(basedn, ldap.SCOPE_BASE, filter, search_atr)
-    print(con_result)
+    results_2 = con.search(basedn, ldap.SCOPE_ONELEVEL, filter, search_atr)
+    results_1 = con.search(basedn, ldap.SCOPE_BASE, filter, search_atr)
+    for result in results_1:
+        print('DN'.rjust(15) + ' = ' + result[0].decode('utf-8'))
+    for result in results_2:
+        print('DN'.rjust(15) + ' = ' + result[0].decode('utf-8'))
     con.unbind_s()
 
 
