@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../Navigation/Navigation";
 // import Header from "../Header/Header"
+import LogOut from "../Header/Header"
 import SendReport from "../SendReport/SendReport"
 // import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
@@ -21,7 +22,8 @@ import Employees from "../Employees/Employees"
 import Interval from "../WorkCalendar/Interval/Interval"
 import SystemTime from "../SystemTime/SystemTime"
 import Structure from "../Tree/Structure"
-import { Layout, Menu, PageHeader,Button, DatePicker} from 'antd';
+import { DatePicker } from 'antd';
+import { Layout, Menu, PageHeader,Button} from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import {
     DesktopOutlined,
@@ -31,6 +33,7 @@ import {
     
   } from '@ant-design/icons';
 import Calendar from "../Navigation/Calendar/Calendar"
+import picture from "../MainPage/micran1.png"
 
 
   const { Header, Content, Footer, Sider } = Layout;
@@ -40,6 +43,7 @@ class Main extends Component{
     state = {
         collapsed: false,
       };
+     
     
       onCollapse = collapsed => {
         console.log(collapsed);
@@ -53,6 +57,9 @@ class Main extends Component{
     
 
     render() {
+      function onChange(date, dateString) {
+        console.log(date, dateString);
+      }
       
         if(!localStorage.getItem('date')){
             let date = new Date()
@@ -63,39 +70,80 @@ class Main extends Component{
           console.log(month, dateString);
         }
         return (
+          
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
-                <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-                    <div className="logotip" 
-                    style={{
-                        width:"120px",
-                        height:"31px",
-                        float:"Left"
-                    }}>Микран</div>
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+              
+                <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{backgroundColor:"white"}}>
+                <div style={{backgroundColor:"white",color:"#fff"}}>
+                <img src={picture} alt="" className="img-fluid"></img>
+                </div>
+                
+                <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
+                <DatePicker onChange={onChange} picker="month"/>
                     <Menu.Item key="1" icon={<PieChartOutlined />}>
-                      
+                      <a  href="http://localhost:3000/cabinet/">
+                        <span data-feather="home"></span>
+                          Отправка отчетов
+                        <span className="sr-only"></span>
+                      </a>
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<DesktopOutlined />}>
-                    Option 2
+                    <Menu.Item key="2">
+                        <a  href='http://localhost:3000/cabinet/admin/view_groups'>
+                          <span data-feather="shopping-cart"></span>
+                            Просмотр групп
+                        </a>
                     </Menu.Item>
-                      <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-                      {/* <Calendar/> */}
-                      </SubMenu>
-                    <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-                    <Menu.Item key="6">Team 1</Menu.Item>
-                    <Menu.Item key="8">Team 2</Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="9" icon={<FileOutlined />} />
+                    <Menu.Item key="3">
+                      <a  href='http://localhost:3000/cabinet/admin/logs'>
+                        <span data-feather="shopping-cart"></span>
+                          Просмотр логирования
+                      </a>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                      <a href="http://localhost:3000/cabinet/admin/play_roll">
+                        <span data-feather="layers"></span>
+                          Расчетный лист
+                      </a>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <a  href="http://localhost:3000/cabinet/admin/register">
+                        <span data-feather="layers"></span>
+                          Реестр проектов
+                      </a>
+                    </Menu.Item>
+                    <Menu.Item key="6">
+                      <a  href="http://localhost:3000/cabinet/admin/employees">
+                        <span data-feather="layers"></span>
+                          Сотрудники    
+                      </a>
+                    </Menu.Item>
+                    <Menu.Item key="7">
+                      <a  href="http://localhost:3000/cabinet/admin/calendar">
+                        <span data-feather="layers"></span>
+                          Трудовой календарь
+                      </a>
+                    </Menu.Item>
+                    <Menu.Item key="8">
+                      <a  href="http://localhost:3000/cabinet/admin/system_time">
+                        <span data-feather="layers"></span>
+                          Система учета времени
+                      </a>  
+                    </Menu.Item>
+                    <Menu.Item key="9">
+                      <a  href="http://localhost:3000/cabinet/admin/structure">
+                        <span data-feather="layers"></span>
+                          Структура подразделений
+                      </a>
+                    </Menu.Item>
                 </Menu>
+                
                 </Sider>
+                
         <Layout className="site-layout">
-          <Header>
-            <div className="text-right">
-              <Button size="small">Выйти</Button>
-            </div>
-          </Header>
+        
           <Content >
             <div className="Data" style={{backgroundColor:"white",paddingTop:"20px"}}>
+            <LogOut clickLogOut={this.logOut}/>
                     <Switch>
                         <Route path='/cabinet/' exact component = {SendReport}/>
                          <Route path='/cabinet/person' exact  component = {PersonData}/>

@@ -6,6 +6,7 @@ import picture from './micran1.png'
 const Auth =(props)=>{
     return(
         <div className="container-fluid">
+            <body className="authhh">
             <div className="form-signin">
                 <img src={picture} alt="" className="img-fluid"></img>
                 <div className="form-froup">
@@ -26,6 +27,8 @@ const Auth =(props)=>{
                 {/*</div>*/}
                 <button onClick={props.authHandler} type="submit" className="btn btn-lg btn-primary">Войти</button>
             </div>
+            </body>
+            
         </div>
     )
 }
