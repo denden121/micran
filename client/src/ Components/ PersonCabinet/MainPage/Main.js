@@ -25,13 +25,18 @@ import SystemTime from "../SystemTime/SystemTime"
 import Structure from "../Tree/Structure"
 import { DatePicker, Space } from 'antd';
 import { Layout, Menu, PageHeader,Button} from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { UpSquareOutlined,TeamOutlined,UsergroupAddOutlined } from '@ant-design/icons';
 import {
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
-    TeamOutlined,
-    
+    LoginOutlined,
+    FormOutlined,
+    FolderOpenOutlined,
+    CalendarOutlined,
+    FieldTimeOutlined,
+    ApartmentOutlined,
+    DollarOutlined
   } from '@ant-design/icons';
 import Calendar from "../Navigation/Calendar/Calendar"
 import picture from "../MainPage/micran1.png"
@@ -44,8 +49,6 @@ class Main extends Component{
     state = {
         collapsed: false,
       };
-     
-    
       onCollapse = collapsed => {
         console.log(collapsed);
         this.setState({ collapsed });
@@ -66,6 +69,10 @@ class Main extends Component{
             rend()
         }
     }
+    onClickCalendar=(event)=>{
+      console.log(event)
+      // debugger;
+    }
 
     render() {
       
@@ -75,7 +82,7 @@ class Main extends Component{
         }
 
         return (
-          
+            
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
               
                 <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{backgroundColor:"white"}}>
@@ -83,73 +90,86 @@ class Main extends Component{
                 <img src={picture} alt="" className="img-fluid"></img>
                 </div>
                 
-                <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
+                <Menu onClick={this.onClickCalendar} theme="light" mode="inline">
                     <Space direction="vertical">
-                        <DatePicker defaultValue={moment(localStorage.getItem('date').split(' ').reverse().join('-'), 'YYYY-MM')} onChange={this.onChangeDate} picker="month" />
-                    </Space>,
-                    <Menu.Item key="1" icon={<PieChartOutlined />}>
+                        <DatePicker 
+                        size="middle"
+                        defaultValue={moment(localStorage.getItem('date').split(' ').reverse().join('-'), 'YYYY-MM')} onChange={this.onChangeDate} picker="month" />
+                    </Space>
+                    <Menu.Item key={localStorage.getItem('key')} icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
                       <a  href="http://localhost:3000/cabinet/">
                         <span data-feather="home"></span>
                           Отправка отчетов
                         <span className="sr-only"></span>
                       </a>
                     </Menu.Item>
-                    <Menu.Item key="2">
+                    <Menu.Item key="2" icon={<DollarOutlined style={{ fontSize: '16px'}}/>}>
+                      <a  href="http://localhost:3000/cabinet/salary">
+                        <span data-feather="bar-chart-2"></span>
+                          Зарплата
+                      </a>
+                    </Menu.Item>
+                 </Menu> 
+                  
+                    {localStorage.getItem('admin') == 'True'
+                    ?<Menu> <Menu.Item key="2" icon={<UsergroupAddOutlined style={{ fontSize: '16px'}}/>}>
                         <a  href='http://localhost:3000/cabinet/admin/view_groups'>
                           <span data-feather="shopping-cart"></span>
                             Просмотр групп
                         </a>
                     </Menu.Item>
-                    <Menu.Item key="3">
+                    <Menu.Item key="3" icon={<LoginOutlined style={{ fontSize: '16px'}}/>}>
                       <a  href='http://localhost:3000/cabinet/admin/logs'>
                         <span data-feather="shopping-cart"></span>
                           Просмотр логирования
                       </a>
                     </Menu.Item>
-                    <Menu.Item key="4">
+                    <Menu.Item key="4" icon={<FormOutlined style={{ fontSize: '16px'}}/>}>
                       <a href="http://localhost:3000/cabinet/admin/play_roll">
                         <span data-feather="layers"></span>
                           Расчетный лист
                       </a>
                     </Menu.Item>
-                    <Menu.Item key="5">
+                    <Menu.Item key="5" icon={<FolderOpenOutlined style={{ fontSize: '16px'}}/>}>
                       <a  href="http://localhost:3000/cabinet/admin/register">
                         <span data-feather="layers"></span>
                           Реестр проектов
                       </a>
                     </Menu.Item>
-                    <Menu.Item key="6">
+                    <Menu.Item key="6" icon={<TeamOutlined style={{ fontSize: '16px'}}/>}>
                       <a  href="http://localhost:3000/cabinet/admin/employees">
                         <span data-feather="layers"></span>
                           Сотрудники    
                       </a>
                     </Menu.Item>
-                    <Menu.Item key="7">
+                    <Menu.Item key="7" icon={<CalendarOutlined style={{ fontSize: '16px'}}/>}>
                       <a  href="http://localhost:3000/cabinet/admin/calendar">
                         <span data-feather="layers"></span>
                           Трудовой календарь
                       </a>
                     </Menu.Item>
-                    <Menu.Item key="8">
+                    <Menu.Item key="8" icon={<FieldTimeOutlined style={{ fontSize: '16px'}}/>}>
                       <a  href="http://localhost:3000/cabinet/admin/system_time">
                         <span data-feather="layers"></span>
                           Система учета времени
                       </a>  
                     </Menu.Item>
-                    <Menu.Item key="9">
+                    <Menu.Item key="9" icon={<ApartmentOutlined style={{ fontSize: '16px'}}/>}>
                       <a  href="http://localhost:3000/cabinet/admin/structure">
                         <span data-feather="layers"></span>
                           Структура подразделений
                       </a>
                     </Menu.Item>
-                </Menu>
+                    </Menu>
+                  : ''}
+                
                 
                 </Sider>
                 
         <Layout className="site-layout">
         
           <Content >
-            <div className="Data" style={{backgroundColor:"white",paddingTop:"20px"}}>
+            <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"900px"}}>
             <LogOut clickLogOut={this.logOut}/>
                     <Switch>
                         <Route path='/cabinet/' exact component = {SendReport}/>
@@ -169,7 +189,6 @@ class Main extends Component{
                      </Switch>
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
         </Layout>
       </Layout>
             // <div className="container">

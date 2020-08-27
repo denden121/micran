@@ -121,8 +121,8 @@ class AddGroups extends React.Component {
                                     </label>
                                     <Input id="nameGroup" placeholder="Введите название группы" className="col-md-6"/>
                                 </div>
-                                <div className={'error-label'}>Введите название группы</div>
-                                <div>Группа с таким названием уже существует</div>
+                                {/* <div className={'error-label'}>Введите название группы</div> */}
+                                {/* <div>Группа с таким названием уже существует</div> */}
 
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Действия</label>
@@ -140,7 +140,7 @@ class AddGroups extends React.Component {
                                         {children}
                                     </Select>
                                 </div>
-                                <div>Введите название группы</div>
+                                {/* <div>Введите название группы</div> */}
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Участники</label>
                                     <Select
@@ -155,7 +155,7 @@ class AddGroups extends React.Component {
                                         className="text-left"
                                     />
                                 </div>
-                                <div>Введите название группы</div>
+                                {/* <div>Введите название группы</div> */}
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Описание</label>
                                     <TextArea
