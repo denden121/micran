@@ -167,6 +167,7 @@ CORS_ORIGIN_WHITELIST = [
 
 CSRF_TRUSTED_ORIGINS = [
     'localhost:3000',
+    '127.0.0.1:3000'
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -181,6 +182,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
     'Access-Control-Allow-Headers',
     'Access-Control-Allow-Credentials',
+    'Access-Control-Allow-Origin',
 ]
 
 
