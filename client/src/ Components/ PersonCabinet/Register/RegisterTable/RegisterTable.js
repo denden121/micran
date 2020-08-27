@@ -27,10 +27,10 @@ const RegisterTable = (props) =>{
     return(
         <div className="container-fluid">
             <div className="row">
-                <div className="col-sm-12">
-                    <div className="responsive-table">
+                <div className="col-md-12 col-lg-12">
+                    <div className="responsive-table" style={{overflow:"auto", maxWidth:"100%"}}>
                         <div className="title text-left"><h5>Список проектов</h5></div>
-                        <table className="reestr data-table-column-filter table table-bordered table-striped" style={{marginBottom:"0"}}>
+                        <table className="table table-bordered table-sm" style={{marginBottom:"0"}}>
                             <thead>
                                 <tr>
                                     <th style={{width:"80px"}}>Направление</th>
@@ -47,7 +47,7 @@ const RegisterTable = (props) =>{
                                     <th style={{width:"60px"}}>Приемка ВП</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="reestr">
                                 <ListProjects projects = {props.projects}/>
                             </tbody>
                         </table>

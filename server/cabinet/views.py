@@ -1,5 +1,6 @@
 import simplejson as json
 from datetime import datetime
+from datetime import date
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.core import serializers
@@ -76,6 +77,13 @@ def check_view(request):
     print(hasattr(user, 'profile'))
     print(user)
     return HttpResponse(hasattr(user, 'profile'))
+
+
+@csrf_exempt
+def check_group_name(request):
+    name = request.POST.get('name')
+    groups = Group.objects.filter(name=name)
+    return HttpResponse(bool(groups))
 
 
 @csrf_exempt
@@ -489,7 +497,8 @@ def workers_department(request, department_id):
             workers = Profile.objects.filter(department=department_id)
             data = []
             for worker in workers:
-                data.append({'pk': worker.pk, 'name': " ".join([worker.last_name, worker.first_name, worker.middle_name])})
+                data.append(
+                    {'pk': worker.pk, 'name': " ".join([worker.last_name, worker.first_name, worker.middle_name])})
             return HttpResponse(json.dumps(data))
 
 
@@ -502,7 +511,7 @@ def departament_simple_view(request):
             data = []
             for department in departments:
                 data.append({'pk': department.pk, 'fields': {'code': department.department_code,
-                             'name': department.department_name}})
+                                                             'name': department.department_name}})
             return HttpResponse(json.dumps(data))
 
 
@@ -539,7 +548,8 @@ def workers_info_simple(request):
             persons = Profile.objects.all()
             data = []
             for person in persons:
-                data.append({'pk': person.pk, 'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name})
+                data.append({'pk': person.pk,
+                             'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name})
             return HttpResponse(json.dumps(data))
 
 
@@ -650,14 +660,17 @@ def subdepartment_view(request):
 
 
 @csrf_exempt
-def subdepartment_from_departments_view(request):
+def subdepartment_from_departments_view(request, department_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            department = request.GET.get(['department'])
-            subdepartments = Subdepartment.objects.filter(department=department)
-            data = serializers.serialize('json', subdepartments)
-            return HttpResponse(data)
+            subdepartments = Subdepartment.objects.filter(department=department_id)
+            data = []
+            for subdepartment in subdepartments:
+                data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.subdepartment_code,
+                                                                'name': subdepartment.subdepartment_name}})
+            print(data)
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
@@ -689,10 +702,12 @@ def time_control_view_detail(request):
         if request.method == "GET":
             fields = []
             for i in range(5):
-                if i%2 == 0:
-                    fields.append({'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран вход'})
+                if i % 2 == 0:
+                    fields.append(
+                        {'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран вход'})
                 else:
-                    fields.append({'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран выход'})
+                    fields.append(
+                        {'num': i, 'date': '2020-01-01', 'time': f'1{i}:20', 'commentary': 'Вершинина: Микран выход'})
             return HttpResponse(json.dumps(fields))
 
 
@@ -702,29 +717,85 @@ def calendar_control_view(request):
     if user:
         if request.method == "GET":
             subdepartment = request.GET.get('subdepartment')
-            current_date = datetime.now()
-            time = request.GET.get('time')
+            current_date = request.GET.get('current_date')
+            month, year = current_date.split('-')
+            interval = request.GET.get('range')
             profiles = Profile.objects.filter(subdepartment=subdepartment)
-            if time == "month":
-                data = []
-                type_fields = {}
+            if interval == "month":
+                output = []
                 for profile in profiles:
-                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=current_date.month,
-                                                           start_date__year=current_date.year)
+                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
+                                                            start_date__year=year)
+                    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                     for calendar in calendars:
-                        date_fields = {'pk': calendar.pk, 'start_date': str(calendar.start_date), 'end_date': str(calendar.end_date)}
-                        if calendar.type in type_fields:
-                            type_fields[calendar.type].append(date_fields)
-                        else:
-                            type_fields[calendar.type] = []
-                            type_fields[calendar.type].append(date_fields)
-                    data.append({'pk': profile.pk, 'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
-                                 'types': type_fields})
-                    type_fields={}
-                return HttpResponse(json.dumps(data))
-
-
-
+                        if calendar.type == 'undefined':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [1] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'paid_holiday':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [2] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'unpaid_holiday':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [3] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'sick_leave':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [4] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'hooky':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [5] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'event':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [6] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'study_holiday':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [7] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                        if calendar.type == 'planned_holiday':
+                            data[calendar.start_date.day - 1:calendar.end_date.day] = [8] * (
+                                    (calendar.end_date.day - calendar.start_date.day) + 1)
+                    output.append({'pk': profile.pk,
+                                   'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                                   'fields': data})
+                return HttpResponse(json.dumps(output))
+            if interval == "year":
+                output = []
+                for profile in profiles:
+                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
+                                                            start_date__year=year)
+                    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    for calendar in calendars:
+                        start_week = date(calendar.start_date.year, calendar.start_date.month,
+                                          calendar.start_date.day).isocalendar()[1]
+                        end_week = date(calendar.end_date.year, calendar.end_date.month,
+                                        calendar.end_date.day).isocalendar()[1]
+                        if calendar.type == 'undefined':
+                            data[start_week - 1:end_week] = [1] * (
+                                    (end_week - start_week) + 1)
+                        if calendar.type == 'paid_holiday':
+                            data[start_week - 1:end_week] = [2] * (
+                                    (end_week - start_week) + 1)
+                        if calendar.type == 'unpaid_holiday':
+                            data[start_week - 1:end_week] = [3] * (
+                                    (end_week - start_week) + 1)
+                        if calendar.type == 'sick_leave':
+                            data[start_week - 1:end_week] = [4] * (
+                                    (end_week - start_week) + 1)
+                        if calendar.type == 'hooky':
+                            data[start_week - 1:end_week] = [5] * (
+                                    (end_week - start_week) + 1)
+                        if calendar.type == 'event':
+                            data[start_week - 1:end_week] = [6] * (
+                                    (end_week - start_week) + 1)
+                        if calendar.type == 'study_holiday':
+                            data[start_week - 1:end_week] = [7] * (
+                                    (end_week - start_week) + 1)
+                        if calendar.type == 'planned_holiday':
+                            data[start_week - 1:end_week] = [8] * (
+                                    (end_week - start_week) + 1)
+                    output.append({'pk': profile.pk,
+                                   'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
+                                   'fields': data})
+                return HttpResponse(json.dumps(output))
 
 
 @csrf_exempt
