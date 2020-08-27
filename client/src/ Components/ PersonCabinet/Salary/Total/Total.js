@@ -12,7 +12,7 @@ const Total = (props) =>{
                         Начислено
                     </div>
                     <div className="card-body text-left">
-                        {props.salary.award + props.salary.plan_salary}
+                        {((props.salary.salary_hand * 100) / 87).toFixed(2) }
                     </div>
                 </div>
                 <div className="prof card col-md-4">
@@ -20,7 +20,7 @@ const Total = (props) =>{
                          На руки
                     </div>
                     <div className="card-body text-left">
-                        {props.salary.salary_hand * 0.87}
+                        {props.salary.salary_hand}
                     </div>
                 </div>
                  <div className="prof card col-md-4">
@@ -28,7 +28,7 @@ const Total = (props) =>{
                         Налог ДФЛ(13%)
                     </div>
                 <div className="card-body text-left">
-                        {(props.salary.award + props.salary.salary_hand)*0.13}
+                        {(((props.salary.salary_hand * 100) / 87)*0.13).toFixed(2) }
                  </div>
                 </div>
             </div>

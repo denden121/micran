@@ -13,7 +13,7 @@ class Salary extends React.Component {
     componentDidMount() {
         this.getSalary()
     }
-    getSalary=async ()=>{
+    getSalary=()=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -25,9 +25,12 @@ class Salary extends React.Component {
         }
         console.log('year',date[1])
         const url = `http://127.0.0.1:8000/salary/individual/?month=${date[0]}&year=${date[1]}`
-        await fetch(url, requestOptions)
+        fetch(url, requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({salary: result}))
+            .then(result =>{
+                    console.log(result)
+                    this.setState({salary: result})
+                })
             .catch(error => console.log('error', error))
         console.log('state',this.state.salary)
     }

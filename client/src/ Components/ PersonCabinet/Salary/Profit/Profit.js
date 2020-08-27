@@ -19,7 +19,7 @@ const Profit = (props) =>{
             </tr>
             <tr>
                 <th scope="row" className="text-left">Начислено</th>
-                <td>{props.salary.salary_hand + props.salary.plan_salary}</td>
+                <td>{((props.salary.salary_hand * 100) / 87).toFixed(2) }</td>
             </tr>
             </tbody>
         )
