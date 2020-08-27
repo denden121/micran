@@ -78,7 +78,7 @@ class Main extends Component{
 
         if(!localStorage.getItem('date')){
             let date = new Date()
-            localStorage.setItem('date',`${date.getMonth()+1} ${date.getFullYear()} `)
+            localStorage.setItem('date',`${date.getMonth()>9?date.getMonth()>9+1:'0'+date.getMonth()>9} ${date.getFullYear()} `)
         }
         let a = localStorage.getItem('admin') == 'True';
 
