@@ -29,3 +29,16 @@
 .ucheb_otpusk{
     background-color: #B190F0;
 }
+
+.workcalendar{
+    display:block;
+    max-height:800px;
+    overflow-y:auto;
+}
+
+.workcalendar{
+    display:table;
+    /* width:200%; */
+    max-width: 1960px;
+    table-layout:fixed;
+}
