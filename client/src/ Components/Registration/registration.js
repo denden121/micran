@@ -5,6 +5,7 @@ import './registration.css'
 const Registration =(props)=>{
     return(
         <div className="container-fluid">
+            <body className="authhh" style={{paddingTop:"60px",paddingBottom:"60px"}}>
             <form className="form-horizontal">
                 <h5>Регистрация</h5>
                 <div className="from-group row">
@@ -32,6 +33,8 @@ const Registration =(props)=>{
                 <button onClick={props.sendFunc} type="submit" class="btn btn-primary">Зарегистрироваться</button>
 
             </form>
+            </body>
+            
         </div>
     )
 

@@ -12,7 +12,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 const children = [];
 for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
 class AddGroups extends React.Component {
     state = {
@@ -113,17 +113,20 @@ class AddGroups extends React.Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-lg-12">
-                         <h4 className="text-left">Новая группа</h4>
-                         <div className="row no-gutters border rounded overflow-hidden flex-lg-row mb-4 shadow-sm h-lg-250 position-relative">
-                             <div className="col p-4 d-flex flex-column position-static">
+                        <h4 className="text-left">Новая группа</h4>
+                        <div className="row no-gutters border rounded overflow-hidden flex-lg-row mb-4 shadow-sm h-lg-250 position-relative">
+                            <div className="col p-4 d-flex flex-column position-static">
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Название группы
                                     </label>
                                     <Input id="nameGroup" placeholder="Введите название группы" className="col-md-6"/>
                                 </div>
+                                <div className={'error-label'}>Введите название группы</div>
+                                <div>Группа с таким названием уже существует</div>
+
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Действия</label>
-                                    <Select 
+                                    <Select
                                         onChange = {this.addActions}
                                         closeMenuOnSelect={false}
                                         mode="multiple"
@@ -131,46 +134,48 @@ class AddGroups extends React.Component {
                                         isMulti
                                         options={this.state.actions}
                                         placeholder="Выбрать"
-                                        style={{width:"50%"}}  
-                                        className="text-left"                                                                           
+                                        style={{width:"50%"}}
+                                        className="text-left"
                                     >
                                         {children}
                                     </Select>
                                 </div>
+                                <div>Введите название группы</div>
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Участники</label>
-                                        <Select
-                                            onChange = {this.addWorkers}
-                                            closeMenuOnSelect={false}
-                                            components={animatedComponents}
-                                            mode="multiple"
-                                            isMulti
-                                            options={this.state.workers}
-                                            placeholder="Выбрать"
-                                            style={{width:"50%"}}
-                                            className="text-left"
-                                        />
+                                    <Select
+                                        onChange = {this.addWorkers}
+                                        closeMenuOnSelect={false}
+                                        components={animatedComponents}
+                                        mode="multiple"
+                                        isMulti
+                                        options={this.state.workers}
+                                        placeholder="Выбрать"
+                                        style={{width:"50%"}}
+                                        className="text-left"
+                                    />
                                 </div>
+                                <div>Введите название группы</div>
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Описание</label>
                                     <TextArea
-                                            // value={value}
-                                            id={'description'}
-                                            placeholder="Введите описание"
-                                            autoSize={{ minRows: 3, maxRows: 5 }}
-                                            style={{width:"50%"}}
-                                        />
+                                        // value={value}
+                                        id={'description'}
+                                        placeholder="Введите описание"
+                                        autoSize={{ minRows: 3, maxRows: 5 }}
+                                        style={{width:"50%"}}
+                                    />
                                 </div>
                                 <div className="col-md-12 text-right" style={{marginTop:"20px",marginLeft:"-150px"}}>
-                                        <Button onClick={this.createGroup} style={{backgroundColor:"#1890ff"}}>Отправить</Button>
-                                        <Button onClick={()=>{document.location='view_groups'}} style={{backgroundColor:"#e6f7ff",marginLeft:"5px"}}>Назад</Button>
-                                </div>  
-                             </div>
-                         </div>
+                                    <Button onClick={this.createGroup} style={{backgroundColor:"#1890ff"}}>Отправить</Button>
+                                    <Button onClick={()=>{document.location='view_groups'}} style={{backgroundColor:"#e6f7ff",marginLeft:"5px"}}>Назад</Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div> 
+                </div>
             </div>
-            
+
         )
     }
 }

@@ -1,4 +1,4 @@
-.container{
+/* .container{
     display: grid;
     grid-template-areas: 
     "head head"
@@ -27,4 +27,29 @@
     max-width: 1960px;
     padding: 0 30px;
 }
+ */
+
+.logotip {
+    width: 120px;
+    height: 31px;
+    /* background: rgba(255, 255, 255, 0.2); */
+    padding-bottom: 66px;
+    padding-top: 26px;
+    padding-left: 76px;
+    /* float: left; */
+    color:#fff;
+    font-size: 20px;
+    
+  }
+  
+  .site-layout-background {
+    background: #fff;
+  }
+
+  /* .container {
+    margin: 0 auto;
+    max-width: 100%;
+    max-width: 1960px;
+    padding: 0 30px;
+} */
 
