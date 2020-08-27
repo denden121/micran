@@ -68,9 +68,9 @@ const Calendar =(props)=>{
         range = dates[date[0]]+1
     }
     return(
-        <div>
+        <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
             <table className="table table-bordered table-sm">
-                <tbody>
+                <tbody className="workcalendar">
                     <tr>
                         <td colspan={range} scope="colgroup">2020 год</td>
                     </tr>

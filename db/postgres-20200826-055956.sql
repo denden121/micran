@@ -1221,12 +1221,17 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-1	pbkdf2_sha256$180000$HV1eogJkO7PC$xGd1w2Te+5Nuy9XHyn44J33omvh7kxBiu55XltkobJ4=	2020-08-18 03:09:01.79378+00	t	admin				t	t	2020-08-18 03:08:40.451566+00
 2	pbkdf2_sha256$180000$6ZaKNCAwjJcg$ETnS6MnY5lFdzIhty7o+8jQjndMuyKMOWtR9THu+Y8Q=	\N	f	user_1				f	t	2020-08-18 03:22:37+00
 3	pbkdf2_sha256$180000$Tv0k0O1L9o8y$uN4GriJX8uDzXf1QEm02fC7T4Bl3B0kqF6xmI4OgPZg=	\N	f	user_2				f	t	2020-08-18 03:23:35.651062+00
 4	pbkdf2_sha256$180000$mS0lolQ1jxcH$S3CHddCQwtcOYb0Iddp7u4amq6wuXpsLcPnTg2CEVlk=	\N	f	user_3				f	t	2020-08-18 03:24:27.797006+00
 5	pbkdf2_sha256$180000$Dc1wOTY6LYFO$nx4SZhQizjjeTQWvqkvSwWRrjw9YlT5mOv8EYbePehU=	\N	f	user_4				f	t	2020-08-18 03:25:13.005881+00
 6	pbkdf2_sha256$180000$X0lA28sBwxiN$OdJNUKxuCLiEWBYK3HzwWbZYW/6sebGgBvX1/oXuUj8=	\N	f	user_5				f	t	2020-08-18 03:27:25.611265+00
+1	pbkdf2_sha256$180000$HV1eogJkO7PC$xGd1w2Te+5Nuy9XHyn44J33omvh7kxBiu55XltkobJ4=	2020-08-26 04:27:40.225611+00	t	admin				t	t	2020-08-18 03:08:40.451566+00
+7	pbkdf2_sha256$180000$5uJVS4WIn5wE$KipkoW6VFbtmNoWwdiM5IAVO4FWXSm9qbwCaMtaLnFw=	\N	f	user_6				f	t	2020-08-26 05:44:09.288933+00
+8	pbkdf2_sha256$180000$gp3KT3UwA3Ak$aC88QSddyugwGEsW0l7+xdNMlgtAYhzCbkO8IxrUoK4=	\N	f	user_7				f	t	2020-08-26 05:45:03.783023+00
+9	pbkdf2_sha256$180000$mrIDELuEWe8f$8hJB3dkHhe1gR/bGoqQurYZaQwCrLeeFRJb9XMbu394=	\N	f	user_8				f	t	2020-08-26 05:45:52.158532+00
+10	pbkdf2_sha256$180000$XW7Nyt2E66eE$vtQhmbonMHQxm8Cf87QIAdOO/po8jkD/F3wKYbdS6Qs=	\N	f	user_9				f	t	2020-08-26 05:46:43.501917+00
+11	pbkdf2_sha256$180000$lr1FovQ15zdp$P4yMrfueRs9vfnVM62ebuJDYJKbQW56yA1IkIEqF7t0=	\N	f	user_10				f	t	2020-08-26 05:47:36.218974+00
 \.
 
 
@@ -1276,8 +1281,13 @@ COPY public.cabinet_calendarmark (id, type, start_date, end_date, person_id) FRO
 2	undefined	2020-09-01	2020-09-20	1
 3	undefined	2020-09-21	2020-09-21	1
 4	undefined	2020-08-21	2020-08-21	1
-5	paid_holiday	2020-08-21	2020-08-21	1
-6	undefined	2020-08-21	2020-08-21	2
+5	paid_holiday	2020-08-21	2020-08-25	1
+7	undefined	2020-08-01	2020-08-04	1
+8	sick_leave	2020-08-26	2020-08-20	2
+9	hooky	2020-08-10	2020-08-26	3
+10	study_holiday	2020-07-26	2020-08-26	4
+11	planned_holiday	2020-05-26	2020-06-20	5
+12	event	2020-08-05	2020-08-26	6
 \.
 
 
@@ -1311,6 +1321,7 @@ COPY public.cabinet_group (id, name, description) FROM stdin;
 1	Gods	
 2	Default	
 3	Admins	Топ группа
+4	People	
 \.
 
 
@@ -1332,6 +1343,9 @@ COPY public.cabinet_group_available_actions (id, group_id, action_id) FROM stdin
 11	3	7
 12	3	8
 13	3	9
+14	4	8
+15	4	9
+16	4	7
 \.
 
 
@@ -1349,6 +1363,11 @@ COPY public.cabinet_group_participants (id, group_id, profile_id) FROM stdin;
 7	3	3
 8	3	4
 9	3	5
+10	4	7
+11	4	8
+12	4	9
+13	4	10
+14	4	11
 \.
 
 
@@ -1370,6 +1389,10 @@ COPY public.cabinet_logging (id, "IP", login, action, status, date) FROM stdin;
 11	22.22.22.22	admin	login	t	2020-08-21 02:45:57.345689+00
 12	31.173.243.86	admin	login	t	2020-08-24 02:27:08.781063+00
 13	22.22.22.22	admin	login	t	2020-08-24 03:11:10.20574+00
+14	22.22.22.22	admin	login	t	2020-08-24 06:54:04.479609+00
+15	31.173.242.75	admin	login	t	2020-08-26 04:26:59.459069+00
+16	31.173.242.75	admin	login	t	2020-08-26 04:27:24.802938+00
+17	31.173.242.75	admin	login	t	2020-08-26 05:53:36.85899+00
 \.
 
 
@@ -1384,6 +1407,11 @@ COPY public.cabinet_profile (user_id, sex, birth_date, "position", middle_name, 
 6	Female	1999-02-01	Controller	Alexandrovna	Anna	Petrova	0	Full	Day		f	3	6	\N
 1	Male	2000-08-18	Financist	Ivanovich	Ivan	Ivanov	0	Full	Day		f	1	1	1
 2	Male	2000-06-18	Financist	Petrovich	Ivan	Ivanov	0	Full	Day		f	1	1	2
+7	Male	2000-08-26	Top	Ivanovich	Ivan	Sergeev	2	Full-Time	Day		f	1	1	1
+8	Male	1999-11-26	Technician	Alexandrovich	Ivan	Sergeev	0	Full-Time	Day		f	1	2	1
+9	Male	2000-08-26	Technician	Sergeevich	Petr	Ivanov	0	Full-Time	Day		f	2	3	3
+10	Female	1990-01-01	Top	Petrovna	Olga	Ivanova	0	Full-Time	Day		f	3	5	2
+11	Female	2000-08-26	Technician	Petrovna	Irina	Sidorova	6	Full-Time	Day		f	3	6	2
 \.
 
 
@@ -1395,6 +1423,7 @@ COPY public.cabinet_project (id, name, direction_id, client, production_order, c
 1	Administrate Department	1	"InFoTecs"	2814709FJH		PLK228	f	f	f	f	2	3	1
 2	Create Programm	2	"NETech"	2814123AJH		PFM228	t	t	t	t	5	6	4
 3	Maintain the site	3	"MIcrach"	2865709MKH		ABO324	t	f	f	f	5	2	1
+4	Do something	3	"KripKit"	2281337213		124FAS214	f	t	f	t	6	10	8
 \.
 
 
@@ -1518,6 +1547,28 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 55	2020-08-24 02:41:55.421833+00	9	13	1	[{"added": {}}]	7	1
 56	2020-08-24 02:42:20.037442+00	1	Gods	1	[{"added": {}}]	18	1
 57	2020-08-24 02:42:37.670807+00	2	Default	1	[{"added": {}}]	18	1
+58	2020-08-24 07:01:25.185073+00	6	CalendarMark object (6)	3		20	1
+59	2020-08-24 07:01:35.95736+00	5	CalendarMark object (5)	2	[{"changed": {"fields": ["End date"]}}]	20	1
+60	2020-08-24 07:02:24.726546+00	7	CalendarMark object (7)	1	[{"added": {}}]	20	1
+61	2020-08-26 05:44:09.420204+00	7	user_6	1	[{"added": {}}]	4	1
+62	2020-08-26 05:45:03.907708+00	8	user_7	1	[{"added": {}}]	4	1
+63	2020-08-26 05:45:52.298872+00	9	user_8	1	[{"added": {}}]	4	1
+64	2020-08-26 05:46:43.622025+00	10	user_9	1	[{"added": {}}]	4	1
+65	2020-08-26 05:47:36.395049+00	11	user_10	1	[{"added": {}}]	4	1
+66	2020-08-26 05:49:09.351875+00	7	user_6	1	[{"added": {}}]	11	1
+67	2020-08-26 05:49:52.04254+00	8	user_7	1	[{"added": {}}]	11	1
+68	2020-08-26 05:50:24.275147+00	9	user_8	1	[{"added": {}}]	11	1
+69	2020-08-26 05:51:10.194435+00	10	user_9	1	[{"added": {}}]	11	1
+70	2020-08-26 05:52:01.834405+00	11	user_10	1	[{"added": {}}]	11	1
+71	2020-08-26 05:52:31.3205+00	8	CalendarMark object (8)	1	[{"added": {}}]	20	1
+72	2020-08-26 05:52:44.165562+00	9	CalendarMark object (9)	1	[{"added": {}}]	20	1
+73	2020-08-26 05:52:56.290964+00	10	CalendarMark object (10)	1	[{"added": {}}]	20	1
+74	2020-08-26 05:53:10.90108+00	11	CalendarMark object (11)	1	[{"added": {}}]	20	1
+75	2020-08-26 05:53:27.211435+00	12	CalendarMark object (12)	1	[{"added": {}}]	20	1
+76	2020-08-26 05:55:35.131933+00	4	Do somethind	1	[{"added": {}}]	12	1
+77	2020-08-26 05:55:44.590854+00	4	Do something	2	[{"changed": {"fields": ["Name", "Acceptance vp"]}}]	12	1
+78	2020-08-26 05:55:47.655973+00	4	Do something	2	[{"changed": {"fields": ["Status"]}}]	12	1
+79	2020-08-26 05:56:55.442757+00	4	People	1	[{"added": {}}]	18	1
 \.
 
 
@@ -1592,7 +1643,8 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
-a1q7cs61dyw7d6rbcybftu492act5acs	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZmZTA3OTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmMDVmY2ZhOWRlM2ExMzBiYjEzYTQ5NzkyMmUzM2NiMGRmODI0NTE4In0=	2020-09-01 03:09:01.802001+00
+p32kvfjkbewyyw29w9aqm2eacefntoid	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZmZTA3OTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmMDVmY2ZhOWRlM2ExMzBiYjEzYTQ5NzkyMmUzM2NiMGRmODI0NTE4In0=	2020-09-08 02:31:21.237819+00
+fqeooe0d9riq0vjhmrkwd9jo532itgz4	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZmZTA3OTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmMDVmY2ZhOWRlM2ExMzBiYjEzYTQ5NzkyMmUzM2NiMGRmODI0NTE4In0=	2020-09-09 04:27:40.232096+00
 \.
 
 
@@ -1628,7 +1680,7 @@ SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_user_id_seq', 6, true);
+SELECT pg_catalog.setval('public.auth_user_id_seq', 11, true);
 
 
 --
@@ -1649,7 +1701,7 @@ SELECT pg_catalog.setval('public.cabinet_action_id_seq', 9, true);
 -- Name: cabinet_calendarmark_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_calendarmark_id_seq', 6, true);
+SELECT pg_catalog.setval('public.cabinet_calendarmark_id_seq', 12, true);
 
 
 --
@@ -1670,35 +1722,35 @@ SELECT pg_catalog.setval('public.cabinet_direction_id_seq', 3, true);
 -- Name: cabinet_group_available_actions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_group_available_actions_id_seq', 13, true);
+SELECT pg_catalog.setval('public.cabinet_group_available_actions_id_seq', 16, true);
 
 
 --
 -- Name: cabinet_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_group_id_seq', 3, true);
+SELECT pg_catalog.setval('public.cabinet_group_id_seq', 4, true);
 
 
 --
 -- Name: cabinet_group_participants_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_group_participants_id_seq', 9, true);
+SELECT pg_catalog.setval('public.cabinet_group_participants_id_seq', 14, true);
 
 
 --
 -- Name: cabinet_logging_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_logging_id_seq', 13, true);
+SELECT pg_catalog.setval('public.cabinet_logging_id_seq', 17, true);
 
 
 --
 -- Name: cabinet_project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_project_id_seq', 3, true);
+SELECT pg_catalog.setval('public.cabinet_project_id_seq', 4, true);
 
 
 --
@@ -1733,14 +1785,14 @@ SELECT pg_catalog.setval('public.cabinet_subdepartment_id_seq', 6, true);
 -- Name: cabinet_timecard_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_timecard_id_seq', 1, true);
+SELECT pg_catalog.setval('public.cabinet_timecard_id_seq', 2, true);
 
 
 --
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 57, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 79, true);
 
 
 --
