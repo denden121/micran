@@ -6,6 +6,7 @@ import LogOut from "../Header/Header"
 import SendReport from "../SendReport/SendReport"
 // import rend from '../../../index.js'
 import PersonData from "../PersonData/PersonData";
+import moment from 'moment';
 import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
@@ -22,7 +23,7 @@ import Employees from "../Employees/Employees"
 import Interval from "../WorkCalendar/Interval/Interval"
 import SystemTime from "../SystemTime/SystemTime"
 import Structure from "../Tree/Structure"
-import { DatePicker } from 'antd';
+import { DatePicker, Space } from 'antd';
 import { Layout, Menu, PageHeader,Button} from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import {
@@ -54,21 +55,25 @@ class Main extends Component{
         localStorage.setItem('token','')
         localStorage.setItem('checkReg','False')
     }
-    
+
+    onChangeDate = (month, dateString)=> {
+        if(month !== null) {
+            console.log(month, dateString)
+            dateString = dateString.split('-').reverse()
+            dateString[1] = parseInt(dateString[1])
+            dateString = dateString.join(' ')
+            localStorage.setItem('date', dateString)
+            rend()
+        }
+    }
 
     render() {
-      function onChange(date, dateString) {
-        console.log(date, dateString);
-      }
       
         if(!localStorage.getItem('date')){
             let date = new Date()
             localStorage.setItem('date',`${date.getMonth()+1} ${date.getFullYear()} `)
         }
 
-        function onChange(month, dateString) {
-          console.log(month, dateString);
-        }
         return (
           
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
@@ -79,7 +84,9 @@ class Main extends Component{
                 </div>
                 
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
-                <DatePicker onChange={onChange} picker="month"/>
+                    <Space direction="vertical">
+                        <DatePicker defaultValue={moment(localStorage.getItem('date').split(' ').reverse().join('-'), 'YYYY-MM')} onChange={this.onChangeDate} picker="month" />
+                    </Space>,
                     <Menu.Item key="1" icon={<PieChartOutlined />}>
                       <a  href="http://localhost:3000/cabinet/">
                         <span data-feather="home"></span>
