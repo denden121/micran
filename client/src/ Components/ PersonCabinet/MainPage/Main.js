@@ -113,14 +113,14 @@ class Main extends Component{
 
 
                     {a
-                        ?<Menu.Item key="2" icon={<UsergroupAddOutlined style={{ fontSize: '16px'}}/>}>
+                        ?<Menu.Item key="3" icon={<UsergroupAddOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href='http://localhost:3000/cabinet/admin/view_groups'>
                                 <span data-feather="shopping-cart"></span>
                                 Просмотр групп
                             </a>
                         </Menu.Item>:''}
                     {a
-                        ? <Menu.Item key="3" icon={<LoginOutlined style={{ fontSize: '16px'}}/>}>
+                        ? <Menu.Item key="4" icon={<LoginOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href='http://localhost:3000/cabinet/admin/logs'>
                                 <span data-feather="shopping-cart"></span>
                                 Просмотр логирования
@@ -128,42 +128,42 @@ class Main extends Component{
                         </Menu.Item>:''
                     }
                     {a
-                        ?<Menu.Item key="4" icon={<FormOutlined style={{ fontSize: '16px'}}/>}>
+                        ?<Menu.Item key="5" icon={<FormOutlined style={{ fontSize: '16px'}}/>}>
                             <a href="http://localhost:3000/cabinet/admin/play_roll">
                                 <span data-feather="layers"></span>
                                 Расчетный лист
                             </a>
                         </Menu.Item>:''}
                     {a
-                        ?<Menu.Item key="5" icon={<FolderOpenOutlined style={{ fontSize: '16px'}}/>}>
+                        ?<Menu.Item key="6" icon={<FolderOpenOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href="http://localhost:3000/cabinet/admin/register">
                                 <span data-feather="layers"></span>
                                 Реестр проектов
                             </a>
                         </Menu.Item>:''}
                     {a
-                        ?<Menu.Item key="6" icon={<TeamOutlined style={{ fontSize: '16px'}}/>}>
+                        ?<Menu.Item key="7" icon={<TeamOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href="http://localhost:3000/cabinet/admin/employees">
                                 <span data-feather="layers"></span>
                                 Сотрудники
                             </a>
                         </Menu.Item>:''}
                     {a
-                        ?<Menu.Item key="7" icon={<CalendarOutlined style={{ fontSize: '16px'}}/>}>
+                        ?<Menu.Item key="8" icon={<CalendarOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href="http://localhost:3000/cabinet/admin/calendar">
                                 <span data-feather="layers"></span>
                                 Трудовой календарь
                             </a>
                         </Menu.Item>:''}
                     {a
-                        ?<Menu.Item key="8" icon={<FieldTimeOutlined style={{ fontSize: '16px'}}/>}>
+                        ?<Menu.Item key="9" icon={<FieldTimeOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href="http://localhost:3000/cabinet/admin/system_time">
                                 <span data-feather="layers"></span>
                                 Система учета времени
                             </a>
                         </Menu.Item>:''}
                     {a
-                        ?<Menu.Item key="9" icon={<ApartmentOutlined style={{ fontSize: '16px'}}/>}>
+                        ?<Menu.Item key="10" icon={<ApartmentOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href="http://localhost:3000/cabinet/admin/structure">
                                 <span data-feather="layers"></span>
                                 Структура подразделений
