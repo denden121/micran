@@ -176,7 +176,7 @@ class Main extends Component{
                 <Layout className="site-layout">
 
                     <Content >
-                        <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"900px"}}>
+                        <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"1900px"}}>
                             <LogOut clickLogOut={this.logOut}/>
                             <Switch>
                                 <Route path='/cabinet/' exact component = {SendReport}/>
