@@ -22,7 +22,7 @@ class Interval extends React.Component {
             this.setState({range:a,
                                 show:false})
         }
-
+        // console.log(this.state)
     }
     componentDidMount() {
         this.loadDepartments()
@@ -40,7 +40,7 @@ class Interval extends React.Component {
             .then(response =>  response.json())
             .then(result => {
                 let actions = Array.from(result).map((department)=>{
-                    console.log(department)
+                    // console.log(department)
                     return {value:`${department.pk}`,label:`${department.fields.code +' '+ department.fields.name}`}
                 })
                 this.setState({departments: actions})})
@@ -61,7 +61,7 @@ class Interval extends React.Component {
             .then(result => {
                 console.log('sub',result)
                 let subdepartments = Array.from(result).map((subdepartment)=>{
-                    console.log(subdepartment)
+                    // console.log(subdepartment)
                     return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
                 })
                 this.setState({subdepartments: subdepartments})})
