@@ -17,3 +17,8 @@
 .checkBox:hover{
      color: #11BCD3; 
 }
+
+.error-add-group{
+    color:red;
+    display: none;
+}
