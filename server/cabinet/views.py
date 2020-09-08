@@ -437,9 +437,9 @@ def salary(request):
                 salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
                 salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
                                                                     common_part=salary_common)
-                department = worker.department.department_name
-                direction = worker.direction.direction_name
-                subdepartment = worker.subdepartment.subdepartment_name
+                department = worker.department.department_code
+                direction = worker.direction.direction_code
+                subdepartment = worker.subdepartment.subdepartment_code
                 salary.time_from_report = hour
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'position': worker.position, 'SRI_SAS': worker.SRI_SAS,

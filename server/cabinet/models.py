@@ -143,8 +143,7 @@ class SalaryIndividual(models.Model):
         self.days_worked = salary_common.days_norm_common - (self.day_off + self.vacation + self.sick_leave)
         self.time_norm = 8 * self.days_worked
         try:
-            if self.is_penalty:
-                self.penalty = (self.time_norm - self.time_orion) * self.plan_salary / self.time_norm
+            self.penalty = (self.time_norm - self.time_orion) * self.plan_salary / self.time_norm
             self.salary_hand = self.plan_salary * self.days_worked / salary_common.days_norm_common - self.penalty + self.award
         except ZeroDivisionError:
             self.penalty = 0

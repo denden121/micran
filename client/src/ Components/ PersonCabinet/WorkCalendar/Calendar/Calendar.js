@@ -73,9 +73,9 @@ const Calendar =(props)=>{
     }
     console.log('range',range_temp)
     return(
-        <div>
+        <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
             <table className="table table-bordered table-sm">
-                <tbody>
+                <tbody className="workcalendar">
                     <tr>
                         <td colspan={range_temp} scope="colgroup">2020 год</td>
                     </tr>
