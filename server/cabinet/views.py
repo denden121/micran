@@ -427,7 +427,7 @@ def salary(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.filter(department=user.profile.department)
+            workers = Profile.objects.all()
             data = []
             output = []
             year = request.GET.get('year')
@@ -437,16 +437,14 @@ def salary(request):
                 salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
                 salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
                                                                     common_part=salary_common)
-                department = worker.department.department_code
                 direction = worker.direction.direction_code
-                subdepartment = worker.subdepartment.subdepartment_code
                 salary.time_from_report = hour
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
                          'time_norm': salary.time_norm, 'penalty': salary.penalty,
-                         'is_penalty': salary.is_penalty, 'department': department,
-                         'subdepartment': subdepartment, 'direction': direction,
+                         'is_penalty': salary.is_penalty, 'department': worker.department.department_name,
+                         'direction': direction,
                          'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
                          'award': salary.award, 'salary_hand': salary.salary_hand}
                 data.append({'pk': worker.pk, 'person': field})
@@ -507,7 +505,7 @@ def departament_simple_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            departments = Department.objects.all()
+            departments = Department.objects.filter(subdepartment_code=0)
             data = []
             for department in departments:
                 data.append({'pk': department.pk, 'fields': {'code': department.department_code,
@@ -533,7 +531,7 @@ def workers_info(request):
                          'experience': person.experience, 'lateness': person.lateness,
                          '№ db': "321", '№ 1c': "3059", "sex": person.sex,
                          'birth_date': str(person.birth_date),
-                         'ockladnaya': "ne_ponyal", 'subdivision': person.subdepartment.subdepartment_name,
+                         'ockladnaya': "ne_ponyal",
                          'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
@@ -664,7 +662,8 @@ def subdepartment_from_departments_view(request, department_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            subdepartments = Department.objects.filter(subdepartment_code=department_id)
+            department = Department.objects.get(pk=department_id)
+            subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
             data = []
             for subdepartment in subdepartments:
                 data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.department_code,

@@ -18,8 +18,8 @@ class AddGroups extends React.Component {
     state = {
         actions: '',
         workers: '',
-        select_actions:{},
-        select_workers:{},
+        select_actions:[],
+        select_workers:[],
         value:''
     }
     componentDidMount() {
@@ -74,6 +74,7 @@ class AddGroups extends React.Component {
         console.log('actions',this.state.select_actions)
         console.log('workers',this.state.select_workers)
         let nameGroup = document.querySelector('#nameGroup').value
+        console.log(this.state.select_workers,this.state.select_actions,nameGroup)
         if(this.state.select_workers.length !== 0 &
             this.state.select_actions.length !== 0 &
             nameGroup !=='') {
