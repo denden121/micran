@@ -8,8 +8,9 @@ import rend from "../../../index";
 
 class Payroll extends React.Component{
     state = {
-        allSalary:{},
-        filtersSalary:{},
+        allSalary:[],
+        departments:[],
+        subdepartments:[],
         hideSalary:false,
         hideNormTime:false,
         hideZeroReport:false,
@@ -18,8 +19,48 @@ class Payroll extends React.Component{
     }
     componentDidMount() {
         this.loadAllSalary()
+        this.loadDepartments()
     }
-    loadAllSalary = async ()=>{
+    loadDepartments=()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch("http://127.0.0.1:8000/departments/simple/", requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                let actions = Array.from(result).map((department)=>{
+                    // console.log(department)
+                    return {value:`${department.pk}`,label:`${department.fields.code +' '+ department.fields.name}`}
+                })
+                this.setState({departments: actions})})
+            .catch(error => console.log('error', error))
+    }
+    onChangeSelectDepartments=(e)=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch(`http://127.0.0.1:8000/departments/${e}/subdepartments/`, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                console.log('sub',result)
+                let subdepartments = Array.from(result).map((subdepartment)=>{
+                    // console.log(subdepartment)
+                    return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
+                })
+                this.setState({subdepartments: subdepartments})})
+            .catch(error => console.log('error', error))
+    }
+    loadAllSalary = ()=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -30,11 +71,10 @@ class Payroll extends React.Component{
         };
         const date = localStorage.getItem('date').split(' ')
         const url = `http://127.0.0.1:8000/salary/?month=${date[0]}&year=${date[1]}`
-        await fetch(url, requestOptions)
+        fetch(url, requestOptions)
             .then(response => response.json())
             .then(result => this.setState({allSalary:result[0].fields}))
             .catch(error => console.log('error', error));
-        // console.log(this.state.allSalary)
     }
     onChangeSalary = (event) => {
         console.log(event.target.type)
@@ -96,7 +136,6 @@ class Payroll extends React.Component{
 
             const date = localStorage.getItem('date').split(' ')
             let formdata = new FormData();
-
             const field = event.target.id.split('.')
             const id = field[1]
             const nameField = field[2]
@@ -117,16 +156,8 @@ class Payroll extends React.Component{
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
         }
-        // switch (event.target.id.split('.')[1])
-        // console.log(event.target.value)
-        // console.log(event.target.placeholder)
-        // console.log(event.target)
     }
-    onBlurNormDay = async (event)=>{
-        // console.log('value',event.target.value)
-        // console.log('default',event.target.defaultValue)
-        // console.log('class',event.target.className)
-
+    onBlurNormDay = (event)=>{
         if(event.target.value!=event.target.defaultValue ){
             const token = localStorage.getItem('token')
             let myHeaders = new Headers();
@@ -145,14 +176,14 @@ class Payroll extends React.Component{
                 redirect: 'follow'
             };
             const url = `http://127.0.0.1:8000/salary/change_common/`
-            await fetch(url, requestOptions)
+            fetch(url, requestOptions)
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
             rend()
         }
     }
-    onBlurSalary= async (event)=>{
+    onBlurSalary=(event)=>{
         const isSend = event.target.type !== 'checkbox' &
             event.target.value !== event.target.defaultValue
         if (isSend){
@@ -184,7 +215,7 @@ class Payroll extends React.Component{
                 redirect: 'follow'
             };
             const url = `http://127.0.0.1:8000/salary/`
-            await fetch(url, requestOptions)
+            fetch(url, requestOptions)
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.log('error', error));
@@ -236,7 +267,6 @@ class Payroll extends React.Component{
         }
     }
     render(){
-        // console.log('dfsf',this.state)
         return(
             <div className="container-fluid">
                 <div className="row">
@@ -246,14 +276,17 @@ class Payroll extends React.Component{
                             <div className="row">
                                 <div className="col-md-12 col-lg-12 card">
                                      <div className="card-body">
-                                        <PayrollCheck onChangeFilter={this.onChangeFilter}/>
+                                        <PayrollCheck
+                                            departments = {this.state.departments}
+                                            onChangeFilter={this.onChangeFilter}
+                                            onChangeSelectDepartments ={this.onChangeSelectDepartments}/>
                                      </div>
                                  </div>
                             </div>
                         <br/>
-                        <div className="text-left">
-                             <button className="btn btn-sm btn-danger">Синхронизировать таблицы</button>
-                         </div>
+                        {/*<div className="text-left">*/}
+                        {/*     <button className="btn btn-sm btn-danger">Синхронизировать таблицы</button>*/}
+                        {/* </div>*/}
                          <br/>
                          <Norma
                              normDays = {this.state.allSalary.days_norm}
