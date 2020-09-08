@@ -74,29 +74,36 @@ class AddGroups extends React.Component {
         console.log('actions',this.state.select_actions)
         console.log('workers',this.state.select_workers)
         let nameGroup = document.querySelector('#nameGroup').value
+        if(this.state.select_workers.length !== 0 &
+            this.state.select_actions.length !== 0 &
+            nameGroup !=='') {
+            document.querySelector('.error-add-group').style.display = 'none'
+            let token = localStorage.getItem('token')
+            let myHeaders = new Headers();
+            myHeaders.append("Authorization", token);
 
-        let token = localStorage.getItem('token')
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", token);
+            let formdata = new FormData();
+            console.log()
+            formdata.append("name", nameGroup);
+            formdata.append("actions", this.state.select_actions.join(' '));
+            formdata.append("description", document.querySelector('#description').value);
+            formdata.append("participants", this.state.select_workers.join(' '));
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: formdata,
+                redirect: 'follow'
+            };
 
-        let formdata = new FormData();
-        console.log()
-        formdata.append("name", nameGroup);
-        formdata.append("actions", this.state.select_actions.join(' '));
-        formdata.append("description", document.querySelector('#description').value);
-        formdata.append("participants", this.state.select_workers.join(' '));
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow'
-        };
-
-        fetch("http://127.0.0.1:8000/groups/", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        document.location = 'view_groups'
+            fetch("http://127.0.0.1:8000/groups/", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+            document.location = 'view_groups'
+        }
+        else{
+            console.log(document.querySelector('.error-add-group').style.display = 'block')
+        }
     }
     addActions=(event)=>{
         this.setState({select_actions:event})
@@ -166,6 +173,7 @@ class AddGroups extends React.Component {
                                         style={{width:"50%"}}
                                     />
                                 </div>
+                                <div className="error-add-group">Введите все поля</div>
                                 <div className="col-md-12 text-right" style={{marginTop:"20px",marginLeft:"-150px"}}>
                                     <Button onClick={this.createGroup} style={{backgroundColor:"#1890ff"}}>Отправить</Button>
                                     <Button onClick={()=>{document.location='view_groups'}} style={{backgroundColor:"#e6f7ff",marginLeft:"5px"}}>Назад</Button>
