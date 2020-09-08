@@ -13,7 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm, \
     CalendarMarkForm
 from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, \
-    Direction, Subdepartment, TimeCard, CalendarMark
+    Direction, TimeCard, CalendarMark
 
 
 def get_user_jwt(request):
@@ -618,15 +618,15 @@ def departament_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            departments = Department.objects.all()
+            departments = Department.objects.filter(subdepartment_code='0')
             data = []
             subdepartments_field = []
             direction_field = []
             profile_field = []
             for department in departments:
-                subdepartments = Subdepartment.objects.filter(department=department)
+                subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
                 for subdepartment in subdepartments:
-                    directions = Direction.objects.filter(subdepartment=subdepartment)
+                    directions = Direction.objects.filter(subdepartment=subdepartment.subdepartment_code)
                     for direction in directions:
                         profiles = Profile.objects.filter(direction=direction)
                         for profile in profiles:
@@ -637,8 +637,8 @@ def departament_view(request):
                                                 'code': direction.direction_code,
                                                 'users': profile_field})
                         profile_field = []
-                    subdepartments_field.append({'name': subdepartment.subdepartment_name,
-                                                 'code': subdepartment.subdepartment_code,
+                    subdepartments_field.append({'name': subdepartment.department_name,
+                                                 'code': subdepartment.department_code,
                                                  'directions': direction_field})
                     direction_field = []
                 field = {'code': department.department_code,
@@ -654,7 +654,7 @@ def subdepartment_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            subdepartments = Subdepartment.objects.all()
+            subdepartments = Department.objects.filter(subdepartment_code__exact=0)
             data = serializers.serialize('json', subdepartments)
             return HttpResponse(data)
 
@@ -664,11 +664,11 @@ def subdepartment_from_departments_view(request, department_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            subdepartments = Subdepartment.objects.filter(department=department_id)
+            subdepartments = Department.objects.filter(subdepartment_code=department_id)
             data = []
             for subdepartment in subdepartments:
-                data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.subdepartment_code,
-                                                                'name': subdepartment.subdepartment_name}})
+                data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.department_code,
+                                                                'name': subdepartment.department_name}})
             print(data)
             return HttpResponse(json.dumps(data))
 
@@ -720,7 +720,7 @@ def calendar_control_view(request):
             current_date = request.GET.get('current_date')
             month, year = current_date.split('-')
             interval = request.GET.get('range')
-            profiles = Profile.objects.filter(subdepartment=subdepartment)
+            profiles = Profile.objects.filter(department=subdepartment)
             if interval == "month":
                 output = []
                 for profile in profiles:
@@ -803,6 +803,6 @@ def workers_subdepartment(request, subdepartment_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.filter(subdepartment=subdepartment_id)
+            workers = Profile.objects.filter(department=subdepartment_id)
             data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
             return HttpResponse(data)
