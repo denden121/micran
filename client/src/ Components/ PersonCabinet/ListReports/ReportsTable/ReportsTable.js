@@ -3,7 +3,7 @@ import React from "react"
 const ReportsTable =()=>{
     return(
         <div className="table-responsive">
-            <table className="table table-bordered">
+            <table className="table table-bordered table-sm">
                 <thead>
                     <tr>
                         <th scope="col">№ п/п</th>
@@ -17,6 +17,9 @@ const ReportsTable =()=>{
                 </thead>
                 <tbody>
                     <tr>
+                        <td colspan="7" scope="colgroup" className="table-secondary">Отдел</td>
+                    </tr>
+                    <tr>
                         <td scope="row"></td>
                         <td></td>
                         <td></td>
@@ -25,6 +28,7 @@ const ReportsTable =()=>{
                         <td></td>
                         <td></td>
                     </tr>
+                    
                 </tbody>
             </table>
         </div>
