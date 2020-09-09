@@ -1,7 +1,7 @@
 import React from "react"
 import "./Calendar.css"
 
-const dates={
+const dates = {
     '01':31,
     '02':28,
     '03':31,
@@ -26,7 +26,7 @@ const colors = {
     7:'ucheb_otpusk',
     8:'plan_otpusk',
 }
-const Persons =(props)=>{
+const Persons = (props) => {
     console.log('props',props)
     let people = props.date;
     console.log('people',people)
@@ -50,7 +50,6 @@ const Days = (props)=>{
     for (let i = 0;i<props.range-1;i++){
         a.push(i+1)
     }
-
     return a.map( item =>{
         return <td scope="col" className="Day">{item}</td>
     })
@@ -58,18 +57,13 @@ const Days = (props)=>{
 
 const Calendar =(props)=>{
     console.log('props',props)
-
     let date = localStorage.getItem('date').split(' ')
-    console.log(date)
     let range_temp = ''
-    console.log('rrrrrrrr',props.date)
     if (props.date.range ==='year'){
         range_temp = 54
     }
     else if(props.date.range ==='month'){
-        console.log('fffff',date[0])
-
-        range_temp = dates[date[0]]+1
+        range_temp = dates[date[0]<10?'0'+date[0]:date[0]]+1
     }
     console.log('range',range_temp)
     return(
@@ -85,7 +79,7 @@ const Calendar =(props)=>{
                         {/*<td scope="col" className="Day"></td>*/}
                         <Days range ={range_temp}/>
                     </tr>
-                    <tr>
+                       <tr>
                         <td colspan={range_temp} scope="colgroup" className="table-secondary">Отдел</td>
                     </tr>
                     <Persons date = {props.date.persons}/>

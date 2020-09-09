@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import './AddGroups.css'
 import Activity from "./Activity/Activity"
-// import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import {PlusCircleOutlined} from '@ant-design/icons'
 import { Input } from 'antd';
