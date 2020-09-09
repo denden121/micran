@@ -587,6 +587,11 @@ def change_common_salary(request):
         form = SalaryCommonForm(request.POST, instance=salary)
         if form.is_valid():
             form.save()
+            salaries = SalaryIndividual.objects.filter(date=salary.date)
+            for salary in salaries:
+                salary.time_norm = int(days) * 8
+                salary.days_worked = int(days)
+                salary.save()
             return HttpResponse("Success")
         return HttpResponse("Fail")
 

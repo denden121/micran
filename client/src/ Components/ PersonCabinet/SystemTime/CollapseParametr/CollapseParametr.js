@@ -23,7 +23,7 @@ const CollapseParametr =(props)=>{
                                     <br/>
                                     <div className="col-md-11 text-left">
                                         <Select
-                                        placeholder="Выбрать депортамент"
+                                        placeholder="Выбрать департамент"
                                         style={{width:"100%"}}
                                         options={props.Departments}
                                         onChange={props.onChangeDepartments}
