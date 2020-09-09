@@ -17,7 +17,7 @@ const CollapseList =()=>{
             <div className="row">
                 <div className="col-lg-12">
                 <Select
-                    placeholder="Выбрать депортамент"
+                    placeholder="Выбрать департамент"
                     style={{width:"70%"}}
                 />
                 </div>

@@ -1,6 +1,8 @@
 import React from "react"
-import { Collapse } from 'antd';
+import { Collapse, Button } from 'antd';
 import CollapseList from "./CollapseList/CollapseList"
+import ReportsTable from "./ReportsTable/ReportsTable"
+
 
 class ListReports extends React.Component {
     render(){
@@ -19,6 +21,18 @@ class ListReports extends React.Component {
                         <CollapseList/>
                     </Panel>
                     </Collapse>    
+                    </div>
+                </div>
+                <br/>
+                <div className="row">
+                    <div className="col-lg-12 text-left">
+                        <Button>Импортировать отчеты</Button>
+                    </div>
+                </div>
+                <br/>
+                <div className="row">
+                    <div className="col-lg-12">
+                        <ReportsTable/>
                     </div>
                 </div>
             </div>
