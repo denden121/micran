@@ -23,6 +23,7 @@ import Employees from "../Employees/Employees"
 import Interval from "../WorkCalendar/Interval/Interval"
 import SystemTime from "../SystemTime/SystemTime"
 import Structure from "../Tree/Structure"
+import ListReports from "../ListReports/ListReports"
 import { DatePicker, Space } from 'antd';
 import { Layout, Menu, PageHeader,Button} from 'antd';
 import { UpSquareOutlined,TeamOutlined,UsergroupAddOutlined } from '@ant-design/icons';
@@ -101,6 +102,13 @@ class Main extends Component{
                             <a  href="http://localhost:3000/cabinet/">
                                 <span data-feather="home"></span>
                                 Отправка отчетов
+                                <span className="sr-only"></span>
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item key="1" icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/list_reports">
+                                <span data-feather="home"></span>
+                                Список отчетов 
                                 <span className="sr-only"></span>
                             </a>
                         </Menu.Item>
@@ -193,6 +201,7 @@ class Main extends Component{
                                 <Route path='/cabinet/admin/calendar' exact  component = {Interval}/>
                                 <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/>
                                 <Route path='/cabinet/admin/structure' exact  component = {Structure}/>
+                                <Route path='/cabinet/list_reports' exact  component = {ListReports}/>
                             </Switch>
                         </div>
                     </Content>
