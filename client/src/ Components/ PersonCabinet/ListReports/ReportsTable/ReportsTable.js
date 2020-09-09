@@ -1,4 +1,5 @@
 import React from "react"
+import {Modal} from "antd"
 
 const ReportsTable =()=>{
     return(
@@ -22,7 +23,7 @@ const ReportsTable =()=>{
                     <tr>
                         <td scope="row"></td>
                         <td></td>
-                        <td></td>
+                        <td><a></a></td>
                         <td></td>
                         <td></td>
                         <td></td>

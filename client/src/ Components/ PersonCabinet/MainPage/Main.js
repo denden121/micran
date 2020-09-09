@@ -86,7 +86,7 @@ class Main extends Component{
         return (
 
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
-
+                
                 <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{backgroundColor:"white"}}>
                     <div style={{backgroundColor:"white",color:"#fff"}}>
                         <img src={picture} alt="" className="img-fluid"></img>
@@ -182,10 +182,15 @@ class Main extends Component{
                 </Sider>
 
                 <Layout className="site-layout">
-
+                        
                     <Content >
                         <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"1900px"}}>
-                            <LogOut clickLogOut={this.logOut}/>
+                            {/* <LogOut clickLogOut={this.logOut}/> */}
+                            <div className="d-flex flex-column flex-md-row  p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+                                <nav className="my-2 my-md-0 mr-md-3">
+                                    <LogOut className="text-right" clickLogOut={this.logOut}/> 
+                                </nav>  
+                            </div>
                             <Switch>
                                 <Route path='/cabinet/' exact component = {SendReport}/>
                                 <Route path='/cabinet/person' exact  component = {PersonData}/>
