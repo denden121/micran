@@ -30,6 +30,7 @@ def get_endpoint_department(data, output):
         return output
     else:
         output.append(data)
+        return output
 
 
 def build_level(subdepartment_id, lvl):
@@ -48,17 +49,20 @@ def build_level(subdepartment_id, lvl):
 
 def build_level_with_user(subdepartment_id, lvl, date):
     department = Department.objects.get(pk=subdepartment_id)
+    if int(department.subdepartment_code) > 0:
+        lvl += 1
     if lvl == 0:
         data = {}
     else:
-        data = {'name': department.department_name, 'code': department.department_code}
+        data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
     subdepartments_objects = []
     users = []
     month, year = date.split('-')
     subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
     profiles = Profile.objects.filter(department=department)
     for worker in profiles:
-        users_field = {'name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name}
+        users_field = {'name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
+                       'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
         reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
         report_time = 0
         for report in reports:
@@ -847,12 +851,25 @@ def workers_subdepartment(request, subdepartment_id):
 
 @csrf_exempt
 def workers_for_reports(request, department_id):
-    # user = get_user_jwt(request)
-    user = True
+    user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             date = request.GET.get('date')
-            department = Department.objects.get(pk=department_id)
             data = build_level_with_user(department_id, 0, date)
             output = get_endpoint_department(data, [])
             return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
+
+@csrf_exempt
+def all_reports_for_person(request, person_id):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            date = request.GET.get('date')
+            month, year = date.split('-')
+            data = []
+            reports = Report.objects.filter(creator_id=person_id, date__month=month, date__year=year)
+            for report in reports:
+                data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
+                             'text': report.text, 'status': report.status})
+            return HttpResponse(json.dumps(data))
+        # elif request.method == "POST":

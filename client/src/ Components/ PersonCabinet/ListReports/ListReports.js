@@ -1,22 +1,12 @@
 import React from "react"
-import { Collapse, Button } from 'antd';
+import { Collapse, Button, Modal } from 'antd';
 import CollapseList from "./CollapseList/CollapseList"
 import ReportsTable from "./ReportsTable/ReportsTable"
+import ReportModal from "./ReportModal/ReportModal"
 
 
 class ListReports extends React.Component {
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
+  
     state = {
         departments:[],
         select_department:'',
@@ -25,6 +15,19 @@ class ListReports extends React.Component {
         reports:[],
         visible: false 
     }
+
+    showModal = () => {
+        this.setState({
+          visible: true,
+        });
+      };
+    
+      handleOk = e => {
+        console.log(e);
+        this.setState({
+          visible: false
+        });
+      };
     componentDidMount() {
         this.loadDepartments();
     }
@@ -108,8 +111,21 @@ class ListReports extends React.Component {
                 <br/>
                 <div className="row">
                     <div className="col-lg-12">
+<<<<<<< HEAD
                         <ReportsTable
                         reports = {this.state.reports}/>
+=======
+                        <ReportsTable onClickShowModal={this.showModal}/>
+                        <Modal
+                            title="Название дата"
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            width={720}                            
+                            okText="Блокировать"                                                    
+                        >
+                            <ReportModal/>
+                        </Modal>
+>>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
                     </div>
                 </div>
             </div>

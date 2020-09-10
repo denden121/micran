@@ -1,6 +1,7 @@
 import React from "react"
 import {Modal} from "antd"
 
+<<<<<<< HEAD
 const Report =(props)=>{
     let a = []
     for(let i of props.reports){
@@ -33,6 +34,10 @@ const Report =(props)=>{
 }
 
 const ReportsTable =(props)=>{
+=======
+const ReportsTable =(props)=>{
+    console.log(props)
+>>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
     return(
         <div className="table-responsive">
             <table className="table table-bordered table-sm">
@@ -48,7 +53,23 @@ const ReportsTable =(props)=>{
                     </tr>
                 </thead>
                 <tbody>
+<<<<<<< HEAD
                     <Report reports ={props.reports}/>
+=======
+                    <tr>
+                        <td colspan="7" scope="colgroup" className="table-secondary">Отдел</td>
+                    </tr>
+                    <tr>
+                        <td scope="row"></td>
+                        <td></td>
+                        <td><a onClick={props.onClickShowModal} style={{cursor:"pointer"}}>пппп</a></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    
+>>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
                 </tbody>
             </table>
         </div>

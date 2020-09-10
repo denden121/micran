@@ -40,7 +40,7 @@ import {
     DollarOutlined
 } from '@ant-design/icons';
 import Calendar from "../Navigation/Calendar/Calendar"
-import picture from "../MainPage/micran1.png"
+import picture from "../MainPage/micran.svg"
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -90,14 +90,14 @@ class Main extends Component{
                 <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{backgroundColor:"white"}}>
                     <div style={{backgroundColor:"white",color:"#fff"}}>
                         <img src={picture} alt="" className="img-fluid"></img>
-                    </div>
-
-                    <Menu onClick={this.onClickCalendar} theme="light" mode="inline">
                         <Space direction="vertical">
                             <DatePicker
                                 size="middle"
                                 defaultValue={moment(localStorage.getItem('date').split(' ').reverse().join('-'), 'YYYY-MM')} onChange={this.onChangeDate} picker="month" />
                         </Space>
+                    </div>                    
+                    <Menu onClick={this.onClickCalendar} theme="light" mode="inline">
+                        
                         <Menu.Item key={localStorage.getItem('key')} icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
                             <a  href="http://localhost:3000/cabinet/">
                                 <span data-feather="home"></span>
@@ -185,12 +185,8 @@ class Main extends Component{
                         
                     <Content >
                         <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"1900px"}}>
-                            {/* <LogOut clickLogOut={this.logOut}/> */}
-                            <div className="d-flex flex-column flex-md-row  p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-                                <nav className="my-2 my-md-0 mr-md-3">
-                                    <LogOut className="text-right" clickLogOut={this.logOut}/> 
-                                </nav>  
-                            </div>
+                            <LogOut clickLogOut={this.logOut}/>
+                            
                             <Switch>
                                 <Route path='/cabinet/' exact component = {SendReport}/>
                                 <Route path='/cabinet/person' exact  component = {PersonData}/>
