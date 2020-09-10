@@ -892,11 +892,18 @@ def all_reports_for_person(request, person_id):
             return HttpResponse(json.dumps(data))
         elif request.method == "POST":
             date = request.POST.get('date')
+            action = request.POST.get('action')
             month, year = date.split('-')
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
-                report.status = True
-                report.ban_id = user.profile
+                if action == 'ban':
+                    report.status = True
+                    report.ban_id = user.profile
+                    report.check_id = user.profile
+                if action == 'unlock':
+                    report.status = False
+                    report.ban_id = None
+                    report.check_id = None
                 report.save()
             return HttpResponse('Success')
