@@ -88,7 +88,7 @@ class Project(models.Model):
     contract = models.CharField(max_length=100)
     type = models.BooleanField(blank=True, default='False')  # False is inside True is outer
     status = models.BooleanField(blank=True, default='False')  # False is Open True is close
-    report_availability = models.BooleanField(blank=True, default='False')  # False is Available True is Inavailable
+    report_availability = models.BooleanField(blank=True, default='False')  # False is Available True is Unavailable
     acceptance_vp = models.BooleanField(blank=True, default='False')  # False in False True is True
 
     def __str__(self):
@@ -101,13 +101,12 @@ class Report(models.Model):
                                    related_name='creator')
     ban_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,
                                related_name='ban', blank=True)
+    check_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,
+                               related_name='checker', blank=True)
     project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
     date = models.DateField(blank=True)
-
-    # def __str__(self):
-    # return self.name
 
 
 class Department(models.Model):
@@ -142,7 +141,8 @@ class SalaryIndividual(models.Model):
         self.time_norm = 8 * self.days_worked
         try:
             self.penalty = (self.time_norm - self.time_orion) * self.plan_salary / self.time_norm
-            self.salary_hand = self.plan_salary * self.days_worked / salary_common.days_norm_common - self.penalty + self.award
+            self.salary_hand = self.plan_salary * self.days_worked / salary_common.days_norm_common \
+                               - self.penalty + self.award
         except ZeroDivisionError:
             self.penalty = 0
             self.salary_hand = 0
