@@ -884,7 +884,9 @@ def all_reports_for_person(request, person_id):
             month, year = date.split('-')
             data = []
             time_report = 0
-            reports = Report.objects.filter(creator_id=person_id, date__month=month, date__year=year)
+            output = {}
+            profile = Profile.objects.get(pk=person_id)
+            reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
                              'text': report.text, 'status': report.status})
@@ -893,8 +895,12 @@ def all_reports_for_person(request, person_id):
             time_system = 0
             for time_card in times_cards:
                 time_system += time_card.hours_worked.hour
-            data.append({'time_report': time_report, 'time_system': time_system})
-            return HttpResponse(json.dumps(data))
+            output['time_report'] = time_report
+            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
+            output['time_system'] = time_system
+            output['date'] = date
+            output['reports'] = data
+            return HttpResponse(json.dumps(output))
         elif request.method == "POST":
             date = request.POST.get('date')
             action = request.POST.get('action')
@@ -902,7 +908,7 @@ def all_reports_for_person(request, person_id):
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             data = []
-            data.append({'date': date, 'name' : ' '.join([profile.first_name, profile.last_name, profile.middle_name])})
+            output = {}
             time_report = 0
             for report in reports:
                 if action == 'ban':
@@ -921,5 +927,9 @@ def all_reports_for_person(request, person_id):
             time_system = 0
             for time_card in times_cards:
                 time_system += time_card.hours_worked.hour
-            data.append({'time_report': time_report, 'time_system': time_system})
-            return HttpResponse(json.dumps(data))
+            output['time_report'] = time_report
+            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
+            output['time_system'] = time_system
+            output['date'] = date
+            output['reports'] = data
+            return HttpResponse(json.dumps(output))
