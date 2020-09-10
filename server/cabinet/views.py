@@ -70,12 +70,18 @@ def build_level_with_user(subdepartment_id, lvl, date):
             if report.status and flag != 2:
                 flag = 1
             if flag == 1:
-                users_field['banned'] = report.ban_id.last_name + ' ' + report.ban_id.first_name + ' ' + report.ban_id.middle_name
+                users_field[
+                    'banned'] = report.ban_id.last_name + ' ' + report.ban_id.first_name + \
+                                ' ' + report.ban_id.middle_name
                 users_field['report_status'] = report.status
+                users_field[
+                    'checker'] = report.check_id.last_name + ' ' + report.ban_id.first_name + \
+                                  ' ' + report.ban_id.middle_name
                 flag = 1
             report_time += report.hour
         if flag == 0:
             users_field['banned'] = ''
+            users_field['checker'] = ''
         times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=worker.user.pk)
         time_system = 0
         for time_card in times_cards:
