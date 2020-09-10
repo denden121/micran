@@ -1254,7 +1254,6 @@ COPY public.cabinet_calendarmark (id, type, start_date, end_date, person_id) FRO
 
 COPY public.cabinet_department (id, department_code, department_name, subdepartment_code) FROM stdin;
 1	2	Департамент финансов	0
-2	3	Бухгалтерия	2
 3	6	Планово-экономический отдел	2
 4	10	Департамент маркетинга и продаж	0
 5	15	Служба качества	0
@@ -1338,6 +1337,7 @@ COPY public.cabinet_department (id, department_code, department_name, subdepartm
 83	183	Столярный участок	124
 84	184	Служба технического обслуживания	118
 85	185	Диспетчерская служба	118
+2	3	Бухгалтерия	2000
 86	186	Участок пайки и радиомонтажа	118
 87	187	Участок микросварки и наклейки	118
 88	190	ООО "Микран-Групп"	0
@@ -1649,17 +1649,17 @@ COPY public.cabinet_logging (id, "IP", login, action, status, date) FROM stdin;
 --
 
 COPY public.cabinet_profile (user_id, sex, birth_date, "position", middle_name, first_name, last_name, experience, shift, part_time_job, lateness, "SRI_SAS", department_id, direction_id) FROM stdin;
-5	Male	2000-08-18	Controller	Petrovich	Ivan	Ivanov	0	Full	Night		f	\N	\N
-6	Female	1999-02-01	Controller	Alexandrovna	Anna	Petrova	0	Full	Day		f	\N	\N
-10	Female	1990-01-01	Top	Petrovna	Olga	Ivanova	0	Full-Time	Day		f	\N	2
-11	Female	2000-08-26	Technician	Petrovna	Irina	Sidorova	6	Full-Time	Day		f	\N	2
-3	Female	2001-08-18	Farmer	Alexandrovna	Anna	Ivanovna	0	Half	Day		f	\N	\N
-4	Female	1999-02-18	Farmer	Petrovna	Olga	Petrova	0	Full	Day		f	\N	\N
-9	Male	2000-08-26	Technician	Sergeevich	Petr	Ivanov	0	Full-Time	Day		f	\N	3
-1	Male	2000-08-18	Financist	Ivanovich	Ivan	Ivanov	0	Full	Day		f	\N	1
-2	Male	2000-06-18	Financist	Petrovich	Ivan	Ivanov	0	Full	Day		f	\N	2
-7	Male	2000-08-26	Top	Ivanovich	Ivan	Sergeev	2	Full-Time	Day		f	\N	1
-8	Male	1999-11-26	Technician	Alexandrovich	Ivan	Sergeev	0	Full-Time	Day		f	\N	1
+11	Female	2000-08-26	Technician	Petrovna	Irina	Sidorova	6	Full-Time	Day		f	7	2
+10	Female	1990-01-01	Top	Petrovna	Olga	Ivanova	0	Full-Time	Day		f	54	2
+9	Male	2000-08-26	Technician	Sergeevich	Petr	Ivanov	0	Full-Time	Day		f	14	3
+8	Male	1999-11-26	Technician	Alexandrovich	Ivan	Sergeev	0	Full-Time	Day		f	13	1
+7	Male	2000-08-26	Top	Ivanovich	Ivan	Sergeev	2	Full-Time	Day		f	18	1
+6	Female	1999-02-01	Controller	Alexandrovna	Anna	Petrova	0	Full	Day		f	57	3
+5	Male	2000-08-18	Controller	Petrovich	Ivan	Ivanov	0	Full	Night		f	15	3
+4	Female	1999-02-18	Farmer	Petrovna	Olga	Petrova	0	Full	Day		f	6	3
+3	Female	2001-08-18	Farmer	Alexandrovna	Anna	Ivanovna	0	Half	Day		f	106	1
+2	Male	2000-06-18	Financist	Petrovich	Ivan	Ivanov	0	Full	Day		f	7	2
+1	Male	2000-08-18	Financist	Ivanovich	Ivan	Ivanov	0	Full	Day		f	5	1
 \.
 
 
@@ -1694,6 +1694,8 @@ COPY public.cabinet_salarycommon (id, days_norm_common, time_norm_common, date) 
 1	12	96	2020-08-01
 2	0	0	2020-10-01
 3	20	160	2020-07-01
+4	0	0	2020-09-01
+5	20	160	2020-05-01
 \.
 
 
@@ -1702,17 +1704,17 @@ COPY public.cabinet_salarycommon (id, days_norm_common, time_norm_common, date) 
 --
 
 COPY public.cabinet_salaryindividual (id, days_worked, vacation, sick_leave, day_off, time_from_report, time_orion, time_norm, time_off, plan_salary, award, penalty, is_penalty, salary_hand, date, common_part_id, person_id) FROM stdin;
-2	20	0	0	0	0	0	160	0	15000	2000	0	f	17000	2020-08-01	1	2
-3	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-08-01	1	3
-4	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-10-01	2	1
-5	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-10-01	2	2
-6	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-07-01	3	1
-7	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-07-01	3	2
-8	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-07-01	3	7
-9	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-07-01	3	8
-10	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-08-01	1	7
-11	0	0	0	0	0	0	0	0	0	0	0	f	0	2020-08-01	1	8
-1	12	0	0	0	0	0	96	0	10000	2500	10000	t	2500	2020-08-01	1	1
+34	20	0	0	0	0	0	160	0	10	0	10	f	0	2020-05-01	5	11
+35	20	0	0	0	0	0	160	0	121	0	121	f	0	2020-05-01	5	10
+37	20	0	0	0	0	0	160	0	12	0	12	f	0	2020-05-01	5	8
+36	20	0	0	0	0	0	160	0	212	0	212	f	0	2020-05-01	5	9
+38	20	0	0	0	0	0	160	0	12	0	12	f	0	2020-05-01	5	7
+39	20	0	0	0	0	0	160	0	12	0	12	f	0	2020-05-01	5	6
+40	20	0	0	0	0	0	160	0	12	0	12	f	0	2020-05-01	5	5
+41	20	0	0	0	0	0	160	0	12	0	12	f	0	2020-05-01	5	4
+42	20	0	0	0	0	0	160	0	12	0	12	f	0	2020-05-01	5	3
+43	20	0	0	0	0	0	160	0	12	0	12	f	0	2020-05-01	5	2
+44	20	0	0	0	0	0	160	0	120	0	120	f	0	2020-05-01	5	1
 \.
 
 
@@ -1812,6 +1814,53 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 80	2020-09-08 06:53:05.790971+00	3	Control	3		8	1
 81	2020-09-08 06:53:08.69176+00	2	Food	3		8	1
 82	2020-09-08 06:53:11.322005+00	1	Finances	3		8	1
+113	2020-09-08 07:32:44.251843+00	11	user_10	2	[{"changed": {"fields": ["Department"]}}]	11	1
+114	2020-09-08 07:32:50.757282+00	10	user_9	2	[{"changed": {"fields": ["Department"]}}]	11	1
+115	2020-09-08 07:33:01.270911+00	9	user_8	2	[{"changed": {"fields": ["Department"]}}]	11	1
+116	2020-09-08 07:33:06.797347+00	8	user_7	2	[{"changed": {"fields": ["Department"]}}]	11	1
+117	2020-09-08 07:33:17.179225+00	7	user_6	2	[{"changed": {"fields": ["Department"]}}]	11	1
+118	2020-09-08 07:33:29.481614+00	6	user_5	2	[{"changed": {"fields": ["Department", "Direction"]}}]	11	1
+119	2020-09-08 07:33:36.668269+00	5	user_4	2	[{"changed": {"fields": ["Department", "Direction"]}}]	11	1
+120	2020-09-08 07:33:43.533807+00	4	user_3	2	[{"changed": {"fields": ["Department", "Direction"]}}]	11	1
+121	2020-09-08 07:33:52.650065+00	3	user_2	2	[{"changed": {"fields": ["Department", "Direction"]}}]	11	1
+122	2020-09-08 07:33:57.782551+00	2	user_1	2	[{"changed": {"fields": ["Department"]}}]	11	1
+123	2020-09-08 07:34:02.196742+00	1	admin	2	[{"changed": {"fields": ["Department"]}}]	11	1
+124	2020-09-08 07:40:43.679268+00	2	Бухгалтерия	2	[{"changed": {"fields": ["Subdepartment code"]}}]	8	1
+125	2020-09-08 07:42:00.512478+00	2	Бухгалтерия	2	[{"changed": {"fields": ["Subdepartment code"]}}]	8	1
+126	2020-09-08 07:42:41.067077+00	2	Бухгалтерия	2	[{"changed": {"fields": ["Subdepartment code"]}}]	8	1
+127	2020-09-08 09:15:57.886412+00	33	SalaryIndividual object (33)	3		16	1
+128	2020-09-08 09:15:57.898197+00	32	SalaryIndividual object (32)	3		16	1
+129	2020-09-08 09:15:57.900061+00	31	SalaryIndividual object (31)	3		16	1
+130	2020-09-08 09:15:57.901937+00	30	SalaryIndividual object (30)	3		16	1
+131	2020-09-08 09:15:57.903836+00	29	SalaryIndividual object (29)	3		16	1
+132	2020-09-08 09:15:57.905495+00	28	SalaryIndividual object (28)	3		16	1
+133	2020-09-08 09:15:57.907421+00	27	SalaryIndividual object (27)	3		16	1
+134	2020-09-08 09:15:57.90962+00	26	SalaryIndividual object (26)	3		16	1
+135	2020-09-08 09:15:57.911493+00	25	SalaryIndividual object (25)	3		16	1
+136	2020-09-08 09:15:57.913414+00	24	SalaryIndividual object (24)	3		16	1
+137	2020-09-08 09:15:57.915295+00	23	SalaryIndividual object (23)	3		16	1
+138	2020-09-08 09:15:57.916902+00	22	SalaryIndividual object (22)	3		16	1
+139	2020-09-08 09:15:57.918431+00	21	SalaryIndividual object (21)	3		16	1
+140	2020-09-08 09:15:57.920274+00	20	SalaryIndividual object (20)	3		16	1
+141	2020-09-08 09:15:57.921744+00	19	SalaryIndividual object (19)	3		16	1
+142	2020-09-08 09:15:57.923101+00	18	SalaryIndividual object (18)	3		16	1
+143	2020-09-08 09:15:57.924637+00	17	SalaryIndividual object (17)	3		16	1
+144	2020-09-08 09:15:57.926191+00	16	SalaryIndividual object (16)	3		16	1
+145	2020-09-08 09:15:57.927686+00	15	SalaryIndividual object (15)	3		16	1
+146	2020-09-08 09:15:57.929128+00	14	SalaryIndividual object (14)	3		16	1
+147	2020-09-08 09:15:57.930526+00	13	SalaryIndividual object (13)	3		16	1
+148	2020-09-08 09:15:57.931922+00	12	SalaryIndividual object (12)	3		16	1
+149	2020-09-08 09:15:57.933655+00	11	SalaryIndividual object (11)	3		16	1
+150	2020-09-08 09:15:57.935396+00	10	SalaryIndividual object (10)	3		16	1
+151	2020-09-08 09:15:57.937503+00	9	SalaryIndividual object (9)	3		16	1
+152	2020-09-08 09:15:57.939222+00	8	SalaryIndividual object (8)	3		16	1
+153	2020-09-08 09:15:57.940846+00	7	SalaryIndividual object (7)	3		16	1
+154	2020-09-08 09:15:57.94263+00	6	SalaryIndividual object (6)	3		16	1
+155	2020-09-08 09:15:57.944268+00	5	SalaryIndividual object (5)	3		16	1
+156	2020-09-08 09:15:57.94582+00	4	SalaryIndividual object (4)	3		16	1
+157	2020-09-08 09:15:57.947434+00	3	SalaryIndividual object (3)	3		16	1
+158	2020-09-08 09:15:57.949034+00	2	SalaryIndividual object (2)	3		16	1
+159	2020-09-08 09:15:57.950692+00	1	SalaryIndividual object (1)	3		16	1
 \.
 
 
@@ -2009,14 +2058,14 @@ SELECT pg_catalog.setval('public.cabinet_report_id_seq', 16, true);
 -- Name: cabinet_salarycommon_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_salarycommon_id_seq', 3, true);
+SELECT pg_catalog.setval('public.cabinet_salarycommon_id_seq', 5, true);
 
 
 --
 -- Name: cabinet_salaryindividual_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_salaryindividual_id_seq', 11, true);
+SELECT pg_catalog.setval('public.cabinet_salaryindividual_id_seq', 44, true);
 
 
 --
@@ -2030,7 +2079,7 @@ SELECT pg_catalog.setval('public.cabinet_timecard_id_seq', 2, true);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 112, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 159, true);
 
 
 --

@@ -78,6 +78,7 @@ class Interval extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         };
+        console.log(date)
         const url = `http://127.0.0.1:8000/cabinet/calendar/?subdepartment=${e}&current_date=${date.join('-')}&range=${this.state.range}`
         fetch(url, requestOptions)
             .then(response =>  response.json())

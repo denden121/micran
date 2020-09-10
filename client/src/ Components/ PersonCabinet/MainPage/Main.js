@@ -23,6 +23,7 @@ import Employees from "../Employees/Employees"
 import Interval from "../WorkCalendar/Interval/Interval"
 import SystemTime from "../SystemTime/SystemTime"
 import Structure from "../Tree/Structure"
+import ListReports from "../ListReports/ListReports"
 import { DatePicker, Space } from 'antd';
 import { Layout, Menu, PageHeader,Button} from 'antd';
 import { UpSquareOutlined,TeamOutlined,UsergroupAddOutlined } from '@ant-design/icons';
@@ -85,7 +86,7 @@ class Main extends Component{
         return (
 
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
-
+                
                 <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{backgroundColor:"white"}}>
                     <div style={{backgroundColor:"white",color:"#fff"}}>
                         <img src={picture} alt="" className="img-fluid"></img>
@@ -101,6 +102,13 @@ class Main extends Component{
                             <a  href="http://localhost:3000/cabinet/">
                                 <span data-feather="home"></span>
                                 Отправка отчетов
+                                <span className="sr-only"></span>
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item key="1" icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/list_reports">
+                                <span data-feather="home"></span>
+                                Список отчетов 
                                 <span className="sr-only"></span>
                             </a>
                         </Menu.Item>
@@ -174,10 +182,15 @@ class Main extends Component{
                 </Sider>
 
                 <Layout className="site-layout">
-
+                        
                     <Content >
                         <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"1900px"}}>
-                            <LogOut clickLogOut={this.logOut}/>
+                            {/* <LogOut clickLogOut={this.logOut}/> */}
+                            <div className="d-flex flex-column flex-md-row  p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+                                <nav className="my-2 my-md-0 mr-md-3">
+                                    <LogOut className="text-right" clickLogOut={this.logOut}/> 
+                                </nav>  
+                            </div>
                             <Switch>
                                 <Route path='/cabinet/' exact component = {SendReport}/>
                                 <Route path='/cabinet/person' exact  component = {PersonData}/>
@@ -193,6 +206,7 @@ class Main extends Component{
                                 <Route path='/cabinet/admin/calendar' exact  component = {Interval}/>
                                 <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/>
                                 <Route path='/cabinet/admin/structure' exact  component = {Structure}/>
+                                <Route path='/cabinet/list_reports' exact  component = {ListReports}/>
                             </Switch>
                         </div>
                     </Content>
