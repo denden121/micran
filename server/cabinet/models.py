@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 TYPE_CALENDAR_MARK = [
     ('undefined', 'undefined'),
     ('paid_holiday', 'paid_holiday'),
@@ -45,8 +44,10 @@ class Direction(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
     sex = models.CharField(max_length=10, blank=True)
-    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.SET_NULL, blank=True, null=True)
-    direction = models.ForeignKey('Direction', related_name='direction', on_delete=models.SET_NULL, blank=True, null=True)
+    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.SET_NULL, blank=True,
+                                   null=True)
+    direction = models.ForeignKey('Direction', related_name='direction', on_delete=models.SET_NULL, blank=True,
+                                  null=True)
     birth_date = models.DateField(null=True, blank=True)
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
@@ -74,18 +75,21 @@ class Group(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=True)
-    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True, null=True)
+    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True,
+                                  null=True)
     manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.SET_NULL, null=True)
     client = models.CharField(max_length=100, blank=True)
-    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.SET_NULL, null=True)
-    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.SET_NULL, null=True)
+    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.SET_NULL,
+                                       null=True)
+    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id',
+                                              on_delete=models.SET_NULL, null=True)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.CharField(max_length=100)
-    type = models.BooleanField(blank=True, default='False') # False is inside True is outer
-    status = models.BooleanField(blank=True, default='False') # False is Open True is close
-    report_availability = models.BooleanField(blank=True, default='False') # False is Available True is Inavailable
-    acceptance_vp = models.BooleanField(blank=True, default='False') # False in False True is True
+    type = models.BooleanField(blank=True, default='False')  # False is inside True is outer
+    status = models.BooleanField(blank=True, default='False')  # False is Open True is close
+    report_availability = models.BooleanField(blank=True, default='False')  # False is Available True is Inavailable
+    acceptance_vp = models.BooleanField(blank=True, default='False')  # False in False True is True
 
     def __str__(self):
         return self.name
@@ -93,7 +97,10 @@ class Project(models.Model):
 
 class Report(models.Model):
     status = models.BooleanField(blank=True)
-    creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
+    creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True,
+                                   related_name='creator')
+    ban_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,
+                               related_name='ban', blank=True)
     project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)

@@ -65,10 +65,18 @@ def build_level_with_user(subdepartment_id, lvl, date):
                        'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
         reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
         report_time = 0
+        flag = 0
         for report in reports:
+            if report.status and flag != 2:
+                flag = 1
+            if flag == 1:
+                users_field['banned'] = report.ban_id.last_name + ' ' + report.ban_id.first_name + ' ' + report.ban_id.middle_name
+                users_field['report_status'] = report.status
+                flag = 1
             report_time += report.hour
+        if flag == 0:
+            users_field['banned'] = ''
         times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=worker.user.pk)
-        print(times_cards)
         time_system = 0
         for time_card in times_cards:
             time_system += time_card.hours_worked.hour
@@ -851,13 +859,15 @@ def workers_subdepartment(request, subdepartment_id):
 
 @csrf_exempt
 def workers_for_reports(request, department_id):
-    user = get_user_jwt(request)
+    # user = get_user_jwt(request)
+    user = True
     if user:
         if request.method == "GET":
             date = request.GET.get('date')
             data = build_level_with_user(department_id, 0, date)
             output = get_endpoint_department(data, [])
             return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
+
 
 @csrf_exempt
 def all_reports_for_person(request, person_id):
@@ -872,4 +882,13 @@ def all_reports_for_person(request, person_id):
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
                              'text': report.text, 'status': report.status})
             return HttpResponse(json.dumps(data))
-        # elif request.method == "POST":
+        elif request.method == "POST":
+            date = request.POST.get('date')
+            month, year = date.split('-')
+            data = []
+            reports = Report.objects.filter(creator_id=person_id, date__month=month, date__year=year)
+            for report in reports:
+                report.status = True
+                report.ban_id = user
+                report.save()
+            return HttpResponse(json.dumps(data))
