@@ -904,6 +904,7 @@ def all_reports_for_person(request, person_id):
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             data = []
+            data.append({'date': date, 'name' : ' '.join([profile.first_name, profile.last_name, profile.middle_name])})
             time_report = 0
             for report in reports:
                 if action == 'ban':
