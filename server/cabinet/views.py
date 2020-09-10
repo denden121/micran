@@ -71,9 +71,7 @@ def build_level_with_user(subdepartment_id, lvl, date):
         users_field['time_report'] = report_time
         users_field['time_system'] = time_system
         users.append(users_field)
-    if users:
-        data['users'] = users
-        print(data['users'])
+    data['users'] = users
     if subdepartments:
         for subdepartment in subdepartments:
             subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date))
