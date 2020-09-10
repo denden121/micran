@@ -885,10 +885,17 @@ def all_reports_for_person(request, person_id):
             date = request.GET.get('date')
             month, year = date.split('-')
             data = []
+            time_report = 0
             reports = Report.objects.filter(creator_id=person_id, date__month=month, date__year=year)
             for report in reports:
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
                              'text': report.text, 'status': report.status})
+                time_report += report.hour
+            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
+            time_system = 0
+            for time_card in times_cards:
+                time_system += time_card.hours_worked.hour
+            data.append({'time_report': time_report, 'time_system': time_system})
             return HttpResponse(json.dumps(data))
         elif request.method == "POST":
             date = request.POST.get('date')
@@ -896,6 +903,8 @@ def all_reports_for_person(request, person_id):
             month, year = date.split('-')
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
+            data = []
+            time_report = 0
             for report in reports:
                 if action == 'ban':
                     report.status = True
@@ -906,4 +915,12 @@ def all_reports_for_person(request, person_id):
                     report.ban_id = None
                     report.check_id = None
                 report.save()
-            return HttpResponse('Success')
+                data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
+                             'text': report.text, 'status': report.status})
+                time_report += report.hour
+            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
+            time_system = 0
+            for time_card in times_cards:
+                time_system += time_card.hours_worked.hour
+            data.append({'time_report': time_report, 'time_system': time_system})
+            return HttpResponse(json.dumps(data))
