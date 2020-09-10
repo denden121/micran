@@ -48,10 +48,12 @@ def build_level(subdepartment_id, lvl):
 
 def build_level_with_user(subdepartment_id, lvl, date):
     department = Department.objects.get(pk=subdepartment_id)
+    if int(department.subdepartment_code) > 0:
+        lvl+=1
     if lvl == 0:
         data = {}
     else:
-        data = {'name': department.department_name, 'code': department.department_code}
+        data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
     subdepartments_objects = []
     users = []
     month, year = date.split('-')
@@ -854,5 +856,5 @@ def workers_for_reports(request, department_id):
             date = request.GET.get('date')
             department = Department.objects.get(pk=department_id)
             data = build_level_with_user(department_id, 0, date)
-            output = get_endpoint_department(data, [])
-            return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
+            # output = get_endpoint_department(data, [])
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
