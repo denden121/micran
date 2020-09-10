@@ -68,7 +68,7 @@ class ListReports extends React.Component {
                     <Collapse accordion defaultActiveKey={['1']} onChange={callback}>
                     <Panel header="Параметры отображения" className="text-left" key="1">
                         <CollapseList
-                            onChangeSelectDepartments = {this.onChangeSelectDepartments}
+                            onChangeSelectDepartments = {this.onChangeSelectDepartments}    
                             departments = {this.state.departments}
                             subdepartments = {this.state.subdepartments}/>
                     </Panel>
