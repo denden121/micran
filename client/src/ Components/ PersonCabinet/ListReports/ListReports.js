@@ -6,23 +6,21 @@ import ReportModal from "./ReportModal/ReportModal"
 
 
 class ListReports extends React.Component {
-  
     state = {
         departments:[],
-        select_department:'',
+        // select_department:'',
         subdepartments:[],
-        select_subdepartments:'',
+        // select_subdepartments:'',
         reports:[],
         visible: false 
     }
-
     showModal = () => {
         this.setState({
           visible: true,
         });
       };
     
-      handleOk = e => {
+    handleOk = e => {
         console.log(e);
         this.setState({
           visible: false
@@ -61,25 +59,51 @@ class ListReports extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        fetch(`http://127.0.0.1:8000/departments/${e}/subdepartments/`, requestOptions)
-            .then(response =>  response.json())
-            .then(result => {
-                console.log('sub',result)
-                let subdepartments = Array.from(result).map((subdepartment)=>{
-                    // console.log(subdepartment)
-                    return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
-                })
-                this.setState({subdepartments: subdepartments})})
-            .catch(error => console.log('error', error))
-
         fetch(`http://127.0.0.1:8000/reports/department/${e}/?date=${date}`, requestOptions)
             .then(response =>  response.json())
             .then(result => {
+                let a = []
+                let subdepartments = []
+                for(let i of result){
+                    a.push({name:i.name,
+                        code:i.code,
+                        pk:i.pk})
+                    a.push(i.users)
+                    subdepartments.push({value:`${i.pk}`,label:`${i.code+ ' '+i.name}`})
+                }
                 console.log(result)
-                this.setState({reports: result})
+                this.setState(
+                    {reports: a,
+                        subdepartments: subdepartments})
             })
             .catch(error => console.log('error', error))
-
+    }
+    onChangeSelectSubDepartments=(e)=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        const date = localStorage.getItem('date').replace(' ','-')
+        console.log(date)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch(`http://127.0.0.1:8000/reports/department/${e}/?date=${date}`, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                let a = []
+                for(let i of result){
+                    a.push({name:i.name,
+                        code:i.code,
+                        pk:i.pk})
+                    a.push(i.users)
+                }
+                console.log(result)
+                this.setState(
+                    {reports: a})
+            })
+            .catch(error => console.log('error', error))
     }
     render(){
         const { Panel } = Collapse;
@@ -95,6 +119,7 @@ class ListReports extends React.Component {
                     <Collapse accordion defaultActiveKey={['1']} onChange={callback}>
                     <Panel header="Параметры отображения" className="text-left" key="1">
                         <CollapseList
+                            onChangeSelectSubDepartments = {this.onChangeSelectSubDepartments}
                             onChangeSelectDepartments = {this.onChangeSelectDepartments}    
                             departments = {this.state.departments}
                             subdepartments = {this.state.subdepartments}/>
@@ -111,11 +136,9 @@ class ListReports extends React.Component {
                 <br/>
                 <div className="row">
                     <div className="col-lg-12">
-<<<<<<< HEAD
                         <ReportsTable
-                        reports = {this.state.reports}/>
-=======
-                        <ReportsTable onClickShowModal={this.showModal}/>
+                            reports = {this.state.reports}
+                            onClickShowModal={this.showModal}/>
                         <Modal
                             title="Название дата"
                             visible={this.state.visible}
@@ -125,7 +148,6 @@ class ListReports extends React.Component {
                         >
                             <ReportModal/>
                         </Modal>
->>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
                     </div>
                 </div>
             </div>

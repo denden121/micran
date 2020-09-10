@@ -1,20 +1,8 @@
 import React from "react"
 import {Modal} from "antd"
 
-<<<<<<< HEAD
 const Report =(props)=>{
-    let a = []
-    for(let i of props.reports){
-        // console.log('i',i)
-        a.push({name:i.name,
-                code:i.code,
-                pk:i.pk})
-        a.push(i.users)
-    }
-
-    // console.log('a',a)
-    return a.map((item,key)=>{
-        // console.log('item',item)
+    return props.reports.map((item,key)=>{
         console.log(item.users)
         return Array.isArray( item)? item.map((user)=> {
                 return <tr>
@@ -34,10 +22,7 @@ const Report =(props)=>{
 }
 
 const ReportsTable =(props)=>{
-=======
-const ReportsTable =(props)=>{
     console.log(props)
->>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
     return(
         <div className="table-responsive">
             <table className="table table-bordered table-sm">
@@ -53,23 +38,7 @@ const ReportsTable =(props)=>{
                     </tr>
                 </thead>
                 <tbody>
-<<<<<<< HEAD
-                    <Report reports ={props.reports}/>
-=======
-                    <tr>
-                        <td colspan="7" scope="colgroup" className="table-secondary">Отдел</td>
-                    </tr>
-                    <tr>
-                        <td scope="row"></td>
-                        <td></td>
-                        <td><a onClick={props.onClickShowModal} style={{cursor:"pointer"}}>пппп</a></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    
->>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
+                    <Report onClickShowModal={props.onClickShowModal} reports ={props.reports}/>
                 </tbody>
             </table>
         </div>
