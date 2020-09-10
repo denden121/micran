@@ -147,6 +147,10 @@ class SalaryIndividual(models.Model):
             self.penalty = 0
             self.salary_hand = 0
 
+    def __str__(self):
+        return 'Salary for ' + self.person.last_name + ' ' + self.person.first_name + ' ' + self.person.middle_name + \
+               ' for ' + str(self.date.year) + ' ' + str(self.date.month)
+
 
 class SalaryCommon(models.Model):
     days_norm_common = models.FloatField(blank=True, default=0)

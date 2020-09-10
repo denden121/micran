@@ -80,7 +80,9 @@ def build_level_with_user(subdepartment_id, lvl, date):
         time_system = 0
         for time_card in times_cards:
             time_system += time_card.hours_worked.hour
+        salary = SalaryIndividual.objects.get(date__month=month, date__year=year, person=worker)
         users_field['time_report'] = report_time
+        users_field['time_norm'] = salary.time_norm
         users_field['time_system'] = time_system
         users.append(users_field)
     data['users'] = users
@@ -885,10 +887,10 @@ def all_reports_for_person(request, person_id):
         elif request.method == "POST":
             date = request.POST.get('date')
             month, year = date.split('-')
-            data = []
-            reports = Report.objects.filter(creator_id=person_id, date__month=month, date__year=year)
+            profile = Profile.objects.get(pk=person_id)
+            reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
                 report.status = True
-                report.ban_id = user
+                report.ban_id = user.profile
                 report.save()
-            return HttpResponse(json.dumps(data))
+            return HttpResponse('Success')
