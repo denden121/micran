@@ -7,7 +7,38 @@ const gridStyle = {
   };
 const { TextArea } = Input;
 
+const Cards = (props) =>{
+    console.log(props)
+    return props.reports.map((item,key)=>{
+        return <Card.Grid style={gridStyle}>
+            <div className="row">
+                <div className="col-lg-6">
+                    <div style={{padding:"15px"}} className="text-left"><strong>№{key+1}</strong></div>
+                </div>
+
+                <div className="col-lg-6">
+                    <div style={{padding:"15px",color:"red"}} className="text-right">{item.hours}ч</div>
+                </div>
+
+
+
+            <div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
+                <Button  type="primary" danger size="small">
+                    Удалить
+                </Button>
+            </div>
+            </div>
+            <div className="row">
+                <div className="col-lg-12">
+                    <div style={{padding:"15px"}} className="text-left"><strong>{item.project}</strong></div>
+                </div>
+            </div>
+        </Card.Grid>
+    })
+}
+
 const ReportModal =(props)=>{
+    console.log(props.personDate.reports)
     return(
         <div className="container-fluid">
             <div className="row">
@@ -18,24 +49,7 @@ const ReportModal =(props)=>{
                         <Row gutter={16}>
                             <Col span={10}>
                                 <Card title="Список проектов" bordered={true}>
-                                    <Card.Grid style={gridStyle}>
-                                        <div className="row">
-                                            <div className="col-lg-6">
-                                                <div style={{padding:"15px"}} className="text-left"><strong>№1</strong></div>
-                                            </div>
-                                            <div className="col-lg-6">
-                                                <div style={{padding:"15px",color:"red"}} className="text-right">12ч</div>
-                                            </div>
-                                        </div>
-                                                                          
-                                    <div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
-                                        <Button  type="primary" danger size="small">
-                                            Удалить
-                                        </Button>
-                                    </div>
-                                    </Card.Grid>
-                                    <Card.Grid style={gridStyle}></Card.Grid>
-                                    <Card.Grid style={gridStyle}></Card.Grid>
+                                    <Cards reports = {props.personDate.reports}/>
                                 </Card>
                                 <br/>
                                     <div className="row">
@@ -57,7 +71,7 @@ const ReportModal =(props)=>{
                                 <br/>
                                 <div className="row">
                                     <div className="col-lg-12 text-right" style={{color:"#40D0E3",fontSize:"20px"}}>
-                                        48.52 ч.
+                                        {props.personDate.time_system} ч.
                                     </div>
                                 </div>
                                 <div className="row">

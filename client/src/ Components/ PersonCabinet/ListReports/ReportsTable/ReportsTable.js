@@ -7,12 +7,12 @@ const Report =(props)=>{
         return Array.isArray( item)? item.map((user)=> {
                 return <tr>
                     <td scope="row"></td>
-                    <td><a onClick={props.onClickShowModal} style={{cursor: "pointer"}}>{user.name}</a></td>
+                    <td><a onClick={props.onClickShowModal.bind(this,user.pk)} style={{cursor: "pointer"}}>{user.name}</a></td>
                     <td>{user.time_report}</td>
                     <td>{user.time_norm}</td>
                     <td>{user.time_system}</td>
+                    <td>{user.checker}</td>
                     <td>{user.banned}</td>
-                    <td></td>
                 </tr>
             })
             : <tr>

@@ -12,16 +12,29 @@ class ListReports extends React.Component {
         subdepartments:[],
         // select_subdepartments:'',
         reports:[],
-        visible: false 
+        visible: false,
+        person_date:''
     }
-    showModal = () => {
-        this.setState({
-          visible: true,
-        });
-      };
-    
+    showModal = (pk) => {
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        const date = localStorage.getItem('date').replace(' ', '-')
+        // console.log(date)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch(`http://127.0.0.1:8000/reports/person/${pk}/?date=${date}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                this.setState({person_date: result, visible: true,})
+            })
+            .catch(error => console.log('error', error));
+    }
     handleOk = e => {
-        console.log(e);
+        // console.log(e);
         this.setState({
           visible: false
         });
@@ -53,7 +66,7 @@ class ListReports extends React.Component {
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
         const date = localStorage.getItem('date').replace(' ','-')
-        console.log(date)
+        // console.log(date)
         let requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -71,7 +84,7 @@ class ListReports extends React.Component {
                     a.push(i.users)
                     subdepartments.push({value:`${i.pk}`,label:`${i.code+ ' '+i.name}`})
                 }
-                console.log(result)
+                // console.log(result)
                 this.setState(
                     {reports: a,
                         subdepartments: subdepartments})
@@ -99,7 +112,7 @@ class ListReports extends React.Component {
                         pk:i.pk})
                     a.push(i.users)
                 }
-                console.log(result)
+                // console.log(result)
                 this.setState(
                     {reports: a})
             })
@@ -146,7 +159,7 @@ class ListReports extends React.Component {
                             width={720}                            
                             okText="Блокировать"                                                    
                         >
-                            <ReportModal/>
+                            <ReportModal personDate = {this.state.person_date}/>
                         </Modal>
                     </div>
                 </div>
