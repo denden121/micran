@@ -61,7 +61,7 @@ def build_level_with_user(subdepartment_id, lvl, date):
     subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
     profiles = Profile.objects.filter(department=department)
     for worker in profiles:
-        users_field = {'name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
+        users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
                        'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
         reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
         report_time = 0
@@ -71,12 +71,10 @@ def build_level_with_user(subdepartment_id, lvl, date):
                 flag = 1
             if flag == 1:
                 users_field[
-                    'banned'] = report.ban_id.last_name + ' ' + report.ban_id.first_name + \
-                                ' ' + report.ban_id.middle_name
+                    'banned'] = ' '.join([report.ban_id.first_name, report.ban_id.last_name, report.ban_id.middle_name])
                 users_field['report_status'] = report.status
                 users_field[
-                    'checker'] = report.check_id.last_name + ' ' + report.ban_id.first_name + \
-                                  ' ' + report.ban_id.middle_name
+                    'checker'] = ' '.join([report.check_id.first_name, report.check_id.last_name, report.check_id.middle_name])
                 flag = 1
             report_time += report.hour
         if flag == 0:
@@ -885,17 +883,33 @@ def all_reports_for_person(request, person_id):
             date = request.GET.get('date')
             month, year = date.split('-')
             data = []
-            reports = Report.objects.filter(creator_id=person_id, date__month=month, date__year=year)
+            time_report = 0
+            output = {}
+            profile = Profile.objects.get(pk=person_id)
+            reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
                              'text': report.text, 'status': report.status})
-            return HttpResponse(json.dumps(data))
+                time_report += report.hour
+            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
+            time_system = 0
+            for time_card in times_cards:
+                time_system += time_card.hours_worked.hour
+            output['time_report'] = time_report
+            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
+            output['time_system'] = time_system
+            output['date'] = date
+            output['reports'] = data
+            return HttpResponse(json.dumps(output))
         elif request.method == "POST":
             date = request.POST.get('date')
             action = request.POST.get('action')
             month, year = date.split('-')
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
+            data = []
+            output = {}
+            time_report = 0
             for report in reports:
                 if action == 'ban':
                     report.status = True
@@ -906,4 +920,16 @@ def all_reports_for_person(request, person_id):
                     report.ban_id = None
                     report.check_id = None
                 report.save()
-            return HttpResponse('Success')
+                data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
+                             'text': report.text, 'status': report.status})
+                time_report += report.hour
+            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
+            time_system = 0
+            for time_card in times_cards:
+                time_system += time_card.hours_worked.hour
+            output['time_report'] = time_report
+            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
+            output['time_system'] = time_system
+            output['date'] = date
+            output['reports'] = data
+            return HttpResponse(json.dumps(output))
