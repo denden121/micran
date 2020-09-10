@@ -54,6 +54,8 @@ class ListReports extends React.Component {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
+        const date = localStorage.getItem('date').replace(' ','-')
+        console.log(date)
         let requestOptions = {
             method: 'GET',
             headers: myHeaders,
@@ -69,6 +71,15 @@ class ListReports extends React.Component {
                 })
                 this.setState({subdepartments: subdepartments})})
             .catch(error => console.log('error', error))
+
+        fetch(`http://127.0.0.1:8000/reports/department/${e}/?date=${date}`, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                console.log(result)
+                this.setState({reports: result})
+            })
+            .catch(error => console.log('error', error))
+
     }
     render(){
         const { Panel } = Collapse;
@@ -84,7 +95,7 @@ class ListReports extends React.Component {
                     <Collapse accordion defaultActiveKey={['1']} onChange={callback}>
                     <Panel header="Параметры отображения" className="text-left" key="1">
                         <CollapseList
-                            onChangeSelectDepartments = {this.onChangeSelectDepartments}
+                            onChangeSelectDepartments = {this.onChangeSelectDepartments}    
                             departments = {this.state.departments}
                             subdepartments = {this.state.subdepartments}/>
                     </Panel>
@@ -100,6 +111,10 @@ class ListReports extends React.Component {
                 <br/>
                 <div className="row">
                     <div className="col-lg-12">
+<<<<<<< HEAD
+                        <ReportsTable
+                        reports = {this.state.reports}/>
+=======
                         <ReportsTable onClickShowModal={this.showModal}/>
                         <Modal
                             title="Название дата"
@@ -110,6 +125,7 @@ class ListReports extends React.Component {
                         >
                             <ReportModal/>
                         </Modal>
+>>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
                     </div>
                 </div>
             </div>
