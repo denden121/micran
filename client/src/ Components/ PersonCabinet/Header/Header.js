@@ -14,9 +14,19 @@ const LogOut =(props)=>{
         //         </ul>
         //     </nav>            
         // </div>
-        <div className="text-right">
-              <a onClick={props.clickLogOut} type="primary" size="small"  href="#" style={{marginRight:"10px"}}>Выйти</a>
-        </div>
+        // <div className="d-flex flex-column flex-md-row  p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        //     <nav className="my-2 my-md-0 mr-md-3">
+        //         <div className="text-right">
+        //             <a onClick={props.clickLogOut} type="primary" size="small"  href="#" style={{marginRight:"10px"}}>Выйти</a>
+        //         </div>
+        //     </nav>  
+        // </div>
+        <header className="blog-header py-3">
+            <div className="text-right">
+            <a onClick={props.clickLogOut} className="btn btn-sm btn-outline-secondary" size="small"  href="#" style={{marginRight:"10px"}}>Выйти</a>
+            </div>
+            <hr/>
+        </header>
     )
 }
 export default LogOut;

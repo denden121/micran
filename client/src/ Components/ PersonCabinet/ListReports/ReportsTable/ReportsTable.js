@@ -1,7 +1,8 @@
 import React from "react"
 import {Modal} from "antd"
 
-const ReportsTable =()=>{
+const ReportsTable =(props)=>{
+    console.log(props)
     return(
         <div className="table-responsive">
             <table className="table table-bordered table-sm">
@@ -23,7 +24,7 @@ const ReportsTable =()=>{
                     <tr>
                         <td scope="row"></td>
                         <td></td>
-                        <td><a></a></td>
+                        <td><a onClick={props.onClickShowModal} style={{cursor:"pointer"}}>пппп</a></td>
                         <td></td>
                         <td></td>
                         <td></td>
