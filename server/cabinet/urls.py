@@ -45,5 +45,4 @@ urlpatterns = [
     path('admin/logs_with_range/', views.logs_with_range),
     path('admin/groups_admin/', views.groups_with_permission),
     path('reports/department/<int:department_id>/', views.workers_for_reports),
-    path('reports/subdepartment/<int:department_id>/', views.workers_for_reports_with_subdepartments),
 ]
