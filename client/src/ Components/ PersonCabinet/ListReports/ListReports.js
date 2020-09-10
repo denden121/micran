@@ -5,12 +5,25 @@ import ReportsTable from "./ReportsTable/ReportsTable"
 
 
 class ListReports extends React.Component {
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
     state = {
         departments:[],
         select_department:'',
         subdepartments:[],
         select_subdepartments:'',
         reports:[],
+        visible: false 
     }
     componentDidMount() {
         this.loadDepartments();

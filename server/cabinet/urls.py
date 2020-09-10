@@ -37,16 +37,12 @@ urlpatterns = [
     path('admin/logs/', views.logs),
     path('directions/', views.direction_view),
     path('subdepartments/', views.subdepartment_view),
-    path('departments/', views.departament_view),
+    path('departments/', views.departament_new_view),
     path('departments/<int:department_id>/subdepartments/', views.subdepartment_from_departments_view),
     path('departments/simple/', views.departament_simple_view),
     path('workers/subdepartments/<int:subdepartment_id>', views.workers_subdepartment),
     path('workers/departments/<int:department_id>', views.workers_department),
     path('admin/logs_with_range/', views.logs_with_range),
     path('admin/groups_admin/', views.groups_with_permission),
+    path('reports/department/<int:department_id>/', views.workers_for_reports),
 ]
-
-
-
-
-

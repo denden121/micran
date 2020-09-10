@@ -23,6 +23,72 @@ def get_user_jwt(request):
     return user
 
 
+def get_endpoint_department(data, output):
+    if 'subdepartments' in data:
+        for i in range(len(data['subdepartments'])):
+            get_endpoint_department(data['subdepartments'][i], output)
+        return output
+    else:
+        output.append(data)
+
+
+def build_level(subdepartment_id, lvl):
+    department = Department.objects.get(pk=subdepartment_id)
+    data = {'lvl': lvl, 'name': department.department_name, 'code': department.department_code}
+    subdepartments_objects = []
+    subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
+    if subdepartments:
+        for subdepartment in subdepartments:
+            subdepartments_objects.append(build_level(subdepartment.pk, lvl + 1))
+        data['subdepartments'] = subdepartments_objects
+        return data
+    else:
+        return data
+
+
+def build_level_with_user(subdepartment_id, lvl, date):
+    department = Department.objects.get(pk=subdepartment_id)
+    if lvl == 0:
+        data = {}
+    else:
+        data = {'name': department.department_name, 'code': department.department_code}
+    subdepartments_objects = []
+    users = []
+    month, year = date.split('-')
+    subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
+    profiles = Profile.objects.filter(department=department)
+    for worker in profiles:
+        users_field = {'name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name}
+        reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
+        report_time = 0
+        for report in reports:
+            report_time += report.hour
+        times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=worker.user.pk)
+        print(times_cards)
+        time_system = 0
+        for time_card in times_cards:
+            time_system += time_card.hours_worked.hour
+        users_field['time_report'] = report_time
+        users_field['time_system'] = time_system
+        users.append(users_field)
+    data['users'] = users
+    if subdepartments:
+        for subdepartment in subdepartments:
+            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date))
+        data['subdepartments'] = subdepartments_objects
+        return data
+    else:
+        return data
+
+
+def departament_new_view(request):
+    departments = Department.objects.filter(subdepartment_code='0')
+    data = {}
+    for department in departments:
+        data[department.id] = build_level(department.id, 0)
+    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+
+
 def get_time_from_reports(profile):
     t = datetime.now()
     reports = Report.objects.filter(creator_id=profile.user.id, date__month=t.month, date__year=t.year)
@@ -433,12 +499,15 @@ def salary(request):
             year = request.GET.get('year')
             month = request.GET.get('month')
             for worker in workers:
-                hour = get_time_from_reports(worker)
+                reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
+                report_time = 0
+                for report in reports:
+                    report_time += report.hour
                 salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
                 salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
                                                                     common_part=salary_common)
                 direction = worker.direction.direction_code
-                salary.time_from_report = hour
+                salary.time_from_report = report_time
                 field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
                          'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
                          'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
@@ -617,42 +686,6 @@ def managers_project(request):
 
 
 @csrf_exempt
-def departament_view(request):
-    user = get_user_jwt(request)
-    if user:
-        if request.method == "GET":
-            departments = Department.objects.filter(subdepartment_code='0')
-            data = []
-            subdepartments_field = []
-            direction_field = []
-            profile_field = []
-            for department in departments:
-                subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-                for subdepartment in subdepartments:
-                    directions = Direction.objects.filter(subdepartment=subdepartment.subdepartment_code)
-                    for direction in directions:
-                        profiles = Profile.objects.filter(direction=direction)
-                        for profile in profiles:
-                            profile_field.append(
-                                {'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
-                                 'position': profile.position})
-                        direction_field.append({'name': direction.direction_name,
-                                                'code': direction.direction_code,
-                                                'users': profile_field})
-                        profile_field = []
-                    subdepartments_field.append({'name': subdepartment.department_name,
-                                                 'code': subdepartment.department_code,
-                                                 'directions': direction_field})
-                    direction_field = []
-                field = {'code': department.department_code,
-                         'name': department.department_name,
-                         'subdepartments': subdepartments_field}
-                subdepartments_field = []
-                data.append({'pk': department.pk, 'department': field})
-            return HttpResponse(json.dumps(data))
-
-
-@csrf_exempt
 def subdepartment_view(request):
     user = get_user_jwt(request)
     if user:
@@ -810,3 +843,16 @@ def workers_subdepartment(request, subdepartment_id):
             workers = Profile.objects.filter(department=subdepartment_id)
             data = serializers.serialize('json', workers, fields=('first_name', 'last_name', 'middle_name'))
             return HttpResponse(data)
+
+
+@csrf_exempt
+def workers_for_reports(request, department_id):
+    # user = get_user_jwt(request)
+    user = True
+    if user:
+        if request.method == "GET":
+            date = request.GET.get('date')
+            department = Department.objects.get(pk=department_id)
+            data = build_level_with_user(department_id, 0, date)
+            output = get_endpoint_department(data, [])
+            return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
