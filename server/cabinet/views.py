@@ -61,7 +61,7 @@ def build_level_with_user(subdepartment_id, lvl, date):
     subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
     profiles = Profile.objects.filter(department=department)
     for worker in profiles:
-        users_field = {'name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
+        users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
                        'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
         reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
         report_time = 0
@@ -71,12 +71,10 @@ def build_level_with_user(subdepartment_id, lvl, date):
                 flag = 1
             if flag == 1:
                 users_field[
-                    'banned'] = report.ban_id.last_name + ' ' + report.ban_id.first_name + \
-                                ' ' + report.ban_id.middle_name
+                    'banned'] = ' '.join([report.ban_id.first_name, report.ban_id.last_name, report.ban_id.middle_name])
                 users_field['report_status'] = report.status
                 users_field[
-                    'checker'] = report.check_id.last_name + ' ' + report.ban_id.first_name + \
-                                  ' ' + report.ban_id.middle_name
+                    'checker'] = ' '.join([report.check_id.first_name, report.check_id.last_name, report.check_id.middle_name])
                 flag = 1
             report_time += report.hour
         if flag == 0:
