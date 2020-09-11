@@ -2,16 +2,14 @@ import simplejson as json
 from datetime import datetime
 from datetime import date
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
 from django.core import serializers
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm, \
-    CalendarMarkForm
+from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
 from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, \
     Direction, TimeCard, CalendarMark
 
@@ -71,10 +69,12 @@ def build_level_with_user(subdepartment_id, lvl, date):
                 flag = 1
             if flag == 1:
                 users_field[
-                    'banned'] = ' '.join([report.ban_id.first_name, report.ban_id.last_name, report.ban_id.middle_name])
+                    'banned'] = ' '.join([report.ban_id.first_name,
+                                          report.ban_id.last_name, report.ban_id.middle_name])
                 users_field['report_status'] = report.status
                 users_field[
-                    'checker'] = ' '.join([report.check_id.first_name, report.check_id.last_name, report.check_id.middle_name])
+                    'checker'] = ' '.join([report.check_id.first_name,
+                                           report.check_id.last_name, report.check_id.middle_name])
                 flag = 1
             report_time += report.hour
         if flag == 0:
@@ -133,7 +133,7 @@ def get_access(action_num, user):
 
 
 def logging(request, username, status, action):
-    log = Logging.objects.create(IP=request.POST.get('IP'), login=username, status=status, action=action)
+    Logging.objects.create(IP=request.POST.get('IP'), login=username, status=status, action=action)
 
 
 @csrf_exempt
@@ -516,12 +516,12 @@ def salary(request):
             output = []
             year = request.GET.get('year')
             month = request.GET.get('month')
+            salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
             for worker in workers:
                 reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
                 report_time = 0
                 for report in reports:
                     report_time += report.hour
-                salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
                 salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
                                                                     common_part=salary_common)
                 direction = worker.direction.direction_code
@@ -933,3 +933,15 @@ def all_reports_for_person(request, person_id):
             output['date'] = date
             output['reports'] = data
             return HttpResponse(json.dumps(output))
+
+
+@csrf_exempt
+def all_projects_simple_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            projects = Project.objects.all()
+            data = []
+            for project in projects:
+                data.append({'pk': project.pk, 'name': project.name,})
+            return HttpResponse(json.dumps(data))

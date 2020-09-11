@@ -23,7 +23,7 @@ const Cards = (props) =>{
 
 
             <div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
-                <Button  type="primary" danger size="small">
+                <Button onClick={props.onClickDeleteProject.bind(this,key,item.pk)}  type="primary" danger size="small">
                     Удалить
                 </Button>
             </div>
@@ -49,12 +49,14 @@ const ReportModal =(props)=>{
                         <Row gutter={16}>
                             <Col span={10}>
                                 <Card title="Список проектов" bordered={true}>
-                                    <Cards reports = {props.personDate.reports}/>
+                                    <Cards
+                                        onClickDeleteProject = {props.onClickDeleteProject}
+                                        reports = {props.personDate.reports}/>
                                 </Card>
                                 <br/>
                                     <div className="row">
                                         <div className="col-lg-12 text-right">
-                                            <button className="btn btn-success btn-sm">Добавить проект</button>
+                                            <button onClick={props.onClickNewProject} className="btn btn-success btn-sm">Добавить проект</button>
                                         </div>
                                     </div>
                                 <br/>
@@ -89,6 +91,8 @@ const ReportModal =(props)=>{
                                         <br/>
                                         <div className="col-lg-12">
                                             <Select
+                                                options={props.nameProjects}
+                                                id={'name-project-look'}
                                             style={{width:"100%"}}/>
                                         </div>
                                     </div>
@@ -100,6 +104,7 @@ const ReportModal =(props)=>{
                                         <br/>
                                         <div className="col-lg-12">
                                             <Input
+                                                id={'hours-look'}
                                             style={{width:"100%"}}/>
                                         </div>
                                     </div>
@@ -111,9 +116,10 @@ const ReportModal =(props)=>{
                                         <br/>
                                         <div className="col-lg-12">
                                         <TextArea
+                                            id={'body-report-look'}
                                         // value={value}
-                                        autoSize={{ minRows: 10, maxRows: 20 }}
-                                        style={{width:"100%"}}
+                                            autoSize={{ minRows: 10, maxRows: 20 }}
+                                            style={{width:"100%"}}
                                     />
                                         </div>
                                     </div>
