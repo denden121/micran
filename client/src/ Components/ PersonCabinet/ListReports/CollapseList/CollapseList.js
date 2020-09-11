@@ -5,7 +5,7 @@ import { Select } from 'antd';
 const plainOptions = ['Весь список', 'Только НИИ СЭС', 'Отображать заблокированный отчет в виде таблицы'];
 const { Option } = Select;
 
-const CollapseList =(props)=>{
+const       CollapseList =(props)=>{
     return(
         <div className="container-fluid">
             <div className="row">
@@ -27,6 +27,7 @@ const CollapseList =(props)=>{
                 <br/>
                 <div className="col-lg-12">
                 <Select
+                    onChange={props.onChangeSelectSubDepartments}
                     options={props.subdepartments}
                     placeholder="Все доступные подразделения"
                     style={{width:"70%"}}
