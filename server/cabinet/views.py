@@ -272,11 +272,9 @@ def all_report_view(request, user_id='default'):
                     report = form.save(commit=False)
                     report.creator_id = profile
                     report.save()
-                    data = []
-                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                    data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hour': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
-                    data.append({'pk': report.pk, 'fields': fields})
-                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
+                    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
@@ -930,7 +928,7 @@ def all_reports_for_person(request, person_id):
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'status': report.status})
+                             'text': report.text, 'status': report.status, 'project_pk': report.project.pk})
                 time_report += report.hour
             times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
             time_system = 0
@@ -963,7 +961,7 @@ def all_reports_for_person(request, person_id):
                     report.check_id = None
                 report.save()
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'status': report.status})
+                             'text': report.text, 'status': report.status, 'project_pk': report.project.pk})
                 time_report += report.hour
             times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
             time_system = 0
