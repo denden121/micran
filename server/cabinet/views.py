@@ -272,7 +272,7 @@ def all_report_view(request, user_id='default'):
                     report = form.save(commit=False)
                     report.creator_id = profile
                     report.save()
-                    data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hour': report.hour,
+                    data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hours': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
                     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
@@ -340,7 +340,7 @@ def report_view(request, report_id, user_id='default'):
                 if form.is_valid():
                     update = form.save()
                     data = []
-                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hours': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
                     data.append({'pk': report.pk, 'fields': fields})
                     return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
