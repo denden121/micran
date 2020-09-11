@@ -1,5 +1,6 @@
 import React from "react"
 import {Card,Col,Row,Button,Select,Input} from "antd"
+import {ClockCircleOutlined} from '@ant-design/icons'
 
 const gridStyle = {
     width: '100%',
@@ -12,27 +13,25 @@ const Cards = (props) =>{
     return props.reports.map((item,key)=>{
         return <Card.Grid style={gridStyle}>
             <div className="row">
-                <div className="col-lg-6">
-                    <div style={{padding:"15px"}} className="text-left"><strong>№{key+1}</strong></div>
-                </div>
-
-                <div className="col-lg-6">
-                    <div style={{padding:"15px",color:"red"}} className="text-right">{item.hours}ч</div>
-                </div>
-
-
-
-            <div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
-                <Button onClick={props.onClickDeleteProject.bind(this,key,item.pk)}  type="primary" danger size="small">
-                    Удалить
-                </Button>
-            </div>
-            </div>
-            <div className="row">
                 <div className="col-lg-12">
-                    <div style={{padding:"15px"}} className="text-left"><strong>{item.project}</strong></div>
+                    <div  className="text-left"><strong>№{key+1}</strong></div>
+                </div>          
+                <div className="col-lg-12">
+                        <div  className="text-left"><strong>{item.project}</strong></div>
+                </div>       
+                <div className="col-lg-12">
+                    <div style={{color:"red"}} className="text-right">{item.hours}ч</div>
                 </div>
-            </div>
+                       
+            
+            
+                <div className="col-lg-12 text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
+                    <Button onClick={props.onClickDeleteProject.bind(this,key,item.pk)}  type="primary" danger size="small">
+                        Удалить
+                    </Button>
+                </div>
+                
+            </div>      
         </Card.Grid>
     })
 }

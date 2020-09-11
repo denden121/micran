@@ -262,8 +262,21 @@ class ListReports extends React.Component {
                             title="Название дата"
                             visible={this.state.visible}
                             onOk={this.handleOk}
-                            width={720}                            
-                            okText="Блокировать"                                                    
+                            onCancel={this.handleOk}
+                            width={900}                            
+                            // okText="Блокировать"  
+                            // canselText="Отмена" 
+                            footer={[                                
+                                <Button  onClick={this.handleOk}>
+                                    Отмена
+                                </Button>,
+                                <button  onClick={this.handleOk} className="btn btn-danger btn-sm">
+                                    Блокировать
+                              </button>,
+                              <button  onClick={this.handleOk} className="btn btn-success btn-sm">
+                                    Разблокировать
+                                </button>,
+                              ]}                                              
                         >
                             <ReportModal
                                 onClickSaveReport = {this.onClickSaveReport}
