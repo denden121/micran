@@ -251,12 +251,31 @@ def all_report_view(request, user_id='default'):
         return HttpResponse("Authentication error")
     else:
         if user:
+            profile = Profile.objects.get(user=user_id)
             if request.method == "GET":
                 # if user_id != user.id:  # 11 is check reports
                 #     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
+            elif request.method == "POST":
+                project_pk = request.POST.get('project')
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user_id, date__year=year,
+                                                date__month=month, project=project_pk)
+                if reports:
+                    return HttpResponse("Already have a report")
+                form = ReportForm(request.POST)
+                print(form.errors)
+                if form.is_valid():
+                    report = form.save(commit=False)
+                    report.creator_id = profile
+                    report.save()
+                    data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hours': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+                return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
 
@@ -306,6 +325,26 @@ def report_view(request, report_id, user_id='default'):
                     data = serializers.serialize('json', report)
                     return HttpResponse(data)
                 return HttpResponse("You don't have permissions")
+            elif request.method == "POST":
+                project_pk = request.POST.get('project')
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user_id, date__year=year,
+                                                date__month=month, project=project_pk)
+                for report in reports:
+                    if report.pk != report_id:
+                        return HttpResponse("Already have a report")
+                report = Report.objects.get(creator_id_id=user_id, id=report_id)
+                form = ReportForm(request.POST, request.FILES, instance=report)
+                print(form.errors)
+                if form.is_valid():
+                    update = form.save()
+                    data = []
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hours': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
+                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
+                return HttpResponse("Fail")
             return HttpResponse("Access error")
         return HttpResponse("Authentication error")
 
@@ -889,7 +928,7 @@ def all_reports_for_person(request, person_id):
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'status': report.status})
+                             'text': report.text, 'status': report.status, 'project_pk': report.project.pk})
                 time_report += report.hour
             times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
             time_system = 0
@@ -899,6 +938,7 @@ def all_reports_for_person(request, person_id):
             output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
             output['time_system'] = time_system
             output['date'] = date
+            output['pk'] = profile.pk
             output['reports'] = data
             return HttpResponse(json.dumps(output))
         elif request.method == "POST":
@@ -921,7 +961,7 @@ def all_reports_for_person(request, person_id):
                     report.check_id = None
                 report.save()
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'status': report.status})
+                             'text': report.text, 'status': report.status, 'project_pk': report.project.pk})
                 time_report += report.hour
             times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
             time_system = 0
