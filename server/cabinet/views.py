@@ -251,12 +251,33 @@ def all_report_view(request, user_id='default'):
         return HttpResponse("Authentication error")
     else:
         if user:
+            profile = Profile.objects.get(user=user_id)
             if request.method == "GET":
                 # if user_id != user.id:  # 11 is check reports
                 #     return HttpResponse("You don't have permissions")
                 reports = Report.objects.filter(creator_id=user_id)
                 data = serializers.serialize('json', reports)
                 return HttpResponse(data)
+            elif request.method == "POST":
+                project_pk = request.POST.get('project')
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user_id, date__year=year,
+                                                date__month=month, project=project_pk)
+                if reports:
+                    return HttpResponse("Already have a report")
+                form = ReportForm(request.POST)
+                print(form.errors)
+                if form.is_valid():
+                    report = form.save(commit=False)
+                    report.creator_id = profile
+                    report.save()
+                    data = []
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
+                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
+                return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
 
