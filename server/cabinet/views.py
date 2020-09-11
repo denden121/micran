@@ -327,6 +327,26 @@ def report_view(request, report_id, user_id='default'):
                     data = serializers.serialize('json', report)
                     return HttpResponse(data)
                 return HttpResponse("You don't have permissions")
+            elif request.method == "POST":
+                project_pk = request.POST.get('project')
+                date = request.POST.get('date')
+                year, month, day = date.split('-')
+                reports = Report.objects.filter(creator_id=user_id, date__year=year,
+                                                date__month=month, project=project_pk)
+                for report in reports:
+                    if report.pk != report_id:
+                        return HttpResponse("Already have a report")
+                report = Report.objects.get(creator_id_id=user_id, id=report_id)
+                form = ReportForm(request.POST, request.FILES, instance=report)
+                print(form.errors)
+                if form.is_valid():
+                    update = form.save()
+                    data = []
+                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                              'status': report.status, 'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields})
+                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
+                return HttpResponse("Fail")
             return HttpResponse("Access error")
         return HttpResponse("Authentication error")
 
