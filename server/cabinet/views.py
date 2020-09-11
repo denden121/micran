@@ -940,6 +940,7 @@ def all_reports_for_person(request, person_id):
             output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
             output['time_system'] = time_system
             output['date'] = date
+            output['pk'] = profile.pk
             output['reports'] = data
             return HttpResponse(json.dumps(output))
         elif request.method == "POST":
