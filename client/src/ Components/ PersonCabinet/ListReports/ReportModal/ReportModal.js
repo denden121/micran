@@ -93,7 +93,7 @@ const ReportModal =(props)=>{
                                             <Select
                                                 options={props.nameProjects}
                                                 id={'name-project-look'}
-                                            style={{width:"100%"}}/>
+                                                style={{width:"100%"}}/>
                                         </div>
                                     </div>
                                     <br/>
@@ -126,7 +126,7 @@ const ReportModal =(props)=>{
                                     <br/>
                                     <div className="row">
                                         <div className="col-lg-12 text-right">
-                                            <button className="btn btn-success btn-sm">Сохранить</button>
+                                            <button onClick={props.onClickSaveReport} className="btn btn-success btn-sm">Сохранить</button>
                                         </div>
                                     </div>
                                 </Card>

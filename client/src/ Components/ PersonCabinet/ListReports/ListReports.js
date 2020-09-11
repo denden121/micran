@@ -8,7 +8,7 @@ import ReportModal from "./ReportModal/ReportModal"
 class ListReports extends React.Component {
     state = {
         departments:[],
-        // select_department:'',
+        select_project:'',
         subdepartments:[],
         // select_subdepartments:'',
         reports:[],
@@ -162,7 +162,66 @@ class ListReports extends React.Component {
         document.querySelector('#body-report-look').value = ''
     }
     onClickSaveReport=()=>{
-        return
+        let hours = document.querySelector('#hours-look').value
+        let body = document.querySelector('#body-report-look').value
+        let nameProject = document.querySelector('#name-project-look')
+        console.log(hours,body,nameProject)
+        // if(hours & body & nameProject){
+        //     let time = document.querySelector('#time_project').value;
+        //     let body = document.querySelector('#body_report').value;
+        //     let token = localStorage.getItem('token');
+        //     let project = document.querySelector('#name_project').value;
+        //     const date = localStorage.getItem('date').split(' ');
+        //     // console.log(time,body,token,project,date,this.state)
+        //     let myHeaders = new Headers()
+        //     myHeaders.append("Authorization", token)
+        //     let formdata = new FormData();
+        //     formdata.append("text", body)
+        //     formdata.append("hour ", time)
+        //     formdata.append("project", project)
+        //     formdata.append('date',`${date[1]}-${date[0]}-3`)
+        //     let requestOptions = {
+        //         method: 'POST',
+        //         headers: myHeaders,
+        //         body: formdata,
+        //         redirect: 'follow'
+        //     };
+        //     if(this.state.select_report){
+        //         let url = `http://127.0.0.1:8000/cabinet/report/${this.state.select_report}`
+        //         fetch(url, requestOptions)
+        //             .then(response => response.json())
+        //             .then(result => {
+        //                 let report  = result;
+        //                 let temp = [...this.state.reports]
+        //                 console.log('dssffs',temp,this.state.select_report)
+        //
+        //                 for(let i = 0;i<temp.length;i++ ){
+        //                     // console.log(temp[o])
+        //                     if(temp[i].pk == this.state.select_report){
+        //
+        //                         temp[i]=report;
+        //                         break;
+        //                     }
+        //                 }
+        //                 console.log(temp)
+        //                 this.setState({reports:temp})
+        //             })
+        //             .catch(error => console.log('error', error));
+        //     }
+        //     else{
+        //         const url = `http://127.0.0.1:8000/cabinet/reports/`
+        //         fetch(url, requestOptions)
+        //             .then(response => response.json())
+        //             .then(result => {
+        //                 let report  = result;
+        //                 let temp = [...this.state.reports];
+        //                 console.log('fdsfsdf',  report, temp)
+        //                 temp.push(result);
+        //                 this.setState({reports:temp})
+        //             })
+        //             .catch(error => console.log('error', error));
+        //     }
+        // }
     }
     render(){
         const { Panel } = Collapse;
@@ -207,7 +266,8 @@ class ListReports extends React.Component {
                             okText="Блокировать"                                                    
                         >
                             <ReportModal
-                                nameProjects = {this.state.projects}git
+                                onClickSaveReport = {this.onClickSaveReport}
+                                nameProjects = {this.state.projects}
                                 onClickNewProject = {this.onClickNewProject}
                                 onClickDeleteProject = {this.onClickDeleteProject}
                                 personDate = {this.state.person_date}/>
