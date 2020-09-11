@@ -10,7 +10,7 @@ const { TextArea } = Input;
 const Cards = (props) =>{
     console.log(props)
     return props.reports.map((item,key)=>{
-        return <Card.Grid style={gridStyle}>
+        return <Card.Grid onClick ={props.onClickCard.bind(this,key,item.pk)} style={gridStyle}>
             <div className="row">
                 <div className="col-lg-6">
                     <div style={{padding:"15px"}} className="text-left"><strong>№{key+1}</strong></div>
@@ -50,6 +50,7 @@ const ReportModal =(props)=>{
                             <Col span={10}>
                                 <Card title="Список проектов" bordered={true}>
                                     <Cards
+                                        onClickCard = {props.onClickCard}
                                         onClickDeleteProject = {props.onClickDeleteProject}
                                         reports = {props.personDate.reports}/>
                                 </Card>
@@ -91,6 +92,8 @@ const ReportModal =(props)=>{
                                         <br/>
                                         <div className="col-lg-12">
                                             <Select
+                                                value={props.selectProjectName}
+                                                onChange={props.onChangeProjectName}
                                                 options={props.nameProjects}
                                                 id={'name-project-look'}
                                                 style={{width:"100%"}}/>
@@ -103,7 +106,7 @@ const ReportModal =(props)=>{
                                         </div>
                                         <br/>
                                         <div className="col-lg-12">
-                                            <Input
+                                            <input
                                                 id={'hours-look'}
                                             style={{width:"100%"}}/>
                                         </div>
@@ -115,7 +118,7 @@ const ReportModal =(props)=>{
                                         </div>
                                         <br/>
                                         <div className="col-lg-12">
-                                        <TextArea
+                                        <textArea
                                             id={'body-report-look'}
                                         // value={value}
                                             autoSize={{ minRows: 10, maxRows: 20 }}
@@ -126,7 +129,9 @@ const ReportModal =(props)=>{
                                     <br/>
                                     <div className="row">
                                         <div className="col-lg-12 text-right">
-                                            <button onClick={props.onClickSaveReport} className="btn btn-success btn-sm">Сохранить</button>
+                                            <button
+                                                onClick={props.onClickSaveReport}
+                                                className="btn btn-success btn-sm">Сохранить</button>
                                         </div>
                                     </div>
                                 </Card>
