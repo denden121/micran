@@ -18,6 +18,7 @@ urlpatterns = [
     path('cabinet/calendar/', views.calendar_control_view),
     # projects
     path('cabinet/projects/', views.all_projects_view),
+    path('cabinet/projects/simple/', views.all_projects_simple_view),
     path('cabinet/projects_for_reports/', views.projects_for_reports),
     path('cabinet/<int:user_id>/project/<int:project_id>', views.project_view),
     path('cabinet/project/<int:project_id>', views.project_view),
