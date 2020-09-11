@@ -111,10 +111,6 @@ class ListReports extends React.Component {
                 <br/>
                 <div className="row">
                     <div className="col-lg-12">
-<<<<<<< HEAD
-                        <ReportsTable
-                        reports = {this.state.reports}/>
-=======
                         <ReportsTable onClickShowModal={this.showModal}/>
                         <Modal
                             title="Название дата"
@@ -125,7 +121,6 @@ class ListReports extends React.Component {
                         >
                             <ReportModal/>
                         </Modal>
->>>>>>> fac90ba8a4ef1038beaf8af880a05f85790537fa
                     </div>
                 </div>
             </div>
