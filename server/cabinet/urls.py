@@ -11,7 +11,7 @@ urlpatterns = [
     # reports
     path('cabinet/reports/', views.all_report_view),
     path('cabinet/<int:user_id>/reports/', views.all_report_view),
-    path('cabinet/<int:user_id>/report/<int:report_id>', views.report_view),
+    path('cabinet/<int:user_id>/report/<int:report_id>/', views.report_view),
     path('cabinet/report/<int:report_id>', views.report_view),
     path('cabinet/time_card/', views.time_control_view),
     path('cabinet/time_card/detail/', views.time_control_view_detail ),
