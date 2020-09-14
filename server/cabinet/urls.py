@@ -47,4 +47,5 @@ urlpatterns = [
     path('admin/groups_admin/', views.groups_with_permission),
     path('reports/department/<int:department_id>/', views.workers_for_reports),
     path('reports/person/<int:person_id>/', views.all_reports_for_person),
+    path('get_department/', views.get_department),
 ]

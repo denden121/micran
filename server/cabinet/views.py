@@ -988,3 +988,13 @@ def all_projects_simple_view(request):
             for project in projects:
                 data.append({'pk': project.pk, 'name': project.name,})
             return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def get_department(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            department = user.profile.department
+            data = {'department_name': department.department_name, 'department_code': department.department_code, 'pk': department.pk}
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
