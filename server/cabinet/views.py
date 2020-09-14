@@ -221,14 +221,20 @@ def all_report_view(request, user_id='default'):
                 salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
                 data = []
                 status = False
+                time_report = 0
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
                               'project_pk': report.project.pk}
                     status = report.status
+                    time_report += report.hour
                     data.append({'pk': report.pk, 'fields': fields})
+                times_cards = TimeCard.objects.filter(date__month=request.GET['month'], date__year=request.GET['year'], user=user)
+                time_system = 0
+                for time_card in times_cards:
+                    time_system += time_card.hours_worked.hour
                 if salary:
-                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'reports': data, 'status': status}))
-                return HttpResponse(json.dumps({'time_norm': '', 'reports': data, 'status': status}))
+                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'time_system':time_system, 'reports': data, 'status': status, 'time_report': time_report}))
+                return HttpResponse(json.dumps({'time_norm': '', 'reports': data, 'status': status, 'time_system':time_system, 'time_report': time_report}))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
