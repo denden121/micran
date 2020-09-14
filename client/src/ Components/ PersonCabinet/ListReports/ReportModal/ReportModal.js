@@ -72,7 +72,7 @@ const ReportModal =(props)=>{
                                 <br/>
                                 <div className="row">
                                     <div className="col-lg-12 text-right" style={{color:"#40D0E3",fontSize:"20px"}}>
-                                        {props.personDate.time_system} ч.
+                                        {props.timeReport} ч.
                                     </div>
                                 </div>
                                 <div className="row">
@@ -83,7 +83,7 @@ const ReportModal =(props)=>{
                                 <br/>
                                 <div className="row">
                                     <div className="col-lg-12 text-right" style={{color:"#40D0E3",fontSize:"20px"}}>
-                                        {props.timeReport} ч.
+                                        {props.personDate.time_system} ч.
                                     </div>
                                 </div>
                                 <div className="row">
