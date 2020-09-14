@@ -1,10 +1,11 @@
 import React from "react"
 import {Card,Col,Row,Button,Select,Input} from "antd"
-
+import {ClockCircleOutlined} from '@ant-design/icons'
+import './ReportModal.css'
 const gridStyle = {
     width: '100%',
     textAlign: 'left',
-  };
+};
 const { TextArea } = Input;
 
 const Cards = (props) =>{
@@ -12,26 +13,25 @@ const Cards = (props) =>{
     return props.reports.map((item,key)=>{
         return <Card.Grid onClick ={props.onClickCard.bind(this,key,item.pk)} style={gridStyle}>
             <div className="row">
-                <div className="col-lg-6">
-                    <div style={{padding:"15px"}} className="text-left"><strong>№{key+1}</strong></div>
-                </div>
-
-                <div className="col-lg-6">
-                    <div style={{padding:"15px",color:"red"}} className="text-right">{item.hours}ч</div>
-                </div>
-
-
-
-            <div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
-                <Button onClick={props.onClickDeleteProject.bind(this,key,item.pk)}  type="primary" danger size="small">
-                    Удалить
-                </Button>
-            </div>
-            </div>
-            <div className="row">
                 <div className="col-lg-12">
-                    <div style={{padding:"15px"}} className="text-left"><strong>{item.project}</strong></div>
+                    <div  className="text-left"><strong>№{key+1}</strong></div>
                 </div>
+                <div className="col-lg-12">
+                    <div  className="text-left"><strong>{item.project}</strong></div>
+                </div>
+                <div className="col-lg-12">
+                    <div style={{color:"red"}} className="text-right">{item.hours}ч</div>
+                </div>
+
+
+
+                <div className="col-lg-12 text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
+                    {props.status?
+                        <Button onClick={props.onClickDeleteProject.bind(this,key,item.pk)}  type="primary" danger size="small" className={'ban'}>
+                            Удалить
+                        </Button>:''}
+                </div>
+
             </div>
         </Card.Grid>
     })
@@ -50,20 +50,24 @@ const ReportModal =(props)=>{
                             <Col span={10}>
                                 <Card title="Список проектов" bordered={true}>
                                     <Cards
+                                        status = {props.personDate.status}
                                         onClickCard = {props.onClickCard}
                                         onClickDeleteProject = {props.onClickDeleteProject}
                                         reports = {props.personDate.reports}/>
                                 </Card>
                                 <br/>
-                                    <div className="row">
-                                        <div className="col-lg-12 text-right">
-                                            <button onClick={props.onClickNewProject} className="btn btn-success btn-sm">Добавить проект</button>
-                                        </div>
+                                <div className="row">
+                                    <div className="col-lg-12 text-right">
+                                        {props.personDate.status?
+                                            <button onClick={props.onClickNewProject} className="ban btn btn-success btn-sm">Добавить проект</button>
+                                            :''
+                                        }
                                     </div>
+                                </div>
                                 <br/>
                                 <div className="row">
                                     <div className="col-lg-12 text-right" style={{color:"#40D0E3",fontSize:"20px"}}>
-                                        13.80 ч.
+                                        {props.personDate.time_system} ч.
                                     </div>
                                 </div>
                                 <div className="row">
@@ -74,7 +78,7 @@ const ReportModal =(props)=>{
                                 <br/>
                                 <div className="row">
                                     <div className="col-lg-12 text-right" style={{color:"#40D0E3",fontSize:"20px"}}>
-                                        {props.personDate.time_system} ч.
+                                        {props.timeReport} ч.
                                     </div>
                                 </div>
                                 <div className="row">
@@ -92,7 +96,7 @@ const ReportModal =(props)=>{
                                         <br/>
                                         <div className="col-lg-12">
                                             <Select
-                                                value={props.selectProjectName}
+                                                value={props.selectProjectName.label}
                                                 onChange={props.onChangeProjectName}
                                                 options={props.nameProjects}
                                                 id={'name-project-look'}
@@ -108,7 +112,7 @@ const ReportModal =(props)=>{
                                         <div className="col-lg-12">
                                             <input
                                                 id={'hours-look'}
-                                            style={{width:"100%"}}/>
+                                                style={{width:"100%"}}/>
                                         </div>
                                     </div>
                                     <br/>
@@ -118,26 +122,28 @@ const ReportModal =(props)=>{
                                         </div>
                                         <br/>
                                         <div className="col-lg-12">
-                                        <textArea
-                                            id={'body-report-look'}
-                                        // value={value}
-                                            autoSize={{ minRows: 10, maxRows: 20 }}
-                                            style={{width:"100%"}}
-                                    />
+                                            <textArea
+                                                id={'body-report-look'}
+                                                // value={value}
+                                                autoSize={{ minRows: 10, maxRows: 20 }}
+                                                style={{width:"100%"}}
+                                            />
                                         </div>
                                     </div>
                                     <br/>
                                     <div className="row">
                                         <div className="col-lg-12 text-right">
-                                            <button
-                                                onClick={props.onClickSaveReport}
-                                                className="btn btn-success btn-sm">Сохранить</button>
+                                            {props.personDate.status?
+                                                <button
+                                                    onClick={props.onClickSaveReport}
+                                                    className="ban btn btn-success btn-sm">Сохранить</button>:''
+                                            }
                                         </div>
                                     </div>
                                 </Card>
-                            </Col>                        
+                            </Col>
                         </Row>
-                     </div>
+                    </div>
                 </div>
             </div>
         </div>

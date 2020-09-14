@@ -339,11 +339,9 @@ def report_view(request, report_id, user_id='default'):
                 print(form.errors)
                 if form.is_valid():
                     update = form.save()
-                    data = []
-                    fields = {'project_name': report.project.name, 'text': report.text, 'hours': report.hour,
-                              'status': report.status, 'project_pk': report.project.pk}
-                    data.append({'pk': report.pk, 'fields': fields})
-                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
+                    data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hours': report.hour,
+                            'status': report.status, 'project_pk': report.project.pk}
+                    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             return HttpResponse("Access error")
         return HttpResponse("Authentication error")

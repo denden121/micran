@@ -10,6 +10,7 @@ class ListReports extends React.Component {
         departments:[],
         select_project:'',
         select_report:'',
+        time_report:'',
         subdepartments:[],
         // select_subdepartments:'',
         reports:[],
@@ -21,6 +22,7 @@ class ListReports extends React.Component {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
+
         const date = localStorage.getItem('date').replace(' ', '-')
         let requestOptions = {
             method: 'GET',
@@ -30,7 +32,8 @@ class ListReports extends React.Component {
         fetch(`http://127.0.0.1:8000/reports/person/${pk}/?date=${date}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                this.setState({person_date: result, visible: true,})
+                console.log(result)
+                this.setState({person_date: result, visible: true,time_report:result.time_report})
             })
             .catch(error => console.log('error', error));
     }
@@ -39,8 +42,8 @@ class ListReports extends React.Component {
           visible: false
         });
       };
-    onChangeProjectName = (e) =>{
-        this.setState({select_project:e})
+    onChangeProjectName = (e,name) =>{
+        this.setState({select_project:name})
     }
     componentDidMount() {
         this.loadDepartmentsAndProjects();
@@ -140,14 +143,15 @@ class ListReports extends React.Component {
             .then(result => {
                 if (result === 'Success') {
                     let reports = {...this.state.person_date}
+                    let time =  this.state.time_report - reports.reports[index].hours
                     reports.reports.splice(index, 1)
                     if (this.state.select_report.index ===index){
                         document.querySelector('#hours-look').value = ''
                         document.querySelector('#body-report-look').value = ''
-                        this.setState({person_date: reports,select_project:''})
+                        this.setState({person_date: reports,select_report:'',select_project:'',time_report:time})
                     }
                     else{
-                        this.setState({person_date: reports})
+                        this.setState({person_date: reports,time_report:time})
                     }
                 }else{
                     alert('не удалось удалить')
@@ -163,8 +167,10 @@ class ListReports extends React.Component {
     onClickSaveReport=()=>{
         let hours = document.querySelector('#hours-look').value
         let body = document.querySelector('#body-report-look').value
-        let nameProject = this.state.select_project
+        let nameProject = this.state.select_project.value
+        console.log(this.state.select_project)
         if(hours && body && nameProject){
+            console.log('gfffffffffffffffffffffffffffffffffffffff')
             let token = localStorage.getItem('token');
             const date = localStorage.getItem('date').split(' ').reverse().join('-');
             let myHeaders = new Headers()
@@ -181,6 +187,8 @@ class ListReports extends React.Component {
                 redirect: 'follow'
             };
             if(this.state.select_report){
+                console.log(this.state.person_date.pk,this.state.select_report.pk)
+
                 let url = `http://127.0.0.1:8000/cabinet/${this.state.person_date.pk}/report/${this.state.select_report.pk}/`
                 fetch(url, requestOptions)
                     .then(response => response.json())
@@ -188,15 +196,12 @@ class ListReports extends React.Component {
                         let report  = result;
                         let person_date = {...this.state.person_date}
                         let temp = person_date.reports
+                        console.log(this.state.time_report,temp[this.state.select_report.index],report)
+                        let time = this.state.time_report - temp[this.state.select_report.index].hours + report.hours
                         temp[this.state.select_report.index] = report
-                        // for(let i = 0;i<temp.length;i++ ){
-                        //     if(temp[i].pk == this.state.select_report.pk){
-                        //         temp[i] = report;
-                        //         break;
-                        //     }
-                        // }
                         person_date.reports = temp
-                        this.setState({person_date:person_date})
+                        person_date.reports = temp
+                        this.setState({person_date:person_date,time_report:time})
                     })
                     .catch(error => console.log('error', error));
             }
@@ -207,17 +212,61 @@ class ListReports extends React.Component {
                     .then(result => {
                         let report  = result;
                         let temp = {...this.state.person_date};
+                        let time = this.state.time_report + result.hours
                         temp.reports.push(result);
-                        this.setState({person_date:temp})
+                        this.setState({person_date:temp,time_report:time,select_report:{index:temp.reports.length-1,pk:result.pk}})
                     })
                     .catch(error => console.log('error', error));
             }
         }
     };
+    onClickBlock=()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        const date = localStorage.getItem('date').replace(' ', '-')
+        let formdata = new FormData();
+        formdata.append("date", date);
+        formdata.append("action", "ban");
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow',
+            body:formdata
+        }
+        fetch(`http://127.0.0.1:8000/reports/person/${this.state.person_date.pk}/`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                this.setState({person_date: result})
+            })
+            .catch(error => console.log('error', error));
+    }
+    onClickUnlock=()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        const date = localStorage.getItem('date').replace(' ', '-')
+        let formdata = new FormData();
+        formdata.append("date", date);
+        formdata.append("action", "unlock");
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow',
+            body:formdata
+        }
+        fetch(`http://127.0.0.1:8000/reports/person/${this.state.person_date.pk}/`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                console.log('fdssdf',result)
+                this.setState({person_date: result})
+            })
+            .catch(error => console.log('error', error));
+    }
     onClickCard = (index,pk) => {
         let report = this.state.person_date.reports[index]
         let temp_report = {index:index,pk:pk}
-        this.setState({select_report:temp_report,select_project:report.project})
+        this.setState({select_report:temp_report,select_project:{label:report.project,value:report.project_pk}})
         console.log('reports',this.state.person_date.reports[index])
         console.log(report.hours,report.text)
         console.log(document.querySelector('#hours-look').value = 'fdsfssd')
@@ -260,14 +309,26 @@ class ListReports extends React.Component {
                             reports = {this.state.reports}
                             onClickShowModal={this.showModal}
                         />
-                            <Modal
-                                title="Название дата"
-                                visible={this.state.visible}
-                                onOk={this.handleOk}
-                                width={720}
-                                okText="Блокировать"
-                            >
+                        <Modal
+                            title="Название дата"
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            onCancel={this.handleOk}
+                            width={900}
+                            footer={[
+                                <Button  onClick={this.handleOk}>
+                                    Отмена
+                                </Button>,
+                                <button  onClick={this.onClickBlock} className="btn btn-danger btn-sm">
+                                    Блокировать
+                                </button>,
+                                <button  onClick={this.onClickUnlock} className="btn btn-success btn-sm">
+                                    Разблокировать
+                                </button>
+                            ]}
+                        >
                             <ReportModal
+                                timeReport = {this.state.time_report}
                                 selectProjectName = {this.state.select_project}
                                 onClickCard = {this.onClickCard}
                                 onChangeProjectName = {this.onChangeProjectName}
