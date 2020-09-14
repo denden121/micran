@@ -16,7 +16,7 @@ const Report =(props)=>{
                 </tr>
             })
             : <tr>
-                <td colSpan="7" scope="colgroup" className="table-secondary">Отдел</td>
+                <td colSpan="7" scope="colgroup" className="table-secondary">{item.code + ' ' +item.name}</td>
             </tr>
     })
 }
