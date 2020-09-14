@@ -927,6 +927,7 @@ def all_reports_for_person(request, person_id):
             data = []
             time_report = 0
             output = {}
+            status = False
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
@@ -955,6 +956,7 @@ def all_reports_for_person(request, person_id):
             data = []
             output = {}
             time_report = 0
+            status = False
             for report in reports:
                 if action == 'ban':
                     report.status = True
