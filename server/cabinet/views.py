@@ -973,6 +973,7 @@ def all_reports_for_person(request, person_id):
             output['time_system'] = time_system
             output['date'] = date
             output['status'] = status
+            output['pk'] = profile.pk
             output['reports'] = data
             return HttpResponse(json.dumps(output))
 
