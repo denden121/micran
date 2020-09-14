@@ -926,13 +926,15 @@ def all_reports_for_person(request, person_id):
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'status': report.status, 'project_pk': report.project.pk})
+                             'text': report.text, 'project_pk': report.project.pk})
                 time_report += report.hour
+                status = report.status
             times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
             time_system = 0
             for time_card in times_cards:
                 time_system += time_card.hours_worked.hour
             output['time_report'] = time_report
+            output['status'] = status
             output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
             output['time_system'] = time_system
             output['date'] = date
@@ -959,8 +961,9 @@ def all_reports_for_person(request, person_id):
                     report.check_id = None
                 report.save()
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'status': report.status, 'project_pk': report.project.pk})
+                             'text': report.text, 'project_pk': report.project.pk})
                 time_report += report.hour
+                status = report.status
             times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
             time_system = 0
             for time_card in times_cards:
@@ -969,6 +972,7 @@ def all_reports_for_person(request, person_id):
             output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
             output['time_system'] = time_system
             output['date'] = date
+            output['status'] = status
             output['reports'] = data
             return HttpResponse(json.dumps(output))
 
