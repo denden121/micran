@@ -5,12 +5,12 @@ import { Select } from 'antd';
 const plainOptions = ['Весь список', 'Только НИИ СЭС', 'Отображать заблокированный отчет в виде таблицы'];
 const { Option } = Select;
 
-const       CollapseList =(props)=>{
+const CollapseList =(props)=>{
     return(
         <div className="container-fluid">
             <div className="row">
                 <div className="col-lg-12">
-                <Checkbox.Group options={plainOptions} />                
+                <Checkbox.Group onChange={props.onChangeCheckbox} options={plainOptions} />
                 </div>
             </div>
             <br/>

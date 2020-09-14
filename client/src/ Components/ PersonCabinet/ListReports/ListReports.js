@@ -7,6 +7,8 @@ import ReportModal from "./ReportModal/ReportModal"
 
 class ListReports extends React.Component {
     state = {
+        isAllList:false,
+        isNIS:false,
         departments:[],
         select_project:'',
         select_report:'',
@@ -39,8 +41,13 @@ class ListReports extends React.Component {
     }
     handleOk = e => {
         this.setState({
-          visible: false
+            visible: false,
+            select_project:'',
+            select_report:'',
+            time_report:'',
         });
+        document.querySelector('#hours-look').value = ''
+        document.querySelector('#body-report-look').value = ''
       };
     onChangeProjectName = (e,name) =>{
         this.setState({select_project:name})
@@ -262,28 +269,6 @@ class ListReports extends React.Component {
             event.target.textContent = "Блокировать"
         }
     }
-    onClickUnlock=()=>{
-        let token = localStorage.getItem('token')
-        let myHeaders = new Headers()
-        myHeaders.append("Authorization", token)
-        const date = localStorage.getItem('date').replace(' ', '-')
-        let formdata = new FormData();
-        formdata.append("date", date);
-        formdata.append("action", "unlock");
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow',
-            body:formdata
-        }
-        fetch(`http://127.0.0.1:8000/reports/person/${this.state.person_date.pk}/`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                console.log('fdssdf',result)
-                this.setState({person_date: result})
-            })
-            .catch(error => console.log('error', error));
-    }
     onClickCard = (index,pk) => {
         let report = this.state.person_date.reports[index]
         let temp_report = {index:index,pk:pk}
@@ -294,6 +279,21 @@ class ListReports extends React.Component {
         // document.querySelector('#name-project-look').value =
         document.querySelector('#hours-look').value = report.hours
         document.querySelector('#body-report-look').value = report.text
+    }
+    onChangeCheckbox=(e)=>{
+        console.log(e,e.indexOf('Весь список')!=-1)
+        if (e.indexOf('Весь список')!=-1){
+            this.setState({isAllList:true})
+        }
+        else{
+            this.setState({isAllList:false})
+        }
+        if (e.indexOf('Только НИИ СЭС')!=-1){
+            this.setState({isNIS:true})
+        }else{
+            this.setState({isNIS:false})
+
+        }
     }
     render(){
         const { Panel } = Collapse;
@@ -309,6 +309,7 @@ class ListReports extends React.Component {
                     <Collapse accordion defaultActiveKey={['1']} onChange={callback}>
                     <Panel header="Параметры отображения" className="text-left" key="1">
                         <CollapseList
+                            onChangeCheckbox = {this.onChangeCheckbox}
                             onChangeSelectSubDepartments = {this.onChangeSelectSubDepartments}
                             onChangeSelectDepartments = {this.onChangeSelectDepartments}    
                             departments = {this.state.departments}
@@ -327,11 +328,13 @@ class ListReports extends React.Component {
                 <div className="row">
                     <div className="col-lg-12">
                         <ReportsTable
+                            isAllList = {this.state.isAllList}
+                            isNIS = {this.state.isNIS}
                             reports = {this.state.reports}
                             onClickShowModal={this.showModal}
                         />
                         <Modal
-                            title="Название дата"
+                            title={this.state.person_date.name}
                             visible={this.state.visible}
                             onOk={this.handleOk}
                             onCancel={this.handleOk}
