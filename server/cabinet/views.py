@@ -220,7 +220,7 @@ def all_report_view(request, user_id='default'):
                                                 date__year=request.GET['year'])
                 salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
                 data = []
-                status = 0
+                status = False
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
                               'project_pk': report.project.pk}
@@ -245,8 +245,8 @@ def all_report_view(request, user_id='default'):
                     report.save()
                     data = []
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'status': report.status, 'project_pk': report.project.pk}
-                    data.append({'pk': report.pk, 'fields': fields})
+                              'project_pk': report.project.pk}
+                    data.append({'pk': report.pk, 'fields': fields, 'status': report.status})
                     return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
