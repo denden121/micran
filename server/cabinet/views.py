@@ -956,16 +956,21 @@ def all_reports_for_person(request, person_id):
                 if action == 'ban':
                     report.status = True
                     report.ban_id = user.profile
-                    report.check_id = user.profile
                 if action == 'unlock':
                     report.status = False
                     report.ban_id = None
+                if action == 'check':
+                    report.check = True
+                    report.check_id = user.profile
+                if action == 'uncheck':
+                    report.check = False
                     report.check_id = None
                 report.save()
                 data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
                              'text': report.text, 'project_pk': report.project.pk})
                 time_report += report.hour
                 status = report.status
+                check = report.check
             times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
             time_system = 0
             for time_card in times_cards:
@@ -976,6 +981,7 @@ def all_reports_for_person(request, person_id):
             output['date'] = date
             output['status'] = status
             output['pk'] = profile.pk
+            output['check'] = check
             output['reports'] = data
             return HttpResponse(json.dumps(output))
 
