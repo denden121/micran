@@ -10,7 +10,8 @@ class SendReport extends React.Component{
         select_report:'',
         timeNorm:'',
         timeCard:'',
-        total:''
+        total:'',
+        status:''
     }
     componentDidMount(){
         this.loadReport()
@@ -89,8 +90,11 @@ class SendReport extends React.Component{
         const url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
         fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({reports :result.reports,
-                                                timeNorm : result.time_norm}))
+            .then(result => {
+                console.log(result)
+                this.setState({reports :result.reports,
+                                    timeNorm : result.time_norm,
+                                    status: result.status})})
             .catch(error => console.log('error', error));
         let temp = this.state.reports.length
         let total = 0
@@ -184,6 +188,7 @@ class SendReport extends React.Component{
                     </div>
                 
                     <Reports
+                        status = {this.state.status}
                         onClickDeleteCard = {this.onClickDeleteCard}
                         onClickCard = {this.onClickCard}
                         listProject = {this.state.reports}

@@ -340,11 +340,8 @@ class ListReports extends React.Component {
                                 <Button  onClick={this.handleOk}>
                                     Отмена
                                 </Button>,
-                                <button  onClick={this.onClickBlock} className="btn btn-danger btn-sm">
-                                    Блокировать
-                                </button>,
-                                <button  onClick={this.onClickUnlock} className="btn btn-success btn-sm">
-                                    Разблокировать
+                                <button  onClick={this.onClickBlock} className={this.state.person_date.status ? "btn btn-success btn-sm" :"btn btn-danger btn-sm"}>
+                                    {this.state.person_date.status ? "Разблоктровать" : "Блокировать"}
                                 </button>
                             ]}
                         >

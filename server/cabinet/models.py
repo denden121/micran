@@ -60,7 +60,7 @@ class Profile(models.Model):
     SRI_SAS = models.BooleanField(blank=True, default='False')
 
     def __str__(self):
-        return self.user.username
+        return self.user.username + ' ' + self.last_name + ' ' + self.first_name + ' ' + self.middle_name
 
 
 class Group(models.Model):
@@ -103,6 +103,7 @@ class Report(models.Model):
                                related_name='ban', blank=True)
     check_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,
                                related_name='checker', blank=True)
+    check = models.BooleanField(default=False)
     project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)

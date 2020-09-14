@@ -16,11 +16,13 @@ const Reports = (props) =>{
                 <br/>
                 {cardReport.fields.hour} ч.                                
                 </div>
-                <div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
+                {props.status
+                ?''
+                :<div className="text-right" style={{paddingRight:"5px",paddingBottom:"10px"}}>
                     <Button onClick={props.onClickDeleteCard.bind(this,cardReport.pk,index)} type="primary" danger size="small">
                         Удалить
                     </Button>
-                </div>
+                </div>}
                 {/* <div>{cardReport.fields.text}</div> */}
                 {/* <div  className="text-left">{cardReport.fields.hour} ч.</div>                 */}
                 {/* <div className="delete text-right">
@@ -36,10 +38,11 @@ const Reports = (props) =>{
     }))
 }
 
-const   ListReports =(props)=>{
+const  ListReports =(props)=>{
     return(
         <div id="proj-list">
             <Reports
+                status = {props.status}
                 onClickDeleteCard = {props.onClickDeleteCard}
                 onClickCard = {props.onClickCard}
                 listProject = {props.listProject}/>
