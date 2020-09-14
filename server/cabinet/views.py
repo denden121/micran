@@ -62,6 +62,10 @@ def build_level_with_user(subdepartment_id, lvl, date):
         users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
                        'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
         reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
+        if reports:
+            users_field['has_report'] = True
+        else:
+            users_field['has_report'] = True
         report_time = 0
         flag = 0
         for report in reports:
