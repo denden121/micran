@@ -48,4 +48,5 @@ urlpatterns = [
     path('reports/department/<int:department_id>/', views.workers_for_reports),
     path('reports/person/<int:person_id>/', views.all_reports_for_person),
     path('get_department/', views.get_department),
+    path('', views.export_projects),
 ]

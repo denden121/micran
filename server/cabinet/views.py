@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
+from .project_export import export
 
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
 from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, \
@@ -19,6 +20,12 @@ def get_user_jwt(request):
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
     return user
+
+
+def export_projects(request):
+    export(1)
+    print('fddfs')
+    return HttpResponse('Success')
 
 
 def get_endpoint_department(data, output):
@@ -62,6 +69,10 @@ def build_level_with_user(subdepartment_id, lvl, date):
         users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
                        'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
         reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
+        if reports:
+            users_field['has_report'] = True
+        else:
+            users_field['has_report'] = False
         report_time = 0
         flag = 0
         for report in reports:
@@ -103,7 +114,7 @@ def departament_new_view(request):
     departments = Department.objects.filter(subdepartment_code='0')
     data = {}
     for department in departments:
-        data[department.id] = build_level(department.id, 0)
+        data[department.id] = build_level_with_user(department.id, 0)
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
@@ -927,6 +938,7 @@ def all_reports_for_person(request, person_id):
             data = []
             time_report = 0
             output = {}
+            status = False
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
             for report in reports:
@@ -955,6 +967,7 @@ def all_reports_for_person(request, person_id):
             data = []
             output = {}
             time_report = 0
+            status = False
             for report in reports:
                 if action == 'ban':
                     report.status = True

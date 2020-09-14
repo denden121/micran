@@ -4,16 +4,20 @@ import {Modal} from "antd"
 const Report =(props)=>{
     return props.reports.map((item,key)=>{
         console.log(item.users)
-        return Array.isArray( item)? item.map((user)=> {
-                return <tr>
-                    <td scope="row"></td>
-                    <td><a onClick={props.onClickShowModal.bind(this,user.pk)} style={{cursor: "pointer"}}>{user.name}</a></td>
-                    <td>{user.time_report}</td>
-                    <td>{user.time_norm}</td>
-                    <td>{user.time_system}</td>
-                    <td>{user.checker}</td>
-                    <td>{user.banned}</td>
-                </tr>
+        return Array.isArray( item)
+            ? item.map((user)=> {
+                // console.log( user.SRI_SAS, props.isNIS, !user.has_report , !props.isAllList)
+                return (user.SRI_SAS === false && props.isNIS === true) || (!user.has_report && !props.isAllList)
+                    ?""
+                    :<tr>
+                        <td scope="row"></td>
+                        <td><a onClick={props.onClickShowModal.bind(this,user.pk)} style={{cursor: "pointer"}}>{user.name}</a></td>
+                        <td>{user.time_report}</td>
+                        <td>{user.time_norm}</td>
+                        <td>{user.time_system}</td>
+                        <td>{user.checker}</td>
+                        <td>{user.banned}</td>
+                    </tr>
             })
             : <tr>
                 <td colSpan="7" scope="colgroup" className="table-secondary">{item.code + ' ' +item.name}</td>
@@ -38,7 +42,10 @@ const ReportsTable =(props)=>{
                     </tr>
                 </thead>
                 <tbody>
-                    <Report onClickShowModal={props.onClickShowModal} reports ={props.reports}/>
+                    <Report
+                        isAllList = {props.isAllList}
+                        isNIS = {props.isNIS}
+                        onClickShowModal={props.onClickShowModal} reports ={props.reports}/>
                 </tbody>
             </table>
         </div>

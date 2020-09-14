@@ -44,14 +44,14 @@ const Reports =(props)=>{
                         <div className="row no-gutters border rounded overflow-hidden flex-sm-row mb-4 h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="total">
-                                    Итого {props.total}
+                                    Итого {props.timeReport}
                                 </div>
                             </div>
                         </div>
                         <div className="row no-gutters border rounded overflow-hidden flex-sm-row mb-4 h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="total">
-                                    Время по карточке {props.timeCard}
+                                    Время по карточке {props.timeSystem}
                                 </div>
                             </div>
                         </div>
