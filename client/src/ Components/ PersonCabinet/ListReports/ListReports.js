@@ -220,26 +220,47 @@ class ListReports extends React.Component {
             }
         }
     };
-    onClickBlock=()=>{
+    onClickBlock=(event)=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
         const date = localStorage.getItem('date').replace(' ', '-')
         let formdata = new FormData();
-        formdata.append("date", date);
-        formdata.append("action", "ban");
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            redirect: 'follow',
-            body:formdata
+        formdata.append("date", date)
+        if(event.target.textContent === "Блокировать"){
+            // console.log(event.target.textContent)
+            // event.target.textContent = 'dadsads'
+            formdata.append("action", "ban");
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                redirect: 'follow',
+                body:formdata
+            }
+            fetch(`http://127.0.0.1:8000/reports/person/${this.state.person_date.pk}/`, requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    this.setState({person_date: result})
+                })
+                .catch(error => console.log('error', error));
+            event.target.textContent = "Разблокировать"
+        }else{
+            formdata.append("action", "unlock");
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                redirect: 'follow',
+                body:formdata
+            }
+            fetch(`http://127.0.0.1:8000/reports/person/${this.state.person_date.pk}/`, requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result)
+                    this.setState({person_date: result})
+                })
+                .catch(error => console.log('error', error));
+            event.target.textContent = "Блокировать"
         }
-        fetch(`http://127.0.0.1:8000/reports/person/${this.state.person_date.pk}/`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                this.setState({person_date: result})
-            })
-            .catch(error => console.log('error', error));
     }
     onClickUnlock=()=>{
         let token = localStorage.getItem('token')
