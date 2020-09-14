@@ -65,7 +65,7 @@ def build_level_with_user(subdepartment_id, lvl, date):
         if reports:
             users_field['has_report'] = True
         else:
-            users_field['has_report'] = True
+            users_field['has_report'] = False
         report_time = 0
         flag = 0
         for report in reports:
