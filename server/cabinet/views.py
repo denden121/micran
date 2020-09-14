@@ -220,13 +220,15 @@ def all_report_view(request, user_id='default'):
                                                 date__year=request.GET['year'])
                 salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
                 data = []
+                status = 0
                 for report in reports:
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'status': report.status, 'project_pk': report.project.pk}
+                              'project_pk': report.project.pk}
+                    status = report.status
                     data.append({'pk': report.pk, 'fields': fields})
                 if salary:
-                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'reports': data}))
-                return HttpResponse(json.dumps({'time_norm': '', 'reports': data}))
+                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'reports': data, 'status': status}))
+                return HttpResponse(json.dumps({'time_norm': '', 'reports': data, 'status': status}))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
@@ -252,13 +254,7 @@ def all_report_view(request, user_id='default'):
     else:
         if user:
             profile = Profile.objects.get(user=user_id)
-            if request.method == "GET":
-                # if user_id != user.id:  # 11 is check reports
-                #     return HttpResponse("You don't have permissions")
-                reports = Report.objects.filter(creator_id=user_id)
-                data = serializers.serialize('json', reports)
-                return HttpResponse(data)
-            elif request.method == "POST":
+            if request.method == "POST":
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
                 year, month, day = date.split('-')
@@ -988,3 +984,13 @@ def all_projects_simple_view(request):
             for project in projects:
                 data.append({'pk': project.pk, 'name': project.name,})
             return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def get_department(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            department = user.profile.department
+            data = {'department_name': department.department_name, 'department_code': department.department_code, 'pk': department.pk}
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
