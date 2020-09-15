@@ -17,10 +17,16 @@ class ReportForm(forms.ModelForm):
 #         fields = []
 
 
-class ProfileForm(forms.ModelForm):
+class RegisterForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['middle_name', 'first_name', 'last_name']
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['fine_late', 'part_time_job', 'SRI_SAS', 'oklad']
 
 
 class ProjectForm(forms.ModelForm):
