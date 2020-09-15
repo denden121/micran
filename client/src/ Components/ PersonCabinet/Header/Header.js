@@ -67,7 +67,7 @@ class LogOut extends React.Component{
             //     </Modal>
             // </header>
             <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-                <h5 class="my-0 mr-md-auto font-weight-normal">Департаметн СВЧЭ</h5>
+                <h4 class="my-0 mr-md-auto font-weight-normal" >Департамент СВЧЭ</h4>
                 <nav class="my-2 my-md-0 mr-md-3">
                 <a onClick={this.showModal}><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>U</Avatar></a>
                 </nav>
@@ -78,7 +78,7 @@ class LogOut extends React.Component{
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
-                width={700}>
+                width={900}>
                     <PersonData/>
                 </Modal>
           </div>

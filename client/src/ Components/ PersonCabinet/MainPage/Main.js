@@ -26,6 +26,7 @@ import Structure from "../Tree/Structure"
 import ListReports from "../ListReports/ListReports"
 import { DatePicker, Space } from 'antd';
 import { Layout, Menu, PageHeader,Button} from 'antd';
+import EditGroupps from "../Administration/AddGroups/EditGroupps/EditGroupps"
 import { UpSquareOutlined,TeamOutlined,UsergroupAddOutlined } from '@ant-design/icons';
 import {
     DesktopOutlined,
@@ -203,6 +204,7 @@ class Main extends Component{
                                 <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/>
                                 <Route path='/cabinet/admin/structure' exact  component = {Structure}/>
                                 <Route path='/cabinet/list_reports' exact  component = {ListReports}/>
+                                <Route path='/cabinet/admin/edit_groups' exact component = {EditGroupps}/>
                             </Switch>
                         </div>
                     </Content>

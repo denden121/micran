@@ -13,7 +13,7 @@ from .project_export import export
 from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, \
     GroupForm, SalaryCommonForm, SalaryIndividualForm, RegisterForm
 from .models import Profile, Project, Report, Action, Group, Logging, \
-    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark
+    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark, GroupAction
 
 
 def get_user_jwt(request):
@@ -53,7 +53,7 @@ def build_level(subdepartment_id, lvl):
         return data
 
 
-def build_level_with_user(subdepartment_id, lvl, date):
+def build_level_with_user(subdepartment_id, lvl, date, only_user=0):
     department = Department.objects.get(pk=subdepartment_id)
     if int(department.subdepartment_code) > 0:
         lvl += 1
@@ -69,6 +69,8 @@ def build_level_with_user(subdepartment_id, lvl, date):
     for worker in profiles:
         users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
                        'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
+        if only_user:
+            continue
         reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
         if reports:
             users_field['has_report'] = True
@@ -114,8 +116,9 @@ def build_level_with_user(subdepartment_id, lvl, date):
 def departament_new_view(request):
     departments = Department.objects.filter(subdepartment_code='0')
     data = {}
+    date = f'{datetime.now().month}-{datetime.now().year}'
     for department in departments:
-        data[department.id] = build_level_with_user(department.id, 0)
+        data[department.id] = build_level_with_user(department.id, 0, date, 1)
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
@@ -195,10 +198,10 @@ def cabinet_view(request, user_id='default'):
         profile = user.profile
         data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                 'last_name': profile.last_name, 'first_name': profile.first_name, 'middle_name': profile.middle_name,
-                'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
-                'experience': profile.experience, 'position': profile.position, 'department': profile.department,
-                'employment_date': profile.employment_date}
-        return HttpResponse(json.dumps(data))
+                'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
+                'experience': profile.experience, 'position': profile.position, 'department': profile.department.department_name,
+                'employment_date': str(profile.employment_date)}
+        return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
     else:
         if user:
             profile = Profile.objects.get(user=user_id)
@@ -206,11 +209,11 @@ def cabinet_view(request, user_id='default'):
                 data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                         'last_name': profile.last_name, 'first_name': profile.first_name,
                         'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
+                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
                         'experience': profile.experience, 'position': profile.position,
-                        'department': profile.department,
-                        'employment_date': profile.employment_date}
-                return HttpResponse(json.dumps(data))
+                        'department': profile.department.department_name,
+                        'employment_date': str(profile.employment_date)}
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
             if request.method == "POST":
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 print(form.errors)
@@ -221,10 +224,10 @@ def cabinet_view(request, user_id='default'):
                 data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                         'last_name': profile.last_name, 'first_name': profile.first_name,
                         'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
-                        'experience': profile.experience, 'position': profile.position, 'department': profile.department,
-                        'employment_date': profile.employment_date}
-                return HttpResponse(json.dumps(data))
+                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
+                        'experience': profile.experience, 'position': profile.position,
+                        'department': profile.department.department_name,'employment_date': str(profile.employment_date)}
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
         return HttpResponse("Permission denied")
 
 
@@ -456,7 +459,7 @@ def group_view(request):
         if request.method == "GET":
             pk = request.GET.get('pk')
             group = Group.objects.get(pk=pk)
-            actions = group.available_actions.all()
+            actions = group.actions.available_actions.all()
             participants = group.participants.all()
             users = []
             actions_output = []
@@ -519,12 +522,15 @@ def groups_with_permission(request):
             for group in groups:
                 profiles = group.participants.all()
                 users = []
-                actions = group.available_actions.all()
+                groups_actions = group.actions.all()
+
                 actions_output = []
                 for profile in profiles:
                     users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                for action in actions:
-                    actions_output.append(action.action + ' ' + str(action.num))
+                for groups_action in groups_action:
+                    actions = groups_action.available_actions.all()
+                    for action in actions:
+                        actions_output.append(action.action + ' ' + str(action.num))
                 fields = {'name': group.name, 'users': users, 'description': group.description,
                           'actions': actions_output}
                 data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})

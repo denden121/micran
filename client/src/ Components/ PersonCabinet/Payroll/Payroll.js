@@ -271,8 +271,10 @@ class Payroll extends React.Component{
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-sm-12 col-md-12 col-lg-12">
-                        <h3 className="text-left">Расчет зарплат(оклад)</h3>
-                        <h5 className="text-left">Параметры отображения</h5>
+                        <h5 className="text-left">Расчет зарплат(оклад)</h5>
+                        {/* <h6 className="text-left">Параметры отображения</h6> */}
+                        <div className="text-left">Параметры отображения</div>
+                        <br/>
                             <div className="row">
                                 <div className="col-md-12 col-lg-12 card">
                                      <div className="card-body">

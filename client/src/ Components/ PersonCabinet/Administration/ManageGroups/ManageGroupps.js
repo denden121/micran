@@ -27,13 +27,12 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-3">
-                        <button className="btn btn-sm btn-primary groupps" onClick={()=>{document.location ='/cabinet/admin/add_groups'}}>Создать новую группу</button>
+               <div className="text-left">
+                    <div className="text-left">
+                            <button className="btn btn-sm btn-primary " onClick={()=>{document.location ='/cabinet/admin/add_groups'}}>Создать новую группу</button>
+                            <button className="btn btn-sm btn-success" style={{marginLeft:"5px"}} onClick={()=>{document.location='/cabinet/admin/edit_groups'}}>Редактирование групп</button>
                     </div>
-                </div>               
-               
-               <br/>
+                    <br/>
                <div className="table-responsive">
                <table className="table table-hover table-bordered">
                     <thead className="thead-dark">
@@ -50,6 +49,8 @@ class ManageGroups extends React.Component{
                </table>
                    
                </div>
+               </div>
+               
             </div>
         )
     }
