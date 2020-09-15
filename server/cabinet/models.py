@@ -49,15 +49,18 @@ class Profile(models.Model):
     direction = models.ForeignKey('Direction', related_name='direction', on_delete=models.SET_NULL, blank=True,
                                   null=True)
     birth_date = models.DateField(null=True, blank=True)
+    employment_date = models.DateField(null=True, blank=True, default='2010-01-01')
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     experience = models.FloatField(blank=False, default='0.0')
+    fine_late = models.TimeField(blank=False, default='09:15:00')
     shift = models.CharField(max_length=30, blank=True)
     part_time_job = models.CharField(max_length=30, blank=True)
     lateness = models.CharField(max_length=30, blank=True)
     SRI_SAS = models.BooleanField(blank=True, default='False')
+    oklad = models.BooleanField(blank=True, default='False')
 
     def __str__(self):
         return self.user.username + ' ' + self.last_name + ' ' + self.first_name + ' ' + self.middle_name

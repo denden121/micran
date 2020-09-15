@@ -10,9 +10,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from .project_export import export
 
-from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, GroupForm, SalaryCommonForm, SalaryIndividualForm
-from .models import Profile, Project, Report, Action, Group, Logging, SalaryCommon, SalaryIndividual, Department, \
-    Direction, TimeCard, CalendarMark
+from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, \
+    GroupForm, SalaryCommonForm, SalaryIndividualForm, RegisterForm
+from .models import Profile, Project, Report, Action, Group, Logging, \
+    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark
 
 
 def get_user_jwt(request):
@@ -191,25 +192,47 @@ def check_admin_view(request):
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
-        if not hasattr(user, 'profile'):
-            return HttpResponse("Profile undefined")
-        data_profile = serializers.serialize('json', [user.profile], fields=('first_name', 'last_name', 'middle_name'))
-        return HttpResponse(data_profile)
+        profile = user.profile
+        data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
+                'last_name': profile.last_name, 'first_name': profile.first_name, 'middle_name': profile.middle_name,
+                'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
+                'experience': profile.experience, 'position': profile.position, 'department': profile.department,
+                'employment_date': profile.employment_date}
+        return HttpResponse(json.dumps(data))
     else:
-        if user and (user.id == user_id or user.is_staff):
-            profile = Profile.objects.filter(user=user)
-            data = serializers.serialize('json', profile)
-            return HttpResponse(data)
+        if user:
+            profile = Profile.objects.get(user=user_id)
+            if request.method == "GET":
+                data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
+                        'last_name': profile.last_name, 'first_name': profile.first_name,
+                        'middle_name': profile.middle_name,
+                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
+                        'experience': profile.experience, 'position': profile.position,
+                        'department': profile.department,
+                        'employment_date': profile.employment_date}
+                return HttpResponse(json.dumps(data))
+            if request.method == "POST":
+                form = ProfileForm(request.POST, request.FILES, instance=profile)
+                print(form.errors)
+                if form.is_valid():
+                    update = form.save(commit=False)
+                    update.user = user
+                    update.save()
+                data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
+                        'last_name': profile.last_name, 'first_name': profile.first_name,
+                        'middle_name': profile.middle_name,
+                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
+                        'experience': profile.experience, 'position': profile.position, 'department': profile.department,
+                        'employment_date': profile.employment_date}
+                return HttpResponse(json.dumps(data))
         return HttpResponse("Permission denied")
 
 
 @csrf_exempt
 def register_view(request):
     user = get_user_jwt(request)
-    if not hasattr(user, 'profile'):
-        Profile.objects.create(user=user)
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=user.profile)
+        form = RegisterForm(request.POST, request.FILES, instance=user.profile)
         print(form.errors)
         if form.is_valid():
             update = form.save(commit=False)
