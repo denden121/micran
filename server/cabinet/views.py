@@ -119,7 +119,8 @@ def departament_new_view(request):
     date = f'{datetime.now().month}-{datetime.now().year}'
     for department in departments:
         data[department.id] = build_level_with_user(department.id, 1, date, 1)
-    return HttpResponse(json.dumps(list(data), ensure_ascii=False).encode('utf8'))
+    output = [data]
+    return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
 
 def get_time_from_reports(profile):
