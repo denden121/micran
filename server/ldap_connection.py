@@ -9,13 +9,11 @@ def connect(username, password):
     login = "uid=" + username + ',ou=People,dc=localnet,dc=micran'
     filter = "uid=" + username
     search_atr = ["sn", "cn", "mail", "employeeNumber", "entryUUID"]
-    con.simple_bind(login, password)
-    results_2 = con.search(basedn, ldap.SCOPE_ONELEVEL, filter, search_atr)
-    results_1 = con.search(basedn, ldap.SCOPE_BASE, filter, search_atr)
-    for result in results_1:
-        print('DN'.rjust(15) + ' = ' + result[0].decode('utf-8'))
-    for result in results_2:
-        print('DN'.rjust(15) + ' = ' + result[0].decode('utf-8'))
+    con.simple_bind_s(login, password)
+    results = con.search_s(basedn, ldap.SCOPE_SUBTREE, filter, search_atr);
+    print(results, '\n');
+    for result in results:
+        print(result[1]["cn"][0].decode('utf-8'))
     con.unbind_s()
 
 

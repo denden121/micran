@@ -27,16 +27,16 @@ const Norma = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="card col-md-3 col-lg-4">
-                    <div className="card-header text-left ">
-                        Время изменения таблицы другим пользователем
-                    </div>
-                    <div className="card-body text-left">
-                        <div className="input-group">
+                {/*<div className="card col-md-3 col-lg-4">*/}
+                {/*    <div className="card-header text-left ">*/}
+                {/*        Время изменения таблицы другим пользователем*/}
+                {/*    </div>*/}
+                {/*    <div className="card-body text-left">*/}
+                {/*        <div className="input-group">*/}
                             {/*<input type="text" className="form-control" />*/}
-                        </div>
-                    </div>
-                </div>
+                        {/*</div>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
             </div>
         </div>
     )

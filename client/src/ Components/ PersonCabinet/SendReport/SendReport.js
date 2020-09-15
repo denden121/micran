@@ -9,8 +9,9 @@ class SendReport extends React.Component{
         name_projects:{},
         select_report:'',
         timeNorm:'',
-        timeCard:'',
-        total:''
+        timeReport:'',
+        timeSystem:'',
+        status:''
     }
     componentDidMount(){
         this.loadReport()
@@ -89,8 +90,13 @@ class SendReport extends React.Component{
         const url = 'http://127.0.0.1:8000/cabinet/reports/?month=' + month + '&year=' + year
         fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({reports :result.reports,
-                                                timeNorm : result.time_norm}))
+            .then(result => {
+                console.log(result)
+                this.setState({reports :result.reports,
+                                    timeReport:result.time_report,
+                                    timeSystem:result.time_system,
+                                    timeNorm : result.time_norm,
+                                     status: result.status})})
             .catch(error => console.log('error', error));
         let temp = this.state.reports.length
         let total = 0
@@ -157,9 +163,10 @@ class SendReport extends React.Component{
                     let reports = [...this.state.reports]
                     // console.log(reports)
                     // console.log(index)
+                    let time = this.state.timeReport - reports[index].fields.hour
                     reports.splice(index, 1)
                     // console.log(reports)
-                    this.setState({reports: reports})
+                    this.setState({reports: reports,timeReport:time})
                 }else{
                     alert('не удалось удалить')
                 }
@@ -184,6 +191,7 @@ class SendReport extends React.Component{
                     </div>
                 
                     <Reports
+                        status = {this.state.status}
                         onClickDeleteCard = {this.onClickDeleteCard}
                         onClickCard = {this.onClickCard}
                         listProject = {this.state.reports}
@@ -191,8 +199,8 @@ class SendReport extends React.Component{
                         OnClickSaveReport = {this.OnClickSaveReport}
                         onClickNewProject = {this.onClickNewProject}
                         onChangeSelect = {this.onChangeSelect}
-                        timeCard = {this.state.timeCard}
-                        total = {this.state.total}
+                        timeReport = {this.state.timeReport}
+                        timeSystem = {this.state.timeSystem}
                         timeNorm = {this.state.timeNorm}
                     />
                 </div>

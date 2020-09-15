@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 TYPE_CALENDAR_MARK = [
     ('undefined', 'undefined'),
     ('paid_holiday', 'paid_holiday'),
@@ -33,8 +32,17 @@ class Action(models.Model):
         return self.action
 
 
+class GroupAction(models.Model):
+    name = models.CharField(max_length=30, blank=True, unique=True)
+    description = models.CharField(max_length=500, blank=True)
+    available_actions = models.ManyToManyField(Action, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Direction(models.Model):
-    subdepartment = models.ForeignKey('Subdepartment', on_delete=models.SET_NULL, null=True)
+    subdepartment = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
     direction_name = models.CharField(max_length=30, blank=True)
     direction_code = models.CharField(max_length=50, blank=True)
 
@@ -45,28 +53,32 @@ class Direction(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT, primary_key=True)
     sex = models.CharField(max_length=10, blank=True)
-    subdepartment = models.ForeignKey('Subdepartment', related_name='subdepartment_id', on_delete=models.SET_NULL, blank=True, null=True)
-    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.SET_NULL, blank=True, null=True)
-    direction = models.ForeignKey('Direction', related_name='direction', on_delete=models.SET_NULL, blank=True, null=True)
+    department = models.ForeignKey('Department', related_name='department_id', on_delete=models.SET_NULL, blank=True,
+                                   null=True)
+    direction = models.ForeignKey('Direction', related_name='direction', on_delete=models.SET_NULL, blank=True,
+                                  null=True)
     birth_date = models.DateField(null=True, blank=True)
+    employment_date = models.DateField(null=True, blank=True, default='2010-01-01')
     position = models.CharField(max_length=30, blank=True)
     middle_name = models.CharField(max_length=30, blank=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     experience = models.FloatField(blank=False, default='0.0')
+    fine_late = models.TimeField(blank=False, default='09:15:00')
     shift = models.CharField(max_length=30, blank=True)
     part_time_job = models.CharField(max_length=30, blank=True)
     lateness = models.CharField(max_length=30, blank=True)
     SRI_SAS = models.BooleanField(blank=True, default='False')
+    oklad = models.BooleanField(blank=True, default='False')
 
     def __str__(self):
-        return self.user.username
+        return self.user.username + ' ' + self.last_name + ' ' + self.first_name + ' ' + self.middle_name
 
 
 class Group(models.Model):
     name = models.CharField(max_length=30, blank=True, unique=True)
     description = models.CharField(max_length=500, blank=True)
-    available_actions = models.ManyToManyField(Action, blank=True)
+    actions = models.ManyToManyField(GroupAction, blank=True)
     participants = models.ManyToManyField(Profile, blank=True)
 
     def __str__(self):
@@ -75,18 +87,21 @@ class Group(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=True)
-    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True, null=True)
+    direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True,
+                                  null=True)
     manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.SET_NULL, null=True)
     client = models.CharField(max_length=100, blank=True)
-    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.SET_NULL, null=True)
-    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id', on_delete=models.SET_NULL, null=True)
+    chief_designer = models.ForeignKey('Profile', related_name='chief_designer_id', on_delete=models.SET_NULL,
+                                       null=True)
+    deputy_chief_designer = models.ForeignKey('Profile', related_name='deputy_chief_designer_id',
+                                              on_delete=models.SET_NULL, null=True)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
     contract = models.CharField(max_length=100)
-    type = models.BooleanField(blank=True, default='False') # False is inside True is outer
-    status = models.BooleanField(blank=True, default='False') # False is Open True is close
-    report_availability = models.BooleanField(blank=True, default='False') # False is Available True is Inavailable
-    acceptance_vp = models.BooleanField(blank=True, default='False') # False in False True is True
+    type = models.BooleanField(blank=True, default='False')  # False is inside True is outer
+    status = models.BooleanField(blank=True, default='False')  # False is Open True is close
+    report_availability = models.BooleanField(blank=True, default='False')  # False is Available True is Unavailable
+    acceptance_vp = models.BooleanField(blank=True, default='False')  # False in False True is True
 
     def __str__(self):
         return self.name
@@ -94,31 +109,26 @@ class Project(models.Model):
 
 class Report(models.Model):
     status = models.BooleanField(blank=True)
-    creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True)
+    creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True,
+                                   related_name='creator')
+    ban_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,
+                               related_name='ban', blank=True)
+    check_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,
+                               related_name='checker', blank=True)
+    check = models.BooleanField(default=False)
     project = models.ForeignKey(Project, related_name='project_id', blank=True, on_delete=models.SET_NULL, null=True)
     text = models.TextField(max_length=500, blank=True)
     hour = models.FloatField(blank=True)
     date = models.DateField(blank=True)
 
-    # def __str__(self):
-    # return self.name
-
 
 class Department(models.Model):
     department_code = models.CharField(max_length=50, blank=True)
     department_name = models.CharField(max_length=100, blank=True)
+    subdepartment_code = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.department_name
-
-
-class Subdepartment(models.Model):
-    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
-    subdepartment_code = models.CharField(max_length=50, blank=True)
-    subdepartment_name = models.CharField(max_length=100, blank=True)
-
-    def __str__(self):
-        return self.subdepartment_name
 
 
 class SalaryIndividual(models.Model):
@@ -143,12 +153,16 @@ class SalaryIndividual(models.Model):
         self.days_worked = salary_common.days_norm_common - (self.day_off + self.vacation + self.sick_leave)
         self.time_norm = 8 * self.days_worked
         try:
-            if self.is_penalty:
-                self.penalty = (self.time_norm - self.time_orion) * self.plan_salary / self.time_norm
-            self.salary_hand = self.plan_salary * self.days_worked / salary_common.days_norm_common - self.penalty + self.award
+            self.penalty = (self.time_norm - self.time_orion) * self.plan_salary / self.time_norm
+            self.salary_hand = self.plan_salary * self.days_worked / salary_common.days_norm_common \
+                               - self.penalty + self.award
         except ZeroDivisionError:
             self.penalty = 0
             self.salary_hand = 0
+
+    def __str__(self):
+        return 'Salary for ' + self.person.last_name + ' ' + self.person.first_name + ' ' + self.person.middle_name + \
+               ' for ' + str(self.date.year) + ' ' + str(self.date.month)
 
 
 class SalaryCommon(models.Model):

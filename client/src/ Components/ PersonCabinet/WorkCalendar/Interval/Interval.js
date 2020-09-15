@@ -22,7 +22,7 @@ class Interval extends React.Component {
             this.setState({range:a,
                                 show:false})
         }
-
+        // console.log(this.state)
     }
     componentDidMount() {
         this.loadDepartments()
@@ -40,7 +40,7 @@ class Interval extends React.Component {
             .then(response =>  response.json())
             .then(result => {
                 let actions = Array.from(result).map((department)=>{
-                    console.log(department)
+                    // console.log(department)
                     return {value:`${department.pk}`,label:`${department.fields.code +' '+ department.fields.name}`}
                 })
                 this.setState({departments: actions})})
@@ -61,7 +61,7 @@ class Interval extends React.Component {
             .then(result => {
                 console.log('sub',result)
                 let subdepartments = Array.from(result).map((subdepartment)=>{
-                    console.log(subdepartment)
+                    // console.log(subdepartment)
                     return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
                 })
                 this.setState({subdepartments: subdepartments})})
@@ -78,6 +78,7 @@ class Interval extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         };
+        console.log(date)
         const url = `http://127.0.0.1:8000/cabinet/calendar/?subdepartment=${e}&current_date=${date.join('-')}&range=${this.state.range}`
         fetch(url, requestOptions)
             .then(response =>  response.json())
@@ -230,7 +231,7 @@ class Interval extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-12">
+                    <div className="col-md-12 col-lg-12">
                         {this.state.show ?
                             <Calendar date={this.state}/> :
                             ''

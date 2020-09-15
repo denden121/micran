@@ -24,9 +24,9 @@ const Reports =(props)=>{
                     <div className="col-sm-5 col-md-5">
                         <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
-
                                 <label className="col-sm-1" className="text-left"><strong>Список проектов</strong><hr className="normal"/></label>
                                 <ProjectList
+                                    status = {props.status}
                                     onClickDeleteCard = {props.onClickDeleteCard}
                                     onClickCard={props.onClickCard}
                                     listProject = {props.listProject}
@@ -34,22 +34,24 @@ const Reports =(props)=>{
                             </div>
                         </div>
                         <label className="Label2">
-                            <button onClick={props.onClickNewProject} className="btn btn-success btn-sm">
-                                Добавить проект</button>
+                            {props.status
+                                ?''
+                                : <button onClick={props.onClickNewProject} className="btn btn-success btn-sm">
+                                Добавить проект</button>}
                         </label>
                         <br/>
                         <br/>
                         <div className="row no-gutters border rounded overflow-hidden flex-sm-row mb-4 h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="total">
-                                    Итого {props.total}
+                                    Итого {props.timeReport}
                                 </div>
                             </div>
                         </div>
                         <div className="row no-gutters border rounded overflow-hidden flex-sm-row mb-4 h-md-250 position-relative">
                             <div className="col p-4 d-flex flex-column position-static">
                                 <div className="total">
-                                    Время по карточке {props.timeCard}
+                                    Время по карточке {props.timeSystem}
                                 </div>
                             </div>
                         </div>
@@ -72,23 +74,26 @@ const Reports =(props)=>{
                                         {/*       placeholder="Проект"*/}
                                         {/*       defaultValue='MicRac'*/}
                                         {/*       type="text"/>*/}
-                                        <select onChange={props.onChangeSelect} className="select2 form-control select2-offscreen" id='name_project'>
+                                        <select disabled={props.status} onChange={props.onChangeSelect} className="select2 form-control select2-offscreen" id='name_project'>
                                             <NameProjects listNameFrojects = {props.listNameFrojects}/>
                                         </select>
                                     </div>
                                     <br/>
                                     <div id="time-read">
                                         <label className="col-sm-1" className="Label1"><strong>Часы:</strong></label>
-                                        <input className="form-control"
-                                               id = 'time_project'
-                                               placeholder="Часы"
-                                               // defaultValue = {props.report.hour}
-                                               type="text"/>
+                                        <input
+                                            readOnly={props.status}
+                                            className="form-control"
+                                            id = 'time_project'
+                                            placeholder="Часы"
+                                            // defaultValue = {props.report.hour}
+                                            type="text"/>
                                     </div>
                                     <br/>
                                     <div id="note-read">
                                         <label className="col-sm-1" className="Label1"><strong>Состав работ:</strong></label>
                                         <textarea
+                                            readOnly={props.status}
                                             // defaultValue = {props.report.text}
                                             className="form-control"
                                             id="body_report"
@@ -98,10 +103,13 @@ const Reports =(props)=>{
                                         </textarea>
                                     </div>
                                     <hr className="normal"/>
-                                    <label className="Label2">
+                                    {props.status
+                                        ?''
+                                        :<label className="Label2">
+
                                         <button onClick={props.OnClickSaveReport} className="btn btn-success">
                                             Сохранить</button>
-                                    </label>
+                                    </label>}
                                 </div>
                             </div>
                         </div>

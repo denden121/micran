@@ -1,19 +1,19 @@
 import React from "react"
 import "./Calendar.css"
 
-const dates={
-    1:31,
-    2:28,
-    3:31,
-    4:31,
-    5:31,
-    6:30,
-    7:31,
-    8:31,
-    9:30,
-    10:31,
-    11:30,
-    12:31
+const dates = {
+    '01':31,
+    '02':28,
+    '03':31,
+    '04':31,
+    '05':31,
+    '06':30,
+    '07':31,
+    '08':31,
+    '09':30,
+    '10':31,
+    '11':30,
+    '12':31
 }
 const colors = {
     0:'',
@@ -26,7 +26,7 @@ const colors = {
     7:'ucheb_otpusk',
     8:'plan_otpusk',
 }
-const Persons =(props)=>{
+const Persons = (props) => {
     console.log('props',props)
     let people = props.date;
     console.log('people',people)
@@ -50,38 +50,37 @@ const Days = (props)=>{
     for (let i = 0;i<props.range-1;i++){
         a.push(i+1)
     }
-
     return a.map( item =>{
         return <td scope="col" className="Day">{item}</td>
     })
 }
 
 const Calendar =(props)=>{
-    console.log(props)
-
+    console.log('props',props)
     let date = localStorage.getItem('date').split(' ')
-    let range = ''
+    let range_temp = ''
     if (props.date.range ==='year'){
-        range = 54
+        range_temp = 54
     }
     else if(props.date.range ==='month'){
-        range = dates[date[0]]+1
+        range_temp = dates[date[0]<10?'0'+date[0]:date[0]]+1
     }
+    console.log('range',range_temp)
     return(
-        <div>
+        <div className="table-responsive" style={{overflow:"auto", maxWidth:"100%"}}>
             <table className="table table-bordered table-sm">
-                <tbody>
+                <tbody className="workcalendar">
                     <tr>
-                        <td colspan={range} scope="colgroup">2020 год</td>
+                        <td colspan={range_temp} scope="colgroup">2020 год</td>
                     </tr>
                     <tr>
                         <td scope="col">ФИО</td>
 
                         {/*<td scope="col" className="Day"></td>*/}
-                        <Days range ={range}/>
+                        <Days range ={range_temp}/>
                     </tr>
-                    <tr>
-                        <td colspan={range} scope="colgroup" className="table-secondary">Отдел</td>
+                       <tr>
+                        <td colspan={range_temp} scope="colgroup" className="table-secondary">Отдел</td>
                     </tr>
                     <Persons date = {props.date.persons}/>
                 </tbody>

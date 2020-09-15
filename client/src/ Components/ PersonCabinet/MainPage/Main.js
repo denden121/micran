@@ -23,33 +23,38 @@ import Employees from "../Employees/Employees"
 import Interval from "../WorkCalendar/Interval/Interval"
 import SystemTime from "../SystemTime/SystemTime"
 import Structure from "../Tree/Structure"
+import ListReports from "../ListReports/ListReports"
 import { DatePicker, Space } from 'antd';
 import { Layout, Menu, PageHeader,Button} from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import EditGroupps from "../Administration/AddGroups/EditGroupps/EditGroupps"
+import { UpSquareOutlined,TeamOutlined,UsergroupAddOutlined } from '@ant-design/icons';
 import {
     DesktopOutlined,
     PieChartOutlined,
     FileOutlined,
-    TeamOutlined,
-    
-  } from '@ant-design/icons';
+    LoginOutlined,
+    FormOutlined,
+    FolderOpenOutlined,
+    CalendarOutlined,
+    FieldTimeOutlined,
+    ApartmentOutlined,
+    DollarOutlined
+} from '@ant-design/icons';
 import Calendar from "../Navigation/Calendar/Calendar"
-import picture from "../MainPage/micran1.png"
+import picture from "../MainPage/micran.svg"
 
 
-  const { Header, Content, Footer, Sider } = Layout;
-  const { SubMenu } = Menu;
+const { Header, Content, Footer, Sider } = Layout;
+const { SubMenu } = Menu;
 
 class Main extends Component{
     state = {
         collapsed: false,
-      };
-     
-    
-      onCollapse = collapsed => {
+    };
+    onCollapse = collapsed => {
         console.log(collapsed);
         this.setState({ collapsed });
-      };
+    };
 
     logOut = () =>{
         localStorage.setItem('token','')
@@ -66,112 +71,145 @@ class Main extends Component{
             rend()
         }
     }
+    onClickCalendar=(event)=>{
+        console.log(event)
+        // debugger;
+    }
 
     render() {
-      
+
         if(!localStorage.getItem('date')){
             let date = new Date()
-            localStorage.setItem('date',`${date.getMonth()+1} ${date.getFullYear()} `)
+            localStorage.setItem('date',`${date.getMonth()>9?date.getMonth()>9+1:'0'+date.getMonth()>9} ${date.getFullYear()} `)
         }
+        let a = localStorage.getItem('admin') == 'True';
 
         return (
-          
+
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
-              
+                
                 <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{backgroundColor:"white"}}>
-                <div style={{backgroundColor:"white",color:"#fff"}}>
-                <img src={picture} alt="" className="img-fluid"></img>
-                </div>
-                
-                <Menu theme="light" defaultSelectedKeys={['1']} mode="inline">
-                    <Space direction="vertical">
-                        <DatePicker defaultValue={moment(localStorage.getItem('date').split(' ').reverse().join('-'), 'YYYY-MM')} onChange={this.onChangeDate} picker="month" />
-                    </Space>,
-                    <Menu.Item key="1" icon={<PieChartOutlined />}>
-                      <a  href="http://localhost:3000/cabinet/">
-                        <span data-feather="home"></span>
-                          Отправка отчетов
-                        <span className="sr-only"></span>
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <a  href='http://localhost:3000/cabinet/admin/view_groups'>
-                          <span data-feather="shopping-cart"></span>
-                            Просмотр групп
-                        </a>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                      <a  href='http://localhost:3000/cabinet/admin/logs'>
-                        <span data-feather="shopping-cart"></span>
-                          Просмотр логирования
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="4">
-                      <a href="http://localhost:3000/cabinet/admin/play_roll">
-                        <span data-feather="layers"></span>
-                          Расчетный лист
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="5">
-                      <a  href="http://localhost:3000/cabinet/admin/register">
-                        <span data-feather="layers"></span>
-                          Реестр проектов
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="6">
-                      <a  href="http://localhost:3000/cabinet/admin/employees">
-                        <span data-feather="layers"></span>
-                          Сотрудники    
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="7">
-                      <a  href="http://localhost:3000/cabinet/admin/calendar">
-                        <span data-feather="layers"></span>
-                          Трудовой календарь
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item key="8">
-                      <a  href="http://localhost:3000/cabinet/admin/system_time">
-                        <span data-feather="layers"></span>
-                          Система учета времени
-                      </a>  
-                    </Menu.Item>
-                    <Menu.Item key="9">
-                      <a  href="http://localhost:3000/cabinet/admin/structure">
-                        <span data-feather="layers"></span>
-                          Структура подразделений
-                      </a>
-                    </Menu.Item>
-                </Menu>
-                
+                    <div style={{backgroundColor:"white",color:"#fff"}}>
+                        <img src={picture} alt="" className="img-fluid"></img>
+                        <Space direction="vertical">
+                            <DatePicker
+                                size="middle"
+                                defaultValue={moment(localStorage.getItem('date').split(' ').reverse().join('-'), 'YYYY-MM')} onChange={this.onChangeDate} picker="month" />
+                        </Space>
+                    </div>                    
+                    <Menu onClick={this.onClickCalendar} theme="light" mode="inline">
+                        
+                        <Menu.Item key={localStorage.getItem('key')} icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/">
+                                <span data-feather="home"></span>
+                                Отправка отчетов
+                                <span className="sr-only"></span>
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item key="1" icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/list_reports">
+                                <span data-feather="home"></span>
+                                Список отчетов 
+                                <span className="sr-only"></span>
+                            </a>
+                        </Menu.Item>
+                        <Menu.Item key="2" icon={<DollarOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/salary">
+                                <span data-feather="bar-chart-2"></span>
+                                Зарплата
+                            </a>
+                        </Menu.Item>
+
+
+                    {a
+                        ?<Menu.Item key="3" icon={<UsergroupAddOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href='http://localhost:3000/cabinet/admin/view_groups'>
+                                <span data-feather="shopping-cart"></span>
+                                Просмотр групп
+                            </a>
+                        </Menu.Item>:''}
+                    {a
+                        ? <Menu.Item key="4" icon={<LoginOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href='http://localhost:3000/cabinet/admin/logs'>
+                                <span data-feather="shopping-cart"></span>
+                                Просмотр логирования
+                            </a>
+                        </Menu.Item>:''
+                    }
+                    {a
+                        ?<Menu.Item key="5" icon={<FormOutlined style={{ fontSize: '16px'}}/>}>
+                            <a href="http://localhost:3000/cabinet/admin/play_roll">
+                                <span data-feather="layers"></span>
+                                Расчетный лист
+                            </a>
+                        </Menu.Item>:''}
+                    {a
+                        ?<Menu.Item key="6" icon={<FolderOpenOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/admin/register">
+                                <span data-feather="layers"></span>
+                                Реестр проектов
+                            </a>
+                        </Menu.Item>:''}
+                    {a
+                        ?<Menu.Item key="7" icon={<TeamOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/admin/employees">
+                                <span data-feather="layers"></span>
+                                Сотрудники
+                            </a>
+                        </Menu.Item>:''}
+                    {a
+                        ?<Menu.Item key="8" icon={<CalendarOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/admin/calendar">
+                                <span data-feather="layers"></span>
+                                Трудовой календарь
+                            </a>
+                        </Menu.Item>:''}
+                    {a
+                        ?<Menu.Item key="9" icon={<FieldTimeOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/admin/system_time">
+                                <span data-feather="layers"></span>
+                                Система учета времени
+                            </a>
+                        </Menu.Item>:''}
+                    {a
+                        ?<Menu.Item key="10" icon={<ApartmentOutlined style={{ fontSize: '16px'}}/>}>
+                            <a  href="http://localhost:3000/cabinet/admin/structure">
+                                <span data-feather="layers"></span>
+                                Структура подразделений
+                            </a>
+                        </Menu.Item>
+                        : ''}
+                    </Menu>
                 </Sider>
-                
-        <Layout className="site-layout">
-        
-          <Content >
-            <div className="Data" style={{backgroundColor:"white",paddingTop:"20px"}}>
-            <LogOut clickLogOut={this.logOut}/>
-                    <Switch>
-                        <Route path='/cabinet/' exact component = {SendReport}/>
-                         <Route path='/cabinet/person' exact  component = {PersonData}/>
-                         <Route path='/cabinet/salary' exact  component = {Salary}/>
-                         <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
-                         <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
-                         <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
-                         <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
-                         <Route path='/cabinet/admin/register' exact  component = {Register}/>  
-                         <Route path='/cabinet/admin/new_project' exact  component = {NewProject}/>
-                         <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>   
-                         <Route path='/cabinet/admin/employees' exact  component = {Employees}/>  
-                         <Route path='/cabinet/admin/calendar' exact  component = {Interval}/> 
-                         <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/> 
-                         <Route path='/cabinet/admin/structure' exact  component = {Structure}/> 
-                     </Switch>
-            </div>
-          </Content>
-          <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-        </Layout>
-      </Layout>
+
+                <Layout className="site-layout">
+                        
+                    <Content >
+                        <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"1900px"}}>
+                            <LogOut clickLogOut={this.logOut}/>
+                            
+                            <Switch>
+                                <Route path='/cabinet/' exact component = {SendReport}/>
+                                <Route path='/cabinet/person' exact  component = {PersonData}/>
+                                <Route path='/cabinet/salary' exact  component = {Salary}/>
+                                <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
+                                <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
+                                <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
+                                <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
+                                <Route path='/cabinet/admin/register' exact  component = {Register}/>
+                                <Route path='/cabinet/admin/new_project' exact  component = {NewProject}/>
+                                <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>
+                                <Route path='/cabinet/admin/employees' exact  component = {Employees}/>
+                                <Route path='/cabinet/admin/calendar' exact  component = {Interval}/>
+                                <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/>
+                                <Route path='/cabinet/admin/structure' exact  component = {Structure}/>
+                                <Route path='/cabinet/list_reports' exact  component = {ListReports}/>
+                                <Route path='/cabinet/admin/edit_groups' exact component = {EditGroupps}/>
+                            </Switch>
+                        </div>
+                    </Content>
+                </Layout>
+            </Layout>
             // <div className="container">
             //     <div className="Head">
             //         <Header clickLogOut={this.logOut}/>
@@ -184,7 +222,7 @@ class Main extends Component{
             //             onClickPrivious = {this.onClickPrivious}
             //         />
             //     </div>
-                
+
 
             //     <div className="Data">
             //         <Switch>
@@ -195,13 +233,13 @@ class Main extends Component{
             //             <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
             //             <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
             //             <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
-            //             <Route path='/cabinet/admin/register' exact  component = {Register}/>  
+            //             <Route path='/cabinet/admin/register' exact  component = {Register}/>
             //             <Route path='/cabinet/admin/new_project' exact  component = {NewProject}/>
-            //             <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>   
-            //             <Route path='/cabinet/admin/employees' exact  component = {Employees}/>  
-            //             <Route path='/cabinet/admin/calendar' exact  component = {Interval}/> 
-            //             <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/> 
-            //             <Route path='/cabinet/admin/structure' exact  component = {Structure}/> 
+            //             <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>
+            //             <Route path='/cabinet/admin/employees' exact  component = {Employees}/>
+            //             <Route path='/cabinet/admin/calendar' exact  component = {Interval}/>
+            //             <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/>
+            //             <Route path='/cabinet/admin/structure' exact  component = {Structure}/>
             //         </Switch>
             //     </div>
             // </div>

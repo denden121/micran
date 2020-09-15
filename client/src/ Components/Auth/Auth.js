@@ -25,8 +25,8 @@ const Auth =(props)=>{
                 {/*        Запомнить меня*/}
                 {/*    </label>*/}
                 {/*</div>*/}
-                <div className='error-label error-label-1'>Не правильный пароль или логин</div>
-                <div className='error-label error-label-2'>Введите логин и пароль</div>
+                <div className='error-label error-label-1 text-center'>Неверный логин или пароль</div>
+                <div className='error-label error-label-2 text-center'>Введите логин и пароль</div>
                 <button onClick={props.authHandler} type="submit" className="btn btn-lg btn-primary">Войти</button>
             </div>
             </body>
