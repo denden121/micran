@@ -9,12 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from .project_export import export
+from .departaments_scripts import get_endpoint_department, build_level_with_user
 
-from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, \
+from .forms import ProjectForm, ReportForm, ActionForm, ProfileForm, \
     GroupForm, SalaryCommonForm, SalaryIndividualForm, RegisterForm
 from .models import Profile, Project, Report, Action, Group, Logging, \
-    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark
-
+    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark, GroupAction
 
 def get_user_jwt(request):
     token = request.headers.get('Authorization')
@@ -25,97 +25,15 @@ def get_user_jwt(request):
 
 def export_projects(request):
     export(1)
-    print('fddfs')
     return HttpResponse('Success')
-
-
-def get_endpoint_department(data, output):
-    if 'subdepartments' in data:
-        for i in range(len(data['subdepartments'])):
-            get_endpoint_department(data['subdepartments'][i], output)
-        return output
-    else:
-        output.append(data)
-        return output
-
-
-def build_level(subdepartment_id, lvl):
-    department = Department.objects.get(pk=subdepartment_id)
-    data = {'lvl': lvl, 'name': department.department_name, 'code': department.department_code}
-    subdepartments_objects = []
-    subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-    if subdepartments:
-        for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level(subdepartment.pk, lvl + 1))
-        data['subdepartments'] = subdepartments_objects
-        return data
-    else:
-        return data
-
-
-def build_level_with_user(subdepartment_id, lvl, date):
-    department = Department.objects.get(pk=subdepartment_id)
-    if int(department.subdepartment_code) > 0:
-        lvl += 1
-    if lvl == 0:
-        data = {}
-    else:
-        data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
-    subdepartments_objects = []
-    users = []
-    month, year = date.split('-')
-    subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-    profiles = Profile.objects.filter(department=department)
-    for worker in profiles:
-        users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
-                       'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
-        reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
-        if reports:
-            users_field['has_report'] = True
-        else:
-            users_field['has_report'] = False
-        report_time = 0
-        flag = 0
-        for report in reports:
-            if report.status and flag != 2:
-                flag = 1
-            if flag == 1:
-                users_field[
-                    'banned'] = ' '.join([report.ban_id.first_name,
-                                          report.ban_id.last_name, report.ban_id.middle_name])
-                users_field['report_status'] = report.status
-                users_field[
-                    'checker'] = ' '.join([report.check_id.first_name,
-                                           report.check_id.last_name, report.check_id.middle_name])
-                flag = 1
-            report_time += report.hour
-        if flag == 0:
-            users_field['banned'] = ''
-            users_field['checker'] = ''
-        times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=worker.user.pk)
-        time_system = 0
-        for time_card in times_cards:
-            time_system += time_card.hours_worked.hour
-        salary = SalaryIndividual.objects.get(date__month=month, date__year=year, person=worker)
-        users_field['time_report'] = report_time
-        users_field['time_norm'] = salary.time_norm
-        users_field['time_system'] = time_system
-        users.append(users_field)
-    data['users'] = users
-    if subdepartments:
-        for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date))
-        data['subdepartments'] = subdepartments_objects
-        return data
-    else:
-        return data
 
 
 def departament_new_view(request):
     departments = Department.objects.filter(subdepartment_code='0')
-    data = {}
+    data = []
+    date = f'{datetime.now().month}-{datetime.now().year}'
     for department in departments:
-        data[department.id] = build_level_with_user(department.id, 0)
+        data.append(build_level_with_user(department.id, 1, date, 1))
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
@@ -188,6 +106,13 @@ def check_admin_view(request):
     return HttpResponse(get_access(100, user))
 
 
+def get_user_jwt(request):
+    token = request.headers.get('Authorization')
+    validated_token = JWTAuthentication().get_validated_token(token)
+    user = JWTAuthentication().get_user(validated_token)
+    return user
+
+
 @csrf_exempt
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
@@ -195,10 +120,10 @@ def cabinet_view(request, user_id='default'):
         profile = user.profile
         data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                 'last_name': profile.last_name, 'first_name': profile.first_name, 'middle_name': profile.middle_name,
-                'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
-                'experience': profile.experience, 'position': profile.position, 'department': profile.department,
-                'employment_date': profile.employment_date}
-        return HttpResponse(json.dumps(data))
+                'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
+                'experience': profile.experience, 'position': profile.position, 'department': profile.department.department_name,
+                'employment_date': str(profile.employment_date)}
+        return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
     else:
         if user:
             profile = Profile.objects.get(user=user_id)
@@ -206,11 +131,11 @@ def cabinet_view(request, user_id='default'):
                 data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                         'last_name': profile.last_name, 'first_name': profile.first_name,
                         'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
+                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
                         'experience': profile.experience, 'position': profile.position,
-                        'department': profile.department,
-                        'employment_date': profile.employment_date}
-                return HttpResponse(json.dumps(data))
+                        'department': profile.department.department_name,
+                        'employment_date': str(profile.employment_date)}
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
             if request.method == "POST":
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 print(form.errors)
@@ -221,10 +146,10 @@ def cabinet_view(request, user_id='default'):
                 data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                         'last_name': profile.last_name, 'first_name': profile.first_name,
                         'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': profile.birth_date,
-                        'experience': profile.experience, 'position': profile.position, 'department': profile.department,
-                        'employment_date': profile.employment_date}
-                return HttpResponse(json.dumps(data))
+                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
+                        'experience': profile.experience, 'position': profile.position,
+                        'department': profile.department.department_name,'employment_date': str(profile.employment_date)}
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
         return HttpResponse("Permission denied")
 
 
@@ -456,7 +381,7 @@ def group_view(request):
         if request.method == "GET":
             pk = request.GET.get('pk')
             group = Group.objects.get(pk=pk)
-            actions = group.available_actions.all()
+            actions = group.actions.available_actions.all()
             participants = group.participants.all()
             users = []
             actions_output = []
@@ -519,7 +444,7 @@ def groups_with_permission(request):
             for group in groups:
                 profiles = group.participants.all()
                 users = []
-                actions = group.available_actions.all()
+                actions = group.actions.all()
                 actions_output = []
                 for profile in profiles:
                     users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
@@ -543,14 +468,6 @@ def groups_with_permission(request):
                     pass
                 if actions:
                     [group_obj.available_actions.add(actions[i]) for i in range(len(actions))]
-            if request.POST.get('participants'):
-                participants = request.POST['participants'].split()
-                try:
-                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
-                except Profile.DoesNotExist:
-                    pass
-                if participants:
-                    [group_obj.participants.add(participants[i]) for i in range(len(participants))]
             if group.is_valid():
                 group.save()
                 return HttpResponse("Success")
@@ -1044,4 +961,21 @@ def get_department(request):
         if request.method == "GET":
             department = user.profile.department
             data = {'department_name': department.department_name, 'department_code': department.department_code, 'pk': department.pk}
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+
+
+@csrf_exempt
+def action_with_group_view(request):
+    # user = get_user_jwt(request)
+    user = True
+    if user:
+        if request.method == "GET":
+            action_groups = GroupAction.objects.all()
+            data = []
+            for action_group in action_groups:
+                fields = []
+                actions = action_group.available_actions.all()
+                for action in actions:
+                    fields.append({'action': action.action, 'code': action.num, 'pk': action.pk})
+                data.append({'pk': action_group.pk, 'group_name': action_group.name,'actions': fields})
             return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))

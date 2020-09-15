@@ -32,6 +32,14 @@ class Action(models.Model):
         return self.action
 
 
+class GroupAction(models.Model):
+    name = models.CharField(max_length=30, blank=True, unique=True)
+    available_actions = models.ManyToManyField(Action, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Direction(models.Model):
     subdepartment = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
     direction_name = models.CharField(max_length=30, blank=True)
@@ -69,7 +77,7 @@ class Profile(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=30, blank=True, unique=True)
     description = models.CharField(max_length=500, blank=True)
-    available_actions = models.ManyToManyField(Action, blank=True)
+    actions = models.ManyToManyField(Action, blank=True)
     participants = models.ManyToManyField(Profile, blank=True)
 
     def __str__(self):
