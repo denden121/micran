@@ -115,12 +115,11 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0):
 
 def departament_new_view(request):
     departments = Department.objects.filter(subdepartment_code='0')
-    data = {}
+    data = []
     date = f'{datetime.now().month}-{datetime.now().year}'
     for department in departments:
-        data[department.id] = build_level_with_user(department.id, 1, date, 1)
-    output = [data]
-    return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
+        data.append(build_level_with_user(department.id, 1, date, 1))
+    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
 def get_time_from_reports(profile):
