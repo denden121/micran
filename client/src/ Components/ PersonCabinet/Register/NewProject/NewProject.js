@@ -155,7 +155,7 @@ class NewProject extends React.Component{
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-12">
+                    <div className="col-sm-12 col-md-12 col-lg-12">
                         <h3 className="text-left">Новый проект</h3>
                         <div
                             className="row no-gutters border rounded overflow-hidden flex-lg-row mb-4 shadow-sm h-lg-250 position-relative">
