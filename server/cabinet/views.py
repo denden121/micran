@@ -118,7 +118,7 @@ def departament_new_view(request):
     data = {}
     date = f'{datetime.now().month}-{datetime.now().year}'
     for department in departments:
-        data[department.id] = build_level_with_user(department.id, 0, date, 1)
+        data[department.id] = build_level_with_user(department.id, 1, date, 1)
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
@@ -523,11 +523,10 @@ def groups_with_permission(request):
                 profiles = group.participants.all()
                 users = []
                 groups_actions = group.actions.all()
-
                 actions_output = []
                 for profile in profiles:
                     users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                for groups_action in groups_action:
+                for groups_action in groups_actions:
                     actions = groups_action.available_actions.all()
                     for action in actions:
                         actions_output.append(action.action + ' ' + str(action.num))
