@@ -45,6 +45,7 @@ class Structure extends React.Component {
                                 children: directions.map((direction, index_direction) => {
                                     let people = Array.from(direction.users)
                                     return {
+
                                         title: direction.code + ' ' + direction.name,
                                         key: `0-${index_dep}-${index}-${index_direction}`,
                                         icon: <FolderOpenOutlined/>,
