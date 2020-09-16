@@ -4,7 +4,10 @@ import {Button,Modal} from "antd"
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import PersonData from "../PersonData/PersonData"
+import { Layout, Menu} from 'antd';
 
+
+const { Header, Content, Sider } = Layout;
 class LogOut extends React.Component{
     state = { visible: false };
 
@@ -66,13 +69,12 @@ class LogOut extends React.Component{
             //         <PersonData/>
             //     </Modal>
             // </header>
-            <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-                <h4 class="my-0 mr-md-auto font-weight-normal" >Департамент СВЧЭ</h4>
-                <nav class="my-2 my-md-0 mr-md-3">
+            <div>
+                {/* <nav className="my-2 my-md-0 mr-md-3">
                 <a onClick={this.showModal}><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>U</Avatar></a>
-                </nav>
+                </nav> */}
                 {/* <a class="btn btn-outline-primary" href="#">Sign up</a> */}
-                <a onClick={this.logOut} className="btn btn-sm btn-outline-secondary" size="small"  href="#" style={{marginRight:"10px"}}>Выйти</a>
+                {/* <a onClick={this.logOut} className="btn btn-sm btn-outline-secondary" size="small"  href="#" style={{marginRight:"10px"}}>Выйти</a>
                 <Modal
                 title="Личные данные"
                 visible={this.state.visible}
@@ -80,8 +82,25 @@ class LogOut extends React.Component{
                 onCancel={this.handleCancel}
                 width={900}>
                     <PersonData/>
-                </Modal>
-          </div>
+                </Modal> */}
+                <Header className="header" style={{height:"60px"}}>
+                  <div className="logo" style={{color:"#fff",float:"left"}}>
+                       Система отчетности. Департаментр СВЧ электронники       
+                  </div>   
+                  <Menu  style={{float:"right",height:"10px"}}theme="dark" mode="horizontal" selectedKeys={[1]}>
+                    <Menu.Item key="2"><a onClick={this.showModal}><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>U</Avatar></a></Menu.Item>        
+                    <Menu.Item key="1"> <a onClick={this.logOut} className="btn btn-sm btn-outline-secondary" size="small"  href="#" >Выйти</a></Menu.Item>                   
+                </Menu>  
+                <Modal
+                title="Личные данные"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                width={900}>
+                    <PersonData/>
+                </Modal>                         
+                </Header>
+            </div>
         )
     }
     

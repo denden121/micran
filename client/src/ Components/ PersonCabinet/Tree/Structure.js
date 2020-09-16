@@ -24,32 +24,38 @@ class Structure extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         };
-        let tree = {}
+        // let tree = {    \}
         fetch("http://127.0.0.1:8000/departments/", requestOptions)
             .then(response => response.json())
             .then(result => {
+                // tree = Array.from(result)
+                let tree = Array.from(result[0])
                 console.log(result)
-                tree = Array.from(result)
                 tree = tree.map((department,index_dep)=>{
-                    let temp1 = Array.from(department.department.subdepartments)
+                    let sub = department.subdepartments.concat(department.users)
                     return {
-                        title: department.department.code + ' ' + department.department.name,
+                        title: department.code + ' ' + department.name,
                         key: '0-' + index_dep,
                         icon: <FolderOutlined/>,
-                        children: temp1.map((subdepartment, index) => {
-                            let directions = Array.from(subdepartment.directions)
+                        children: sub.map((subdepartment, index) => {
+                            let directions;
+                            subdepartment.subdepartments
+                                ? directions = subdepartment.subdepartments.concat(subdepartment.users)
+                                : directions = subdepartment.users
                             return {
                                 title: subdepartment.code + ' ' + subdepartment.name,
                                 key: `0-${index_dep}-${index}`,
                                 icon: <FolderOpenOutlined/>,
                                 children: directions.map((direction, index_direction) => {
-                                    let people = Array.from(direction.users)
+                                    let directions;
+                                    direction.subdepartments
+                                        ? directions = direction.subdepartments.concat(direction.users)
+                                        : directions = direction.users
                                     return {
-
                                         title: direction.code + ' ' + direction.name,
                                         key: `0-${index_dep}-${index}-${index_direction}`,
                                         icon: <FolderOpenOutlined/>,
-                                        children: people.map((man, index_man) => {
+                                        children: directions.map((man, index_man) => {
                                             return {
                                                 title: man.name,
                                                 key: `0-${index_dep}-${index}-${index_direction}-${index_man}`,

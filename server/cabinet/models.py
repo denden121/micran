@@ -34,7 +34,6 @@ class Action(models.Model):
 
 class GroupAction(models.Model):
     name = models.CharField(max_length=30, blank=True, unique=True)
-    description = models.CharField(max_length=500, blank=True)
     available_actions = models.ManyToManyField(Action, blank=True)
 
     def __str__(self):
@@ -65,8 +64,8 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=30, blank=True)
     experience = models.FloatField(blank=False, default='0.0')
     fine_late = models.TimeField(blank=False, default='09:15:00')
-    shift = models.CharField(max_length=30, blank=True)
-    part_time_job = models.CharField(max_length=30, blank=True)
+    shift = models.BooleanField(blank=True, default='False') #False in half-day, True is full-day
+    part_time_job = models.BooleanField(blank=True, default='False') #False in night, True is day
     lateness = models.CharField(max_length=30, blank=True)
     SRI_SAS = models.BooleanField(blank=True, default='False')
     oklad = models.BooleanField(blank=True, default='False')
@@ -78,7 +77,7 @@ class Profile(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=30, blank=True, unique=True)
     description = models.CharField(max_length=500, blank=True)
-    actions = models.ManyToManyField(GroupAction, blank=True)
+    actions = models.ManyToManyField(Action, blank=True)
     participants = models.ManyToManyField(Profile, blank=True)
 
     def __str__(self):
