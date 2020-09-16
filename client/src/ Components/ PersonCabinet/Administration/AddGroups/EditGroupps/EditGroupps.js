@@ -12,32 +12,6 @@ import {
     Switch,
   } from 'antd';
 
-const user = ["Доступ в пользовательский раздел (код 1)"]
-const admin = ["Доступ в администраторский раздел (код 2)","Доступ ко всем департаментам (код 44)","Доступ по всему департаменту (код 45)"];
-// const Fields =(props)=>{
-//     let temp = admin.map((item)=>{
-//         // console.log(item)
-//         // return ""
-//         let checkBoxes = item.fields 
-//         return <Form.Item label={item.label} style={{marginTop:"-20px"}}>
-//         <div className="text-left">
-//             <Checkbox.Group>
-//                 <Row>
-//                     <Col>
-//                         {checkBoxes.map((box)=>{
-//                             return <Checkbox value={box.value} onChange={props.onChangeCheckbox}>
-//                                 {box.name}
-//                             </Checkbox>
-//                         })}
-                        
-//                     </Col>                                                
-//                 </Row>                                           
-//             </Checkbox.Group>                                       
-//         </div>
-//     </Form.Item>
-//     })
-//     return temp
-// }
 const { TextArea } = Input;
 const EditGroups =(props)=>{
     return(
@@ -64,7 +38,7 @@ const EditGroups =(props)=>{
                                 <br/>
                                 <Form.Item label="1.Пользовательский раздел">
                                     <div className="text-left">
-                                    <Checkbox.Group onChange={props.onChangeCheckbox} options={user}/>
+                                    {/*<Checkbox.Group onChange={props.onChangeCheckbox} options={user}/>*/}
                                     </div>                                    
                                 </Form.Item>
                                 <hr/>
@@ -74,8 +48,9 @@ const EditGroups =(props)=>{
                                         <Checkbox.Group>
                                             <Row>
                                                 <Col>
-                                                    <Checkbox.Group onChange={props.onChangeCheckbox} options={admin}/>                                                   
-                                                </Col>                                                
+                                                    <Checkbox.Group onChange={props.onChangeCheckbox}/>
+                                                    <Checkbox.Group onChange={props.onChangeCheckbox}/>
+                                                </Col>
                                             </Row>                                           
                                         </Checkbox.Group>                                       
                                     </div>
@@ -91,4 +66,4 @@ const EditGroups =(props)=>{
     )
 }
 
-export default EditGroups
+export default EditGroups;

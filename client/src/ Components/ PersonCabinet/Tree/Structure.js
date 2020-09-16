@@ -76,11 +76,31 @@ componentDidMount() {
     this.loadTree()
 }
 
+onClickFile=()=>{
+    let token = localStorage.getItem('token')
+    let myHeaders = new Headers();
+
+    myHeaders.append("Authorization", token);
+
+    let requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+    // let tree = {    \}
+    fetch("http://127.0.0.1:8000/export/", requestOptions)
+        .then(response => response.json())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+}
+
 render(){
     return(
         <div className="container-fluid">
             <div className="label row">
-                <label className="text-left col-md-12">
+                <button onClick={this.onClickFile}>dssdfds</button>
+
+                    <label className="text-left col-md-12">
                     <PartitionOutlined style={{float:"left",fontSize:"23px",padding:"2px",transform: 'rotate(90deg)'}}/>
                     <h4>Структура подразделений</h4>
                     <hr className="normal hr"/>

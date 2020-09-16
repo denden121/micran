@@ -140,7 +140,7 @@ def cabinet_view(request, user_id='default'):
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save(commit=False)
+                    update = form.save()
                     update.user = user
                     update.save()
                 data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,

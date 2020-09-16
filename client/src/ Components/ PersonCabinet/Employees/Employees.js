@@ -26,7 +26,28 @@ class Employees extends React.Component{
         });
     };
     handleOk = e => {
-        // console.log(e);
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        const worker = this.state.workers[this.state.select_worker_index]
+        console.log('worker',worker)
+        let formdata = new FormData();
+        formdata.append('part_time_job',worker.person.part_time_job)
+        formdata.append('SRI_SAS',worker.person.SRI_SAS)
+        formdata.append('oklad',worker.person.oklad)
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow',
+            body:formdata
+        }
+        const url = `http://127.0.0.1:8000/cabinet/${worker.pk}/`
+        fetch(url, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => console.log('error', error))
         this.setState({
             visible: false,
         });
@@ -88,10 +109,12 @@ class Employees extends React.Component{
             redirect: 'follow',
             body:formdata
         }
-        const url = `http://127.0.0.1:8000/workers/all/`
+        const url = `http://127.0.0.1:8000/cabinet/${this.state.select_worker_id}`
         fetch(url, requestOptions)
             .then(response =>  response.json())
-            .then(result => this.setState({workers: result}))
+            .then(result => {
+                console.log(result)
+            })
             .catch(error => console.log('error', error))
     }
     componentDidMount() {
@@ -116,6 +139,7 @@ class Employees extends React.Component{
                     cancelText="Права доступа"
                     okText="Сохранить" >
                     <CardModal
+                        onClickSave = {this.onClickSave}
                         onChangeSRI_SAS ={this.onChangeSRI_SAS}
                         Workers ={this.state}
                         onChangeOcklad = {this.onChangeOcklad}
