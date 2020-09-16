@@ -40,4 +40,4 @@ def export(query_project):
         ws.write(11 + i, 8, query_project[i].acceptance_vp)
         ws.write(11 + i, 9, query_project[i].status)
     wb.save('test.xls')
-    return True
+    return 1

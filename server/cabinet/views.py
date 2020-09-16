@@ -3,7 +3,7 @@ from datetime import datetime
 from datetime import date
 from django.contrib.auth import authenticate
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -25,7 +25,7 @@ def get_user_jwt(request):
 
 def export_projects(request):
     export(1)
-    return HttpResponse('Success')
+    return FileResponse(open('test.xls', 'rb'))
 
 
 def departament_new_view(request):
