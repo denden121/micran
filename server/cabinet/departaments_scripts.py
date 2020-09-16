@@ -58,9 +58,10 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0):
                     'banned'] = ' '.join([report.ban_id.first_name,
                                           report.ban_id.last_name, report.ban_id.middle_name])
                 users_field['report_status'] = report.status
-                users_field[
-                    'checker'] = ' '.join([report.check_id.first_name,
-                                           report.check_id.last_name, report.check_id.middle_name])
+                if report.check:
+                    users_field[
+                        'checker'] = ' '.join([report.check_id.first_name,
+                                               report.check_id.last_name, report.check_id.middle_name])
                 flag = 1
             report_time += report.hour
         if flag == 0:
