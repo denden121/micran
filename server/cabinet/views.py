@@ -608,10 +608,11 @@ def workers_info(request):
                 field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
                          'position': person.position, 'SRI_SAS': person.SRI_SAS,
                          'shift': person.shift, 'date': "2009-01-01",
+                         'part_time_job': person.part_time_job,
                          'experience': person.experience, 'lateness': person.lateness,
                          '№ db': "321", '№ 1c': "3059", "sex": person.sex,
                          'birth_date': str(person.birth_date),
-                         'ockladnaya': "ne_ponyal",
+                         'ocklad': person.oklad,
                          'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
