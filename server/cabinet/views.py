@@ -612,7 +612,7 @@ def workers_info(request):
                          'experience': person.experience, 'lateness': person.lateness,
                          '№ db': "321", '№ 1c': "3059", "sex": person.sex,
                          'birth_date': str(person.birth_date),
-                         'ocklad': person.oklad,
+                         'oklad': person.oklad,
                          'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
