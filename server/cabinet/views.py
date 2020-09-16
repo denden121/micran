@@ -408,6 +408,23 @@ def group_view(request):
 
 
 @csrf_exempt
+def change_group_view(request, group_id):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "POST":
+            group_obj = Group.objects.get(pk=group_id)
+            group = GroupForm(request.POST, instance=group_obj)
+            if group.is_valid():
+                group.save(commit=False)
+                actions = request.POST['actions'].split()
+                actions = [Action.objects.get(pk=int(action)) for action in actions]
+                if actions and group.is_valid():
+                    group = group.save()
+                    [group.available_actions.add(actions[i]) for i in range(len(actions))]
+                return HttpResponse("Success")
+
+
+@csrf_exempt
 def action_view(request):
     user = get_user_jwt(request)
     if user:
@@ -967,8 +984,7 @@ def get_department(request):
 
 @csrf_exempt
 def action_with_group_view(request):
-    # user = get_user_jwt(request)
-    user = True
+    user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             action_groups = GroupAction.objects.all()
