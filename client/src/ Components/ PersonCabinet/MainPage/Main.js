@@ -85,12 +85,13 @@ class Main extends Component{
         let a = localStorage.getItem('admin') == 'True';
 
         return (
+            
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
-                <LogOut/>
+                    <LogOut/>
+                            
                 <Layout className="site-layout">
                 <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{backgroundColor:"white"}}>
-                    <div style={{backgroundColor:"white",color:"#fff"}}>
-                        {/* <img src={picture} alt="" className="img-fluid"></img> */}
+                    <div style={{backgroundColor:"white",color:"#fff",marginTop:"20px"}}>
                         <Space direction="vertical">
                             <DatePicker
                                 size="middle"
@@ -187,7 +188,6 @@ class Main extends Component{
                     <Content >
                         <div className="Data" style={{backgroundColor:"white",paddingTop:"20px",minHeight:"1900px"}}>
                             {/* <LogOut clickLogOut={this.logOut}/> */}
-                            
                             <Switch>
                                 <Route path='/cabinet/' exact component = {SendReport}/>
                                 <Route path='/cabinet/person' exact  component = {PersonData}/>

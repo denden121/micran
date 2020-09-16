@@ -117,6 +117,7 @@ const ReportModal =(props)=>{
                                         <br/>
                                         <div className="col-lg-12">
                                             <input
+                                                className="form-control"
                                                 readOnly={props.personDate.status}
                                                 id={'hours-look'}
                                                 style={{width:"100%"}}/>
@@ -130,6 +131,7 @@ const ReportModal =(props)=>{
                                         <br/>
                                         <div className="col-lg-12">
                                             <textArea
+                                            className="form-control"
                                                 readOnly={props.personDate.status}
                                                 id={'body-report-look'}
                                                 // value={value}
