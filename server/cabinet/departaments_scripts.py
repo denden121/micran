@@ -70,9 +70,12 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0):
         time_system = 0
         for time_card in times_cards:
             time_system += time_card.hours_worked.hour
-        salary = SalaryIndividual.objects.get(date__month=month, date__year=year, person=worker)
+        salary = SalaryIndividual.objects.filter(date__month=month, date__year=year, person=worker)
         users_field['time_report'] = report_time
-        users_field['time_norm'] = salary.time_norm
+        if salary:
+            users_field['time_norm'] = salary[0].time_norm
+        else:
+            users_field['time_norm'] = 0
         users_field['time_system'] = time_system
         users.append(users_field)
     data['users'] = users
