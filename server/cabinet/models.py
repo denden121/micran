@@ -63,7 +63,7 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     experience = models.FloatField(blank=False, default='0.0')
-    fine_late = models.TimeField(blank=False, default='09:15:00')
+    fine_late = models.TimeField(blank=True, default='09:15:00')
     shift = models.BooleanField(blank=True, default='False') #False in half-day, True is full-day
     part_time_job = models.BooleanField(blank=True, default='False') #False in night, True is day
     lateness = models.CharField(max_length=30, blank=True)
