@@ -74,7 +74,14 @@ class LogOut extends React.Component{
       <nav className="nav nav-masthead justify-content-center">
         <a className="nav-link" onClick={this.showModal}><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf',marginRight:"10px" }}>U</Avatar></a>
       </nav>
-      
+      <Modal
+        title="Личные данные"
+        visible={this.state.visible}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
+        width={700}>
+        <PersonData/>
+      </Modal>
     </div>
   </header>
                 
