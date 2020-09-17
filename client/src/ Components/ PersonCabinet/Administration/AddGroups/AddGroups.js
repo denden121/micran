@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import './AddGroups.css'
+import Actions from './Actions'
 import Activity from "./Activity/Activity"
 import makeAnimated from 'react-select/animated';
 import {PlusCircleOutlined} from '@ant-design/icons'
 import { Input } from 'antd';
 import {Select} from "antd";
 import { Button, Space } from 'antd';
-
 const { TextArea } = Input;
 const { Option } = Select;
 const children = [];
@@ -25,7 +25,19 @@ class AddGroups extends React.Component {
         this.loadActions()
         this.loadWorkers()
     }
-    loadActions= () => {
+    onChangeCheckBox=(e)=>{
+        console.log(e.target.checked)
+        let temp = [...this.state.select_actions]
+        if(e.target.checked){
+            temp.push(e.target.value)
+        }else{
+            temp.splice(temp.indexOf(e.target.value),1)
+        }
+        this.setState({select_actions:temp})
+        console.log(this.state)
+        console.log(e.target.value)
+    }
+    loadActions=() => {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -34,14 +46,11 @@ class AddGroups extends React.Component {
             headers: myHeaders,
             redirect: 'follow'
         }
-        fetch("http://127.0.0.1:8000/actions/", requestOptions)
+        fetch("http://127.0.0.1:8000/groups/actions/", requestOptions)
             .then(response =>  response.json())
             .then(result => {
-                let actions = Array.from(result).map((action)=>{
-                    console.log(action)
-                    return {value:`${action.pk}`,label:`${action.name}`}
-                })
-                this.setState({actions: actions})})
+                console.log('result',result)
+                this.setState({actions: result})})
             .catch(error => console.log('error', error))
     }
     loadWorkers= () =>{
@@ -69,7 +78,7 @@ class AddGroups extends React.Component {
                 this.setState({workers: workers})})
             .catch(error => console.log('error', error))
     }
-    createGroup = async () => {
+    createGroup =  () => {
         console.log('actions',this.state.select_actions)
         console.log('workers',this.state.select_workers)
         let nameGroup = document.querySelector('#nameGroup').value
@@ -131,21 +140,22 @@ class AddGroups extends React.Component {
                                 {/* <div className={'error-label'}>Введите название группы</div> */}
                                 {/* <div>Группа с таким названием уже существует</div> */}
 
-                                <div className="input-group mb-3 input-group-lg">
+                                <div onChange={this.onChangeCheckBox} className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Действия</label>
-                                    <Select
-                                        onChange = {this.addActions}
-                                        closeMenuOnSelect={false}
-                                        mode="multiple"
-                                        components={animatedComponents}
-                                        isMulti
-                                        options={this.state.actions}
-                                        placeholder="Выбрать"
-                                        style={{width:"50%"}}
-                                        className="text-left"
-                                    >
-                                        {children}
-                                    </Select>
+                                    {/*<Select*/}
+                                    {/*    onChange = {this.addActions}*/}
+                                    {/*    closeMenuOnSelect={false}*/}
+                                    {/*    mode="multiple"*/}
+                                    {/*    components={animatedComponents}*/}
+                                    {/*    isMulti*/}
+                                    {/*    options={this.state.actions}*/}
+                                    {/*    placeholder="Выбрать"*/}
+                                    {/*    style={{width:"50%"}}*/}
+                                    {/*    className="text-left"*/}
+                                    {/*>*/}
+                                    {/*    {children}*/}
+                                    {/*</Select>*/}
+                                    <Actions items = {this.state.actions}/>
                                 </div>
                                 {/* <div>Введите название группы</div> */}
                                 <div className="input-group mb-3 input-group-lg">

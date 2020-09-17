@@ -25,7 +25,8 @@ def get_user_jwt(request):
 
 def export_projects(request):
     export(1)
-    return FileResponse(open('test.xls', 'rb'))
+    if request.GET.get('fuck_ura'):
+        return FileResponse(open('test.xls', 'rb'))
 
 
 def departament_new_view(request):
