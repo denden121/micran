@@ -17,9 +17,12 @@ const Fields =(props)=>{
                     <Row>
                         <Col span={8}> */}
                             {checkBoxes.map((box)=>{
-                                return <Checkbox style={{ lineHeight: '32px' }} value={box.pk} onChange={props.onChangeCheckbox} >
-                                    {box.action} {box.code}
-                                </Checkbox> 
+
+                                return <div>
+                                    <Checkbox style={{ lineHeight: '32px' }} value={box.pk} onChange={props.onChangeCheckbox} >
+                                        {box.action} {box.code}
+                                    </Checkbox>
+                                </div>
                             })}
 
                         {/* </Col>

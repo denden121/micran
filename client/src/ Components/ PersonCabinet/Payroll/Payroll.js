@@ -10,6 +10,7 @@ class Payroll extends React.Component{
     state = {
         allSalary:[],
         departments:[],
+        selectDepartment:'',
         subdepartments:[],
         hideSalary:false,
         hideNormTime:false,
@@ -18,8 +19,26 @@ class Payroll extends React.Component{
         hideAnotherPeople:false
     }
     componentDidMount() {
-        this.loadAllSalary()
+        this.loadNativeDepartment()
+        // this.loadAllSalary()
         this.loadDepartments()
+    }
+    loadNativeDepartment=  ()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch("http://127.0.0.1:8000/get_department/", requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                let temp = {department:{label:result.name,value:result.pk}}
+                // localStorage.setItem('payroll',JSON.stringify(temp))
+            })
+            .catch(error => console.log('error', error))
     }
     loadDepartments=()=>{
         let token = localStorage.getItem('token')
@@ -35,7 +54,7 @@ class Payroll extends React.Component{
             .then(result => {
                 let actions = Array.from(result).map((department)=>{
                     // console.log(department)
-                    return {value:`${department.pk}`,label:`${department.fields.code +' '+ department.fields.name}`}
+                    return {value:department.pk,label:`${department.fields.code +' '+ department.fields.name}`}
                 })
                 this.setState({departments: actions})})
             .catch(error => console.log('error', error))
@@ -279,6 +298,7 @@ class Payroll extends React.Component{
                                 <div className="col-md-12 col-lg-12 card">
                                      <div className="card-body">
                                         <PayrollCheck
+                                            selectDepartment={this.state.selectDepartment}
                                             departments = {this.state.departments}
                                             onChangeFilter={this.onChangeFilter}
                                             onChangeSelectDepartments ={this.onChangeSelectDepartments}/>
