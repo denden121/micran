@@ -26,6 +26,7 @@ urlpatterns = [
     path('groups/', views.group_view),
     path('groups/actions/', views.action_with_group_view),
     path('groups/check/', views.check_group_name),
+    path('groups/<int:group_id>/change/', views.change_group_view),
     path('actions/', views.action_view),
     path('salary/', views.salary),
     path('salary/individual/', views.salary_individual),
@@ -49,4 +50,5 @@ urlpatterns = [
     path('reports/department/<int:department_id>/', views.workers_for_reports),
     path('reports/person/<int:person_id>/', views.all_reports_for_person),
     path('get_department/', views.get_department),
+    path('export/', views.export_projects),
 ]
