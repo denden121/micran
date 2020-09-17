@@ -4,8 +4,8 @@ import Actions from './Actions'
 import Activity from "./Activity/Activity"
 import makeAnimated from 'react-select/animated';
 import {PlusCircleOutlined} from '@ant-design/icons'
-import { Input } from 'antd';
-import {Select} from "antd";
+import { Input, Card} from 'antd';
+import {Select, Form} from "antd";
 import { Button, Space } from 'antd';
 const { TextArea } = Input;
 const { Option } = Select;
@@ -130,8 +130,23 @@ class AddGroups extends React.Component {
                 <div className="row">
                     <div className="col-lg-12">
                         <h4 className="text-left">Новая группа</h4>
-                        <div className="row no-gutters border rounded overflow-hidden flex-lg-row mb-4 shadow-sm h-lg-250 position-relative">
-                            <div className="col p-4 d-flex flex-column position-static">
+                            <Card>
+                                <div className="row">
+                                    <div className="col-lg-12">
+                                        <Form labelCol={{span:4}}
+                                                wrapperCol={{span:12}}
+                                                layout="vertical">
+                                            <Form.Item label="Название">
+                                            <Input id="nameGroup" placeholder="Введите название группы" className="col-md-6"/>
+                                            </Form.Item>
+                                            <Form.Item>
+                                                <Actions items = {this.state.actions}/>
+                                            </Form.Item>
+                                            
+                                        </Form>
+                                    </div>
+                                </div>
+                            </Card>
                                 <div className="input-group mb-3 input-group-lg">
                                     <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Название группы
                                     </label>
@@ -141,7 +156,7 @@ class AddGroups extends React.Component {
                                 {/* <div>Группа с таким названием уже существует</div> */}
 
                                 <div onChange={this.onChangeCheckBox} className="input-group mb-3 input-group-lg">
-                                    <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Действия</label>
+                                    {/* <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Действия</label> */}
                                     {/*<Select*/}
                                     {/*    onChange = {this.addActions}*/}
                                     {/*    closeMenuOnSelect={false}*/}
@@ -155,7 +170,8 @@ class AddGroups extends React.Component {
                                     {/*>*/}
                                     {/*    {children}*/}
                                     {/*</Select>*/}
-                                    <Actions items = {this.state.actions}/>
+                                   
+                                    
                                 </div>
                                 {/* <div>Введите название группы</div> */}
                                 <div className="input-group mb-3 input-group-lg">
@@ -190,8 +206,8 @@ class AddGroups extends React.Component {
                                     <Button onClick={this.createGroup} style={{backgroundColor:"#1890ff"}}>Отправить</Button>
                                     <Button onClick={()=>{document.location='view_groups'}} style={{backgroundColor:"#e6f7ff",marginLeft:"5px"}}>Назад</Button>
                                 </div>
-                            </div>
-                        </div>
+                            {/* </div> */}
+                        {/* </div> */}
                     </div>
                 </div>
             </div>
