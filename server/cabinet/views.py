@@ -160,9 +160,7 @@ def cabinet_view(request, user_id='default'):
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save()
-                    update.user = user
-                    update.save()
+                    form.save()
                 data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                         'last_name': profile.last_name, 'first_name': profile.first_name,
                         'middle_name': profile.middle_name,
@@ -635,7 +633,7 @@ def workers_info(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            persons = Profile.objects.all()
+            persons = Profile.objects.all().order_by('pk')
             data = []
             group_field = []
             for person in persons:
@@ -653,6 +651,7 @@ def workers_info(request):
                          'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
+            print(data)
             return HttpResponse(json.dumps(data))
 
 

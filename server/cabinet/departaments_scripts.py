@@ -2,8 +2,8 @@ from .models import Department, Profile, Report, SalaryIndividual, TimeCard, Sal
 
 
 def get_salary_fields(user, month, year):
-    salary_common = SalaryCommon.objects.get_or_create(date__month=month, date__year=year)
-    salary = SalaryIndividual.objects.get_or_create(date__month=month, date__year=year, person=user)
+    salary_common, created_c = SalaryCommon.objects.get_or_create(date__month=month, date__year=year)
+    salary, created_i = SalaryIndividual.objects.get_or_create(date__month=month, date__year=year, person=user)
     data = {'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
             'time_norm': salary.time_norm, 'penalty': salary.penalty,
             'is_penalty': salary.is_penalty,
