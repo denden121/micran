@@ -25,8 +25,8 @@ class Logging(models.Model):
 
 
 class Action(models.Model):
-    action = models.CharField(max_length=30, blank=True)
-    num = models.IntegerField()
+    action = models.CharField(max_length=30, blank=True, unique=True)
+    num = models.IntegerField(unique=True)
 
     def __str__(self):
         return self.action
@@ -107,7 +107,7 @@ class Project(models.Model):
 
 
 class Report(models.Model):
-    status = models.BooleanField(blank=True)
+    status = models.BooleanField(default=False)
     creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True,
                                    related_name='creator')
     ban_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,

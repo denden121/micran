@@ -28,6 +28,16 @@ def export_projects(request):
     return FileResponse(open('test.xls', 'rb'))
 
 
+def get_department(subdepartment):
+    if subdepartment.subdepartment_code !='0':
+        print(subdepartment.subdepartment_code)
+        department = Department.objects.get(department_code=subdepartment.subdepartment_code)
+        return get_department(department)
+    else:
+        return subdepartment
+
+
+
 def departament_new_view(request):
     departments = Department.objects.filter(subdepartment_code='0')
     data = []
@@ -973,12 +983,13 @@ def all_projects_simple_view(request):
 
 
 @csrf_exempt
-def get_department(request):
+def get_department_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             department = user.profile.department
-            data = {'department_name': department.department_name, 'department_code': department.department_code, 'pk': department.pk}
+            department = get_department(department)
+            data = {'pk': department.pk, 'department_name': department.department_name, 'department_code': department.department_code}
             return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
