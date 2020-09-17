@@ -1,4 +1,5 @@
 import React from 'react'
+import {FormOutlined} from '@ant-design/icons';
 
 
 const Groups = (props) =>{
@@ -8,6 +9,7 @@ const Groups = (props) =>{
             <tr>
                 <th scope="row">{index+1}</th>
                 <td>{groups.fields.name}</td>
+                <td><a onClick={()=>{document.location='/cabinet/admin/edit_groups'}}><FormOutlined/></a></td>
                 <td>{groups.fields.description}</td>
                 <td>{groups.fields.users.join(', ')}</td>
             </tr>

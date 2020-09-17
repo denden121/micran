@@ -65,28 +65,30 @@ const CardModal =(props)=>{
                                             <label className="Label2" style={{marginTop:"-10px"}}><b>опоздания</b></label>
                                         </div>
                                         <div className="col-md-5">
-                                            <div className="form-control form-control-sm"/>                                                 
+                                            <div className="form-control form-control-sm">
+                                                {worker.person.lateness}
+                                            </div>
                                         </div>
                                         <div className="col-md-7">
                                             <label className="Label2"><b>Смена</b></label>
                                         </div>
                                         <div className="col-md-5">
-                                            <Radio.Group onChange={props.onChangeRadio}>
-                                                <Radio  value={1}>дневная</Radio><br/>
-                                                <Radio  value={2}>ночная</Radio>        
+                                            <Radio.Group defaultValue={worker.person.part_time_job ? 0 : 1} onChange={props.onChangeRadio.bind(this,props.Workers.select_worker_index)}>
+                                                <Radio  value={0}>дневная</Radio><br/>
+                                                <Radio  value={1}>ночная</Radio>
                                             </Radio.Group>                                              
                                         </div>                                        
                                         <div className="col-md-7">
                                             <label className="Label2" style={{marginTop:"10px"}}><b>Совместительство</b></label>
                                         </div>
                                         <div className="col-md-5">                                              
-                                            <Checkbox style={{marginTop:"10px"}}>НИИ СЭС</Checkbox>                                            
+                                            <Checkbox onChange={props.onChangeSRI_SAS.bind(this,props.Workers.select_worker_index)} checked={worker.person.SRI_SAS} style={{marginTop:"10px"}}>НИИ СЭС</Checkbox>
                                         </div>   
                                         <div className="col-md-7">
                                                 <label className="Label2" style={{marginTop:"10px"}}><b>Окладная СОТ</b></label>
                                         </div>
                                         <div className="col-md-5">                                              
-                                            <Checkbox style={{marginTop:"10px"}}>использовать</Checkbox>                                            
+                                            <Checkbox onChange={props.onChangeOcklad.bind(this,props.Workers.select_worker_index)} checked={worker.person.oklad} style={{marginTop:"10px"}}>использовать</Checkbox>
                                         </div>   
                                         <div className="col-md-12"><hr className="normal"/></div>      
                                         <div className="col-md-7">
