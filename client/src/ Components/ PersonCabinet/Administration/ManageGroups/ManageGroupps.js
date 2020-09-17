@@ -30,7 +30,7 @@ class ManageGroups extends React.Component{
                <div className="text-left">
                     <div className="text-left">
                             <button className="btn btn-sm btn-primary " onClick={()=>{document.location ='/cabinet/admin/add_groups'}}>Создать новую группу</button>
-                            <button className="btn btn-sm btn-success" style={{marginLeft:"5px"}} onClick={()=>{document.location='/cabinet/admin/edit_groups'}}>Редактирование групп</button>
+                            {/* <button className="btn btn-sm btn-success" style={{marginLeft:"5px"}} onClick={()=>{document.location='/cabinet/admin/edit_groups'}}>Редактирование групп</button> */}
                     </div>
                     <br/>
                <div className="table-responsive">
@@ -39,6 +39,7 @@ class ManageGroups extends React.Component{
                         <tr>
                             <th scope="col">№</th>
                             <th scope="col">Название</th>
+                            <th scope="col">Ред</th>
                             <th scope="col">Описание</th>
                             <th scope="col">Входит в группу</th>
                         </tr>
