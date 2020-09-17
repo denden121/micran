@@ -7,22 +7,27 @@ const Fields =(props)=>{
         // console.log(item)
         // return ""
         let checkBoxes = item.actions
-        return <Form.Item label={item.group_name} style={{marginTop:"-20px"}}>
-            <div className="text-left">
-                <Checkbox.Group>
+
+        return <Form labelCol={{span:7}}
+        wrapperCol={{span:12}}
+        layout="horizontal">
+        <Form.Item label={item.group_name}  name="checkbox-group">
+            <div className="text-left" >
+                {/* <Checkbox.Group >
                     <Row>
-                        <Col>
+                        <Col span={8}> */}
                             {checkBoxes.map((box)=>{
-                                return <Checkbox value={box.pk} onChange={props.onChangeCheckbox}>
+                                return <Checkbox style={{ lineHeight: '32px' }} value={box.pk} onChange={props.onChangeCheckbox} >
                                     {box.action} {box.code}
-                                </Checkbox>
+                                </Checkbox> 
                             })}
 
-                        </Col>
+                        {/* </Col>
                     </Row>
-                </Checkbox.Group>
+                </Checkbox.Group> */}
             </div>
         </Form.Item>
+        </Form>
     }):''
     return temp
 }
