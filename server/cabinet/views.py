@@ -44,7 +44,16 @@ def departament_new_view(request):
     data = []
     date = f'{datetime.now().month}-{datetime.now().year}'
     for department in departments:
-        data.append(build_level_with_user(department.id, 1, date, 1))
+        data.append(build_level_with_user(department.id, 1, date, 1, 0))
+    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+
+
+def salary_new_view(request):
+    departments = Department.objects.filter(subdepartment_code='0')
+    data = []
+    date = f'{datetime.now().month}-{datetime.now().year}'
+    for department in departments:
+        data.append(build_level_with_user(department.id, 1, date, 1, 1))
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
@@ -979,7 +988,7 @@ def all_projects_simple_view(request):
             projects = Project.objects.all()
             data = []
             for project in projects:
-                data.append({'pk': project.pk, 'name': project.name,})
+                data.append({'pk': project.pk, 'name': project.name})
             return HttpResponse(json.dumps(data))
 
 
@@ -990,7 +999,7 @@ def get_department_view(request):
         if request.method == "GET":
             department = user.profile.department
             department = get_department(department)
-            data = {'pk': department.pk, 'department_name': department.department_name, 'department_code': department.department_code}
+            data = {'pk': department.pk, 'name': department.department_name, 'code': department.department_code}
             return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
