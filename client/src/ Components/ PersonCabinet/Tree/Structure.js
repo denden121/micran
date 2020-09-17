@@ -28,12 +28,17 @@ class Structure extends React.Component {
         fetch("http://127.0.0.1:8000/departments/", requestOptions)
             .then(response => response.json())
             .then(result => {
+                // console.log(result)
                 // tree = Array.from(result)
-                let tree = Array.from(result[0])
-                console.log(result)
+                let tree = result
+                // console.log(result)
                 tree = tree.map((department,index_dep)=>{
-                    let sub = department.subdepartments.concat(department.users)
-                    return {
+                    // console.log(department.subdepartments,department.users)
+                    let sub;
+                    department.subdepartments
+                    ? sub = department.subdepartments.concat(department.users)
+                    : sub = department.users
+                    return{
                         title: department.code + ' ' + department.name,
                         key: '0-' + index_dep,
                         icon: <FolderOutlined/>,
@@ -47,10 +52,17 @@ class Structure extends React.Component {
                                 key: `0-${index_dep}-${index}`,
                                 icon: <FolderOpenOutlined/>,
                                 children: directions.map((direction, index_direction) => {
-                                    let directions;
-                                    direction.subdepartments
-                                        ? directions = direction.subdepartments.concat(direction.users)
-                                        : directions = direction.users
+                                    let directions = [];
+                                    if(department.name){
+                                        direction = [department]
+                                    }
+                                    else if(department.subdepartments){
+                                        directions = direction.subdepartments.concat(direction.users)
+                                    }
+                                    else{
+                                        directions = direction.users
+                                    }
+                                    console.log(direction)
                                     return {
                                         title: direction.code + ' ' + direction.name,
                                         key: `0-${index_dep}-${index}-${index_direction}`,
@@ -77,35 +89,21 @@ componentDidMount() {
 }
 
 onClickFile=()=>{
-    let token = localStorage.getItem('token')
-    let myHeaders = new Headers();
-
-    myHeaders.append("Authorization", token);
-
-    let requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-    };
-    // let tree = {    \}
-    fetch("http://127.0.0.1:8000/export/", requestOptions)
-        .then(response => response.json())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
+    window.location = `http://127.0.0.1:8000/export/?fuck_ura=${'ffff'}`
 }
 
 render(){
     return(
         <div className="container-fluid">
-            <div className="label row">
-                <button onClick={this.onClickFile}>dssdfds</button>
-
-                    <label className="text-left col-md-12">
-                    <PartitionOutlined style={{float:"left",fontSize:"23px",padding:"2px",transform: 'rotate(90deg)'}}/>
-                    <h4>Структура подразделений</h4>
-                    <hr className="normal hr"/>
-                </label>
-            </div>
+                <div className="label row">
+                    <button onClick={this.onClickFile}>dssdfds</button>
+                    <a href="http://127.0.0.1:8000/export/">ffff</a>
+                        <label className="text-left col-md-12">
+                        <PartitionOutlined style={{float:"left",fontSize:"23px",padding:"2px",transform: 'rotate(90deg)'}}/>
+                        <h4>Структура подразделений</h4>
+                        <hr className="normal hr"/>
+                    </label>
+                </div>
             <div className="row" >
                 <div className="col-md-6" style={{backgroundColor:"rgba(0,0,0,0)"}}>
                     <Tree
