@@ -38,10 +38,10 @@ class ManageGroups extends React.Component{
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">№</th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Ред</th>
+                            <th scope="col">Название</th>                            
                             <th scope="col">Описание</th>
                             <th scope="col">Входит в группу</th>
+                            <th scope="col">Ред</th>
                         </tr>
                     </thead>
                     <tbody>
