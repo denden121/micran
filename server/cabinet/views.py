@@ -403,7 +403,8 @@ def group_view(request, group_id):
             users = []
             actions_output = []
             for profile in participants:
-                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
+                              'pk': profile.pk})
             for action in actions:
                 actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
             data = {'pk': group.pk, 'name': group.name,
@@ -429,7 +430,8 @@ def group_view(request, group_id):
                 users = []
                 actions_output = []
                 for profile in participants:
-                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                    users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
+                                  'pk': profile.pk})
                 for action in actions:
                     actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
                 data = {'pk': group.pk, 'name': group.name,
@@ -454,6 +456,14 @@ def change_group_view(request, group_id):
                         [group_obj.actions.add(actions[i]) for i in range(len(actions))]
                 else:
                     group_obj.actions.clear()
+                if 'participants' in request.POST:
+                    participants = request.POST['participants'].split()
+                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                    if participants:
+                        group_obj.participants.clear()
+                        [group_obj.participants.add(participants[i]) for i in range(participants)]
+                else:
+                    group_obj.participants.clear()
                 actions = group_obj.actions.all()
                 participants = group_obj.participants.all()
                 users = []
