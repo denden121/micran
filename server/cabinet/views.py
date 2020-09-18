@@ -393,12 +393,11 @@ def project_view(request, project_id, user_id='default'):
 
 
 @csrf_exempt
-def group_view(request):
+def group_view(request, group_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            pk = request.GET.get('pk')
-            group = Group.objects.get(pk=pk)
+            group = Group.objects.get(pk=group_id)
             actions = group.actions.available_actions.all()
             participants = group.participants.all()
             users = []
