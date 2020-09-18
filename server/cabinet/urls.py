@@ -29,6 +29,7 @@ urlpatterns = [
     path('groups/<int:group_id>/change/', views.change_group_view),
     path('actions/', views.action_view),
     path('salary/', views.salary),
+    path('salary/new/', views.salary_new_view),
     path('salary/individual/', views.salary_individual),
     path('salary/change_common/', views.change_common_salary),
     path('workers/project/', views.workers_project),

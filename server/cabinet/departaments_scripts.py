@@ -1,4 +1,17 @@
-from .models import Department, Profile, Report, SalaryIndividual, TimeCard
+from .models import Department, Profile, Report, SalaryIndividual, TimeCard, SalaryCommon
+
+
+def get_salary_fields(user, month, year):
+    salary_common, created_c = SalaryCommon.objects.get_or_create(date__month=month, date__year=year)
+    salary, created_i = SalaryIndividual.objects.get_or_create(date__month=month, date__year=year, person=user)
+    data = {'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
+            'time_norm': salary.time_norm, 'penalty': salary.penalty,
+            'is_penalty': salary.is_penalty,
+            'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
+            'award': salary.award, 'salary_hand': salary.salary_hand,
+            'days_norm': salary_common.days_norm_common,
+            'time_norm': salary_common.time_norm_common}
+    return data
 
 
 def get_endpoint_department(data, output):
@@ -25,7 +38,7 @@ def build_level(subdepartment_id, lvl):
         return data
 
 
-def build_level_with_user(subdepartment_id, lvl, date, only_user=0):
+def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary=0):
     department = Department.objects.get(pk=subdepartment_id)
     if int(department.subdepartment_code) > 0:
         lvl += 1
@@ -78,6 +91,8 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0):
         else:
             users_field['time_norm'] = 0
         users_field['time_system'] = time_system
+        if salary:
+            users_field['salary'] = get_salary_fields(worker, month, year)
         users.append(users_field)
     data['users'] = users
     if subdepartments:
