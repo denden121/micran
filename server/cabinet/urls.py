@@ -23,7 +23,7 @@ urlpatterns = [
     path('cabinet/<int:user_id>/project/<int:project_id>/', views.project_view),
     path('cabinet/project/<int:project_id/>', views.project_view),
     # roles
-    path('groups/', views.group_view),
+    path('groups/<int:group_id>/', views.group_view),
     path('groups/actions/', views.action_with_group_view),
     path('groups/check/', views.check_group_name),
     path('groups/<int:group_id>/change/', views.change_group_view),

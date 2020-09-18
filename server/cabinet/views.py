@@ -160,9 +160,7 @@ def cabinet_view(request, user_id='default'):
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save()
-                    update.user = user
-                    update.save()
+                    form.save()
                 data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                         'last_name': profile.last_name, 'first_name': profile.first_name,
                         'middle_name': profile.middle_name,
@@ -395,36 +393,50 @@ def project_view(request, project_id, user_id='default'):
 
 
 @csrf_exempt
-def group_view(request):
+def group_view(request, group_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            pk = request.GET.get('pk')
-            group = Group.objects.get(pk=pk)
-            actions = group.actions.available_actions.all()
+            group = Group.objects.get(pk=group_id)
+            actions = group.actions.all()
             participants = group.participants.all()
             users = []
             actions_output = []
             for profile in participants:
-                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
+                              'pk': profile.pk})
             for action in actions:
-                actions_output.append(action.action + ' ' + str(action.num))
-            data = {'name': group.name, 'description': group.description, 'users': users, 'actions': actions_output}
+                actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
+            data = {'pk': group.pk, 'name': group.name,
+                    'description': group.description, 'users': users, 'actions': actions_output}
             return HttpResponse(json.dumps(data))
         if request.method == "POST":
-            group = GroupForm(request.POST)
+            group = GroupForm(request.POST, instance=group_id)
             if group.is_valid():
                 update = group.save(commit=False)
-                actions = request.POST['actions'].split()
-                actions = [Action.objects.get(pk=int(action)) for action in actions]
-                if actions and group.is_valid():
-                    group = group.save()
-                    [group.available_actions.add(actions[i]) for i in range(len(actions))]
-                participants = request.POST['participants'].split()
-                participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
-                if participants:
-                    [group.participants.add(participants[i]) for i in range(len(participants))]
-                return HttpResponse("Success")
+                if request.POST['actions']:
+                    actions = request.POST['actions'].split()
+                    actions = [Action.objects.get(pk=int(action)) for action in actions]
+                    if actions and group.is_valid():
+                        group = group.save()
+                        [group.actions.add(actions[i]) for i in range(len(actions))]
+                if request.POST['participants']:
+                    participants = request.POST['participants'].split()
+                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                    if participants:
+                        [group.participants.add(participants[i]) for i in range(len(participants))]
+                actions = group.actions.all()
+                participants = group.participants.all()
+                users = []
+                actions_output = []
+                for profile in participants:
+                    users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
+                                  'pk': profile.pk})
+                for action in actions:
+                    actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
+                data = {'pk': group.pk, 'name': group.name,
+                        'description': group.description, 'users': users, 'actions': actions_output}
+                return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
@@ -436,12 +448,33 @@ def change_group_view(request, group_id):
             group = GroupForm(request.POST, instance=group_obj)
             if group.is_valid():
                 group.save(commit=False)
-                actions = request.POST['actions'].split()
-                actions = [Action.objects.get(pk=int(action)) for action in actions]
-                if actions and group.is_valid():
-                    group = group.save()
-                    [group.available_actions.add(actions[i]) for i in range(len(actions))]
-                return HttpResponse("Success")
+                if 'actions' in request.POST:
+                    actions = request.POST['actions'].split()
+                    actions = [Action.objects.get(pk=int(action)) for action in actions]
+                    if actions and group.is_valid():
+                        group_obj.actions.clear()
+                        [group_obj.actions.add(actions[i]) for i in range(len(actions))]
+                else:
+                    group_obj.actions.clear()
+                if 'participants' in request.POST:
+                    participants = request.POST['participants'].split()
+                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                    if participants:
+                        group_obj.participants.clear()
+                        [group_obj.participants.add(participants[i]) for i in range(participants)]
+                else:
+                    group_obj.participants.clear()
+                actions = group_obj.actions.all()
+                participants = group_obj.participants.all()
+                users = []
+                actions_output = []
+                for profile in participants:
+                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
+                for action in actions:
+                    actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
+                data = {'pk': group_obj.pk, 'name': group_obj.name,
+                        'description': group_obj.description, 'users': users, 'actions': actions_output}
+                return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
@@ -635,7 +668,7 @@ def workers_info(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            persons = Profile.objects.all()
+            persons = Profile.objects.all().order_by('pk')
             data = []
             group_field = []
             for person in persons:
@@ -653,6 +686,7 @@ def workers_info(request):
                          'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
+            print(data)
             return HttpResponse(json.dumps(data))
 
 
