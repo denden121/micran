@@ -4,8 +4,7 @@ import React from "react";
 const Fields =(props)=>{
     console.log(props)
     let temp = props.items ? props.items.map((item)=>{
-        // console.log(item)
-        // return ""
+
         let checkBoxes = item.actions
 
         return <Form labelCol={{span:7}}
@@ -19,7 +18,7 @@ const Fields =(props)=>{
                             {checkBoxes.map((box)=>{
 
                                 return <div>
-                                    <Checkbox style={{ lineHeight: '32px' }} value={box.pk} onChange={props.onChangeCheckbox} >
+                                    <Checkbox style={{ lineHeight: '32px' }} value={box.pk} onChange={props.onChangeCheckBox} >
                                         {box.action} {box.code}
                                     </Checkbox>
                                 </div>

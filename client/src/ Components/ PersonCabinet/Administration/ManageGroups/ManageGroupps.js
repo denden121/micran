@@ -21,6 +21,10 @@ class ManageGroups extends React.Component{
                 this.setState({groups:result})
             })
     }
+    onClickEditGroup=(pk)=>{
+        let temp = {pk:pk}
+        console.log(pk)
+    }
     state = {
         groups:{}
     }
@@ -45,7 +49,7 @@ class ManageGroups extends React.Component{
                         </tr>
                     </thead>
                     <tbody>
-                        <Groups listGroup = {this.state.groups}/>
+                        <Groups onClickEditGroup={this.onClickEditGroup} listGroup = {this.state.groups}/>
                     </tbody>
                </table>
                    

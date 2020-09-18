@@ -9,7 +9,7 @@ const Groups = (props) =>{
             <tr>
                 <th scope="row">{index+1}</th>
                 <td>{groups.fields.name}</td>
-                <td><a onClick={()=>{document.location='/cabinet/admin/edit_groups'}}><FormOutlined/></a></td>
+                <td><a onClick={props.onClickEditGroup.bind(this,groups.pk)}><FormOutlined/></a></td>
                 <td>{groups.fields.description}</td>
                 <td>{groups.fields.users.join(', ')}</td>
             </tr>
@@ -18,4 +18,4 @@ const Groups = (props) =>{
 }
 
 export default Groups
-
+//()=>{document.location='/cabinet/admin/edit_groups'}
