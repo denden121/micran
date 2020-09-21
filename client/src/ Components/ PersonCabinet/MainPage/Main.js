@@ -10,7 +10,6 @@ import moment from 'moment';
 import "./Main.css"
 import Switch from "react-bootstrap/cjs/Switch";
 import {Redirect, Route} from "react-router-dom";
-import AddGroups from "../Administration/AddGroups/AddGroups";
 import ManageGroupps from "../Administration/ManageGroups/ManageGroupps";
 import ViewLogs from "../Administration/ViewLogs/ViewLogs";
 import Salary from "../Salary/Salary"
@@ -21,7 +20,7 @@ import NewProject from "../Register/NewProject/NewProject";
 import UnitProjects from "../Register/UnitProjects/UnitProjects"
 import Employees from "../Employees/Employees"
 import Interval from "../WorkCalendar/Interval/Interval"
-import ADDGroup from "../Administration/AddGroups/ADDGroup"
+import AddGroups from "../Administration/AddGroups/AddGroups"
 import SystemTime from "../SystemTime/SystemTime"
 import Structure from "../Tree/Structure"
 import ListReports from "../ListReports/ListReports"
@@ -67,6 +66,7 @@ class Main extends Component{
             console.log(month, dateString)
             dateString = dateString.split('-').reverse()
             dateString[1] = parseInt(dateString[1])
+            dateString = dateString.join(' ')
             dateString = dateString.join(' ')
             localStorage.setItem('date', dateString)
             rend()
@@ -193,7 +193,7 @@ class Main extends Component{
                                 <Route path='/cabinet/' exact component = {SendReport}/>
                                 <Route path='/cabinet/person' exact  component = {PersonData}/>
                                 <Route path='/cabinet/salary' exact  component = {Salary}/>
-                                <Route path='/cabinet/admin/add_groups' exact component = {ADDGroup}/>
+                                <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
                                 <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
                                 <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
                                 <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
