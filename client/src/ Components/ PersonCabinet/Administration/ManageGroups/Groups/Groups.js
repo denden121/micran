@@ -8,15 +8,10 @@ const Groups = (props) =>{
         return(
             <tr>
                 <th scope="row">{index+1}</th>
-<<<<<<< HEAD
                 <td>{groups.fields.name}</td>
-                <td><a onClick={props.onClickEditGroup.bind(this,groups.pk)}><FormOutlined/></a></td>
-=======
-                <td>{groups.fields.name}</td>                
->>>>>>> 12645c64d1ec0d9c8fe47a4fe4f78bbf015cabb5
                 <td>{groups.fields.description}</td>
                 <td>{groups.fields.users.join(', ')}</td>
-                <td><a onClick={()=>{document.location='/cabinet/admin/edit_groups'}}><FormOutlined/></a></td>
+                <td><a onClick={props.onClickEditGroup.bind(this,groups.pk)}><FormOutlined/></a></td>
             </tr>
         )
     })

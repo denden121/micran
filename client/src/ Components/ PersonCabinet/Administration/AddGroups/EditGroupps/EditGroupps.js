@@ -10,14 +10,14 @@ import {
     InputNumber,
     TreeSelect,
     Switch,
-  } from 'antd';
+} from 'antd';
 
 const { TextArea } = Input;
 class  EditGroups extends React.Component{
     state = {
         date:[]
     }
-    loadDates=()=>{
+    loadDates= async ()=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -34,12 +34,12 @@ class  EditGroups extends React.Component{
                 this.setState({date:result})
             })
     }
-    componentDidMount() {
+    componentDidMount() {   
         this.loadDates()
     }
 
     render() {
-
+        // console.log(this.state.date.description)
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -53,11 +53,12 @@ class  EditGroups extends React.Component{
                                         layout="horizontal"
                                     >
                                         <Form.Item label="Название">
-                                            <input className="form-control form-control-sm"></input>
+                                            <input defaultValue={this.state.date.name} className="form-control form-control-sm"></input>
                                         </Form.Item>
                                         <Form.Item label="Описание" style={{marginTop: "-20px"}}>
-                                            <TextArea
-                                                autoSize={{minRows: 2, maxRows: 8}}
+                                            <textarea
+                                                defaultValue={this.state.date.description}
+                                                // autoSize={{minRows: 2, maxRows: 8}}
                                             />
                                         </Form.Item>
                                         <hr/>
