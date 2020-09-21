@@ -370,15 +370,44 @@ def project_view(request, project_id, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET":
-                project = Project.objects.filter(id=project_id)
-                data = serializers.serialize('json', project)
+                project = Project.objects.get(id=project_id)
+                manager = Profile.objects.get(pk=project.manager)
+                manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
+                chief_designer = Profile.objects.get(pk=project.chief_designer)
+                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
+                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
+                direction = Direction.objects.get(pk=project.direction.pk)
+                data = { 'pk': project.pk 'name': project.name, 'direction': direction.direction_name, 'manager': manager_name,
+                         'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
+                         'production_order': project.production_order,
+                         'comment_for_employees': project.comment_for_employees,
+                         'contract': project.contract, 'type': project.type, 'status': project.status,
+                         'client': project.client,
+                         'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
                 return HttpResponse(data)
             elif request.method == "POST" and get_access(13, user):
                 project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
                     form.save()
-                    return HttpResponse("Success")
+                    project = Project.objects.get(id=project_id)
+                    manager = Profile.objects.get(pk=project.manager)
+                    manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
+                    chief_designer = Profile.objects.get(pk=project.chief_designer)
+                    chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                    deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
+                    deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
+                    direction = Direction.objects.get(pk=project.direction.pk)
+                    data = {'pk': project.pk 'name': project.name, 'direction': direction.direction_name,
+                            'manager': manager_name,
+                            'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
+                            'production_order': project.production_order,
+                            'comment_for_employees': project.comment_for_employees,
+                            'contract': project.contract, 'type': project.type, 'status': project.status,
+                            'client': project.client,
+                            'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
+                    return HttpResponse(data)
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:
@@ -411,7 +440,7 @@ def group_view(request, group_id):
                     'description': group.description, 'users': users, 'actions': actions_output}
             return HttpResponse(json.dumps(data))
         if request.method == "POST":
-            group = GroupForm(request.POST, instance=group_id)
+            group = GroupForm(request.POST)
             if group.is_valid():
                 update = group.save(commit=False)
                 if request.POST['actions']:
