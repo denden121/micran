@@ -1,12 +1,34 @@
 import React, {Component} from "react"
 import Groups from "./Groups/Groups"
+import EditGroups from "../AddGroups/EditGroupps/EditGroupps";
 import Table from 'react-bootstrap/Table'
+import {Modal} from "antd";
 
 class ManageGroups extends React.Component{
     componentDidMount() {
-        this.loadActions()
+        this.loadGroups()
     }
-    loadActions = async () =>{
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    };
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    loadGroups =  () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -15,22 +37,57 @@ class ManageGroups extends React.Component{
             headers: myHeaders,
             redirect: 'follow'
         };
-        await fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
+        fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
             .then(response => response.json())
             .then(result =>{
                 this.setState({groups:result})
             })
     }
+    loadSelectGroup=(pk)=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        fetch(`http://127.0.0.1:8000/groups/${pk}/`, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                console.log('date',result)
+                this.setState({date: result})})
+            .catch(error => console.log('error', error))
+
+    }
     onClickEditGroup=(pk)=>{
-        let temp = {pk:pk}
-        console.log(pk)
+        this.showModal()
+        // let temp = {pk:pk}
+        // console.log(pk)
+        if (this.state.actions === {}){
+            this.loadActions()
+        }
+        this.loadSelectGroup(pk)
     }
     state = {
-        groups:{}
+        groups:{},
+        actions:{},
+        date:{}
     }
     render(){
         return(
             <div className="container-fluid">
+                <Modal
+                    title="Редактирование групп"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    width={900}
+                >
+                    <EditGroups
+                        date = {this.state.date}
+                    />
+                </Modal>
                <div className="text-left">
                     <div className="text-left">
                             <button className="btn btn-sm btn-primary " onClick={()=>{document.location ='/cabinet/admin/add_groups'}}>Создать новую группу</button>
