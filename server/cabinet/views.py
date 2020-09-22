@@ -442,7 +442,7 @@ def group_view(request, group_id):
                 users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
                               'pk': profile.pk})
             for action in actions:
-                actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
+                actions_output.append(action.pk)
             data = {'pk': group.pk, 'name': group.name,
                     'description': group.description, 'users': users, 'actions': actions_output}
             return HttpResponse(json.dumps(data))

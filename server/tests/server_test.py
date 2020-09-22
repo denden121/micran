@@ -1,5 +1,7 @@
 import requests
 import simplejson
+from datetime import datetime
+
 
 def authenticate(headers):
     request = requests.post('http://127.0.0.1:8000/token/', data={
@@ -27,7 +29,18 @@ def is_user_admin(headers):
         print("Error at http://127.0.0.1:8000/check_admin/")
 
 
+def cabinet_reports(headers):
+    t = datetime.now()
+    request = requests.get(f'http://127.0.0.1:8000/cabinet/reports/?month={t.month}&&?year={t.year}', headers=headers)
+    try:
+        assert request.status_code == 200
+        print(request.content)
+    except AssertionError:
+        print("Error at http://127.0.0.1:8000/cabinet/reports/")
+
+
 headers = {}
 authenticate(headers)
 get_cabinet_info(headers)
 is_user_admin(headers)
+cabinet_reports(headers)
