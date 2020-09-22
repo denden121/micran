@@ -10,7 +10,8 @@ import {
     InputNumber,
     TreeSelect,
     Switch,
-} from 'antd';
+    Modal
+  } from 'antd';
 
 const { TextArea } = Input;
 class  EditGroups extends React.Component{
@@ -38,11 +39,40 @@ class  EditGroups extends React.Component{
         this.loadDates()
     }
 
+    showModal = () => {
+        this.setState({
+          visible: true,
+        });
+      };
+    
+      handleOk = e => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      };
+    
+      handleCancel = e => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      };
+    
     render() {
         // console.log(this.state.date.description)
         return (
+            
             <div className="container-fluid">
-                <div className="row">
+
+                <Modal
+                title="Редактирование групп"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                width={900}
+                >
+                    <div className="row">
                     <div className=" col-lg-12">
                         <Card>
                             <div className="row">
@@ -89,6 +119,11 @@ class  EditGroups extends React.Component{
                         </Card>
                     </div>
                 </div>
+                </Modal>
+                <Button type="primary" onClick={this.showModal}>
+                    Редактирование групп
+                </Button>
+                
             </div>
         )
     }

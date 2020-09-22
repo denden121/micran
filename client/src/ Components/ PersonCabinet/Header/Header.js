@@ -79,7 +79,7 @@ class LogOut extends React.Component{
         visible={this.state.visible}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
-        width={700}>
+        width={900}>
         <PersonData/>
       </Modal>
     </div>
