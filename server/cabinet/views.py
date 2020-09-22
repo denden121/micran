@@ -505,21 +505,22 @@ def change_group_view(request, group_id):
             if group.is_valid():
                 group.save(commit=False)
                 if 'actions' in request.POST:
-                    actions = request.POST['actions'].split()
-                    actions = [Action.objects.get(pk=int(action)) for action in actions]
-                    if actions and group.is_valid():
-                        group_obj.actions.clear()
-                        [group_obj.actions.add(actions[i]) for i in range(len(actions))]
-                else:
-                    group_obj.actions.clear()
-                if 'participants' in request.POST:
-                    participants = request.POST['participants'].split()
-                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
-                    if participants:
-                        group_obj.participants.clear()
-                        [group_obj.participants.add(participants[i]) for i in range(participants)]
-                else:
-                    group_obj.participants.clear()
+                    actions = json.loads(request.POST.get('actions'))
+                    for key, value in actions:
+                        if value:
+                            action = Action.objects.get(pk=int(key))
+                            group_obj.actions.add(action)
+                        if not value:
+                            action = Action.objects.get(pk=int(key))
+                            group_obj.actions.remove(action)
+                # if 'participants' in request.POST:
+                #     participants = request.POST['participants'].split()
+                #     participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                #     if participants:
+                #         group_obj.participants.clear()
+                #         [group_obj.participants.add(participants[i]) for i in range(participants)]
+                # else:
+                #     group_obj.participants.clear()
                 actions_group = group_obj.actions.all()
                 participants = group_obj.participants.all()
                 group_actions = GroupAction.objects.all()
