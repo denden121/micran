@@ -434,17 +434,26 @@ def group_view(request, group_id):
     if user:
         if request.method == "GET":
             group = Group.objects.get(pk=group_id)
-            actions = group.actions.all()
+            actions_group = group.actions.all()
             participants = group.participants.all()
+            group_actions = GroupAction.objects.all()
             users = []
-            actions_output = []
             for profile in participants:
                 users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
                               'pk': profile.pk})
-            for action in actions:
-                actions_output.append(action.pk)
+            group_actions_output = []
+            for group_action in group_actions:
+                actions_output = []
+                for action in group_action.available_actions.all():
+                    if action in actions_group:
+                        actions_output.append({'pk': action.pk, 'name': action.action,
+                                               'code': action.num, 'checked': True})
+                    else:
+                        actions_output.append({'pk': action.pk, 'name': action.action,
+                                               'code': action.num, 'checked': False})
+                group_actions_output.append({'pk': group_action.pk, 'name':group_action.name, 'actions':actions_output})
             data = {'pk': group.pk, 'name': group.name,
-                    'description': group.description, 'users': users, 'actions': actions_output}
+                    'description': group.description, 'users': users, 'groups_actions': group_actions_output}
             return HttpResponse(json.dumps(data))
         if request.method == "POST":
             group = GroupForm(request.POST)
@@ -461,17 +470,28 @@ def group_view(request, group_id):
                     participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
                     if participants:
                         [group.participants.add(participants[i]) for i in range(len(participants))]
-                actions = group.actions.all()
+                actions_group = group.actions.all()
                 participants = group.participants.all()
+                group_actions = GroupAction.objects.all()
                 users = []
                 actions_output = []
                 for profile in participants:
                     users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
                                   'pk': profile.pk})
-                for action in actions:
-                    actions_output.append(action.pk)
+                group_actions_output = []
+                for group_action in group_actions:
+                    actions_output = []
+                    for action in group_action.available_actions.all():
+                        if action in actions_group:
+                            actions_output.append({'pk': action.pk, 'name': action.action,
+                                                   'code': action.num, 'checked': True})
+                        else:
+                            actions_output.append({'pk': action.pk, 'name': action.action,
+                                                   'code': action.num, 'checked': False})
+                    group_actions_output.append(
+                        {'pk': group_action.pk, 'name': group_action.name, 'actions': actions_output})
                 data = {'pk': group.pk, 'name': group.name,
-                        'description': group.description, 'users': users, 'actions': actions_output}
+                        'description': group.description, 'users': users, 'groups_actions': group_actions_output}
                 return HttpResponse(json.dumps(data))
 
 
@@ -500,16 +520,28 @@ def change_group_view(request, group_id):
                         [group_obj.participants.add(participants[i]) for i in range(participants)]
                 else:
                     group_obj.participants.clear()
-                actions = group_obj.actions.all()
+                actions_group = group_obj.actions.all()
                 participants = group_obj.participants.all()
+                group_actions = GroupAction.objects.all()
                 users = []
                 actions_output = []
                 for profile in participants:
-                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                for action in actions:
-                    actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
+                    users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
+                                  'pk': profile.pk})
+                group_actions_output = []
+                for group_action in group_actions:
+                    actions_output = []
+                    for action in group_action.available_actions.all():
+                        if action in actions_group:
+                            actions_output.append({'pk': action.pk, 'name': action.action,
+                                                   'code': action.num, 'checked': True})
+                        else:
+                            actions_output.append({'pk': action.pk, 'name': action.action,
+                                                   'code': action.num, 'checked': False})
+                    group_actions_output.append(
+                        {'pk': group_action.pk, 'name': group_action.name, 'actions': actions_output})
                 data = {'pk': group_obj.pk, 'name': group_obj.name,
-                        'description': group_obj.description, 'users': users, 'actions': actions_output}
+                        'description': group_obj.description, 'users': users, 'groups_actions': group_actions_output}
                 return HttpResponse(json.dumps(data))
 
 

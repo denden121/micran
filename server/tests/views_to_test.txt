@@ -1,4 +1,3 @@
-views.all_report_view
 views.report_view
 views.time_control_view
 views.time_control_view_detail

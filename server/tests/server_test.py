@@ -24,17 +24,15 @@ def is_user_admin(headers):
     request = requests.get('http://127.0.0.1:8000/check_admin/', headers=headers)
     try:
         assert request.status_code == 200
-        assert request.content.decode('utf-8') == "True"
     except AssertionError:
         print("Error at http://127.0.0.1:8000/check_admin/")
 
 
 def cabinet_reports(headers):
     t = datetime.now()
-    request = requests.get(f'http://127.0.0.1:8000/cabinet/reports/?month={t.month}&&?year={t.year}', headers=headers)
+    request = requests.get(f'http://127.0.0.1:8000/cabinet/reports/?month={t.month}&&year={t.year}', headers=headers)
     try:
         assert request.status_code == 200
-        print(request.content)
     except AssertionError:
         print("Error at http://127.0.0.1:8000/cabinet/reports/")
 
