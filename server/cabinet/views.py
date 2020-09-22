@@ -16,6 +16,7 @@ from .forms import ProjectForm, ReportForm, ActionForm, ProfileForm, \
 from .models import Profile, Project, Report, Action, Group, Logging, \
     SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark, GroupAction
 
+
 def get_user_jwt(request):
     token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
@@ -25,18 +26,16 @@ def get_user_jwt(request):
 
 def export_projects(request):
     export(1)
-    if request.GET.get('fuck_ura'):
-        return FileResponse(open('test.xls', 'rb'))
+    return FileResponse(open('test.xls', 'rb'))
 
 
 def get_department(subdepartment):
-    if subdepartment.subdepartment_code !='0':
+    if subdepartment.subdepartment_code != '0':
         print(subdepartment.subdepartment_code)
         department = Department.objects.get(department_code=subdepartment.subdepartment_code)
         return get_department(department)
     else:
         return subdepartment
-
 
 
 def departament_new_view(request):
@@ -141,7 +140,8 @@ def cabinet_view(request, user_id='default'):
         data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
                 'last_name': profile.last_name, 'first_name': profile.first_name, 'middle_name': profile.middle_name,
                 'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
-                'experience': profile.experience, 'position': profile.position, 'department': profile.department.department_name,
+                'experience': profile.experience, 'position': profile.position,
+                'department': profile.department.department_name,
                 'employment_date': str(profile.employment_date)}
         return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
     else:
@@ -166,7 +166,8 @@ def cabinet_view(request, user_id='default'):
                         'middle_name': profile.middle_name,
                         'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
                         'experience': profile.experience, 'position': profile.position,
-                        'department': profile.department.department_name,'employment_date': str(profile.employment_date)}
+                        'department': profile.department.department_name,
+                        'employment_date': str(profile.employment_date)}
                 return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
         return HttpResponse("Permission denied")
 
@@ -211,10 +212,11 @@ def all_report_view(request, user_id='default'):
                 for time_card in times_cards:
                     time_system += time_card.hours_worked.hour
                 if salary:
-                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'time_system':time_system,
+                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'time_system': time_system,
                                                     'reports': data, 'status': status, 'time_report': time_report}))
                 return HttpResponse(json.dumps({'time_norm': '', 'reports': data,
-                                                'status': status, 'time_system':time_system, 'time_report': time_report}))
+                                                'status': status, 'time_system': time_system,
+                                                'time_report': time_report}))
             elif request.method == "POST":
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
@@ -255,7 +257,7 @@ def all_report_view(request, user_id='default'):
                     report.creator_id = profile
                     report.save()
                     data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hours': report.hour,
-                              'status': report.status, 'project_pk': report.project.pk}
+                            'status': report.status, 'project_pk': report.project.pk}
                     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
@@ -368,26 +370,28 @@ def all_projects_view(request):
 def project_view(request, project_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
+        project = Project.objects.get(id=project_id)
         if user:
             if request.method == "GET":
-                project = Project.objects.get(id=project_id)
                 manager = Profile.objects.get(pk=project.manager)
                 manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
                 chief_designer = Profile.objects.get(pk=project.chief_designer)
-                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + \
+                                      ' ' + chief_designer.middle_name
                 deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
-                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
+                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name \
+                                             + ' ' + deputy_chief_designer.middle_name
                 direction = Direction.objects.get(pk=project.direction.pk)
-                data = { 'pk': project.pk, 'name': project.name, 'direction': direction.direction_name, 'manager': manager_name,
-                         'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
-                         'production_order': project.production_order,
-                         'comment_for_employees': project.comment_for_employees,
-                         'contract': project.contract, 'type': project.type, 'status': project.status,
-                         'client': project.client,
-                         'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
+                data = {'pk': project.pk, 'name': project.name,
+                        'direction': direction.direction_name, 'manager': manager_name,
+                        'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
+                        'production_order': project.production_order,
+                        'comment_for_employees': project.comment_for_employees,
+                        'contract': project.contract, 'type': project.type, 'status': project.status,
+                        'client': project.client,
+                        'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
                 return HttpResponse(data)
             elif request.method == "POST" and get_access(13, user):
-                project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
                     form.save()
@@ -395,9 +399,12 @@ def project_view(request, project_id, user_id='default'):
                     manager = Profile.objects.get(pk=project.manager)
                     manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
                     chief_designer = Profile.objects.get(pk=project.chief_designer)
-                    chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
+                    chief_designer_name = chief_designer.last_name + ' ' + \
+                                          chief_designer.first_name + ' ' + chief_designer.middle_name
                     deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
-                    deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
+                    deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' \
+                                                 + deputy_chief_designer.first_name + \
+                                                 ' ' + deputy_chief_designer.middle_name
                     direction = Direction.objects.get(pk=project.direction.pk)
                     data = {'pk': project.pk, 'name': project.name, 'direction': direction.direction_name,
                             'manager': manager_name,
@@ -435,7 +442,7 @@ def group_view(request, group_id):
                 users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
                               'pk': profile.pk})
             for action in actions:
-                actions_output.append({'name': action.action, 'num': action.num, 'pk': action.pk})
+                actions_output.append(action.pk)
             data = {'pk': group.pk, 'name': group.name,
                     'description': group.description, 'users': users, 'actions': actions_output}
             return HttpResponse(json.dumps(data))
@@ -1078,5 +1085,5 @@ def action_with_group_view(request):
                 actions = action_group.available_actions.all()
                 for action in actions:
                     fields.append({'action': action.action, 'code': action.num, 'pk': action.pk})
-                data.append({'pk': action_group.pk, 'group_name': action_group.name,'actions': fields})
+                data.append({'pk': action_group.pk, 'group_name': action_group.name, 'actions': fields})
             return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
