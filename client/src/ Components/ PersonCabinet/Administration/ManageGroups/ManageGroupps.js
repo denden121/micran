@@ -43,22 +43,6 @@ class ManageGroups extends React.Component{
                 this.setState({groups:result})
             })
     }
-    loadActions=() => {
-        let token = localStorage.getItem('token')
-        let myHeaders = new Headers()
-        myHeaders.append("Authorization", token)
-        let requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        }
-        fetch("http://127.0.0.1:8000/groups/actions/", requestOptions)
-            .then(response =>  response.json())
-            .then(result => {
-                console.log('result',result)
-                this.setState({actions: result})})
-            .catch(error => console.log('error', error))
-    }
     loadSelectGroup=(pk)=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
@@ -100,7 +84,9 @@ class ManageGroups extends React.Component{
                     onCancel={this.handleCancel}
                     width={900}
                 >
-                    <EditGroups/>
+                    <EditGroups
+                        date = {this.state.date}
+                    />
                 </Modal>
                <div className="text-left">
                     <div className="text-left">
