@@ -12,21 +12,13 @@ const Fields =(props)=>{
         layout="horizontal">
         <Form.Item label={item.group_name}  name="checkbox-group">
             <div className="text-left" >
-                {/* <Checkbox.Group >
-                    <Row>
-                        <Col span={8}> */}
-                            {checkBoxes.map((box)=>{
-
-                                return <div>
-                                    <Checkbox style={{ lineHeight: '32px' }} value={box.pk} onChange={props.onChangeCheckBox} >
-                                        {box.action} {box.code}
-                                    </Checkbox>
-                                </div>
-                            })}
-
-                        {/* </Col>
-                    </Row>
-                </Checkbox.Group> */}
+                {checkBoxes.map((box)=>{
+                    return <div>
+                        <Checkbox style={{ lineHeight: '32px' }} value={box.pk} onChange={props.onChangeCheckBox} >
+                            {box.action} {box.code}
+                        </Checkbox>
+                    </div>
+                })}
             </div>
         </Form.Item>
         </Form>

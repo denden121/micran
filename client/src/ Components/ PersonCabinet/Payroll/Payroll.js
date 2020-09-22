@@ -10,7 +10,6 @@ class Payroll extends React.Component{
     state = {
         allSalary:[],
         departments:[],
-        selectDepartment:'',
         subdepartments:[],
         hideSalary:false,
         hideNormTime:false,
@@ -19,11 +18,10 @@ class Payroll extends React.Component{
         hideAnotherPeople:false
     }
     componentDidMount() {
-        this.loadNativeDepartment()
-        // this.loadAllSalary()
+        this.loadAllSalary()
         this.loadDepartments()
     }
-    loadNativeDepartment=  ()=>{
+    loadNativeDepartment = () => {
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -35,7 +33,11 @@ class Payroll extends React.Component{
         fetch("http://127.0.0.1:8000/get_department/", requestOptions)
             .then(response =>  response.json())
             .then(result => {
-                let temp = {department:{label:result.name,value:result.pk}}
+                console.log(result)
+                console.log('3333333333333333333333333333333333333333')
+                this.state.selectDepartment = result
+                console.log(this.state)
+                // let temp = {department:{label:result.code+' '+result.name,value:result.pk}}
                 // localStorage.setItem('payroll',JSON.stringify(temp))
             })
             .catch(error => console.log('error', error))
@@ -96,9 +98,9 @@ class Payroll extends React.Component{
             .catch(error => console.log('error', error));
     }
     onChangeSalary = (event) => {
-        console.log(event.target.type)
+        // console.log(event.target.type)
         if(event.target.type === 'number'){
-            console.log(event.target.id)
+            // console.log(event.target.id)
             let id= event.target.id.split('.')[0]
             let nameField = event.target.id.split('.')[1]
 
@@ -119,13 +121,13 @@ class Payroll extends React.Component{
             else if(nameField === 'award_interest'){
                 // получаем значение процентов премии
                 let award_interest =   document.getElementById(`${id}.award_interest`).value
-                console.log(award_interest)
+                // console.log(award_interest)
                 // задаем занчение премии в рубля
                 document.getElementById(`${id}.award`).value = (award_interest / 100 * document.getElementById(`${id}.plan_salary`).value).toFixed(2)
                 // получаем значение плановый зп и премии
                 const plan_salary = document.getElementById(`${id}.plan_salary`).value
                 const award = document.getElementById(`${id}.award`).value
-                console.log(award,plan_salary)
+                // console.log(award,plan_salary)
                 //меняем значение зп на руки
                 document.getElementById(`${id}.salary_hand`).textContent = ((parseFloat(plan_salary) + parseFloat(award)) * 0.87).toFixed(2)
                 // меняем значение начисленно

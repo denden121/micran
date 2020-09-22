@@ -3,7 +3,7 @@ import "../Payroll.css"
 import {Select} from "antd"
 
 const PayrollCheck =(props)=>{
-    console.log('1111',props.selectDepartment.label)
+    // console.log('1111',props.selectDepartment.label)
     return(
         <div>
             <div onChange={props.onChangeFilter} className="form-check text-left">
@@ -33,8 +33,10 @@ const PayrollCheck =(props)=>{
                 </label>
             </div>
             <hr className="normal"/>
+            {/*{console.log('log',props.selectDepartment)}*/}
             <div className="col-md-6 col-lg-12 text-left">
                 <Select
+                    // defaultValue={props.selectDepartment.name}
                     // defaultActiveFirstOption={props.selectDepartment}
                     options = {props.departments}
                     placeholder="Выбрать"
