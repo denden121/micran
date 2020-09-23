@@ -47,12 +47,12 @@ def departament_new_view(request):
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
-def salary_new_view(request):
-    departments = Department.objects.filter(subdepartment_code='0')
+def salary_new_view(request, department_id):
+    department = Department.objects.get(subdepartment_code='0')
     data = []
     date = request.GET.get("date")
-    for department in departments:
-        data.append(build_level_with_user(department.id, 1, date, 1, 1))
+    salary_flag = 1
+    data = build_level_with_user(department.id, 0, date, 1, salary_flag)
     output = get_endpoint_department(data, [])
     return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
