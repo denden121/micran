@@ -1,0 +1,44 @@
+.open{
+    background-color: #6FD76F;
+    border: 3px solid #6FD76F;
+    color: white;
+    border-radius: 7px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.cclose{
+    background-color: #E23C3C;
+    border: 3px solid #E23C3C;
+    color: white;
+    border-radius: 7px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.tip1{
+    background-color: grey;
+    border: 3px solid grey;
+    color: white;
+    border-radius: 7px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.tip2{
+    background-color: #FF7A36;
+    border: 3px solid #FF7A36;
+    color: white;
+    border-radius: 7px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.pp{
+    background-color: #454545;
+    border: 3px solid #454545;
+    color: white;
+    border-radius: 7px;
+    font-size: 12px;
+    margin-left: 5px;
+}

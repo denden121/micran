@@ -1,5 +1,7 @@
 import React from "react"
 import RegisterTable from "./RegisterTable/RegisterTable"
+import {Modal} from "antd"
+import ModalEmp from "./NewProject/ModalEmpl"
 
 
 class Register extends React.Component{
@@ -7,8 +9,28 @@ class Register extends React.Component{
         this.loadProjects()
     }
     state = {
-        projects:{}
+        projects:{},
+        visible: false
     }
+    showModal = () => {
+        this.setState({
+          visible: true,
+        });
+      };
+    
+      handleOk = e => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      };
+    
+      handleCancel = e => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      };
     loadProjects = async () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
@@ -46,7 +68,17 @@ class Register extends React.Component{
                         </div>
                         <hr className="normal"/>
                         
-                        <RegisterTable projects = {this.state.projects}/>
+                        <RegisterTable projects = {this.state.projects} onClickShowModal={this.showModal}/>
+                        <Modal
+                        title="Редактирование проекта"
+                        visible={this.state.visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                        width={720}
+                        cancelText="Отмена"
+                        okText="Сохранить" >
+                            <ModalEmp />
+                        </Modal>
                     </div>
                 </div>
                 

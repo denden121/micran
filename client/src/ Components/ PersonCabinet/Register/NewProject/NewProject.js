@@ -1,10 +1,11 @@
 import React from "react"
 import "./NewProject.css"
 import Register from "../Register"
-import {Select} from "antd";
+import {Select,Modal} from "antd";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
 import { Radio,Input,Button } from 'antd';
 import { Checkbox } from 'antd';
+import ModalEmpl from ".//ModalEmpl"
 
 
 const { TextArea } = Input;
@@ -20,7 +21,8 @@ class NewProject extends React.Component{
         type:'',
         state_project:'',
         availability:'',
-        vp:''
+        vp:'',
+        
     }
     loadDate = async () =>{
         let myHeaders = new Headers();
@@ -148,7 +150,7 @@ class NewProject extends React.Component{
     componentDidMount() {
         this.loadDate()
     }
-
+    
     render() {
         const animatedComponents = makeAnimated();
         // console.log(this.state)
@@ -379,7 +381,7 @@ class NewProject extends React.Component{
                                             onClick={() => document.location = '/cabinet/admin/register'}>Отмена
                                     </Button>
                                 </div>
-
+                                
                             </div>
                         </div>
                     </div>

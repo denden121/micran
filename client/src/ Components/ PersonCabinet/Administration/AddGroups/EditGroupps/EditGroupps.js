@@ -25,7 +25,7 @@ const Fields =(props)=>{
                 <div className="text-left" >
                     {checkBoxes.map((box)=>{
                         return <div>
-                            <Checkbox style={{ lineHeight: '32px' }} value={box.pk} checked={box.checked} onChange={props.onChangeCheckBox} >
+                            <Checkbox style={{ lineHeight: '32px' }} value={box.pk} defaultChecked={box.checked} onChange={props.onChangeCheckBox} >
                                 {box.name} {box.code}
                             </Checkbox>
                         </div>
@@ -51,17 +51,20 @@ const  EditGroups = (props) => {
                                     layout="horizontal"
                                 >
                                     <Form.Item label="Название">
-                                        <input defaultValue={props.date.name} className="form-control form-control-sm"></input>
+                                        <input defaultValue={props.date.name} id={"input-name"} className="form-control form-control-sm"></input>
                                     </Form.Item>
                                     <Form.Item label="Описание" style={{marginTop: "-20px"}}>
                                         <textarea
+                                            id={"description"}
                                             defaultValue={props.date.description}
                                             // autoSize={{minRows: 2, maxRows: 8}}
                                         />
                                     </Form.Item>
                                     <hr/>
                                     <br/>
-                                    <Fields items = {props.date.groups_actions}/>
+                                    <Fields
+                                        onChangeCheckBox = {props.onChangeCheckBox}
+                                        items = {props.date.groups_actions}/>
                                 </Form>
                             </div>
                         </div>
