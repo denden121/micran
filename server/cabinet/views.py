@@ -505,8 +505,9 @@ def change_group_view(request, group_id):
             if group.is_valid():
                 group.save(commit=False)
                 if 'actions' in request.POST:
+                    print(request.POST.get('actions'))
                     actions = json.loads(request.POST.get('actions'))
-                    for key, value in actions:
+                    for key, value in actions.items():
                         if value:
                             action = Action.objects.get(pk=int(key))
                             group_obj.actions.add(action)

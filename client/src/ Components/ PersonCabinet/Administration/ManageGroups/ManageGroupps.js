@@ -15,7 +15,25 @@ class ManageGroups extends React.Component{
     };
 
     handleOk = e => {
-        console.log(e);
+        const nameGroup = document.querySelector('#input-name').value
+        const description = document.querySelector('#description').value
+        const token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        let formdata = new FormData();
+        formdata.append("name", nameGroup);
+        formdata.append("actions", JSON.stringify(this.state.changed_date));
+        formdata.append("description",description);
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+        fetch(`http://127.0.0.1:8000/groups/${this.state.date.pk}/change/`, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
         this.setState({
             visible: false,
         });
@@ -25,6 +43,7 @@ class ManageGroups extends React.Component{
         console.log(e);
         this.setState({
             visible: false,
+            changed_date:{}
         });
     };
 
@@ -42,6 +61,16 @@ class ManageGroups extends React.Component{
             .then(result =>{
                 this.setState({groups:result})
             })
+    }
+    onChangeCheckBox=(e)=>{
+        let temp = {...this.state.changed_date}
+        temp[e.target.value]  = e.target.checked
+        if (e.target.defaultChecked === e.target.checked){
+            delete temp[e.target.value]
+        }
+        console.log(temp)
+        console.log(JSON.stringify(temp))
+        this.setState({changed_date:temp})
     }
     loadSelectGroup=(pk)=>{
         let token = localStorage.getItem('token')
@@ -62,17 +91,13 @@ class ManageGroups extends React.Component{
     }
     onClickEditGroup=(pk)=>{
         this.showModal()
-        // let temp = {pk:pk}
-        // console.log(pk)
-        if (this.state.actions === {}){
-            this.loadActions()
-        }
         this.loadSelectGroup(pk)
     }
     state = {
         groups:{},
         actions:{},
-        date:{}
+        date:{},
+        changed_date:{}
     }
     render(){
         return(
@@ -85,6 +110,7 @@ class ManageGroups extends React.Component{
                     width={900}
                 >
                     <EditGroups
+                        onChangeCheckBox = {this.onChangeCheckBox}
                         date = {this.state.date}
                     />
                 </Modal>
