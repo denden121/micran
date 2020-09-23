@@ -40,7 +40,7 @@ def build_level(subdepartment_id, lvl):
         return data
 
 
-def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary=0):
+def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary_flag=0):
     department = Department.objects.get(pk=subdepartment_id)
     if int(department.subdepartment_code) > 0:
         lvl += 1
@@ -93,7 +93,7 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary=0):
         else:
             users_field['time_norm'] = 0
         users_field['time_system'] = time_system
-        if salary:
+        if salary_flag:
             users_field['salary'] = get_salary_fields(worker, month, year)
         users.append(users_field)
     data['users'] = users

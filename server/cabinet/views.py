@@ -53,7 +53,8 @@ def salary_new_view(request):
     date = request.GET.get("date")
     for department in departments:
         data.append(build_level_with_user(department.id, 1, date, 1, 1))
-    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+    output = get_endpoint_department(data, [])
+    return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
 
 def get_time_from_reports(profile):
@@ -123,13 +124,6 @@ def check_group_name(request):
 def check_admin_view(request):
     user = get_user_jwt(request)
     return HttpResponse(get_access(100, user))
-
-
-def get_user_jwt(request):
-    token = request.headers.get('Authorization')
-    validated_token = JWTAuthentication().get_validated_token(token)
-    user = JWTAuthentication().get_user(validated_token)
-    return user
 
 
 @csrf_exempt
@@ -542,9 +536,11 @@ def change_group_view(request, group_id):
                                                    'code': action.num, 'checked': False})
                     group_actions_output.append(
                         {'pk': group_action.pk, 'name': group_action.name, 'actions': actions_output})
-                data = {'pk': group_obj.pk, 'name': group_obj.name,
-                        'description': group_obj.description, 'users': users, 'groups_actions': group_actions_output}
-                return HttpResponse(json.dumps(data))
+
+                fields = {'name': group_obj.name, 'description': group_obj.description,
+                          'users': users, 'groups_actions': group_actions_output}
+                data = [{'pk': group_obj.pk, 'fields': fields}]
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf8"))
 
 
 @csrf_exempt
@@ -592,7 +588,7 @@ def groups_with_permission(request):
                     actions_output.append(action.action + ' ' + str(action.num))
                 fields = {'name': group.name, 'users': users, 'description': group.description,
                           'actions': actions_output}
-                data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+                data.append({'pk': group.pk, 'fields': fields})
             return HttpResponse(json.dumps(data))
     if request.method == "POST":
         pk = request.POST.get('pk')
@@ -1000,8 +996,7 @@ def workers_subdepartment(request, subdepartment_id):
 
 @csrf_exempt
 def workers_for_reports(request, department_id):
-    # user = get_user_jwt(request)
-    user = True
+    user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             date = request.GET.get('date')
