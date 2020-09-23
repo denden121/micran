@@ -16,6 +16,8 @@ def get_salary_fields(user, month, year):
 
 def get_endpoint_department(data, output):
     if 'subdepartments' in data:
+        fields = {"pk": data["pk"], "code": data["code"], "name": data["name"], "users": data["users"]}
+        output.append(fields)
         for i in range(len(data['subdepartments'])):
             get_endpoint_department(data['subdepartments'][i], output)
         return output
@@ -42,10 +44,10 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary=0):
     department = Department.objects.get(pk=subdepartment_id)
     if int(department.subdepartment_code) > 0:
         lvl += 1
-    if lvl == 0:
-        data = {}
-    else:
-        data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
+    # if lvl == 0:
+    #     data = {}
+    # else:
+    data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
     subdepartments_objects = []
     users = []
     month, year = date.split('-')

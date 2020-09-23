@@ -50,7 +50,7 @@ def departament_new_view(request):
 def salary_new_view(request):
     departments = Department.objects.filter(subdepartment_code='0')
     data = []
-    date = f'{datetime.now().month}-{datetime.now().year}'
+    date = request.GET.get("date")
     for department in departments:
         data.append(build_level_with_user(department.id, 1, date, 1, 1))
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
@@ -506,7 +506,7 @@ def change_group_view(request, group_id):
                 group.save(commit=False)
                 if 'actions' in request.POST:
                     actions = json.loads(request.POST.get('actions'))
-                    for key, value in actions:
+                    for key, value in actions.items():
                         if value:
                             action = Action.objects.get(pk=int(key))
                             group_obj.actions.add(action)
