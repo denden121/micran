@@ -503,7 +503,7 @@ def change_group_view(request, group_id):
             group_obj = Group.objects.get(pk=group_id)
             group = GroupForm(request.POST, instance=group_obj)
             if group.is_valid():
-                group.save(commit=False)
+                group.save()
                 if 'actions' in request.POST:
                     print(request.POST.get('actions'))
                     actions = json.loads(request.POST.get('actions'))
