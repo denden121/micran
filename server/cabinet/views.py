@@ -47,13 +47,14 @@ def departament_new_view(request):
     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
-def salary_new_view(request):
-    departments = Department.objects.filter(subdepartment_code='0')
+def salary_new_view(request, department_id):
+    department = Department.objects.get(subdepartment_code='0')
     data = []
-    date = f'{datetime.now().month}-{datetime.now().year}'
-    for department in departments:
-        data.append(build_level_with_user(department.id, 1, date, 1, 1))
-    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+    date = request.GET.get("date")
+    salary_flag = 1
+    data = build_level_with_user(department.id, 0, date, 1, salary_flag)
+    output = get_endpoint_department(data, [])
+    return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
 
 def get_time_from_reports(profile):
@@ -123,13 +124,6 @@ def check_group_name(request):
 def check_admin_view(request):
     user = get_user_jwt(request)
     return HttpResponse(get_access(100, user))
-
-
-def get_user_jwt(request):
-    token = request.headers.get('Authorization')
-    validated_token = JWTAuthentication().get_validated_token(token)
-    user = JWTAuthentication().get_user(validated_token)
-    return user
 
 
 @csrf_exempt
@@ -503,10 +497,11 @@ def change_group_view(request, group_id):
             group_obj = Group.objects.get(pk=group_id)
             group = GroupForm(request.POST, instance=group_obj)
             if group.is_valid():
-                group.save(commit=False)
+                group.save()
                 if 'actions' in request.POST:
+                    print(request.POST.get('actions'))
                     actions = json.loads(request.POST.get('actions'))
-                    for key, value in actions:
+                    for key, value in actions.items():
                         if value:
                             action = Action.objects.get(pk=int(key))
                             group_obj.actions.add(action)
@@ -523,27 +518,16 @@ def change_group_view(request, group_id):
                 #     group_obj.participants.clear()
                 actions_group = group_obj.actions.all()
                 participants = group_obj.participants.all()
-                group_actions = GroupAction.objects.all()
                 users = []
-                actions_output = []
+                actions = []
+                for action in actions_group:
+                    actions.append(action.action + ' ' + str(action.num))
                 for profile in participants:
-                    users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name,
-                                  'pk': profile.pk})
-                group_actions_output = []
-                for group_action in group_actions:
-                    actions_output = []
-                    for action in group_action.available_actions.all():
-                        if action in actions_group:
-                            actions_output.append({'pk': action.pk, 'name': action.action,
-                                                   'code': action.num, 'checked': True})
-                        else:
-                            actions_output.append({'pk': action.pk, 'name': action.action,
-                                                   'code': action.num, 'checked': False})
-                    group_actions_output.append(
-                        {'pk': group_action.pk, 'name': group_action.name, 'actions': actions_output})
-                data = {'pk': group_obj.pk, 'name': group_obj.name,
-                        'description': group_obj.description, 'users': users, 'groups_actions': group_actions_output}
-                return HttpResponse(json.dumps(data))
+                    users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name})
+                fields = {'name': group_obj.name, 'description': group_obj.description,
+                          'users': users, 'actions': actions}
+                data = {'pk': group_obj.pk, 'fields': fields}
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf8"))
 
 
 @csrf_exempt
@@ -591,7 +575,7 @@ def groups_with_permission(request):
                     actions_output.append(action.action + ' ' + str(action.num))
                 fields = {'name': group.name, 'users': users, 'description': group.description,
                           'actions': actions_output}
-                data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+                data.append({'pk': group.pk, 'fields': fields})
             return HttpResponse(json.dumps(data))
     if request.method == "POST":
         pk = request.POST.get('pk')
@@ -999,8 +983,7 @@ def workers_subdepartment(request, subdepartment_id):
 
 @csrf_exempt
 def workers_for_reports(request, department_id):
-    # user = get_user_jwt(request)
-    user = True
+    user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             date = request.GET.get('date')

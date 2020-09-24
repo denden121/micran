@@ -16,6 +16,8 @@ def get_salary_fields(user, month, year):
 
 def get_endpoint_department(data, output):
     if 'subdepartments' in data:
+        fields = {"pk": data["pk"], "code": data["code"], "name": data["name"], "users": data["users"]}
+        output.append(fields)
         for i in range(len(data['subdepartments'])):
             get_endpoint_department(data['subdepartments'][i], output)
         return output
@@ -38,14 +40,14 @@ def build_level(subdepartment_id, lvl):
         return data
 
 
-def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary=0):
+def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary_flag=0):
     department = Department.objects.get(pk=subdepartment_id)
     if int(department.subdepartment_code) > 0:
         lvl += 1
-    if lvl == 0:
-        data = {}
-    else:
-        data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
+    # if lvl == 0:
+    #     data = {}
+    # else:
+    data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
     subdepartments_objects = []
     users = []
     month, year = date.split('-')
@@ -91,13 +93,13 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary=0):
         else:
             users_field['time_norm'] = 0
         users_field['time_system'] = time_system
-        if salary:
+        if salary and salary_flag == 1:
             users_field['salary'] = get_salary_fields(worker, month, year)
         users.append(users_field)
     data['users'] = users
     if subdepartments:
         for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date))
+            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date, 0, salary_flag))
         data['subdepartments'] = subdepartments_objects
         return data
     else:
