@@ -10,27 +10,38 @@ class Register extends React.Component{
     }
     state = {
         projects:{},
+        select_project: {},
         visible: false
     }
-    showModal = () => {
+    showModal = (e) => {
+        console.log(e)
+        let a = {...this.state.projects[e]}
         this.setState({
-          visible: true,
+            visible: true,
+            select_project: a
         });
-      };
-    
-      handleOk = e => {
+    };
+    onChangeName=(e)=>{
+        console.log(e.target)
+        console.log(e.target.value)
+        let a  = {...this.state.select_project}
+        a.fields.name = e.target.value
+        this.setState({select_project:a})
+    }
+
+    handleOk = e => {
         console.log(e);
         this.setState({
-          visible: false,
+            visible: false,
         });
-      };
-    
-      handleCancel = e => {
+    };
+
+    handleCancel = e => {
         console.log(e);
         this.setState({
-          visible: false,
+            visible: false
         });
-      };
+    };
     loadProjects = async () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
@@ -67,21 +78,21 @@ class Register extends React.Component{
                             <button type="button" className="btn btn-primary btn-sm" style={{marginLeft:"5px"}}>Экспорт результатов</button>
                         </div>
                         <hr className="normal"/>
-                        
+
                         <RegisterTable projects = {this.state.projects} onClickShowModal={this.showModal}/>
                         <Modal
-                        title="Редактирование проекта"
-                        visible={this.state.visible}
-                        onOk={this.handleOk}
-                        onCancel={this.handleCancel}
-                        width={720}
-                        cancelText="Отмена"
-                        okText="Сохранить" >
-                            <ModalEmp />
+                            title="Редактирование проекта"
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            onCancel={this.handleCancel}
+                            width={720}
+                            cancelText="Отмена"
+                            okText="Сохранить" >
+                            <ModalEmp onChangeName={this.onChangeName} personDate = {this.state.select_project}/>
                         </Modal>
                     </div>
                 </div>
-                
+
             </div>
         )
     }

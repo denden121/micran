@@ -51,7 +51,7 @@ const  EditGroups = (props) => {
                                     layout="horizontal"
                                 >
                                     <Form.Item label="Название">
-                                        <input defaultValue={props.date.name} id={"input-name"} className="form-control form-control-sm"></input>
+                                        <input className="form-control form-control-sm">ffff</input>
                                     </Form.Item>
                                     <Form.Item label="Описание" style={{marginTop: "-20px"}}>
                                         <textarea

@@ -11,10 +11,11 @@ const ModalEmpl =(props)=>{
             wrapperCol={{ span: 12}}
             layout="horizontal">
                 <Form.Item label="Название проекта">
-                    <Input></Input>
+                    <Input id={'name'} onChange={props.onChangeName} value={props.personDate.fields.name}></Input>
                 </Form.Item>     
                 <Form.Item label="Направления" style={{marginTop:"-10px"}}>
                     <Select
+                        defaultValue={props.personDate.fields.direction}
                     placeholder="Выбрать"
                     ></Select>
                 </Form.Item>
@@ -52,6 +53,7 @@ const ModalEmpl =(props)=>{
                 </Form.Item>   
                 <Form.Item label="Заказ на производство" style={{marginTop:"-10px"}}>
                 <TextArea
+
                     autoSize={{ minRows: 1, maxRows: 8 }}
                     placeholder="Введите текст"/>
                 </Form.Item>       

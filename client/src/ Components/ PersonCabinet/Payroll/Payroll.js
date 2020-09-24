@@ -80,6 +80,16 @@ class Payroll extends React.Component{
                 })
                 this.setState({subdepartments: subdepartments})})
             .catch(error => console.log('error', error))
+        // fetch(`http://127.0.0.1:8000/departments/new`, requestOptions)
+        //     .then(response =>  response.json())
+        //     .then(result => {
+        //         console.log('sub',result)
+        //         let subdepartments = Array.from(result).map((subdepartment)=>{
+        //             // console.log(subdepartment)
+        //             return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
+        //         })
+        //         this.setState({subdepartments: subdepartments})})
+        //     .catch(error => console.log('error', error))
     }
     loadAllSalary = ()=>{
         let token = localStorage.getItem('token')
