@@ -36,6 +36,7 @@ const PayrollCheck =(props)=>{
             {/*{console.log('log',props.selectDepartment)}*/}
             <div className="col-md-6 col-lg-12 text-left">
                 <Select
+                    onChange={props.onChangeSelectDepartments}
                     // defaultValue={props.selectDepartment.name}
                     // defaultActiveFirstOption={props.selectDepartment}
                     options = {props.departments}

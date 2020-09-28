@@ -11,7 +11,7 @@ const Groups = (props) =>{
                 <td>{groups.fields.name}</td>
                 <td>{groups.fields.description}</td>
                 <td>{groups.fields.users.join(', ')}</td>
-                <td><a onClick={props.onClickEditGroup.bind(this,groups.pk)}><FormOutlined/></a></td>
+                <td><a onClick={props.onClickEditGroup.bind(this,groups.pk,index)}><FormOutlined/></a></td>
             </tr>
         )
     })

@@ -8,15 +8,30 @@ class ManageGroups extends React.Component{
     componentDidMount() {
         this.loadGroups()
     }
-    showModal = () => {
+    showModal = (index) => {
+        // console.log(index)
+        // console.log('fff',document.querySelectorAll('#input-name-group'))
+        // document.getElementById('input-name').value = 'fdsf'
         this.setState({
             visible: true,
+            select_index:index
         });
+        this.setState({
+            visible: false,
+            // select_index:index
+        });
+        this.setState({
+            visible: true,
+            // select_index:index
+        });
+
     };
 
     handleOk = e => {
         const nameGroup = document.querySelector('#input-name').value
+        document.querySelector('#input-name').value = ''
         const description = document.querySelector('#description').value
+        document.querySelector('#description').value = ''
         const token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -33,6 +48,12 @@ class ManageGroups extends React.Component{
         fetch(`http://127.0.0.1:8000/groups/${this.state.date.pk}/change/`, requestOptions)
             .then(response => response.json())
             .then(result => console.log(result))
+            .then(result =>{
+                console.log(result)
+                let temp = [...this.state.groups]
+                temp[this.state.select_index] = result
+                this.setState({groups:temp})
+            })
             .catch(error => console.log('error', error));
         this.setState({
             visible: false,
@@ -59,6 +80,7 @@ class ManageGroups extends React.Component{
         fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
             .then(response => response.json())
             .then(result =>{
+                console.log(result)
                 this.setState({groups:result})
             })
     }
@@ -89,12 +111,15 @@ class ManageGroups extends React.Component{
             .catch(error => console.log('error', error))
 
     }
-    onClickEditGroup=(pk)=>{
-        this.showModal()
-        this.loadSelectGroup(pk)
+    onClickEditGroup=(pk,index)=>{
+        this.showModal(index)
+
+
+        console.log('fff',document.querySelector('#input-name-group'))
     }
     state = {
         groups:{},
+        select_index:'',
         actions:{},
         date:{},
         changed_date:{}
@@ -102,6 +127,7 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
+                {/*<input type="text">dadsadsa</input>*/}
                 <Modal
                     title="Редактирование групп"
                     visible={this.state.visible}
