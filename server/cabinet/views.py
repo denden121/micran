@@ -48,8 +48,7 @@ def departament_new_view(request):
 
 
 def salary_new_view(request, department_id):
-    department = Department.objects.get(subdepartment_code='0')
-    data = []
+    department = Department.objects.get(pk=department_id)
     date = request.GET.get("date")
     salary_flag = 1
     data = build_level_with_user(department.id, 0, date, 1, salary_flag)
