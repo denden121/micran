@@ -9,11 +9,22 @@ class ManageGroups extends React.Component{
         this.loadGroups()
     }
     showModal = (index) => {
-        console.log(index)
+        // console.log(index)
+        // console.log('fff',document.querySelectorAll('#input-name-group'))
+        // document.getElementById('input-name').value = 'fdsf'
         this.setState({
             visible: true,
             select_index:index
         });
+        this.setState({
+            visible: false,
+            // select_index:index
+        });
+        this.setState({
+            visible: true,
+            // select_index:index
+        });
+
     };
 
     handleOk = e => {
@@ -101,7 +112,9 @@ class ManageGroups extends React.Component{
     }
     onClickEditGroup=(pk,index)=>{
         this.showModal(index)
-        this.loadSelectGroup(pk)
+
+
+        console.log('fff',document.querySelector('#input-name-group'))
     }
     state = {
         groups:{},
@@ -113,6 +126,7 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
+                {/*<input type="text">dadsadsa</input>*/}
                 <Modal
                     title="Редактирование групп"
                     visible={this.state.visible}
