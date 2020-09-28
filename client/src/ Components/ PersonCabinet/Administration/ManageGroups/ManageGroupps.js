@@ -31,7 +31,7 @@ class ManageGroups extends React.Component{
             redirect: 'follow'
         };
         fetch(`http://127.0.0.1:8000/groups/${this.state.date.pk}/change/`, requestOptions)
-            .then(response => response.text())
+            .then(response => response.json())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
         this.setState({
