@@ -622,37 +622,20 @@ def logs(request):
 
 
 @csrf_exempt
-def salary(request):
+def salary_norm(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.all()
-            data = []
-            output = []
-            year = request.GET.get('year')
-            month = request.GET.get('month')
+            date = request.GET.get('date')
+            month, year = date.split('-')
             salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
-            for worker in workers:
-                reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
-                report_time = 0
-                for report in reports:
-                    report_time += report.hour
-                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
-                                                                    common_part=salary_common)
-                direction = worker.direction.direction_code
-                salary.time_from_report = report_time
-                field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
-                         'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
-                         'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
-                         'time_norm': salary.time_norm, 'penalty': salary.penalty,
-                         'is_penalty': salary.is_penalty, 'department': worker.department.department_name,
-                         'direction': direction,
-                         'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
-                         'award': salary.award, 'salary_hand': salary.salary_hand}
-                data.append({'pk': worker.pk, 'person': field})
-            output.append({'fields': {'days_norm': salary_common.days_norm_common,
-                                      'time_norm': salary_common.time_norm_common, 'persons': data}})
-            return HttpResponse(json.dumps(output))
+            data = {'days_norm': salary_common.days_norm_common, 'time_norm': salary_common.time_norm_common}
+            return HttpResponse(json.dumps(data))
+
+
+def change_salary(request):
+    user = get_user_jwt(request)
+    if user:
         if request.method == "POST":
             person = request.POST.get('person')
             person = Profile.objects.get(pk=person)
