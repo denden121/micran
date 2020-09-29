@@ -32,7 +32,9 @@ const ListEmp =(props)=>{
                     <tr>
                     <th scope="col">№ БД</th>
                     <th scope="col">№ 1С</th>
-                    <th scope="col">ФИО</th>
+                    <th scope="col">ФИО
+                    <input onChange={props.onChangeSearch}/>
+                    </th>
                     <th scope="col">Дата труд-ва</th>
                     <th scope="col">Смена</th>
                     <th scope="col">НИИСЭС</th>
