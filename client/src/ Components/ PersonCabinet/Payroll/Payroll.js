@@ -19,7 +19,7 @@ class Payroll extends React.Component{
         hideAnotherPeople:false
     }
     componentDidMount() {
-        this.loadAllSalary()
+        this.loadNorm()
         this.loadDepartments()
     }
     loadNativeDepartment = () => {
@@ -111,7 +111,23 @@ class Payroll extends React.Component{
             })
             .catch(error => console.log('error', error))
     }
-    loadAllSalary = ()=>{
+    loadNorm = ()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        const date = localStorage.getItem('date').replace(' ','-')
+        const url = `http://127.0.0.1:8000/salary/norm/?date=${date}`
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(result =>{
+                console.log(result)
+                this.setState({norm:result})})
+            .catch(error => console.log('error', error));
     }
     onChangeSalary = (event) => {
         // console.log(event.target.type)
@@ -331,8 +347,8 @@ class Payroll extends React.Component{
                         {/* </div>*/}
                          <br/>
                          <Norma
-                             normDays = {this.state.allSalary.days_norm}
-                             normTime = {this.state.allSalary.time_norm}
+                             normDays = {this.state.norm.days_norm}
+                             normTime = {this.state.norm.time_norm}
                              onBlurNormDay = {this.onBlurNormDay}
                              onBlurNormHours = {this.onBlurNormHours}
                          />
