@@ -22,9 +22,9 @@ const Fields =(props)=>{
             <label className="col-sm-2" name="checkbox-group">{item.name}</label>  
                 <div className="col-sm-10" >
                     {checkBoxes.map((box)=>{
-                        return <div>
+                        return <div className="col-sm-2 text-left" style={{paddingLeft:"0px"}}>
                             <Checkbox  value={box.pk} defaultChecked={box.checked} onChange={props.onChangeCheckBox} >
-                                {box.name} {box.code}
+                               {box.name}, {box.code}
                             </Checkbox>
                         </div>
                     })}
@@ -75,28 +75,41 @@ class  EditGroups extends React.Component{
     render() {
         return (
             <div className="container-fluid">
-                <div className="form">
-                    <div class="form-group row">
+                <div className="row">                    
+                    <div className="col-lg-12">
+                    <Card>
+                    <div className="form">
+                    <div className="form-group row">
                         <label for="input-name" className="col-sm-2 col-form-label">Название</label>
-                        <div class="col-sm-10">
-                            <input defaultValue={this.state.group.name} type="text" id={'input-name-group'} className="form-control-plaintext"/>
+                        <div className="col-sm-9">
+                            <input defaultValue={this.state.group.name} type="text" id={'input-name-group'} className="form-control form-control-sm"/>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="description" class="col-sm-2 col-form-label">Описание</label>
-                        <div class="col-sm-10">
-                            <textarea
+                        <label for="description" className="col-sm-2 col-form-label">Описание</label>
+                        <div class="col-sm-9">
+                            
+                            <TextArea
                                 defaultValue={this.state.group.description}
                                 id={"description"}
                                 autoSize={{minRows: 1, maxRows: 8}} Default
+                                className="from-control"
                             >
-                            </textarea>
+                            </TextArea>
                         </div>
                     </div>
                     <Fields
                         onChangeCheckBox={this.onChangeCheckBox}
                         items={this.state.group.groups_actions}/>
                 </div>
+                <div className="text-right" style={{marginRight:"70px"}}>
+                <button className="btn btn-info btn-sm">Сохранить</button>
+                </div>
+                
+                </Card>
+                    </div>                    
+                </div>
+               
             </div>
         )
     }
