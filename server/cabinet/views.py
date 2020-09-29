@@ -48,8 +48,7 @@ def departament_new_view(request):
 
 
 def salary_new_view(request, department_id):
-    department = Department.objects.get(subdepartment_code='0')
-    data = []
+    department = Department.objects.get(pk=department_id)
     date = request.GET.get("date")
     salary_flag = 1
     data = build_level_with_user(department.id, 0, date, 1, salary_flag)
@@ -834,16 +833,12 @@ def subdepartment_view(request):
 @csrf_exempt
 def subdepartment_from_departments_view(request, department_id):
     user = get_user_jwt(request)
+    date = 'default'
     if user:
         if request.method == "GET":
-            department = Department.objects.get(pk=department_id)
-            subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-            data = []
-            for subdepartment in subdepartments:
-                data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.department_code,
-                                                                'name': subdepartment.department_name}})
-            print(data)
-            return HttpResponse(json.dumps(data))
+            data = build_level_with_user(department_id, 0, date, only_user=0, salary_flag=0)
+            data = get_endpoint_department(data, [])
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
 @csrf_exempt
@@ -853,7 +848,7 @@ def direction_view(request):
         if request.method == "GET":
             directions = Direction.objects.all()
             data = serializers.serialize('json', directions)
-            return HttpResponse(data)
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt

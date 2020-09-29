@@ -8,15 +8,11 @@ class ManageGroups extends React.Component{
     componentDidMount() {
         this.loadGroups()
     }
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    };
-
     handleOk = e => {
         const nameGroup = document.querySelector('#input-name').value
+        document.querySelector('#input-name').value = ''
         const description = document.querySelector('#description').value
+        document.querySelector('#description').value = ''
         const token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -31,19 +27,17 @@ class ManageGroups extends React.Component{
             redirect: 'follow'
         };
         fetch(`http://127.0.0.1:8000/groups/${this.state.date.pk}/change/`, requestOptions)
-            .then(response => response.text())
+            .then(response => response.json())
             .then(result => console.log(result))
+            .then(result =>{
+                console.log(result)
+                let temp = [...this.state.groups]
+                temp[this.state.select_index] = result
+                this.setState({groups:temp})
+            })
             .catch(error => console.log('error', error));
         this.setState({
             visible: false,
-        });
-    };
-
-    handleCancel = e => {
-        console.log(e);
-        this.setState({
-            visible: false,
-            changed_date:{}
         });
     };
 
@@ -59,42 +53,19 @@ class ManageGroups extends React.Component{
         fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
             .then(response => response.json())
             .then(result =>{
+                console.log(result)
                 this.setState({groups:result})
             })
     }
-    onChangeCheckBox=(e)=>{
-        let temp = {...this.state.changed_date}
-        temp[e.target.value]  = e.target.checked
-        if (e.target.defaultChecked === e.target.checked){
-            delete temp[e.target.value]
-        }
-        console.log(temp)
-        console.log(JSON.stringify(temp))
-        this.setState({changed_date:temp})
-    }
-    loadSelectGroup=(pk)=>{
-        let token = localStorage.getItem('token')
-        let myHeaders = new Headers()
-        myHeaders.append("Authorization", token)
-        let requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow'
-        }
-        fetch(`http://127.0.0.1:8000/groups/${pk}/`, requestOptions)
-            .then(response =>  response.json())
-            .then(result => {
-                console.log('date',result)
-                this.setState({date: result})})
-            .catch(error => console.log('error', error))
 
-    }
+
     onClickEditGroup=(pk)=>{
-        this.showModal()
-        this.loadSelectGroup(pk)
+        document.location='/cabinet/admin/edit_groups'
+        localStorage.setItem('selectGroup',pk)
     }
     state = {
         groups:{},
+        select_index:'',
         actions:{},
         date:{},
         changed_date:{}
@@ -102,18 +73,6 @@ class ManageGroups extends React.Component{
     render(){
         return(
             <div className="container-fluid">
-                <Modal
-                    title="Редактирование групп"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    width={900}
-                >
-                    <EditGroups
-                        onChangeCheckBox = {this.onChangeCheckBox}
-                        date = {this.state.date}
-                    />
-                </Modal>
                <div className="text-left">
                     <div className="text-left">
                             <button className="btn btn-sm btn-primary " onClick={()=>{document.location ='/cabinet/admin/add_groups'}}>Создать новую группу</button>
