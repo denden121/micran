@@ -8,7 +8,7 @@ const ListProjects = (props) => {
         return(
             <tr>
                 <td>{project.fields.direction}</td>
-                <td><a onClick={props.onClickShowModal.bind(this,index)} style={{cursor:"pointer"}}>{project.fields.name}</a></td>
+                <td>{project.fields.name}</td>
                 <td>{project.fields.manager}</td>
                 <td>{project.fields.chief_designer}</td>
                 <td>{project.fields.deputy_chief_designer}</td>
@@ -51,7 +51,10 @@ const RegisterTable = (props) =>{
                                 </tr>
                             </thead>
                             <tbody className="reestr">
-                                <ListProjects onClickShowModal={props.onClickShowModal} projects = {props.projects}/>
+                                <ListProjects
+                                    onClickEdit = {props.onClickEdit}
+                                    onClickShowModal={props.onClickShowModal}
+                                    projects = {props.projects}/>
                             </tbody>
                         </table>
                     </div>
