@@ -126,8 +126,10 @@ class  EditGroups extends React.Component{
                         onChangeCheckBox={this.onChangeCheckBox}
                         items={this.state.group.groups_actions}/>
                 </div>
-                <div className="text-right" style={{marginRight:"70px"}}>
-                    <button onClick={this.handleOk} className="btn btn-info btn-sm">Сохранить</button>
+                <br/>
+                <div className="text-center">
+                    <button onClick={this.handleOk} className="btn btn-success btn-sm" style={{marginRight:"5px"}}>Сохранить</button>
+                    <button  className="btn btn-secondary btn-sm" onClick={() => document.location = '/cabinet/admin/view_groups'}>Отмена</button>
                 </div>
                 
                 </Card>

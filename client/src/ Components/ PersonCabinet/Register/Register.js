@@ -62,8 +62,9 @@ class Register extends React.Component{
     onClickBack= () =>{
         document.location='/cabinet/admin/register'
     }
-    onClickEdit= () =>{
+    onClickEdit= (pk) =>{
         document.location='/cabinet/admin/edit_register'
+        localStorage.setItem('selectGroup',pk)
     }
     render(){
         console.log(this.state)

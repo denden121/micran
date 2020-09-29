@@ -1,5 +1,6 @@
 import React from "react"
 import "./RegisterTable.css"
+import {FormOutlined} from '@ant-design/icons';
 
 const ListProjects = (props) => {
     let result = Array.from(props.projects)
@@ -18,6 +19,7 @@ const ListProjects = (props) => {
                 <td>{project.fields.status ? 'Зыкрыт' : 'Открыт'}</td>
                 <td>{project.fields.report_availability ? 'Недоступен' : 'Доступен'}</td>
                 <td>{project.fields.acceptance_vp?'да':'нет*'}</td>
+                <td><a onClick={props.onClickEdit.bind(this,project.pk)}><FormOutlined/></a></td>
             </tr>
         )
     })
@@ -45,6 +47,7 @@ const RegisterTable = (props) =>{
                                     <th style={{width:"55px"}}>Сост-е</th>
                                     <th style={{width:"60px"}}>В отчет</th>
                                     <th style={{width:"60px"}}>Приемка ВП</th>
+                                    <th>Ред</th>
                                 </tr>
                             </thead>
                             <tbody className="reestr">
