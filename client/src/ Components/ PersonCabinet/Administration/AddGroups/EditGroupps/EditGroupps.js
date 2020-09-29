@@ -36,28 +36,37 @@ const Fields =(props)=>{
 }
 const { TextArea } = Input;
 class  EditGroups extends React.Component{
-    constructor(props) {
-        super(props);
-        // state = {
-        //     pk:props.pk,
-        //     date:{}
-        // }
+    state={
+        group:{},
+        changed_date:{}
     }
-    loadGroups =  () =>{
-        let token = localStorage.getItem('token')
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", token);
+    onChangeCheckBox=(e)=>{
+        let temp = {...this.state.changed_date}
+        temp[e.target.value]  = e.target.checked
+        if (e.target.defaultChecked === e.target.checked){
+            delete temp[e.target.value]
+        }
+        console.log(temp)
+        console.log(JSON.stringify(temp))
+        this.setState({changed_date:temp})
+    }
+    loadSelectGroup=()=>{
+        const token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
         let requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
-        };
-        fetch("http://127.0.0.1:8000/admin/groups_admin/", requestOptions)
-            .then(response => response.json())
-            .then(result =>{
-                console.log(result)
-                this.setState({groups:result})
-            })
+        }
+        const pk = localStorage.getItem('selectGroup')
+        fetch(`http://127.0.0.1:8000/groups/${pk}/`, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                console.log('date',result)
+                this.setState({group: result})})
+            .catch(error => console.log('error', error))
+
     }
     componentDidMount() {
         this.loadSelectGroup()
@@ -70,23 +79,23 @@ class  EditGroups extends React.Component{
                     <div class="form-group row">
                         <label for="input-name" className="col-sm-2 col-form-label">Название</label>
                         <div class="col-sm-10">
-                            <input type="text" id={'input-name-group'} className="form-control-plaintext"/>
+                            <input defaultValue={this.state.group.name} type="text" id={'input-name-group'} className="form-control-plaintext"/>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="description" class="col-sm-2 col-form-label">Описание</label>
                         <div class="col-sm-10">
-                            <TextArea
+                            <textarea
+                                defaultValue={this.state.group.description}
                                 id={"description"}
-                                // defaultValue={props.date.description}
                                 autoSize={{minRows: 1, maxRows: 8}} Default
                             >
-                            </TextArea>
+                            </textarea>
                         </div>
                     </div>
-                    {/*<Fields*/}
-                    {/*    onChangeCheckBox={props.onChangeCheckBox}*/}
-                    {/*    items={props.date.groups_actions}/>*/}
+                    <Fields
+                        onChangeCheckBox={this.onChangeCheckBox}
+                        items={this.state.group.groups_actions}/>
                 </div>
             </div>
         )

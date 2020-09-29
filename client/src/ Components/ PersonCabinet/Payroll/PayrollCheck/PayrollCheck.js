@@ -3,6 +3,7 @@ import "../Payroll.css"
 import {Select} from "antd"
 
 const PayrollCheck =(props)=>{
+    console.log(props)
     // console.log('1111',props.selectDepartment.label)
     return(
         <div>
@@ -48,6 +49,7 @@ const PayrollCheck =(props)=>{
             <br/>
             <div className="col-md-6 col-lg-12 text-left">
                 <Select
+                    options={props.subdepartments}
                     placeholder="Выбрать"
                     style={{width:"100%"}}
                     className="text-left" >
