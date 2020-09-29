@@ -53,7 +53,6 @@ const RegisterTable = (props) =>{
                             <tbody className="reestr">
                                 <ListProjects
                                     onClickEdit = {props.onClickEdit}
-                                    onClickShowModal={props.onClickShowModal}
                                     projects = {props.projects}/>
                             </tbody>
                         </table>
