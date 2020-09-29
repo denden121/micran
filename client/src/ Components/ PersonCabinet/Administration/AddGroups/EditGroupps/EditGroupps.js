@@ -116,10 +116,9 @@ class  EditGroups extends React.Component{
                         <label for="description" className="col-sm-2 col-form-label">Описание</label>
                         <div class="col-sm-9">
                             <textarea className="form-control" 
-                            defaultValue={this.state.group.description}
-                            id={"description"}
-                            autoSize={{minRows: 1, maxRows: 8}} Default>
-
+                                defaultValue={this.state.group.description}
+                                id={"description"}
+                                autoSize={{minRows: 1, maxRows: 8}} Default>
                             </textarea>
                         </div>
                     </div>
