@@ -16,7 +16,11 @@ def get_salary_fields(user, month, year):
 
 def get_endpoint_department(data, output):
     if 'subdepartments' in data:
-        fields = {"pk": data["pk"], "code": data["code"], "name": data["name"], "users": data["users"]}
+        fields = {"pk": data["pk"], "code": data["code"], "name": data["name"]}
+        try:
+            fields["users"] = data["users"]
+        except KeyError:
+            pass
         output.append(fields)
         for i in range(len(data['subdepartments'])):
             get_endpoint_department(data['subdepartments'][i], output)
@@ -40,7 +44,7 @@ def build_level(subdepartment_id, lvl):
         return data
 
 
-def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary_flag=0):
+def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, salary_flag=0):
     department = Department.objects.get(pk=subdepartment_id)
     if int(department.subdepartment_code) > 0:
         lvl += 1
@@ -49,59 +53,61 @@ def build_level_with_user(subdepartment_id, lvl, date, only_user=0, salary_flag=
     # else:
     data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
     subdepartments_objects = []
-    users = []
-    month, year = date.split('-')
+    if date != 'default':
+        month, year = date.split('-')
     subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-    profiles = Profile.objects.filter(department=department)
-    for worker in profiles:
-        users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
-                       'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
-        if only_user:
-            continue
-        report_time = 0
-        flag = 0
-        salary = SalaryIndividual.objects.filter(date__month=month, date__year=year, person=worker)
-        if salary_flag != 1:
-            reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
-            if reports:
-                users_field['has_report'] = True
-            else:
-                users_field['has_report'] = False
-            for report in reports:
-                if report.status and flag != 2:
-                    flag = 1
-                if flag == 1:
-                    users_field[
-                        'banned'] = ' '.join([report.ban_id.first_name,
-                                              report.ban_id.last_name, report.ban_id.middle_name])
-                    users_field['report_status'] = report.status
-                    if report.check:
+    if only_user != 0:
+        users = []
+        profiles = Profile.objects.filter(department=department)
+        for worker in profiles:
+            users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
+                           'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
+            if only_user:
+                continue
+            report_time = 0
+            flag = 0
+            salary = SalaryIndividual.objects.filter(date__month=month, date__year=year, person=worker)
+            if salary_flag != 1:
+                reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
+                if reports:
+                    users_field['has_report'] = True
+                else:
+                    users_field['has_report'] = False
+                for report in reports:
+                    if report.status and flag != 2:
+                        flag = 1
+                    if flag == 1:
                         users_field[
-                            'checker'] = ' '.join([report.check_id.first_name,
-                                                   report.check_id.last_name, report.check_id.middle_name])
-                    flag = 1
-                report_time += report.hour
-            if flag == 0:
-                users_field['banned'] = ''
-                users_field['checker'] = ''
-            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=worker.user.pk)
-            time_system = 0
-            for time_card in times_cards:
-                time_system += time_card.hours_worked.hour
-            users_field['time_report'] = report_time
-            users_field['time_system'] = time_system
-            if salary:
-                users_field['time_norm'] = salary[0].time_norm
-            else:
-                users_field['time_norm'] = 0
-        if salary and salary_flag == 1:
-            users_field['position'] = worker.position
-            users_field.update(get_salary_fields(worker, month, year))
-        users.append(users_field)
-    data['users'] = users
+                            'banned'] = ' '.join([report.ban_id.first_name,
+                                                  report.ban_id.last_name, report.ban_id.middle_name])
+                        users_field['report_status'] = report.status
+                        if report.check:
+                            users_field[
+                                'checker'] = ' '.join([report.check_id.first_name,
+                                                       report.check_id.last_name, report.check_id.middle_name])
+                        flag = 1
+                    report_time += report.hour
+                if flag == 0:
+                    users_field['banned'] = ''
+                    users_field['checker'] = ''
+                times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=worker.user.pk)
+                time_system = 0
+                for time_card in times_cards:
+                    time_system += time_card.hours_worked.hour
+                users_field['time_report'] = report_time
+                users_field['time_system'] = time_system
+                if salary:
+                    users_field['time_norm'] = salary[0].time_norm
+                else:
+                    users_field['time_norm'] = 0
+            if salary and salary_flag == 1:
+                users_field['position'] = worker.position
+                users_field.update(get_salary_fields(worker, month, year))
+            users.append(users_field)
+        data['users'] = users
     if subdepartments:
         for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date, 0, salary_flag))
+            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date, only_user  , salary_flag))
         data['subdepartments'] = subdepartments_objects
         return data
     else:
