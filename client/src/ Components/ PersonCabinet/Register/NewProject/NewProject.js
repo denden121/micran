@@ -215,8 +215,8 @@ class NewProject extends React.Component{
                                             style={{width:"50%"}}
                                         />
                                     </div>
-                                    <div className="input-group mb-3 input-group-sm">
-                                        <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Зам.главного
+                                    <div className="input-group mb-3 input-group-sm ">
+                                        <label className="napr col-sm-4" style={{fontSize: "16px"}}>Зам.главного
                                             конструктора</label>
                                         <Select
                                             onChange = {this.onChangeSelectDeputyDesigner}
@@ -224,7 +224,8 @@ class NewProject extends React.Component{
                                             components={animatedComponents}
                                             options={this.state.people.length ? this.state.people :''}
                                             placeholder="Выбрать"
-                                            style={{width:"50%"}}
+                                            style={{width:"100%"}}
+                                            className="col-lg-8"
                                         />
                                     </div>
                                     <hr className="normal"/>

@@ -42,6 +42,7 @@ import {
 } from '@ant-design/icons';
 import Calendar from "../Navigation/Calendar/Calendar"
 import picture from "../MainPage/micran.svg"
+import EditRegister from "../Register/EditRegister/EditRegister"
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -199,7 +200,7 @@ class Main extends Component{
                                 <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
                                 <Route path='/cabinet/admin/register' exact  component = {Register}/>
                                 <Route path='/cabinet/admin/new_project' exact  component = {NewProject}/>
-                                <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>
+                                <Route path='/cabinet/admin/edit_register' exact  component = {EditRegister}/>
                                 <Route path='/cabinet/admin/employees' exact  component = {Employees}/>
                                 <Route path='/cabinet/admin/calendar' exact  component = {Interval}/>
                                 <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/>
