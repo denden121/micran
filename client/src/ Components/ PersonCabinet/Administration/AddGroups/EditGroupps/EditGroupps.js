@@ -40,6 +40,33 @@ class  EditGroups extends React.Component{
         group:{},
         changed_date:{}
     }
+    handleOk = () => {
+        const nameGroup = document.querySelector('#input-name').value
+        document.querySelector('#input-name').value = ''
+        const description = document.querySelector('#description').value
+        document.querySelector('#description').value = ''
+        const token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        let formdata = new FormData();
+        formdata.append("name", nameGroup);
+        formdata.append("actions", JSON.stringify(this.state.changed_date));
+        formdata.append("description",description);
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+        const pk = localStorage.getItem('selectGroup')
+        fetch(`http://127.0.0.1:8000/groups/${pk}/change/`, requestOptions)
+            .then(response => response.json())
+            .then(result =>{
+                console.log(result)
+                document.location='/cabinet/admin/view_groups'
+            })
+            .catch(error => console.log('error', error));
+    };
     onChangeCheckBox=(e)=>{
         let temp = {...this.state.changed_date}
         temp[e.target.value]  = e.target.checked
@@ -81,20 +108,20 @@ class  EditGroups extends React.Component{
                     <div className="form-group row">
                         <label for="input-name" className="col-sm-2 col-form-label">Название</label>
                         <div className="col-sm-9">
-                            <input defaultValue={this.state.group.name} type="text" id={'input-name-group'} className="form-control form-control-sm"/>
+                            <input defaultValue={this.state.group.name} type="text" id={'input-name'} className="form-control form-control-sm"/>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="description" className="col-sm-2 col-form-label">Описание</label>
                         <div class="col-sm-9">
                             
-                            <TextArea
+                            <textarea
                                 defaultValue={this.state.group.description}
                                 id={"description"}
                                 autoSize={{minRows: 1, maxRows: 8}} Default
                                 className="from-control"
                             >
-                            </TextArea>
+                            </textarea>
                         </div>
                     </div>
                     <Fields
@@ -102,13 +129,12 @@ class  EditGroups extends React.Component{
                         items={this.state.group.groups_actions}/>
                 </div>
                 <div className="text-right" style={{marginRight:"70px"}}>
-                <button className="btn btn-info btn-sm">Сохранить</button>
+                    <button onClick={this.handleOk} className="btn btn-info btn-sm">Сохранить</button>
                 </div>
                 
                 </Card>
                     </div>                    
                 </div>
-               
             </div>
         )
     }

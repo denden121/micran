@@ -8,38 +8,7 @@ class ManageGroups extends React.Component{
     componentDidMount() {
         this.loadGroups()
     }
-    handleOk = e => {
-        const nameGroup = document.querySelector('#input-name').value
-        document.querySelector('#input-name').value = ''
-        const description = document.querySelector('#description').value
-        document.querySelector('#description').value = ''
-        const token = localStorage.getItem('token')
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", token);
-        let formdata = new FormData();
-        formdata.append("name", nameGroup);
-        formdata.append("actions", JSON.stringify(this.state.changed_date));
-        formdata.append("description",description);
-        let requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: formdata,
-            redirect: 'follow'
-        };
-        fetch(`http://127.0.0.1:8000/groups/${this.state.date.pk}/change/`, requestOptions)
-            .then(response => response.json())
-            .then(result => console.log(result))
-            .then(result =>{
-                console.log(result)
-                let temp = [...this.state.groups]
-                temp[this.state.select_index] = result
-                this.setState({groups:temp})
-            })
-            .catch(error => console.log('error', error));
-        this.setState({
-            visible: false,
-        });
-    };
+
 
     loadGroups =  () =>{
         let token = localStorage.getItem('token')
