@@ -168,9 +168,6 @@ const TableZp = (props) =>{
                                     ?<th scope="col">Ст-ть часов,руб</th>
                                     :''}
                             </tr>
-                            <tr>
-                                <th colSpan="15" scope="colgroup" className="table-secondary">Отдел цифровых устройств</th>
-                            </tr>
                             <FieldSalary allSalary = {props.allSalary} Filters={props.Filter}/>
                             </tbody>
                         </table>

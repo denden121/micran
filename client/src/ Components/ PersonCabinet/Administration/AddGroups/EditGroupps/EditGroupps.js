@@ -71,7 +71,6 @@ class  EditGroups extends React.Component{
     componentDidMount() {
         this.loadSelectGroup()
     }
-
     render() {
         return (
             <div className="container-fluid">

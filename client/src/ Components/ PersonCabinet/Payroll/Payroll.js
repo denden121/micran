@@ -9,8 +9,9 @@ import rend from "../../../index";
 class Payroll extends React.Component{
     state = {
         allSalary:[],
+        norm:{},
         departments:[],
-        subdepartments:[],
+        subdepartments:[{label:1,value:1}],
         hideSalary:false,
         hideNormTime:false,
         hideZeroReport:false,
@@ -33,10 +34,7 @@ class Payroll extends React.Component{
         fetch("http://127.0.0.1:8000/get_department/", requestOptions)
             .then(response =>  response.json())
             .then(result => {
-                console.log(result)
-                console.log('3333333333333333333333333333333333333333')
                 this.state.selectDepartment = result
-                console.log(this.state)
                 // let temp = {department:{label:result.code+' '+result.name,value:result.pk}}
                 // localStorage.setItem('payroll',JSON.stringify(temp))
             })
@@ -55,7 +53,6 @@ class Payroll extends React.Component{
             .then(response =>  response.json())
             .then(result => {
                 let actions = Array.from(result).map((department)=>{
-                    // console.log(department)
                     return {value:department.pk,label:`${department.fields.code +' '+ department.fields.name}`}
                 })
                 this.setState({departments: actions})})
@@ -71,54 +68,50 @@ class Payroll extends React.Component{
             redirect: 'follow'
         }
         const date = localStorage.getItem('date').replace(' ','-')
-        fetch(`http://127.0.0.1:8000/departments/${e}/subdepartments/`, requestOptions)
-            .then(response =>  response.json())
-            .then(result => {
-                console.log('sub',result)
-                let subdepartments = result.map((subdepartment)=>{
-                    console.log(subdepartment)
-                    return {value:subdepartment.pk,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
-                })
-                console.log(subdepartments)
-                this.setState({subdepartments: subdepartments})})
-            .catch(error => console.log('error', error))
         fetch(`http://127.0.0.1:8000/salary/new/${e}/?date=${date}`, requestOptions)
             .then(response =>  response.json())
             .then(result => {
+                let subdepartment = []
                 console.log(result)
                 let temp = []
                 for (let i = 0;i < result.length; i++){
+                    subdepartment.push({label:result[i].code +' '+ result[i].name,value:result[i].pk})
                     temp.push({name:result[i].name,code:result[i].code})
                     temp.push(result[i].users)
                 }
-                console.log(temp)
-                this.setState({allSalary:temp})
-                // for(let i)
-                // console.log('sub',result)
-                // let subdepartments = Array.from(result).map((subdepartment)=>{
-                //     cons/ole.log(subdepartment)
-                    // return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
+                this.setState({allSalary:temp,
+                                    subdepartments:subdepartment})
                 })
-                // this.setState({subdepartments: subdepartments})})
+            .catch(error => console.log('error', error))
+
+    }
+    onChangeSelectSubDepartments=(e)=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers()
+        myHeaders.append("Authorization", token)
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        }
+        const date = localStorage.getItem('date').replace(' ','-')
+        fetch(`http://127.0.0.1:8000/salary/new/${e}/?date=${date}`, requestOptions)
+            .then(response =>  response.json())
+            .then(result => {
+                let subdepartment = []
+                console.log(result)
+                let temp = []
+                for (let i = 0;i < result.length; i++){
+                    // subdepartment.push({label:result[i].name,value:result[i].pk})
+                    temp.push({name:result[i].name,code:result[i].code})
+                    temp.push(result[i].users)
+                }
+                this.setState({allSalary:temp})
+
+            })
             .catch(error => console.log('error', error))
     }
     loadAllSalary = ()=>{
-        let token = localStorage.getItem('token')
-        let myHeaders = new Headers();
-        myHeaders.append("Authorization", token);
-        let requestOptions = {
-            method: 'GET',
-            headers: myHeaders, 
-            redirect: 'follow'
-        };
-        const date = localStorage.getItem('date').split(' ')
-        const url = `http://127.0.0.1:8000/salary/?month=${date[0]}&year=${date[1]}`
-        fetch(url, requestOptions)
-            .then(response => response.json())
-            .then(result =>{
-                console.log(result)
-                this.setState({allSalary:result[0].fields})})
-            .catch(error => console.log('error', error));
     }
     onChangeSalary = (event) => {
         // console.log(event.target.type)
@@ -326,8 +319,9 @@ class Payroll extends React.Component{
                                             selectDepartment={this.state.selectDepartment}
                                             departments = {this.state.departments}
                                             onChangeFilter={this.onChangeFilter}
-                                            subdepartments = {this.subdepartments}
-                                            onChangeSelectDepartments ={this.onChangeSelectDepartments}/>
+                                            subdepartments = {this.state.subdepartments}
+                                            onChangeSelectDepartments ={this.onChangeSelectDepartments}
+                                            onChangeSelectSubDepartments = {this.onChangeSelectSubDepartments}/>
                                      </div>
                                  </div>
                             </div>

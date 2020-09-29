@@ -49,6 +49,7 @@ const PayrollCheck =(props)=>{
             <br/>
             <div className="col-md-6 col-lg-12 text-left">
                 <Select
+                    onChange={props.onChangeSelectSubDepartments}
                     options={props.subdepartments}
                     placeholder="Выбрать"
                     style={{width:"100%"}}
