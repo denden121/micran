@@ -75,16 +75,26 @@ class Payroll extends React.Component{
             .then(response =>  response.json())
             .then(result => {
                 console.log('sub',result)
-                let subdepartments = Array.from(result).map((subdepartment)=>{
-                    // console.log(subdepartment)
-                    return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
+                let subdepartments = result.map((subdepartment)=>{
+                    console.log(subdepartment)
+                    return {value:subdepartment.pk,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
                 })
+                console.log(subdepartments)
                 this.setState({subdepartments: subdepartments})})
             .catch(error => console.log('error', error))
         fetch(`http://127.0.0.1:8000/salary/new/${e}/?date=${date}`, requestOptions)
             .then(response =>  response.json())
             .then(result => {
-                console.log('sub',result)
+                console.log(result)
+                let temp = []
+                for (let i = 0;i < result.length; i++){
+                    temp.push({name:result[i].name,code:result[i].code})
+                    temp.push(result[i].users)
+                }
+                console.log(temp)
+                this.setState({allSalary:temp})
+                // for(let i)
+                // console.log('sub',result)
                 // let subdepartments = Array.from(result).map((subdepartment)=>{
                 //     cons/ole.log(subdepartment)
                     // return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
@@ -105,7 +115,9 @@ class Payroll extends React.Component{
         const url = `http://127.0.0.1:8000/salary/?month=${date[0]}&year=${date[1]}`
         fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({allSalary:result[0].fields}))
+            .then(result =>{
+                console.log(result)
+                this.setState({allSalary:result[0].fields})})
             .catch(error => console.log('error', error));
     }
     onChangeSalary = (event) => {
@@ -314,6 +326,7 @@ class Payroll extends React.Component{
                                             selectDepartment={this.state.selectDepartment}
                                             departments = {this.state.departments}
                                             onChangeFilter={this.onChangeFilter}
+                                            subdepartments = {this.subdepartments}
                                             onChangeSelectDepartments ={this.onChangeSelectDepartments}/>
                                      </div>
                                  </div>
@@ -333,7 +346,7 @@ class Payroll extends React.Component{
                          <TableZp
                              onChangeSalary={this.onChangeSalary}
                              Filter = {this.state}
-                             allSalary = {this.state.allSalary.persons}
+                             allSalary = {this.state.allSalary}
                              onBlurSalary = {this.onBlurSalary}
                          />
                     </div>
