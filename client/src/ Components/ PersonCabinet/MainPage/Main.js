@@ -66,8 +66,9 @@ class Main extends Component{
         flag:true
     };
     onClickAdmin=() => {
-        let temp = !this.state.flag
-        this.setState({flag:temp})
+        console.log(localStorage.getItem('menu'))
+        let temp = localStorage.getItem('menu') === 'false' ? 'true' : 'false'
+        localStorage.setItem('menu',temp)
     }
     onCollapse = collapsed => {
         console.log(collapsed);
@@ -102,7 +103,9 @@ class Main extends Component{
             localStorage.setItem('date',`${date.getMonth()>9?date.getMonth()>9+1:'0'+date.getMonth()>9} ${date.getFullYear()} `)
         }
         let a = localStorage.getItem('admin') == 'True';
-
+        if (!localStorage.getItem('menu')){
+            localStorage.setItem('menu','true')
+        }
         return (
 
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
@@ -117,90 +120,7 @@ class Main extends Component{
                                     defaultValue={moment(localStorage.getItem('date').split(' ').reverse().join('-'), 'YYYY-MM')} onChange={this.onChangeDate} picker="month" />
                             </Space>
                         </div>
-                        {/*<Menu onClick={this.onClickCalendar} theme="light" mode="inline">*/}
-                        {/*    */}
-                        {/*    <Menu.Item key={localStorage.getItem('key')} icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/">*/}
-                        {/*            <span data-feather="home"></span>*/}
-                        {/*            Отправка отчетов*/}
-                        {/*            <span className="sr-only"></span>*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>*/}
-                        {/*    <Menu.Item key="1" icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/list_reports">*/}
-                        {/*            <span data-feather="home"></span>*/}
-                        {/*            Список отчетов */}
-                        {/*            <span className="sr-only"></span>*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>*/}
-                        {/*    <Menu.Item key="2" icon={<DollarOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/salary">*/}
-                        {/*            <span data-feather="bar-chart-2"></span>*/}
-                        {/*            Зарплата*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>*/}
-
-
-                        {/*{a*/}
-                        {/*    ?<Menu.Item key="3" icon={<UsergroupAddOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href='http://localhost:3000/cabinet/admin/view_groups'>*/}
-                        {/*            <span data-feather="shopping-cart"></span>*/}
-                        {/*            Просмотр групп*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>:''}*/}
-                        {/*{a*/}
-                        {/*    ? <Menu.Item key="4" icon={<LoginOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href='http://localhost:3000/cabinet/admin/logs'>*/}
-                        {/*            <span data-feather="shopping-cart"></span>*/}
-                        {/*            Просмотр логирования*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>:''*/}
-                        {/*}*/}
-                        {/*{a*/}
-                        {/*    ?<Menu.Item key="5" icon={<FormOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a href="http://localhost:3000/cabinet/admin/play_roll">*/}
-                        {/*            <span data-feather="layers"></span>*/}
-                        {/*            Расчетный лист*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>:''}*/}
-                        {/*{a*/}
-                        {/*    ?<Menu.Item key="6" icon={<FolderOpenOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/admin/register">*/}
-                        {/*            <span data-feather="layers"></span>*/}
-                        {/*            Реестр проектов*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>:''}*/}
-                        {/*{a*/}
-                        {/*    ?<Menu.Item key="7" icon={<TeamOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/admin/employees">*/}
-                        {/*            <span data-feather="layers"></span>*/}
-                        {/*            Сотрудники*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>:''}*/}
-                        {/*{a*/}
-                        {/*    ?<Menu.Item key="8" icon={<CalendarOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/admin/calendar">*/}
-                        {/*            <span data-feather="layers"></span>*/}
-                        {/*            Трудовой календарь*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>:''}*/}
-                        {/*{a*/}
-                        {/*    ?<Menu.Item key="9" icon={<FieldTimeOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/admin/system_time">*/}
-                        {/*            <span data-feather="layers"></span>*/}
-                        {/*            Система учета времени*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>:''}*/}
-                        {/*{a*/}
-                        {/*    ?<Menu.Item key="10" icon={<ApartmentOutlined style={{ fontSize: '16px'}}/>}>*/}
-                        {/*        <a  href="http://localhost:3000/cabinet/admin/structure">*/}
-                        {/*            <span data-feather="layers"></span>*/}
-                        {/*            Структура подразделений*/}
-                        {/*        </a>*/}
-                        {/*    </Menu.Item>*/}
-                        {/*    : ''}*/}
-                        {/*</Menu>*/}
-                        {this.state.flag
+                        {localStorage.getItem('menu') ==='true'
                             ?<Menu onClick={this.onClickCalendar} theme="light" mode="inline">
 
                                 <Menu.Item key={localStorage.getItem('key')} icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
