@@ -48,6 +48,7 @@ const  EditGroups = (props) => {
                 <div class="form-group row">
                     <label for="description" class="col-sm-2 col-form-label">Описание</label>
                     <div class="col-sm-10">
+                    <div><a href=""><div>1</div></a></div>
                     <TextArea
                         id={"description"}
                         defaultValue={props.date.description}
