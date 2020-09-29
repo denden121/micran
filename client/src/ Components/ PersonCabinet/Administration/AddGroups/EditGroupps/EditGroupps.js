@@ -101,6 +101,7 @@ class  EditGroups extends React.Component{
     render() {
         return (
             <div className="container-fluid">
+                <h5 className="text-left">Редактирование групп</h5>
                 <div className="row">                    
                     <div className="col-lg-12">
                     <Card>
@@ -115,13 +116,25 @@ class  EditGroups extends React.Component{
                         <label for="description" className="col-sm-2 col-form-label">Описание</label>
                         <div class="col-sm-9">
                             
+<<<<<<< HEAD
                             <textarea
+=======
+                            {/* <textarea
+>>>>>>> e5eac2c342f7bd24da619697bfcb44f5490624c3
                                 defaultValue={this.state.group.description}
                                 id={"description"}
                                 autoSize={{minRows: 1, maxRows: 8}} Default
                                 className="from-control"
                             >
+<<<<<<< HEAD
                             </textarea>
+=======
+                            </textarea> */}
+                            <textarea className="form-control" 
+                            defaultValue={this.state.group.description}
+                            id={"description"}
+                            autoSize={{minRows: 1, maxRows: 8}} Default></textarea>
+>>>>>>> e5eac2c342f7bd24da619697bfcb44f5490624c3
                         </div>
                     </div>
                     <Fields
