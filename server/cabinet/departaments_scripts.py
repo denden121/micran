@@ -30,19 +30,6 @@ def get_endpoint_department(data, output):
         return output
 
 
-def build_level(subdepartment_id, lvl):
-    department = Department.objects.get(pk=subdepartment_id)
-    data = {'lvl': lvl, 'name': department.department_name, 'code': department.department_code}
-    subdepartments_objects = []
-    subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-    if subdepartments:
-        for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level(subdepartment.pk, lvl + 1))
-        data['subdepartments'] = subdepartments_objects
-        return data
-    else:
-        return data
-
 
 def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, salary_flag=0):
     department = Department.objects.get(pk=subdepartment_id)
@@ -62,8 +49,6 @@ def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, sa
         for worker in profiles:
             users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
                            'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
-            if only_user:
-                continue
             report_time = 0
             flag = 0
             salary = SalaryIndividual.objects.filter(date__month=month, date__year=year, person=worker)
@@ -107,7 +92,7 @@ def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, sa
         data['users'] = users
     if subdepartments:
         for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date, only_user  , salary_flag))
+            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date, only_user, salary_flag))
         data['subdepartments'] = subdepartments_objects
         return data
     else:
