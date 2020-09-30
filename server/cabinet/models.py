@@ -96,7 +96,6 @@ class Project(models.Model):
                                               on_delete=models.SET_NULL, null=True)
     production_order = models.CharField(max_length=100, blank=True)
     comment_for_employees = models.TextField(blank=True)
-    descr = models.TextField(blank=True)
     contract = models.CharField(max_length=100)
     type = models.BooleanField(blank=True, default='False')  # False is inside True is outer
     status = models.BooleanField(blank=True, default='False')  # False is Open True is close
