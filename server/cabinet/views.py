@@ -337,7 +337,7 @@ def all_projects_view(request):
                 deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
                 direction = Direction.objects.get(pk=project.direction.pk)
-                field = {'name': project.name, 'direction': direction.direction_name, 'manager': manager_name,
+                field = {'name': project.name, 'direction': direction.name, 'manager': manager_name,
                          'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
                          'production_order': project.production_order,
                          'comment_for_employees': project.comment_for_employees,
@@ -374,7 +374,7 @@ def project_view(request, project_id, user_id='default'):
                                              + ' ' + deputy_chief_designer.middle_name
                 direction = Direction.objects.get(pk=project.direction.pk)
                 data = {'pk': project.pk, 'name': project.name,
-                        'direction': direction.direction_name,
+                        'direction': direction.name,
                         'direction_pk': direction.pk,
                         'manager': manager_name,
                         'manager_pk': manager.pk,
@@ -403,7 +403,7 @@ def project_view(request, project_id, user_id='default'):
                                                  + deputy_chief_designer.first_name + \
                                                  ' ' + deputy_chief_designer.middle_name
                     direction = Direction.objects.get(pk=project.direction.pk)
-                    data = {'pk': project.pk, 'name': project.name, 'direction': direction.direction_name,
+                    data = {'pk': project.pk, 'name': project.name, 'direction': direction.name,
                             'manager': manager_name,
                             'deputy_chief_designer': deputy_chief_designer_name,
                             'chief_designer': chief_designer_name,
