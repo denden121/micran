@@ -375,14 +375,19 @@ def project_view(request, project_id, user_id='default'):
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name \
                                              + ' ' + deputy_chief_designer.middle_name
                 direction = Direction.objects.get(pk=project.direction.pk)
-                data = {'pk': project.pk, 'name': project.name,
-                        'direction': direction.direction_name, 'manager': manager_name,
-                        'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
-                        'production_order': project.production_order,
-                        'comment_for_employees': project.comment_for_employees,
-                        'contract': project.contract, 'type': project.type, 'status': project.status,
-                        'client': project.client,
-                        'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
+                data = {'pk': project.pk, 'name': project.name, 'direction': direction.direction_name,
+                            'direction_pk': direction.pk,
+                            'manager': manager_name,
+                            'manager_pk': manager.pk,
+                            'deputy_chief_designer': deputy_chief_designer_name,
+                            'deputy_chief_designer_pk': deputy_chief_designer.pk,
+                            'chief_designer': chief_designer_name,
+                            'chief_designer_pk': chief_designer.pk,
+                            'production_order': project.production_order,
+                            'comment_for_employees': project.comment_for_employees,
+                            'contract': project.contract, 'type': project.type, 'status': project.status,
+                            'client': project.client,
+                            'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
                 return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             elif request.method == "POST" and get_access(13, user):
                 form = ProjectForm(request.POST, request.FILES, instance=project)
@@ -411,7 +416,7 @@ def project_view(request, project_id, user_id='default'):
                             'contract': project.contract, 'type': project.type, 'status': project.status,
                             'client': project.client,
                             'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
-                    return HttpResponse(data)
+                    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:
