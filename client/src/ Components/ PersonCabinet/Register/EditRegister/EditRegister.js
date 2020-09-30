@@ -1,9 +1,10 @@
 import React from "react"
-import {Form,Card,Checkbox,Radio,Select,Input,Space} from "antd"
+import {Card,Checkbox,Radio,Select} from "antd"
 import "./EditRegister.css"
 
-const {TextArea} = Input;
-const EditRegister =(props)=>{
+class EditRegister extends React.Component{
+    render() {
+        did
     return(
         <div className="container-fluid">
             <h5 className="text-left">Редактирование проектов</h5>
@@ -16,38 +17,38 @@ const EditRegister =(props)=>{
                                 <label for="input-name" className="col-sm-2 col-form-label">Название проекта</label>
                                 <div className="col-sm-9">
                                     <input  type="text" id={'input-name-group'} className="form-control form-control-sm"
-                                    placeholder="Введите текст"/>
+                                            placeholder="Введите текст"/>
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label for="direction" className="col-sm-2 col-form-label">Направления</label>
                                 <div className="col-sm-9">
-                                <Select
-                                    // defaultValue={props.personDate.fields.direction}
-                                    placeholder="Выбрать"
-                                    style={{width:"100%"}}
-                                    className="text-left"
-                                ></Select>
+                                    <Select
+                                        // defaultValue={props.personDate.fields.direction}
+                                        placeholder="Выбрать"
+                                        style={{width:"100%"}}
+                                        className="text-left"
+                                    ></Select>
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label for="description" className="col-sm-2 col-form-label">Описание</label>
                                 <div className="col-sm-9">
                                     <textarea className="form-control textar"
-                                    id={"description"}
-                                    autoSize={{minRows: 2, maxRows: 8}}
-                                    placeholder="Введите текст"/>
-                                </div>                                
+                                              id={"description"}
+                                              autoSize={{minRows: 2, maxRows: 8}}
+                                              placeholder="Введите текст"/>
+                                </div>
                             </div>
                             <hr/>
                             <div className="form-group row">
                                 <label for="director" className="col-sm-2 col-form-label">Руководитель</label>
                                 <div className="col-sm-9">
                                     <Select
-                                    placeholder="Выбрать"
-                                    style={{width:"100%"}}
-                                    className="text-left"
-                                    id={"director"}
+                                        placeholder="Выбрать"
+                                        style={{width:"100%"}}
+                                        className="text-left"
+                                        id={"director"}
                                     ></Select>
                                 </div>
                             </div>
@@ -78,9 +79,9 @@ const EditRegister =(props)=>{
                                 <label for="num_contract" className="col-sm-2 col-form-label">№ договора</label>
                                 <div className="col-sm-9">
                                     <textarea
-                                    id={"num-contract"}
-                                    autoSize={{minRows: 2, maxRows: 8}}
-                                    className="form-control"
+                                        id={"num-contract"}
+                                        autoSize={{minRows: 2, maxRows: 8}}
+                                        className="form-control"
                                     />
                                 </div>
                             </div>
@@ -88,9 +89,9 @@ const EditRegister =(props)=>{
                                 <label for="customer" className="col-sm-2 col-form-label">Заказчик</label>
                                 <div className="col-sm-9">
                                     <textarea
-                                    id={"customer"}
-                                    autoSize={{minRows: 2, maxRows: 8}}
-                                    className="form-control"
+                                        id={"customer"}
+                                        autoSize={{minRows: 2, maxRows: 8}}
+                                        className="form-control"
                                     />
                                 </div>
                             </div>
@@ -98,9 +99,9 @@ const EditRegister =(props)=>{
                                 <label for="order" className="col-sm-2 col-form-label">Заказ на производство</label>
                                 <div className="col-sm-9">
                                     <textarea
-                                    id={"order"}
-                                    autoSize={{minRows: 2, maxRows: 8}}
-                                    className="form-control"
+                                        id={"order"}
+                                        autoSize={{minRows: 2, maxRows: 8}}
+                                        className="form-control"
                                     />
                                 </div>
                             </div>
@@ -108,19 +109,19 @@ const EditRegister =(props)=>{
                                 <label for="comment" className="col-sm-2 col-form-label">Комментарий</label>
                                 <div className="col-sm-9">
                                     <textarea
-                                    id={"comment"}
-                                    autoSize={{minRows: 2, maxRows: 8}}
-                                    className="form-control"
+                                        id={"comment"}
+                                        autoSize={{minRows: 2, maxRows: 8}}
+                                        className="form-control"
                                     />
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label for="tip" className="col-sm-2 col-form-label">Тип</label>
                                 <div className="col-sm-9 text-left">
-                                <Radio.Group id={"tip"}>
-                                    <Radio  value={0}><label className="tip1" for="inlineCheckbox1">Внутр</label></Radio>
-                                    <Radio value={1}><label className="tip2" for="inlineCheckbox1">Внеш</label></Radio>
-                                </Radio.Group>
+                                    <Radio.Group id={"tip"}>
+                                        <Radio  value={0}><label className="tip1" for="inlineCheckbox1">Внутр</label></Radio>
+                                        <Radio value={1}><label className="tip2" for="inlineCheckbox1">Внеш</label></Radio>
+                                    </Radio.Group>
                                 </div>
                             </div>
                             <div className="form-group row">
@@ -135,18 +136,18 @@ const EditRegister =(props)=>{
                             <div className="form-group row">
                                 <label for="state" className="col-sm-2 col-form-label" >Доступность для отчетов сотрудников</label>
                                 <div className="col-sm-9 text-left">
-                                <Radio.Group>
-                                    <Radio  value={0}><label className="open" for="inlineCheckbox1">Доступен</label></Radio>
-                                    <Radio value={1}><label className="cclose" for="inlineCheckbox1">Недоступен</label></Radio>
-                                </Radio.Group>
+                                    <Radio.Group>
+                                        <Radio  value={0}><label className="open" for="inlineCheckbox1">Доступен</label></Radio>
+                                        <Radio value={1}><label className="cclose" for="inlineCheckbox1">Недоступен</label></Radio>
+                                    </Radio.Group>
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <label for="pp" className="col-sm-2 col-form-label" >Приемка ВП</label>
                                 <div className="col-sm-9 text-left">
-                                <Checkbox id={"pp"}>
-                                    <label className="pp" for="inlineCheckbox1">ПП</label>
-                                </Checkbox>
+                                    <Checkbox id={"pp"}>
+                                        <label className="pp" for="inlineCheckbox1">ПП</label>
+                                    </Checkbox>
                                 </div>
                             </div>
                             <br/>
@@ -160,6 +161,57 @@ const EditRegister =(props)=>{
             </div>
         </div>
     )
+    }
+}
+
+
+class Register extends React.Component{
+    componentDidMount() {
+        this.loadProjects()
+    }
+    state = {
+        projects:{},
+        select_project: {},
+        visible: false
+    }
+    onChangeName=(e)=>{
+        console.log(e.target)
+        console.log(e.target.value)
+        let a  = {...this.state.select_project}
+        a.fields.name = e.target.value
+        this.setState({select_project:a})
+    }
+    loadProjects = async () =>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization", token);
+        let requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        await fetch("http://127.0.0.1:8000/cabinet/projects/", requestOptions)
+            .then(response => response.json())
+            .then(result => this.setState({projects:result}))
+        console.log('state',this.state)
+    }
+    onClickNewProject = () =>{
+        document.location='/cabinet/admin/new_project'
+    }
+    onClickBack= () =>{
+        document.location='/cabinet/admin/register'
+        localStorage.setItem('selectProject','')
+    }
+    onClickEdit= (pk) =>{
+        document.location='/cabinet/admin/edit_register'
+        localStorage.setItem('selectProject',pk)
+    }
+    render(){
+        console.log(this.state)
+        return(
+
+        )
+    }
 }
 
 export default EditRegister

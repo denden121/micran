@@ -232,39 +232,6 @@ class Main extends Component{
                     </Content>
                 </Layout>
             </Layout>
-            // <div className="container">
-            //     <div className="Head">
-            //         <Header clickLogOut={this.logOut}/>
-            //     </div>
-
-            //     <div className='Nav'>
-            //         <Navigation
-            //             onClickDate = {this.onClickDate}
-            //             onClickNext = {this.onClickNext}
-            //             onClickPrivious = {this.onClickPrivious}
-            //         />
-            //     </div>
-
-
-            //     <div className="Data">
-            //         <Switch>
-            //             <Route path='/cabinet/' exact component = {SendReport}/>
-            //             <Route path='/cabinet/person' exact  component = {PersonData}/>
-            //             <Route path='/cabinet/salary' exact  component = {Salary}/>
-            //             <Route path='/cabinet/admin/add_groups' exact component = {AddGroups}/>
-            //             <Route path='/cabinet/admin/logs' exact component = {ViewLogs}/>
-            //             <Route path='/cabinet/admin/view_groups' exact component = {ManageGroupps}/>
-            //             <Route path='/cabinet/admin/play_roll' exact  component = {Payroll}/>
-            //             <Route path='/cabinet/admin/register' exact  component = {Register}/>
-            //             <Route path='/cabinet/admin/new_project' exact  component = {NewProject}/>
-            //             <Route path='/cabinet/admin/unit_projects' exact  component = {UnitProjects}/>
-            //             <Route path='/cabinet/admin/employees' exact  component = {Employees}/>
-            //             <Route path='/cabinet/admin/calendar' exact  component = {Interval}/>
-            //             <Route path='/cabinet/admin/system_time' exact  component = {SystemTime}/>
-            //             <Route path='/cabinet/admin/structure' exact  component = {Structure}/>
-            //         </Switch>
-            //     </div>
-            // </div>
         )
     }
 }
