@@ -21,7 +21,7 @@ urlpatterns = [
     path('cabinet/projects/simple/', views.all_projects_simple_view),
     path('cabinet/projects_for_reports/', views.projects_for_reports),
     path('cabinet/<int:user_id>/project/<int:project_id>/', views.project_view),
-    path('cabinet/project/<int:project_id/>', views.project_view),
+    path('cabinet/project/<int:project_id>/', views.project_view),
     # roles
     path('groups/<int:group_id>/', views.group_view),
     path('groups/actions/', views.action_with_group_view),
