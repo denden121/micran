@@ -383,7 +383,7 @@ def project_view(request, project_id, user_id='default'):
                         'contract': project.contract, 'type': project.type, 'status': project.status,
                         'client': project.client,
                         'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
-                return HttpResponse(data)
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             elif request.method == "POST" and get_access(13, user):
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
