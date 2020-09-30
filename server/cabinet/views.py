@@ -836,7 +836,7 @@ def direction_view(request):
         if request.method == "GET":
             directions = Direction.objects.all()
             data = serializers.serialize('json', directions)
-            return HttpResponse(json.dumps(data))
+            return HttpResponse(data)
 
 
 @csrf_exempt
