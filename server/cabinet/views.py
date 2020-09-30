@@ -375,14 +375,15 @@ def project_view(request, project_id, user_id='default'):
                 deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name \
                                              + ' ' + deputy_chief_designer.middle_name
                 direction = Direction.objects.get(pk=project.direction.pk)
-                data = {'pk': project.pk, 'name': project.name, 'direction': direction.direction_name,
-                            'direction_pk': direction.pk,
-                            'manager': manager_name,
-                            'manager_pk': manager.pk,
-                            'deputy_chief_designer': deputy_chief_designer_name,
-                            'deputy_chief_designer_pk': deputy_chief_designer.pk,
-                            'chief_designer': chief_designer_name,
-                            'chief_designer_pk': chief_designer.pk,
+                data = {'pk': project.pk, 'name': project.name,
+                        'direction': {'name': direction.direction_name,
+                            'pk': direction.pk},
+                        'manager': {'name': manager_name,
+                            'pk': manager.pk},
+                        'deputy_chief_designer': {'name': deputy_chief_designer_name,
+                            'pk': deputy_chief_designer.pk},
+                        'chief_designer': {'name': chief_designer_name,
+                            'pk': chief_designer.pk},
                             'production_order': project.production_order,
                             'comment_for_employees': project.comment_for_employees,
                             'contract': project.contract, 'type': project.type, 'status': project.status,
