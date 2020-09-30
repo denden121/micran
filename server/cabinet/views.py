@@ -376,6 +376,7 @@ def project_view(request, project_id, user_id='default'):
                                              + ' ' + deputy_chief_designer.middle_name
                 direction = Direction.objects.get(pk=project.direction.pk)
                 data = {'pk': project.pk, 'name': project.name, 'direction': direction.direction_name,
+                            'direction_pk': direction.pk,
                             'manager': manager_name,
                             'manager_pk': manager.pk,
                             'deputy_chief_designer': deputy_chief_designer_name,
