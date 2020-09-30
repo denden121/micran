@@ -13,14 +13,6 @@ class Register extends React.Component{
         select_project: {},
         visible: false
     }
-    showModal = (e) => {
-        console.log(e)
-        let a = {...this.state.projects[e]}
-        this.setState({
-            visible: true,
-            select_project: a
-        });
-    };
     onChangeName=(e)=>{
         console.log(e.target)
         console.log(e.target.value)
@@ -28,20 +20,6 @@ class Register extends React.Component{
         a.fields.name = e.target.value
         this.setState({select_project:a})
     }
-
-    handleOk = e => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    };
-
-    handleCancel = e => {
-        console.log(e);
-        this.setState({
-            visible: false
-        });
-    };
     loadProjects = async () =>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
@@ -61,9 +39,11 @@ class Register extends React.Component{
     }
     onClickBack= () =>{
         document.location='/cabinet/admin/register'
+        localStorage.setItem('selectProject','')
     }
-    onClickEdit= () =>{
+    onClickEdit= (pk) =>{
         document.location='/cabinet/admin/edit_register'
+        localStorage.setItem('selectProject',pk)
     }
     render(){
         console.log(this.state)
@@ -79,17 +59,10 @@ class Register extends React.Component{
                         </div>
                         <hr className="normal"/>
 
-                        <RegisterTable projects = {this.state.projects} onClickShowModal={this.showModal}/>
-                        <Modal
-                            title="Редактирование проекта"
-                            visible={this.state.visible}
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
-                            width={720}
-                            cancelText="Отмена"
-                            okText="Сохранить" >
-                            <ModalEmp onChangeName={this.onChangeName} personDate = {this.state.select_project}/>
-                        </Modal>
+                        <RegisterTable
+                            onClickEdit = {this.onClickEdit}
+                            projects = {this.state.projects}/>
+
                     </div>
                 </div>
 
