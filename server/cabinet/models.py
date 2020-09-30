@@ -42,11 +42,11 @@ class GroupAction(models.Model):
 
 class Direction(models.Model):
     subdepartment = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
-    direction_name = models.CharField(max_length=30, blank=True)
-    direction_code = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=30, blank=True)
+    code = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return self.direction_name
+        return self.name
 
 
 class Profile(models.Model):

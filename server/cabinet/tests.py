@@ -3,15 +3,16 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from .models import Profile, Report, Action, Group, GroupAction
 from datetime import datetime
+from json import loads
 
 
 class ReportModelTests(TestCase):
 
 
     def setUp(self) -> None:
-        user = User.objects.create(password='admin', username='admin')
+        user = User.objects.create_user(password='admin', username='admin')
         self.client = Client()
-        user_1 = User.objects.create(password='admin_1', username='admin_1')
+        user_1 = User.objects.create_user(password='admin_1', username='admin_1')
         profile = Profile.objects.create(user=user, first_name='Vanya', last_name='Ivanov', middle_name='Ivanovich')
         Profile.objects.create(user=user_1, first_name='Inna', last_name='Ivanova', middle_name='Ivanovich')
         profiles = Profile.objects.all()
@@ -51,17 +52,19 @@ class ReportModelTests(TestCase):
 
 
     def test_authenticate(self):
-        user = User.objects.create(password='admin_2', username='admin_2')
         response = self.client.post('/token/', data={
-            'username': 'admin_2',
-            'password': 'admin_2',
+            'username': 'admin',
+            'password': 'admin',
             'IP': '102.42.23.56'
         })
-        print(f'"Token": {(response.content).decode("utf8")}')
-    #     headers['Authorization'] = request.json()['access']
-    #
-    # def get_cabinet_info(headers):
-    #     request = requests.get('http://127.0.0.1:8000/cabinet/', headers=headers)
+        token = response.content.decode('utf8')
+        token = loads(token)
+        self.token = token['access']
+        print(f'''"Token": {self.token}''')
+
+
+    def get_cabinet_info(headers):
+        request = requests.get('http://127.0.0.1:8000/cabinet/', headers=headers)
     #     try:
     #         assert request.status_code == 200
     #     except AssertionError:
