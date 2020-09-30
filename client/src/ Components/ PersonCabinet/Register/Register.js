@@ -1,8 +1,5 @@
 import React from "react"
 import RegisterTable from "./RegisterTable/RegisterTable"
-import {Modal} from "antd"
-import ModalEmp from "./NewProject/ModalEmpl"
-
 
 class Register extends React.Component{
     componentDidMount() {
