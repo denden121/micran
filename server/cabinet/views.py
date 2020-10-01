@@ -10,6 +10,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from .project_export import export
 from .departaments_scripts import get_endpoint_department, build_level_with_user
+from .cabinet_scripts.cabinet import get_info_about_user
+from .cabinet_scripts.reports import get_reports, get_reports_for_worker
+from .cabinet_scripts.projects import get_project, get_projects
 
 from .forms import ProjectForm, ReportForm, ActionForm, ProfileForm, \
     GroupForm, SalaryCommonForm, SalaryIndividualForm, RegisterForm
@@ -128,37 +131,20 @@ def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
         profile = user.profile
-        data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
-                'last_name': profile.last_name, 'first_name': profile.first_name, 'middle_name': profile.middle_name,
-                'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
-                'experience': profile.experience, 'position': profile.position,
-                'department': profile.department.department_name,
-                'employment_date': str(profile.employment_date)}
+        data = get_info_about_user(user.id)
         return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
     else:
         if user:
-            profile = Profile.objects.get(user=user_id)
             if request.method == "GET":
-                data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
-                        'last_name': profile.last_name, 'first_name': profile.first_name,
-                        'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
-                        'experience': profile.experience, 'position': profile.position,
-                        'department': profile.department.department_name,
-                        'employment_date': str(profile.employment_date)}
+                data = get_info_about_user(user_id)
                 return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
             if request.method == "POST":
+                profile = Profile.objects.get(user=user_id)
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 print(form.errors)
                 if form.is_valid():
                     form.save()
-                data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
-                        'last_name': profile.last_name, 'first_name': profile.first_name,
-                        'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
-                        'experience': profile.experience, 'position': profile.position,
-                        'department': profile.department.department_name,
-                        'employment_date': str(profile.employment_date)}
+                data = get_info_about_user(user_id)
                 return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
         return HttpResponse("Permission denied")
 
@@ -182,33 +168,12 @@ def register_view(request):
 def all_report_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
-        profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
-                reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
-                                                date__year=request.GET['year'])
-                salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
-                data = []
-                status = False
-                time_report = 0
-                for report in reports:
-                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
-                    status = report.status
-                    time_report += report.hour
-                    data.append({'pk': report.pk, 'fields': fields})
-                times_cards = TimeCard.objects.filter(date__month=request.GET['month'], date__year=request.GET['year'],
-                                                      user=user.id)
-                time_system = 0
-                for time_card in times_cards:
-                    time_system += time_card.hours_worked.hour
-                if salary:
-                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'time_system': time_system,
-                                                    'reports': data, 'status': status, 'time_report': time_report}))
-                return HttpResponse(json.dumps({'time_norm': '', 'reports': data,
-                                                'status': status, 'time_system': time_system,
-                                                'time_report': time_report}))
+                data = get_reports(request.GET.get('month'), request.GET.get('year'), user.id)
+                return HttpResponse(json.dumps(data))
             elif request.method == "POST":
+                profile = Profile.objects.get(user=user)
                 project_pk = request.POST.get('project')
                 date = request.POST.get('date')
                 year, month, day = date.split('-')
@@ -327,24 +292,7 @@ def all_projects_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            projects = Project.objects.all()
-            data = []
-            for project in projects:
-                manager = Profile.objects.get(pk=project.manager)
-                manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
-                chief_designer = Profile.objects.get(pk=project.chief_designer)
-                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
-                deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
-                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
-                direction = Direction.objects.get(pk=project.direction.pk)
-                field = {'name': project.name, 'direction': direction.name, 'manager': manager_name,
-                         'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
-                         'production_order': project.production_order,
-                         'comment_for_employees': project.comment_for_employees,
-                         'contract': project.contract, 'type': project.type, 'status': project.status,
-                         'client': project.client,
-                         'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
-                data.append({'pk': project.pk, 'fields': field})
+            data = get_projects()
             return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
@@ -361,57 +309,16 @@ def all_projects_view(request):
 def project_view(request, project_id, user_id='default'):
     if user_id == 'default':
         user = get_user_jwt(request)
-        project = Project.objects.get(id=project_id)
         if user:
             if request.method == "GET":
-                manager = Profile.objects.get(pk=project.manager)
-                manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
-                chief_designer = Profile.objects.get(pk=project.chief_designer)
-                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + \
-                                      ' ' + chief_designer.middle_name
-                deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
-                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name \
-                                             + ' ' + deputy_chief_designer.middle_name
-                direction = Direction.objects.get(pk=project.direction.pk)
-                data = {'pk': project.pk, 'name': project.name,
-                        'direction': direction.name,
-                        'direction_pk': direction.pk,
-                        'manager': manager_name,
-                        'manager_pk': manager.pk,
-                        'deputy_chief_designer': deputy_chief_designer_name,
-                        'deputy_chief_designer_pk': deputy_chief_designer.pk,
-                        'chief_designer': chief_designer_name,
-                        'chief_designer_pk': chief_designer.pk,
-                        'production_order': project.production_order,
-                        'comment_for_employees': project.comment_for_employees,
-                        'contract': project.contract, 'type': project.type, 'status': project.status,
-                        'client': project.client,
-                        'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
+                data = get_project(project_id)
                 return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             elif request.method == "POST" and get_access(13, user):
+                project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
                     form.save()
-                    project = Project.objects.get(id=project_id)
-                    manager = Profile.objects.get(pk=project.manager)
-                    manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
-                    chief_designer = Profile.objects.get(pk=project.chief_designer)
-                    chief_designer_name = chief_designer.last_name + ' ' + \
-                                          chief_designer.first_name + ' ' + chief_designer.middle_name
-                    deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
-                    deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' \
-                                                 + deputy_chief_designer.first_name + \
-                                                 ' ' + deputy_chief_designer.middle_name
-                    direction = Direction.objects.get(pk=project.direction.pk)
-                    data = {'pk': project.pk, 'name': project.name, 'direction': direction.name,
-                            'manager': manager_name,
-                            'deputy_chief_designer': deputy_chief_designer_name,
-                            'chief_designer': chief_designer_name,
-                            'production_order': project.production_order,
-                            'comment_for_employees': project.comment_for_employees,
-                            'contract': project.contract, 'type': project.type, 'status': project.status,
-                            'client': project.client,
-                            'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
+                    data = get_project(project_id)
                     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
@@ -419,9 +326,8 @@ def project_view(request, project_id, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET" or get_access(12, user):
-                project = Project.objects.filter(id=project_id)
-                data = serializers.serialize('json', project)
-                return HttpResponse(data)
+                data = get_project(project_id)
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
 
@@ -970,7 +876,7 @@ def workers_for_reports(request, department_id):
     if user:
         if request.method == "GET":
             date = request.GET.get('date')
-            data = build_level_with_user(department_id, 0, date)
+            data = build_level_with_user(department_id, 0, date, 1)
             output = get_endpoint_department(data, [])
             return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
@@ -980,41 +886,14 @@ def all_reports_for_person(request, person_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            date = request.GET.get('date')
-            month, year = date.split('-')
-            data = []
-            time_report = 0
-            output = {}
-            status = False
-            profile = Profile.objects.get(pk=person_id)
-            reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
-            for report in reports:
-                data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'project_pk': report.project.pk})
-                time_report += report.hour
-                status = report.status
-            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
-            time_system = 0
-            for time_card in times_cards:
-                time_system += time_card.hours_worked.hour
-            output['time_report'] = time_report
-            output['status'] = status
-            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
-            output['time_system'] = time_system
-            output['date'] = date
-            output['pk'] = profile.pk
-            output['reports'] = data
-            return HttpResponse(json.dumps(output))
+            data = get_reports_for_worker(request.GET.get('date'), person_id)
+            return HttpResponse(json.dumps(data))
         elif request.method == "POST":
             date = request.POST.get('date')
             action = request.POST.get('action')
             month, year = date.split('-')
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
-            data = []
-            output = {}
-            time_report = 0
-            status = False
             for report in reports:
                 if action == 'ban':
                     report.status = True
@@ -1029,24 +908,8 @@ def all_reports_for_person(request, person_id):
                     report.check = False
                     report.check_id = None
                 report.save()
-                data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'project_pk': report.project.pk})
-                time_report += report.hour
-                status = report.status
-                check = report.check
-            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
-            time_system = 0
-            for time_card in times_cards:
-                time_system += time_card.hours_worked.hour
-            output['time_report'] = time_report
-            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
-            output['time_system'] = time_system
-            output['date'] = date
-            output['status'] = status
-            output['pk'] = profile.pk
-            output['check'] = check
-            output['reports'] = data
-            return HttpResponse(json.dumps(output))
+            data = get_reports_for_worker(request.GET.get('date'), person_id)
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt

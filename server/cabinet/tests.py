@@ -60,15 +60,14 @@ class ReportModelTests(TestCase):
         token = response.content.decode('utf8')
         token = loads(token)
         self.token = token['access']
-        print(f'''"Token": {self.token}''')
 
 
-    def get_cabinet_info(headers):
-        request = requests.get('http://127.0.0.1:8000/cabinet/', headers=headers)
-    #     try:
-    #         assert request.status_code == 200
-    #     except AssertionError:
-    #         print("Error at http://127.0.0.1:8000/cabinet/")
+    def test_cabinet_info(self):
+        request = self.client.get('/cabinet/', HTTP_TOKEN=self.token)
+        try:
+            assert request.status_code == 200
+        except AssertionError:
+            print("Error at /cabinet/")
     #
     # def is_user_admin(headers):
     #     request = requests.get('http://127.0.0.1:8000/check_admin/', headers=headers)
