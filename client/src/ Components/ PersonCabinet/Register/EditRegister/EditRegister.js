@@ -106,11 +106,97 @@ class EditRegister extends React.Component{
     }
     onChangeText=(e)=>{
         const name = e.target.name
+        let temp = this.state.project
         if(name ==='name'){
-
-        }else if(name ===''){
-
+            temp.name = e.target.value
+            console.log(e.target.value)
+        }else if(name ==='contract'){
+            temp.contract = e.target.value
+            console.log(e)
+        }else if(name === 'client'){
+            temp.client = e.target.value
+            console.log(e)
+        }else if(name === 'production_order'){
+            temp.production_order = e.target.value
+            console.log(e)
+        }else if(name === 'commit'){
+            temp.comment_for_employees = e.target.value
+            console.log(e)
         }
+        this.setState({project:temp})
+    }
+    onChangeSelectDirection=(e,name,)=>{
+        // console.log(e,name)
+        this.setState({
+            direction:name.label,
+            direction_pk:name.value
+        })
+    }
+    onChangeSelectDirector=(e,name)=>{
+        this.setState({
+            chief_designer: name.label,
+            chief_designer_pk: name.value
+        })
+    }
+    onChangeSelectSubDirector=(e,name)=>{
+        this.setState({
+            deputy_chief_designer: name.label,
+            deputy_chief_designer_pk: name.value
+        })
+    }
+    onChangeSelectManager=(e,name)=>{
+        this.setState({
+            manager: name.label,
+            manager_pk: name.pk
+        })
+    }
+    onChangeBox=(e)=>{
+        this.setState({acceptance_vp:e.target.checked})
+        // console.log(e.target.checked)
+    }
+    saveProject=()=>{
+        let token = localStorage.getItem('token')
+        let myHeaders = new Headers();
+        myHeaders.append("Authorization",token );
+        var formdata = new FormData();
+        formdata.append("name", this.state.project.name);
+        formdata.append("direction", this.state.project.direction_pk);
+        formdata.append("manager", this.state.project.manager_pk);
+        formdata.append("client", this.state.project.client);
+        formdata.append("chief_designer", this.state.project.chief_designer_pk);
+        formdata.append("deputy_chief_designer", this.state.project.deputy_chief_designer_pk);
+        formdata.append("production_order", this.state.project.production_order);
+        formdata.append("comment_for_employees", this.state.project.comment_for_employees);
+        formdata.append("contract", this.state.project.contract);
+        formdata.append("type", this.state.project.type);
+        formdata.append("status", this.state.project.status);
+        formdata.append("report_availability", this.state.project.report_availability);
+        formdata.append("acceptance_vp", this.state.project.acceptance_vp);
+        console.log(this.state.project.name,
+            this.state.project.direction_pk,
+            this.state.project.manager_pk,
+            this.state.project.client,
+            this.state.project.chief_designer_pk,
+            this.state.project.deputy_chief_designer_pk,
+            this.state.project.production_order,
+            this.state.project.comment_for_employees,
+            this.state.project.contract,
+            this.state.project.type,
+            this.state.project.status,
+            this.state.project.report_availability,
+            this.state.project.acceptance_vp
+            )
+        let requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: formdata,
+            redirect: 'follow'
+        };
+
+        fetch(`http://127.0.0.1:8000/cabinet/project/${this.state.project.pk}/`, requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
     }
     render(){
         console.log(this.state.project.direction)
@@ -139,7 +225,8 @@ class EditRegister extends React.Component{
                                     <label htmlFor="direction" className="col-sm-2 col-form-label">Направления</label>
                                     <div className="col-sm-9">
                                         <Select
-                                            onChange={this.onChangeText}
+                                            name={'direction'}
+                                            onChange={this.onChangeSelectDirection}
                                             options={this.state.directions}
                                             value={this.state.project.direction}
                                             // placeholder="Выбрать"
@@ -162,6 +249,7 @@ class EditRegister extends React.Component{
                                     <label htmlFor="director" className="col-sm-2 col-form-label">Руководитель</label>
                                     <div className="col-sm-9">
                                         <Select
+                                            onChange={this.onChangeSelectManager}
                                             options={this.state.directors}
                                             value={this.state.project.manager}
                                             placeholder="Выбрать"
@@ -176,6 +264,7 @@ class EditRegister extends React.Component{
                                         конструктор</label>
                                     <div className="col-sm-9">
                                         <Select
+                                            onChange={this.onChangeSelectDirector}
                                             options={this.state.directors}
                                             value = {this.state.project.chief_designer}
                                             placeholder="Выбрать"
@@ -190,6 +279,7 @@ class EditRegister extends React.Component{
                                            className="col-sm-2 col-form-label">Зам.Гл.Конструктора</label>
                                     <div className="col-sm-9">
                                         <Select
+                                            onChange={this.onChangeSelectSubDirector}
                                             options={this.state.directors}
                                             value = {this.state.project.deputy_chief_designer}
                                             placeholder="Выбрать"
@@ -204,10 +294,12 @@ class EditRegister extends React.Component{
                                     <label htmlFor="num_contract" className="col-sm-2 col-form-label">№ договора</label>
                                     <div className="col-sm-9">
                                     <textarea
+                                        onChange={this.onChangeText}
                                         defaultValue={this.state.project.contract}
                                         id={"num-contract"}
                                         autoSize={{minRows: 2, maxRows: 8}}
                                         className="form-control"
+                                        name={'contract'}
                                     />
                                     </div>
                                 </div>
@@ -215,10 +307,12 @@ class EditRegister extends React.Component{
                                     <label htmlFor="customer" className="col-sm-2 col-form-label">Заказчик</label>
                                     <div className="col-sm-9">
                                     <textarea
+                                        onChange={this.onChangeText}
                                         defaultValue={this.state.project.client}
                                         id={"customer"}
                                         autoSize={{minRows: 2, maxRows: 8}}
                                         className="form-control"
+                                        name={'client'}
                                     />
                                     </div>
                                 </div>
@@ -227,6 +321,8 @@ class EditRegister extends React.Component{
                                         производство</label>
                                     <div className="col-sm-9">
                                     <textarea
+                                        onChange={this.onChangeText}
+                                        name={'production_order'}
                                         defaultValue={this.state.project.production_order}
                                         id={"order"}
                                         autoSize={{minRows: 2, maxRows: 8}}
@@ -238,6 +334,8 @@ class EditRegister extends React.Component{
                                     <label htmlFor="comment" className="col-sm-2 col-form-label">Комментарий</label>
                                     <div className="col-sm-9">
                                     <textarea
+                                        onChange={this.onChangeText}
+                                        name={'commit'}
                                         defaultValue={this.state.project.comment_for_employees}
                                         id={"comment"}
                                         autoSize={{minRows: 2, maxRows: 8}}
@@ -282,14 +380,14 @@ class EditRegister extends React.Component{
                                 <div className="form-group row">
                                     <label htmlFor="pp" className="col-sm-2 col-form-label">Приемка ВП</label>
                                     <div className="col-sm-9 text-left">
-                                        <Checkbox id={"pp"} defaultChecked={true}>
+                                        <Checkbox onChange={this.onChangeBox} id={"pp"} defaultChecked={true}>
                                             <label className="pp" htmlFor="inlineCheckbox1">ПП</label>
                                         </Checkbox>
                                     </div>
                                 </div>
                                 <br/>
                                 <div className="text-center">
-                                    <button className="btn btn-success btn-sm" style={{marginRight: "5px"}}>Сохранить
+                                    <button onClick={this.saveProject} className="btn btn-success btn-sm" style={{marginRight: "5px"}}>Сохранить
                                     </button>
                                     <button className="btn btn-secondary btn-sm">Отмена</button>
                                 </div>
