@@ -16,6 +16,7 @@ from .cabinet_scripts.projects import get_project, get_projects
 from .cabinet_scripts.calendar import get_calendar
 from .cabinet_scripts.groups import get_group, get_groups
 from .cabinet_scripts.salary import change_salary_common
+from django.contrib.auth.models import User
 
 from .forms import ProjectForm, ReportForm, ActionForm, ProfileForm, \
     GroupForm, SalaryCommonForm, SalaryIndividualForm, RegisterForm
@@ -27,6 +28,7 @@ def get_user_jwt(request):
     token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
+    # user = User.objects.get(username="admin")
     return user
 
 
@@ -434,7 +436,6 @@ def groups_with_permission(request):
     if request.method == "GET":
         if user and get_access(101, user):
             data = get_groups()
-            print(data)
             return HttpResponse(json.dumps(data))
     if request.method == "POST":
         pk = request.POST.get('pk')
