@@ -1,7 +1,7 @@
 from .models import Report
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
-from .models import Profile, Report, Action, Group, GroupAction, Project, Direction
+from .models import Profile, Report, Action, Group, GroupAction, Project, Direction, Department
 from datetime import datetime
 from json import loads
 
@@ -30,6 +30,11 @@ class AllModelTests(TestCase):
         group = Group.objects.create(name='Commoners')
         group.actions.set(actions)
         group.participants.set(profiles)
+        Department.objects.create(department_code='1', department_name='First', subdepartment_code='0')
+        Department.objects.create(department_code='2', department_name='Second', subdepartment_code='1')
+        Department.objects.create(department_code='3', department_name='Third', subdepartment_code='1')
+        Department.objects.create(department_code='4', department_name='Fourth', subdepartment_code='2')
+
 
     def test_profile_and_report(self):
         user = User.objects.get(username='admin')
@@ -79,7 +84,8 @@ class AllModelTests(TestCase):
     def test_projects_info(self):
         request = self.client.get('/cabinet/projects/')
         self.assertEqual(request.status_code, 200)
-        self.assertEqual([{'pk': 5, 'fields': {'name': 'Of', 'direction': 'Direction',
+        pk = loads(request.content.decode("utf8"))[0]['pk']
+        self.assertEqual([{'pk': pk, 'fields': {'name': 'Of', 'direction': 'Direction',
                                                'manager': 'Ivanov Vanya Ivanovich',
                                                'deputy_chief_designer': 'Ivanov Vanya Ivanovich',
                                                'chief_designer': 'Ivanov Vanya Ivanovich',
@@ -91,7 +97,24 @@ class AllModelTests(TestCase):
     def test_groups_info(self):
         request = self.client.get('/admin/groups_admin/')
         self.assertEqual(request.status_code, 200)
-        self.assertEqual([{'pk': 3, 'fields': {'name': 'Commoners', 'users': ['Vanya Ivanov Ivanovich', 'Inna Ivanova Ivanovich'],
+        pk = loads(request.content.decode("utf8"))[0]['pk']
+        self.assertEqual([{'pk': pk, 'fields': {'name': 'Commoners', 'users': ['Vanya Ivanov Ivanovich', 'Inna Ivanova Ivanovich'],
                               'description': '', 'actions': ['Eat 10', 'Drink 11', 'Cry 12', 'Sleep 13']}}],
                         loads(request.content.decode("utf8")))
 
+    def test_logs(self):
+        request = self.client.get('/admin/logs/')
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual([], loads(request.content.decode("utf8")))
+
+    def test_departments(self):
+        request = self.client.get('/departments/')
+        self.assertEqual(request.status_code, 200)
+        first_pk = loads(request.content.decode("utf8"))[0]['pk']
+        second_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][0]['pk']
+        third_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][1]['pk']
+        fourth_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][0]['subdepartments'][0]['pk']
+        self.assertEqual([{"name": "First", "code": "1", "pk": first_pk, "users": [], "subdepartments": [
+            {"name": "Second", "code": "2", "pk": second_pk, "users": [],
+             "subdepartments": [{"name": "Fourth", "code": "4", "pk": fourth_pk, "users": []}]},
+            {"name": "Third", "code": "3", "pk": third_pk, "users": []}]}], loads(request.content.decode("utf8")))

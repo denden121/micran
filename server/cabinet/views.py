@@ -11,7 +11,7 @@ from .project_export import export
 from .departaments_scripts import get_endpoint_department, build_level_with_user
 
 from .cabinet_scripts.cabinet import get_info_about_user
-from .cabinet_scripts.reports import get_reports, get_reports_for_worker
+from .cabinet_scripts.reports import get_reports, get_reports_for_worker, create_reports
 from .cabinet_scripts.projects import get_project, get_projects
 from .cabinet_scripts.calendar import get_calendar
 from .cabinet_scripts.groups import get_group, get_groups
@@ -19,9 +19,9 @@ from .cabinet_scripts.salary import change_salary_common
 from django.contrib.auth.models import User
 
 from .forms import ProjectForm, ReportForm, ActionForm, ProfileForm, \
-    GroupForm, SalaryCommonForm, SalaryIndividualForm, RegisterForm
+    GroupForm, SalaryIndividualForm, RegisterForm
 from .models import Profile, Project, Report, Action, Group, Logging, \
-    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark, GroupAction
+    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, GroupAction
 
 
 def get_user_jwt(request):
@@ -47,21 +47,34 @@ def get_department(subdepartment):
 
 
 def departament_new_view(request):
-    departments = Department.objects.filter(subdepartment_code='0')
-    data = []
-    date = f'{datetime.now().month}-{datetime.now().year}'
-    for department in departments:
-        data.append(build_level_with_user(department.id, 1, date, 1, 0))
-    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+    user = get_user_jwt(request)
+    if user:
+        departments = Department.objects.filter(subdepartment_code='0')
+        data = []
+        date = f'{datetime.now().month}-{datetime.now().year}'
+        for department in departments:
+            data.append(build_level_with_user(department.id, 1, date, 1, 0))
+        return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+
+
+def department_workers(request, department_id):
+    user = get_user_jwt(request)
+    if user:
+        department = Department.objects.get(pk=department_id)
+        data = build_level_with_user(department.id, 0, only_user=1)
+        output = get_endpoint_department(data, [], 1)
+        return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
 
 def salary_new_view(request, department_id):
-    department = Department.objects.get(pk=department_id)
-    date = request.GET.get("date")
-    salary_flag = 1
-    data = build_level_with_user(department.id, 0, date, 1, salary_flag)
-    output = get_endpoint_department(data, [])
-    return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
+    user = get_user_jwt(request)
+    if user:
+        department = Department.objects.get(pk=department_id)
+        date = request.GET.get("date")
+        salary_flag = 1
+        data = build_level_with_user(department.id, 0, date, 1, salary_flag)
+        output = get_endpoint_department(data, [])
+        return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
 
 def get_time_from_reports(profile):
@@ -178,25 +191,7 @@ def all_report_view(request, user_id='default'):
                 data = get_reports(request.GET.get('month'), request.GET.get('year'), user.id)
                 return HttpResponse(json.dumps(data))
             elif request.method == "POST":
-                profile = Profile.objects.get(user=user)
-                project_pk = request.POST.get('project')
-                date = request.POST.get('date')
-                year, month, day = date.split('-')
-                reports = Report.objects.filter(creator_id=user.id, date__year=year,
-                                                date__month=month, project=project_pk)
-                if reports:
-                    return HttpResponse("Already have a report")
-                form = ReportForm(request.POST)
-                if form.is_valid():
-                    report = form.save(commit=False)
-                    report.creator_id = profile
-                    report.save()
-                    data = []
-                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
-                    data.append({'pk': report.pk, 'fields': fields, 'status': report.status})
-                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
-                return HttpResponse("Fail")
+                return create_reports(request, user)
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:

@@ -1,4 +1,5 @@
 from .models import Department, Profile, Report, SalaryIndividual, TimeCard, SalaryCommon
+from datetime import datetime
 
 
 def get_salary_fields(user, month, year):
@@ -14,19 +15,30 @@ def get_salary_fields(user, month, year):
     return data
 
 
-def get_endpoint_department(data, output):
+def get_endpoint_department(data, output, only_user=0):
     if 'subdepartments' in data:
         fields = {"pk": data["pk"], "code": data["code"], "name": data["name"]}
         try:
             fields["users"] = data["users"]
         except KeyError:
             pass
-        output.append(fields)
+        if only_user != 0:
+            if only_user != 0:
+                if data["users"]:
+                    for field in data["users"]:
+                        output.append(field)
+        else:
+            output.append(fields)
         for i in range(len(data['subdepartments'])):
-            get_endpoint_department(data['subdepartments'][i], output)
+            get_endpoint_department(data['subdepartments'][i], output, only_user)
         return output
     else:
-        output.append(data)
+        if only_user != 0:
+            if data["users"]:
+                for field in data["users"]:
+                    output.append(field)
+        else:
+            output.append(data)
         return output
 
 
@@ -51,6 +63,8 @@ def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, sa
                            'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
             report_time = 0
             flag = 0
+            if date == "default":
+                month, year = datetime.now().month, datetime.now().year
             salary = SalaryIndividual.objects.filter(date__month=month, date__year=year, person=worker)
             if salary_flag != 1:
                 reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
