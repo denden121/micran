@@ -1,7 +1,8 @@
 from .models import Report
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
-from .models import Profile, Report, Action, Group, GroupAction, Project, Direction, Department
+from .models import Profile, Report, Action, Group, GroupAction, Project, Direction, Department, SalaryIndividual, \
+    SalaryCommon
 from datetime import datetime
 from json import loads
 
@@ -12,8 +13,13 @@ class AllModelTests(TestCase):
         user = User.objects.create_user(password='admin', username='admin')
         self.client = Client()
         user_1 = User.objects.create_user(password='admin_1', username='admin_1')
+        departament = Department.objects.create(department_code='1', department_name='First', subdepartment_code='0')
         profile = Profile.objects.create(user=user, first_name='Vanya', last_name='Ivanov', middle_name='Ivanovich')
-        Profile.objects.create(user=user_1, first_name='Inna', last_name='Ivanova', middle_name='Ivanovich')
+        profile_2 = Profile.objects.create(user=user_1, first_name='Inna', last_name='Ivanova',
+                               middle_name='Ivanovich', department=departament)
+        common_part = SalaryCommon.objects.create(date=datetime.now())
+        SalaryIndividual.objects.create(common_part=common_part, person=profile_2, date=datetime.now())
+        SalaryIndividual.objects.create(common_part=common_part, person=profile, date=datetime.now())
         profiles = Profile.objects.all()
         Report.objects.create(creator_id=profile, text='Ivanovich Ivanovich Ivanovich Ivanovich Ivanovich',
                               hour=5, status=True, ban_id=profile, check=True, check_id=profile, date = datetime.now())
@@ -30,10 +36,10 @@ class AllModelTests(TestCase):
         group = Group.objects.create(name='Commoners')
         group.actions.set(actions)
         group.participants.set(profiles)
-        Department.objects.create(department_code='1', department_name='First', subdepartment_code='0')
         Department.objects.create(department_code='2', department_name='Second', subdepartment_code='1')
         Department.objects.create(department_code='3', department_name='Third', subdepartment_code='1')
         Department.objects.create(department_code='4', department_name='Fourth', subdepartment_code='2')
+
 
 
     def test_profile_and_report(self):
@@ -114,7 +120,16 @@ class AllModelTests(TestCase):
         second_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][0]['pk']
         third_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][1]['pk']
         fourth_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][0]['subdepartments'][0]['pk']
-        self.assertEqual([{"name": "First", "code": "1", "pk": first_pk, "users": [], "subdepartments": [
+        self.assertEqual([{"name": "First", "code": "1", "pk": first_pk, "users": [{'name': 'Inna Ivanova Ivanovich',
+            'SRI_SAS': False, 'pk': 6, 'has_report': False, 'banned': '',
+            'checker': '', 'time_report': 0, 'time_system': 0, 'time_norm': 0}], "subdepartments": [
             {"name": "Second", "code": "2", "pk": second_pk, "users": [],
              "subdepartments": [{"name": "Fourth", "code": "4", "pk": fourth_pk, "users": []}]},
             {"name": "Third", "code": "3", "pk": third_pk, "users": []}]}], loads(request.content.decode("utf8")))
+
+    def test_salary(self):
+        request = self.client.get('/departments/')
+        first_pk = loads(request.content.decode("utf8"))[0]['pk']
+        request = self.client.get(f'/salary/new/{first_pk}/?date=09-2020')
+        self.assertEqual(request.status_code, 200)
+        print(request.content)

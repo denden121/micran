@@ -499,8 +499,9 @@ def change_salary(request):
             year = request.POST.get('year')
             month = request.POST.get('month')
             hour = get_time_from_reports(person)
-            salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
-            salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
+            date = f'{year}-{month}-1'
+            salary_common, created = SalaryCommon.objects.get_or_create(date=date)
+            salary, created = SalaryIndividual.objects.get_or_create(person=person, date=date)
             form = SalaryIndividualForm(request.POST, instance=salary)
             if form.is_valid():
                 form.save()

@@ -29,7 +29,7 @@ urlpatterns = [
     path('groups/<int:group_id>/change/', views.change_group_view),
     path('actions/', views.action_view),
     path('salary/norm/', views.salary_norm),
-    path('salary/change/', views.change_salary),
+    path('salary/', views.change_salary),
     path('salary/new/<int:department_id>/', views.salary_new_view),
     path('salary/individual/', views.salary_individual),
     path('salary/change_common/', views.change_common_salary),
