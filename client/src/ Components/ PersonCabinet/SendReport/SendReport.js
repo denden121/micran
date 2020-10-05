@@ -38,7 +38,7 @@ class SendReport extends React.Component{
             redirect: 'follow'
         };
         if(this.state.select_report){
-            let url = `http://127.0.0.1:8000/cabinet/report/${this.state.select_report}`
+            let url = `http://127.0.0.1:8000/cabinet/report/${this.state.select_report}/`
             fetch(url, requestOptions)
                 .then(response => response.json())
                 .then(result => {
