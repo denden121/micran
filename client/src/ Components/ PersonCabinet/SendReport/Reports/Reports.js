@@ -69,11 +69,6 @@ const Reports =(props)=>{
                                 <div className="box-content">
                                     <div id="time-read">
                                         <label className="col-sm-1" className="Label1"><strong>Проект:</strong></label>
-                                        {/*<input className="form-control"*/}
-                                        {/*       id='name_project'*/}
-                                        {/*       placeholder="Проект"*/}
-                                        {/*       defaultValue='MicRac'*/}
-                                        {/*       type="text"/>*/}
                                         <select disabled={props.status} onChange={props.onChangeSelect} className="select2 form-control select2-offscreen" id='name_project'>
                                             <NameProjects listNameFrojects = {props.listNameFrojects}/>
                                         </select>
