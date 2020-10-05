@@ -43,6 +43,7 @@ urlpatterns = [
     path('directions/', views.direction_view),
     path('subdepartments/', views.subdepartment_view),
     path('departments/', views.departament_new_view),
+    path('department/<int:department_id>/workers/', views.department_workers),
     path('departments/<int:department_id>/subdepartments/', views.subdepartment_from_departments_view),
     path('departments/simple/', views.departament_simple_view),
     path('workers/subdepartments/<int:subdepartment_id>', views.workers_subdepartment),

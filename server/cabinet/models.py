@@ -25,7 +25,7 @@ class Logging(models.Model):
 
 
 class Action(models.Model):
-    action = models.CharField(max_length=30, blank=True, unique=True)
+    action = models.CharField(max_length=100, blank=True, unique=True)
     num = models.IntegerField(unique=True)
 
     def __str__(self):
@@ -33,7 +33,7 @@ class Action(models.Model):
 
 
 class GroupAction(models.Model):
-    name = models.CharField(max_length=30, blank=True, unique=True)
+    name = models.CharField(max_length=100, blank=True, unique=True)
     available_actions = models.ManyToManyField(Action, blank=True)
 
     def __str__(self):
@@ -85,7 +85,7 @@ class Group(models.Model):
 
 
 class Project(models.Model):
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, unique=True)
     direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True,
                                   null=True)
     manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.SET_NULL, null=True)

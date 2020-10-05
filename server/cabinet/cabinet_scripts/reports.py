@@ -1,4 +1,7 @@
 from ..models import Report, SalaryCommon, TimeCard, Profile
+import simplejson as json
+from django.http.response import HttpResponse
+from ..forms import ReportForm
 
 
 def get_reports(month, year, user_id):
@@ -50,3 +53,25 @@ def get_reports_for_worker(date, person_id):
     output['pk'] = profile.pk
     output['reports'] = data
     return output
+
+
+def create_reports(request, user):
+    profile = Profile.objects.get(user=user)
+    project_pk = request.POST.get('project')
+    date = request.POST.get('date')
+    year, month, day = date.split('-')
+    reports = Report.objects.filter(creator_id=user.id, date__year=year,
+                                    date__month=month, project=project_pk)
+    if reports:
+        return HttpResponse("Already have a report")
+    form = ReportForm(request.POST)
+    if form.is_valid():
+        report = form.save(commit=False)
+        report.creator_id = profile
+        report.save()
+        data = []
+        fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
+                  'project_pk': report.project.pk}
+        data.append({'pk': report.pk, 'fields': fields, 'status': report.status})
+        return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
+    return HttpResponse("Fail")

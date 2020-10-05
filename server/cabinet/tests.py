@@ -1,13 +1,12 @@
 from .models import Report
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
-from .models import Profile, Report, Action, Group, GroupAction
+from .models import Profile, Report, Action, Group, GroupAction, Project, Direction, Department
 from datetime import datetime
 from json import loads
 
 
-class ReportModelTests(TestCase):
-
+class AllModelTests(TestCase):
 
     def setUp(self) -> None:
         user = User.objects.create_user(password='admin', username='admin')
@@ -19,6 +18,9 @@ class ReportModelTests(TestCase):
         Report.objects.create(creator_id=profile, text='Ivanovich Ivanovich Ivanovich Ivanovich Ivanovich',
                               hour=5, status=True, ban_id=profile, check=True, check_id=profile, date = datetime.now())
         Action.objects.create(action='Eat', num='10')
+        direction = Direction.objects.create(name="Direction", code="228")
+        Project.objects.create(name="Of", direction=direction, manager=profile, client="Ya", chief_designer=profile,
+                               deputy_chief_designer=profile, contract="2228")
         Action.objects.create(action='Drink', num='11')
         Action.objects.create(action='Cry', num='12')
         Action.objects.create(action='Sleep', num='13')
@@ -28,6 +30,10 @@ class ReportModelTests(TestCase):
         group = Group.objects.create(name='Commoners')
         group.actions.set(actions)
         group.participants.set(profiles)
+        Department.objects.create(department_code='1', department_name='First', subdepartment_code='0')
+        Department.objects.create(department_code='2', department_name='Second', subdepartment_code='1')
+        Department.objects.create(department_code='3', department_name='Third', subdepartment_code='1')
+        Department.objects.create(department_code='4', department_name='Fourth', subdepartment_code='2')
 
 
     def test_profile_and_report(self):
@@ -42,14 +48,12 @@ class ReportModelTests(TestCase):
         self.assertEqual(report.check, True)
         self.assertEqual(report.check_id, profile)
 
-
     # def test_actions_and_groups(self):
     #     group_actions = GroupAction.objects.all()
     #     for group_action in group_actions:
     #         for action in group_action.available_actions.all():
     #             print(action.action)
     #             print(action.num)
-
 
     def test_authenticate(self):
         response = self.client.post('/token/', data={
@@ -61,32 +65,56 @@ class ReportModelTests(TestCase):
         token = loads(token)
         self.token = token['access']
 
-
     def test_cabinet_info(self):
-        request = self.client.get('/cabinet/', HTTP_TOKEN=self.token)
-        try:
-            assert request.status_code == 200
-        except AssertionError:
-            print("Error at /cabinet/")
-    #
-    # def is_user_admin(headers):
-    #     request = requests.get('http://127.0.0.1:8000/check_admin/', headers=headers)
-    #     try:
-    #         assert request.status_code == 200
-    #     except AssertionError:
-    #         print("Error at http://127.0.0.1:8000/check_admin/")
-    #
-    # def cabinet_reports(headers):
-    #     t = datetime.now()
-    #     request = requests.get(f'http://127.0.0.1:8000/cabinet/reports/?month={t.month}&&year={t.year}',
-    #                            headers=headers)
-    #     try:
-    #         assert request.status_code == 200
-    #     except AssertionError:
-    #         print("Error at http://127.0.0.1:8000/cabinet/reports/")
-    #
-    # headers = {}
-    # authenticate(headers)
-    # get_cabinet_info(headers)
-    # is_user_admin(headers)
-    # cabinet_reports(headers)
+        request = self.client.get('/cabinet/')
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual({'pk': 3, 'fine_late': '09:15:00',
+                          'oklad': False, 'last_name': 'Ivanov',
+                          'first_name': 'Vanya', 'middle_name': 'Ivanovich',
+                          'employment_date': '2010-01-01', 'SRI_SAS': False, 'sex': '',
+                          'birth_date': 'None', 'experience': 0.0, 'position': '', 'department': ''},
+                         loads(request.content.decode("utf8")))
+
+    def test_reports_info(self):
+        request = self.client.get('/cabinet/reports/')
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual({'time_system': 0, 'reports': [], 'status': False, 'time_report': 0, 'time_norm': ''},
+               loads(request.content.decode("utf8")))
+
+    def test_projects_info(self):
+        request = self.client.get('/cabinet/projects/')
+        self.assertEqual(request.status_code, 200)
+        pk = loads(request.content.decode("utf8"))[0]['pk']
+        self.assertEqual([{'pk': pk, 'fields': {'name': 'Of', 'direction': 'Direction',
+                                               'manager': 'Ivanov Vanya Ivanovich',
+                                               'deputy_chief_designer': 'Ivanov Vanya Ivanovich',
+                                               'chief_designer': 'Ivanov Vanya Ivanovich',
+                                               'production_order': '', 'comment_for_employees': '', 'contract': '2228',
+                                               'type': False, 'status': False, 'client': 'Ya',
+                                               'report_availability': False, 'acceptance_vp': False}}],
+                         loads(request.content.decode("utf8")))
+
+    def test_groups_info(self):
+        request = self.client.get('/admin/groups_admin/')
+        self.assertEqual(request.status_code, 200)
+        pk = loads(request.content.decode("utf8"))[0]['pk']
+        self.assertEqual([{'pk': pk, 'fields': {'name': 'Commoners', 'users': ['Vanya Ivanov Ivanovich', 'Inna Ivanova Ivanovich'],
+                              'description': '', 'actions': ['Eat 10', 'Drink 11', 'Cry 12', 'Sleep 13']}}],
+                        loads(request.content.decode("utf8")))
+
+    def test_logs(self):
+        request = self.client.get('/admin/logs/')
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual([], loads(request.content.decode("utf8")))
+
+    def test_departments(self):
+        request = self.client.get('/departments/')
+        self.assertEqual(request.status_code, 200)
+        first_pk = loads(request.content.decode("utf8"))[0]['pk']
+        second_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][0]['pk']
+        third_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][1]['pk']
+        fourth_pk = loads(request.content.decode("utf8"))[0]['subdepartments'][0]['subdepartments'][0]['pk']
+        self.assertEqual([{"name": "First", "code": "1", "pk": first_pk, "users": [], "subdepartments": [
+            {"name": "Second", "code": "2", "pk": second_pk, "users": [],
+             "subdepartments": [{"name": "Fourth", "code": "4", "pk": fourth_pk, "users": []}]},
+            {"name": "Third", "code": "3", "pk": third_pk, "users": []}]}], loads(request.content.decode("utf8")))
