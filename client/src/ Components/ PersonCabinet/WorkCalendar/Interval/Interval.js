@@ -62,7 +62,7 @@ class Interval extends React.Component {
                 console.log('sub',result)
                 let subdepartments = Array.from(result).map((subdepartment)=>{
                     // console.log(subdepartment)
-                    return {value:`${subdepartment.pk}`,label:`${subdepartment.fields.code +' '+ subdepartment.fields.name}`}
+                    return {value:`${subdepartment.pk}`,label:`${subdepartment.code +' '+ subdepartment.name}`}
                 })
                 this.setState({subdepartments: subdepartments})})
             .catch(error => console.log('error', error))

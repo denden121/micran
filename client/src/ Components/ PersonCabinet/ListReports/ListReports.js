@@ -70,6 +70,7 @@ class ListReports extends React.Component {
                 let actions = Array.from(result).map((department)=>{
                     return {value:`${department.pk}`,label:`${department.fields.code +' '+ department.fields.name}`}
                 })
+                console.log(actions)
                 this.setState({departments: actions})})
             .catch(error => console.log('error', error))
         fetch("http://127.0.0.1:8000/cabinet/projects/simple/", requestOptions)
@@ -78,6 +79,7 @@ class ListReports extends React.Component {
                 let projects = Array.from(result).map((project)=>{
                     return {value:`${project.pk}`,label:`${project.name}`}
                 })
+                console.log(result)
                 this.setState({projects:projects})
             })
             .catch(error => console.log('error', error));

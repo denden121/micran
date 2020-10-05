@@ -16,7 +16,7 @@ const ListProjects = (props) => {
                 <td>{project.fields.contract}</td>
                 <td>{project.fields.client}</td>
                 <td>{project.fields.type ? 'Внешний' : 'Внутрений'}</td>
-                <td>{project.fields.status ? 'Зыкрыт' : 'Открыт'}</td>
+                <td>{project.fields.status ? 'Закрыт' : 'Открыт'}</td>
                 <td>{project.fields.report_availability ? 'Недоступен' : 'Доступен'}</td>
                 <td>{project.fields.acceptance_vp?'да':'нет*'}</td>
                 <td><a onClick={props.onClickEdit.bind(this,project.pk)}><FormOutlined/></a></td>

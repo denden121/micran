@@ -86,7 +86,6 @@ class Main extends Component{
             dateString = dateString.split('-').reverse()
             dateString[1] = parseInt(dateString[1])
             dateString = dateString.join(' ')
-            dateString = dateString.join(' ')
             localStorage.setItem('date', dateString)
             rend()
         }
@@ -95,7 +94,48 @@ class Main extends Component{
         console.log(event)
         // debugger;
     }
-
+    onChangeLocation=()=>{
+        let temp = document.location.pathname
+        console.log(temp)
+        switch (temp){
+            case '/cabinet/':
+                localStorage.setItem('key','0');
+                break;
+            case '/cabinet/salary':
+                localStorage.setItem('key','1');
+                break;
+            case '/cabinet/salary':
+                localStorage.setItem('key','2');
+                break;
+            case '/cabinet/list_reports':
+                localStorage.setItem('key','3');
+                break;
+            case '/cabinet/admin/view_groups':
+                localStorage.setItem('key','4');
+                break;
+            case '/cabinet/admin/logs':
+                localStorage.setItem('key','5');
+                break;
+            case '/cabinet/admin/play_roll':
+                localStorage.setItem('key','6');
+                break;
+            case '/cabinet/admin/register':
+                localStorage.setItem('key','7');
+                break;
+            case '/cabinet/admin/employees':
+                localStorage.setItem('key','8');
+                break;
+            case '/cabinet/admin/calendar':
+                localStorage.setItem('key','9');
+                break;
+            case '/cabinet/admin/system_time':
+                localStorage.setItem('key','10');
+                break;
+            case '/cabinet/admin/structure':
+                localStorage.setItem('key','11');
+                break;
+        }
+    }
     render() {
 
         if(!localStorage.getItem('date')){
@@ -106,6 +146,7 @@ class Main extends Component{
         if (!localStorage.getItem('menu')){
             localStorage.setItem('menu','true')
         }
+        this.onChangeLocation()
         return (
 
             <Layout style={{ minHeight: '100vh', paddingTop:0,margin:0 }}>
@@ -121,36 +162,36 @@ class Main extends Component{
                             </Space>
                         </div>
                         {localStorage.getItem('menu') ==='true'
-                            ?<Menu onClick={this.onClickCalendar} theme="light" mode="inline">
+                            ?<Menu defaultSelectedKeys={localStorage.getItem('key')}  onClick={this.onClickCalendar} theme="light" mode="inline">
 
-                                <Menu.Item key={localStorage.getItem('key')} icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
+                                <Menu.Item key="0" icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
                                     <a  href="http://localhost:3000/cabinet/">
                                         <span data-feather="home"></span>
                                         Отправка отчетов
                                         <span className="sr-only"></span>
                                     </a>
                                 </Menu.Item>
-                                <Menu.Item key="1" icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
-                                    <a  href="http://localhost:3000/cabinet/list_reports">
-                                        <span data-feather="home"></span>
-                                        Список отчетов
-                                        <span className="sr-only"></span>
-                                    </a>
-                                </Menu.Item>
-                                <Menu.Item key="2" icon={<DollarOutlined style={{ fontSize: '16px'}}/>}>
+                                <Menu.Item key="1" icon={<DollarOutlined style={{ fontSize: '16px'}}/>}>
                                     <a  href="http://localhost:3000/cabinet/salary">
                                         <span data-feather="bar-chart-2"></span>
                                         Зарплата
                                     </a>
                                 </Menu.Item>
-                                <Menu.Item key="3" icon={<DollarOutlined style={{ fontSize: '16px'}}/>}>
+                                <Menu.Item key="2" icon={<DollarOutlined style={{ fontSize: '16px'}}/>}>
                                     <a onClick={this.onClickAdmin} href="#">
                                         <span data-feather="bar-chart-2"></span>
                                         Администрирование
                                     </a>
                                 </Menu.Item>
                             </Menu>
-                            :<Menu>
+                            :<Menu defaultSelectedKeys={localStorage.getItem('key')} mode="inline">
+                                <Menu.Item key="3" icon={<UpSquareOutlined style={{ fontSize: '16px'}}/>}>
+                                    <a  href="http://localhost:3000/cabinet/list_reports">
+                                        <span data-feather="home"></span>
+                                        Список отчетов
+                                        <span className="sr-only"></span>
+                                    </a>
+                                </Menu.Item>
                                 <Menu.Item key="4" icon={<UsergroupAddOutlined style={{ fontSize: '16px'}}/>}>
                                     <a  href='http://localhost:3000/cabinet/admin/view_groups'>
                                         <span data-feather="shopping-cart"></span>

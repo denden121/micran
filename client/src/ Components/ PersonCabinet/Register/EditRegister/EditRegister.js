@@ -30,12 +30,10 @@ class EditRegister extends React.Component{
         await fetch("http://127.0.0.1:8000/directions/", requestOptions)
             .then(response => response.json())
             .then(result =>{
-                console.log(result)
                 directionValue = Array.from(result)
                 directionValue = directionValue.map(direction => {
                     return {value:`${direction.pk}`,label:`${direction.fields.code} ${direction.fields.name}`}
                 })
-                console.log('llll',directionValue)
             } )
             .catch(error => console.log('error', error));
         await fetch("http://127.0.0.1:8000/workers/project/managers/", requestOptions)
@@ -45,18 +43,15 @@ class EditRegister extends React.Component{
                 directorValue = directorValue.map(director => {
                     return {value:`${director.pk}`,label:`${director.fields.last_name + ' ' + director.fields.first_name+' '+director.fields.middle_name}`}
                 })
-                console.log('rrr',directorValue)
             } )
             .catch(error => console.log('error', error))
         await fetch("http://127.0.0.1:8000/workers/project/", requestOptions)
             .then(response => response.json())
             .then(result =>{
-                console.log(result)
                 peopleValue = Array.from(result)
                 peopleValue = peopleValue.map(director => {
                     return {value:`${director.pk}`,label:`${director.fields.last_name + ' ' + director.fields.first_name+' '+director.fields.middle_name}`}
                 })
-                console.log('ggg',peopleValue)
             })
             .catch(error => console.log('error', error));
         this.setState({
@@ -64,7 +59,6 @@ class EditRegister extends React.Component{
             directions: directionValue,
             directors:directorValue
         })
-        console.log('state',this.state)
     }
     loadProject = async () =>{
         let token = localStorage.getItem('token')
@@ -79,14 +73,11 @@ class EditRegister extends React.Component{
         fetch(`http://127.0.0.1:8000/cabinet/project/${pk}/`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 this.setState({project:result})
             })
             .catch(error => console.log(error))
-        console.log('state',this.state)
     }
     onChangeType=(e)=>{
-        console.log(e.target.name)
         let name = e.target.name
         let temp_project = this.state.project
         if(name ==='type'){
@@ -96,9 +87,7 @@ class EditRegister extends React.Component{
         }else{
             temp_project.report_availability = e.target.value === 1 ? true : false
         }
-        console.log(temp_project)
         this.setState({project:temp_project})
-
     }
     onClickBack= () =>{
         document.location='/cabinet/admin/register'
@@ -109,50 +98,51 @@ class EditRegister extends React.Component{
         let temp = this.state.project
         if(name ==='name'){
             temp.name = e.target.value
-            console.log(e.target.value)
         }else if(name ==='contract'){
             temp.contract = e.target.value
-            console.log(e)
         }else if(name === 'client'){
             temp.client = e.target.value
-            console.log(e)
         }else if(name === 'production_order'){
             temp.production_order = e.target.value
-            console.log(e)
         }else if(name === 'commit'){
             temp.comment_for_employees = e.target.value
-            console.log(e)
         }
         this.setState({project:temp})
     }
     onChangeSelectDirection=(e,name,)=>{
-        // console.log(e,name)
+        let project = this.state.project
+        project.direction = name.label
+        project.direction_pk = name.pk
         this.setState({
-            direction:name.label,
-            direction_pk:name.value
+            project:project
         })
     }
     onChangeSelectDirector=(e,name)=>{
+        let project = this.state.project
+        project.chief_designer = name.label
+        project.chief_designer_pk = name.pk
         this.setState({
-            chief_designer: name.label,
-            chief_designer_pk: name.value
+            project:project
         })
     }
     onChangeSelectSubDirector=(e,name)=>{
+        let project = this.state.project
+        project.deputy_chief_designer = name.label
+        project.deputy_chief_designer_pk = name.pk
         this.setState({
-            deputy_chief_designer: name.label,
-            deputy_chief_designer_pk: name.value
+            project:project
         })
     }
     onChangeSelectManager=(e,name)=>{
+        let project = this.state.project
+        project.manager = name.label
+        project.manager_pk = name.pk
         this.setState({
-            manager: name.label,
-            manager_pk: name.pk
+            project:project
         })
     }
     onChangeBox=(e)=>{
         this.setState({acceptance_vp:e.target.checked})
-        // console.log(e.target.checked)
     }
     saveProject=()=>{
         let token = localStorage.getItem('token')
@@ -172,20 +162,20 @@ class EditRegister extends React.Component{
         formdata.append("status", this.state.project.status);
         formdata.append("report_availability", this.state.project.report_availability);
         formdata.append("acceptance_vp", this.state.project.acceptance_vp);
-        console.log(this.state.project.name,
-            this.state.project.direction_pk,
-            this.state.project.manager_pk,
-            this.state.project.client,
-            this.state.project.chief_designer_pk,
-            this.state.project.deputy_chief_designer_pk,
-            this.state.project.production_order,
-            this.state.project.comment_for_employees,
-            this.state.project.contract,
-            this.state.project.type,
-            this.state.project.status,
-            this.state.project.report_availability,
-            this.state.project.acceptance_vp
-            )
+        // console.log(this.state.project.name,
+        //     this.state.project.direction_pk,
+        //     this.state.project.manager_pk,
+        //     this.state.project.client,
+        //     this.state.project.chief_designer_pk,
+        //     this.state.project.deputy_chief_designer_pk,
+        //     this.state.project.production_order,
+        //     this.state.project.comment_for_employees,
+        //     this.state.project.contract,
+        //     this.state.project.type,
+        //     this.state.project.status,
+        //     this.state.project.report_availability,
+        //     this.state.project.acceptance_vp
+        //     )
         let requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -195,7 +185,12 @@ class EditRegister extends React.Component{
 
         fetch(`http://127.0.0.1:8000/cabinet/project/${this.state.project.pk}/`, requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
+            .then(result => {
+                // console.log(result)
+                // if(result === 'success'){
+                    document.location = "/cabinet/admin/register"
+                // }
+            })
             .catch(error => console.log('error', error));
     }
     render(){
@@ -229,7 +224,7 @@ class EditRegister extends React.Component{
                                             onChange={this.onChangeSelectDirection}
                                             options={this.state.directions}
                                             value={this.state.project.direction}
-                                            // placeholder="Выбрать"
+                                            placeholder="Выбрать"
                                             style={{width: "100%"}}
                                             className="text-left"
                                         />
