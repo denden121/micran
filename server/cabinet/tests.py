@@ -18,8 +18,8 @@ class AllModelTests(TestCase):
         profile_2 = Profile.objects.create(user=user_1, first_name='Inna', last_name='Ivanova',
                                middle_name='Ivanovich', department=departament)
         common_part = SalaryCommon.objects.create(date=datetime.now())
-        SalaryIndividual.objects.create(common_part=common_part, person=profile_2, date=datetime.now())
-        SalaryIndividual.objects.create(common_part=common_part, person=profile, date=datetime.now())
+        SalaryIndividual.objects.create(common_part=common_part, person=profile_2, date=datetime.now(), plan_salary=10000)
+        SalaryIndividual.objects.create(common_part=common_part, person=profile, date=datetime.now(), plan_salary=10000)
         profiles = Profile.objects.all()
         Report.objects.create(creator_id=profile, text='Ivanovich Ivanovich Ivanovich Ivanovich Ivanovich',
                               hour=5, status=True, ban_id=profile, check=True, check_id=profile, date = datetime.now())
@@ -130,6 +130,12 @@ class AllModelTests(TestCase):
     def test_salary(self):
         request = self.client.get('/departments/')
         first_pk = loads(request.content.decode("utf8"))[0]['pk']
-        request = self.client.get(f'/salary/new/{first_pk}/?date=09-2020')
-        self.assertEqual(request.status_code, 200)
-        print(request.content)
+        date = f'{datetime.now().month}-{datetime.now().year}'
+        request_2 = self.client.get(f'/salary/new/{first_pk}/?date={date}')
+        self.assertEqual(request_2.status_code, 200)
+        self.assertEqual([{"pk": 33, "code": "1", "name": "First", "users": [
+            {"name": "Inna Ivanova Ivanovich", "SRI_SAS": False, "pk": 18, "position": "", "work_days": 0.0,
+             "hours_worked": 0.0, "time_norm_individual": 0.0, "penalty": 0.0, "is_penalty": False, "time_off": 0.0,
+             "plan_salary": 10000.0, "award": 0.0, "salary_hand": 0.0, "days_norm": 0.0, "time_norm": 0.0}]},
+         {"pk": 34, "code": "2", "name": "Second", "users": []}, {"name": "Fourth", "code": "4", "pk": 36, "users": []},
+         {"name": "Third", "code": "3", "pk": 35, "users": []}], loads(request_2.content.decode("utf8")))

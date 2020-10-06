@@ -70,10 +70,20 @@ def salary_new_view(request, department_id):
     user = get_user_jwt(request)
     if user:
         department = Department.objects.get(pk=department_id)
-        date = request.GET.get("date")
-        salary_flag = 1
-        data = build_level_with_user(department.id, 0, date, 1, salary_flag)
-        output = get_endpoint_department(data, [])
+        if department.subdepartment_code == "0":
+            date = request.GET.get("date")
+            salary_flag = 1
+            data = build_level_with_user(department.id, 0, date, 1, salary_flag)
+            output = get_endpoint_department(data, [])
+        else:
+            date = request.GET.get("date")
+            salary_flag = 1
+            data = build_level_with_user(department.id, 0, date, 1, salary_flag)
+            try:
+                del data['subdepartments']
+            except KeyError:
+                pass
+            output = get_endpoint_department(data, [])
         return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
 
