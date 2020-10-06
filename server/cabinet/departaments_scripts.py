@@ -1,6 +1,6 @@
 from .models import Department, Profile, Report, SalaryIndividual, TimeCard, SalaryCommon
 from datetime import datetime
-
+from datetime import date as dt
 
 def get_salary_fields(user, month, year):
     salary_common, created_c = SalaryCommon.objects.get_or_create(date__month=month, date__year=year)
@@ -65,7 +65,10 @@ def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, sa
             flag = 0
             if date == "default":
                 month, year = datetime.now().month, datetime.now().year
-            salary = SalaryIndividual.objects.filter(date__month=month, date__year=year, person=worker)
+                date_ = dt(year=datetime.now().year, month=datetime.now().month, day=1)
+            else:
+                date_ = dt(year=int(year), month=int(month), day=1)
+            salary, created = SalaryIndividual.objects.get_or_create(date=date_, person=worker)
             if salary_flag != 1:
                 reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
                 if reports:
@@ -99,7 +102,7 @@ def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, sa
                     users_field['time_norm'] = salary[0].time_norm
                 else:
                     users_field['time_norm'] = 0
-            if salary and salary_flag == 1:
+            if salary_flag == 1:
                 users_field['position'] = worker.position
                 users_field.update(get_salary_fields(worker, month, year))
             users.append(users_field)
