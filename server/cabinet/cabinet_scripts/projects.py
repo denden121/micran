@@ -30,7 +30,7 @@ def get_project(project_id):
 
 
 def get_projects():
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by('id')
     data = []
     for project in projects:
         manager = Profile.objects.get(pk=project.manager)

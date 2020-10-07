@@ -5,8 +5,8 @@ from ..forms import ReportForm
 
 
 def get_reports(month, year, user_id):
-    reports = Report.objects.filter(creator_id=user_id, date__month=month, date__year=year)
-    salary = SalaryCommon.objects.filter(date__year=year, date__month=month)
+    reports = Report.objects.filter(creator_id=user_id, date__month=month, date__year=year).order_by('id')
+    salary = SalaryCommon.objects.filter(date__year=year, date__month=month).order_by('id')
     data = []
     status = False
     time_report = 0
