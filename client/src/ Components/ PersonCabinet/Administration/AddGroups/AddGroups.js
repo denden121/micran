@@ -1,7 +1,7 @@
 import React from "react"
 import {Card,Form,Input,Select} from "antd"
 import Actions from "./Actions"
-
+import "./AddGroups.css"
 // import Activity from "./Activity/Activity"
 import makeAnimated from 'react-select/animated';
 // import {PlusCircleOutlined} from '@ant-design/icons'
@@ -167,7 +167,7 @@ class AddGroups extends React.Component{
                                     </Form>
                                     <Actions onChangeCheckBox={this.onChangeCheckBox} items = {this.state.actions}/>
                                     <div className="col-md-12 text-right" style={{marginTop:"20px",marginLeft:"-150px"}}>
-                                <div className="error-add-group text-right">Введите все поля</div>
+                                    <div className="error-add-group text-right">Введите все поля</div>
                                 <br/>
                                     <Button onClick={this.createGroup} style={{backgroundColor:"#1890ff"}}>Отправить</Button>
                                     <Button onClick={()=>{document.location='view_groups'}} style={{backgroundColor:"#e6f7ff",marginLeft:"5px"}}>Назад</Button>

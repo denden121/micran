@@ -109,10 +109,12 @@ class EditRegister extends React.Component{
         }
         this.setState({project:temp})
     }
-    onChangeSelectDirection=(e,name,)=>{
+    onChangeSelectDirection=(e,name)=>{
+        console.log(e,name)
         let project = this.state.project
         project.direction = name.label
-        project.direction_pk = name.pk
+        project.direction_pk = name.value
+        console.log('f',project)
         this.setState({
             project:project
         })
@@ -120,7 +122,7 @@ class EditRegister extends React.Component{
     onChangeSelectDirector=(e,name)=>{
         let project = this.state.project
         project.chief_designer = name.label
-        project.chief_designer_pk = name.pk
+        project.chief_designer_pk = name.value
         this.setState({
             project:project
         })
@@ -128,7 +130,7 @@ class EditRegister extends React.Component{
     onChangeSelectSubDirector=(e,name)=>{
         let project = this.state.project
         project.deputy_chief_designer = name.label
-        project.deputy_chief_designer_pk = name.pk
+        project.deputy_chief_designer_pk = name.value
         this.setState({
             project:project
         })
@@ -136,45 +138,49 @@ class EditRegister extends React.Component{
     onChangeSelectManager=(e,name)=>{
         let project = this.state.project
         project.manager = name.label
-        project.manager_pk = name.pk
+        project.manager_pk = name.value
         this.setState({
             project:project
         })
     }
     onChangeBox=(e)=>{
-        this.setState({acceptance_vp:e.target.checked})
+        let project = this.state.project
+        project.acceptance_vp = e.target.checked
+        console.log(project)
+        this.setState({project:project})
     }
     saveProject=()=>{
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization",token );
-        var formdata = new FormData();
-        formdata.append("name", this.state.project.name);
-        formdata.append("direction", this.state.project.direction_pk);
-        formdata.append("manager", this.state.project.manager_pk);
-        formdata.append("client", this.state.project.client);
-        formdata.append("chief_designer", this.state.project.chief_designer_pk);
-        formdata.append("deputy_chief_designer", this.state.project.deputy_chief_designer_pk);
-        formdata.append("production_order", this.state.project.production_order);
-        formdata.append("comment_for_employees", this.state.project.comment_for_employees);
-        formdata.append("contract", this.state.project.contract);
-        formdata.append("type", this.state.project.type);
-        formdata.append("status", this.state.project.status);
-        formdata.append("report_availability", this.state.project.report_availability);
-        formdata.append("acceptance_vp", this.state.project.acceptance_vp);
-        // console.log(this.state.project.name,
-        //     this.state.project.direction_pk,
-        //     this.state.project.manager_pk,
-        //     this.state.project.client,
-        //     this.state.project.chief_designer_pk,
-        //     this.state.project.deputy_chief_designer_pk,
-        //     this.state.project.production_order,
-        //     this.state.project.comment_for_employees,
-        //     this.state.project.contract,
-        //     this.state.project.type,
-        //     this.state.project.status,
-        //     this.state.project.report_availability,
-        //     this.state.project.acceptance_vp
+        let project = this.state.project
+        let formdata = new FormData();
+        formdata.append("name", project.name);
+        formdata.append("direction", project.direction_pk);
+        formdata.append("manager", project.manager_pk);
+        formdata.append("client", project.client);
+        formdata.append("chief_designer", project.chief_designer_pk);
+        formdata.append("deputy_chief_designer", project.deputy_chief_designer_pk);
+        formdata.append("production_order", project.production_order);
+        formdata.append("comment_for_employees", project.comment_for_employees);
+        formdata.append("contract", project.contract);
+        formdata.append("type", project.type);
+        formdata.append("status", project.status);
+        formdata.append("report_availability", project.report_availability);
+        formdata.append("acceptance_vp", project.acceptance_vp);
+        // console.log(project.name,
+        //     project.direction_pk,
+        //     project.manager_pk,
+        //     project.client,
+        //     project.chief_designer_pk,
+        //     project.deputy_chief_designer_pk,
+        //     project.production_order,
+        //     project.comment_for_employees,
+        //     project.contract,
+        //     project.type,
+        //     project.status,
+        //     project.report_availability,
+        //     project.acceptance_vp
         //     )
         let requestOptions = {
             method: 'POST',
@@ -183,13 +189,10 @@ class EditRegister extends React.Component{
             redirect: 'follow'
         };
 
-        fetch(`http://127.0.0.1:8000/cabinet/project/${this.state.project.pk}/`, requestOptions)
+        fetch(`http://127.0.0.1:8000/cabinet/project/${project.pk}/`, requestOptions)
             .then(response => response.text())
             .then(result => {
-                // console.log(result)
-                // if(result === 'success'){
-                    document.location = "/cabinet/admin/register"
-                // }
+                document.location = "/cabinet/admin/register"
             })
             .catch(error => console.log('error', error));
     }
@@ -230,15 +233,6 @@ class EditRegister extends React.Component{
                                         />
                                     </div>
                                 </div>
-                                {/*<div className="form-group row">*/}
-                                {/*    <label htmlFor="description" className="col-sm-2 col-form-label">Описание</label>*/}
-                                {/*    <div className="col-sm-9">*/}
-                                {/*    <textarea className="form-control textar"*/}
-                                {/*              id={"description"}*/}
-                                {/*              autoSize={{minRows: 2, maxRows: 8}}*/}
-                                {/*              placeholder="Введите текст"/>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
                                 <hr/>
                                 <div className="form-group row">
                                     <label htmlFor="director" className="col-sm-2 col-form-label">Руководитель</label>
@@ -375,7 +369,7 @@ class EditRegister extends React.Component{
                                 <div className="form-group row">
                                     <label htmlFor="pp" className="col-sm-2 col-form-label">Приемка ВП</label>
                                     <div className="col-sm-9 text-left">
-                                        <Checkbox onChange={this.onChangeBox} id={"pp"} defaultChecked={true}>
+                                        <Checkbox onChange={this.onChangeBox} id={"pp"} defaultChecked={this.state.project.acceptance_vp}>
                                             <label className="pp" htmlFor="inlineCheckbox1">ПП</label>
                                         </Checkbox>
                                     </div>
@@ -384,7 +378,7 @@ class EditRegister extends React.Component{
                                 <div className="text-center">
                                     <button onClick={this.saveProject} className="btn btn-success btn-sm" style={{marginRight: "5px"}}>Сохранить
                                     </button>
-                                    <button className="btn btn-secondary btn-sm">Отмена</button>
+                                    <button onClick={()=>{document.location = '/cabinet/admin/register'}}  className="btn btn-secondary btn-sm">Отмена</button>
                                 </div>
                             </div>
                         </Card>
