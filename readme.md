@@ -7,5 +7,5 @@
 3. Для удобства работы можно запустить в detach режиме с помощью команды
 ```docker-compose up -d```
 4. Для заполнения бд тестовыми данными нужно использовать команду
-```/path/to/sql_dump.sql |sudo docker exec -i micran_db_1 psql -U postgres -d postgres```
+```cat /path/to/sql_dump.sql |sudo docker exec -i micran_db_1 psql -U postgres -d postgres```
   
