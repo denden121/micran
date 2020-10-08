@@ -99,7 +99,7 @@ def build_level_with_user(subdepartment_id, lvl, date='default', only_user=0, sa
                 users_field['time_report'] = report_time
                 users_field['time_system'] = time_system
                 if salary:
-                    users_field['time_norm'] = salary[0].time_norm
+                    users_field['time_norm'] = salary.time_norm
                 else:
                     users_field['time_norm'] = 0
             if salary_flag == 1:

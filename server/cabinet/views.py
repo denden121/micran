@@ -158,7 +158,6 @@ def check_admin_view(request):
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
-        profile = user.profile
         data = get_info_about_user(user.id)
         return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
     else:
@@ -251,7 +250,7 @@ def report_view(request, report_id, user_id='default'):
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save()
+                    form.save()
                     data = []
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
@@ -287,7 +286,7 @@ def report_view(request, report_id, user_id='default'):
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save()
+                    form.save()
                     data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hours': report.hour,
                             'status': report.status, 'project_pk': report.project.pk}
                     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
