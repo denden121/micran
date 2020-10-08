@@ -273,7 +273,7 @@ ALTER TABLE public.authtoken_token OWNER TO postgres;
 
 CREATE TABLE public.cabinet_action (
     id integer NOT NULL,
-    action character varying(30) NOT NULL,
+    action character varying(100) NOT NULL,
     num integer NOT NULL
 );
 
@@ -381,9 +381,9 @@ ALTER SEQUENCE public.cabinet_department_id_seq OWNED BY public.cabinet_departme
 
 CREATE TABLE public.cabinet_direction (
     id integer NOT NULL,
-    direction_name character varying(30) NOT NULL,
+    name character varying(30) NOT NULL,
     subdepartment_id integer,
-    direction_code character varying(50) NOT NULL
+    code character varying(50) NOT NULL
 );
 
 
@@ -522,7 +522,7 @@ ALTER SEQUENCE public.cabinet_group_participants_id_seq OWNED BY public.cabinet_
 
 CREATE TABLE public.cabinet_groupaction (
     id integer NOT NULL,
-    name character varying(30) NOT NULL
+    name character varying(100) NOT NULL
 );
 
 
@@ -1281,7 +1281,7 @@ COPY public.auth_user (id, password, last_login, is_superuser, username, first_n
 9	pbkdf2_sha256$180000$mrIDELuEWe8f$8hJB3dkHhe1gR/bGoqQurYZaQwCrLeeFRJb9XMbu394=	\N	f	user_8				f	t	2020-08-26 05:45:52.158532+00
 10	pbkdf2_sha256$180000$XW7Nyt2E66eE$vtQhmbonMHQxm8Cf87QIAdOO/po8jkD/F3wKYbdS6Qs=	\N	f	user_9				f	t	2020-08-26 05:46:43.501917+00
 11	pbkdf2_sha256$180000$lr1FovQ15zdp$P4yMrfueRs9vfnVM62ebuJDYJKbQW56yA1IkIEqF7t0=	\N	f	user_10				f	t	2020-08-26 05:47:36.218974+00
-1	pbkdf2_sha256$180000$HV1eogJkO7PC$xGd1w2Te+5Nuy9XHyn44J33omvh7kxBiu55XltkobJ4=	2020-09-16 11:45:42.629812+00	t	admin				t	t	2020-08-18 03:08:40.451566+00
+1	pbkdf2_sha256$180000$HV1eogJkO7PC$xGd1w2Te+5Nuy9XHyn44J33omvh7kxBiu55XltkobJ4=	2020-09-30 04:22:34.181145+00	t	admin				t	t	2020-08-18 03:08:40.451566+00
 \.
 
 
@@ -1314,11 +1314,64 @@ COPY public.authtoken_token (key, created, user_id) FROM stdin;
 --
 
 COPY public.cabinet_action (id, action, num) FROM stdin;
-5	101	101
-6	100	100
-7	11	11
-8	12	12
-9	13	13
+10	Доступ в пользовательский раздел(код 1)	1
+12	Доступ ко всем департаментам(код 44)	44
+13	Доступ ко всему своему департаменту(код 45)	45
+14	Чтение отчетов(код 3)	3
+15	Редактирование отчетов своего подразделения(код 4)	4
+16	Проверка отчетов(код 5)	5
+17	Блокирование отчетов(код 6)	6
+18	Выбор подразделения в списке отчетов(показывать чужие подразделения)(код 7)	7
+19	Редактирование отчетов чужих подразделений(код 28)	28
+20	Разблокирование отчетов(код 31)	31
+21	Блокирование своего отчета (код 49)	49
+22	Чтение сводной таблицы (код 8)	8
+23	Чтение карточки проектов (код 9)	9
+24	Чтение реестра проектов (код 10)	10
+25	Редактирование реестра проектов (код 11)	11
+26	Выгрузка реестра проектов в Excel (код 47)	47
+27	Чтение сводного отчета (код 12)	12
+28	Чтение графика отпусков (код 13)	13
+29	Редактирование сроков отпусков (код 14)	14
+30	Выбор подразделения (показывать чужие подразделения) (код 15)	15
+31	Редактирование событий в заблокированные периоды (код 59)	59
+32	Чтение зарплатной таблицы (код 16)	16
+33	Редактирование зарплатных коэффициентов своего подразделения (код 17)	17
+34	Выбор подразделения (показывать чужие подразделения) (код 18)	18
+35	Блокирование таблицы (код 19)	19
+36	Экспорт таблицы (код 20)	20
+37	Изменение базовой ставки (код 21)	21
+38	Редактирование зарплатных коэффициентов чужого подразделения (код 32)	32
+39	Редактирование своей зарплаты (код 48)	48
+40	Доступ в раздел окладной СОТ (код 57)	57
+41	Редактирование оклада (код 58)	58
+42	Чтение конструкторского отчета (код 22)	22
+43	Чтение таблицы учета времени (код 24)	24
+44	Выгрузка часов из Ориона (код 25)	25
+45	Чтение логов (код 26)	26
+46	Очистка таблицы с логами (код 27)	27
+47	Чтение прав групп пользователей (код 29)	29
+48	Редактирование прав групп пользователей (код 30)	30
+49	Выбор подразделения (показывать чужие подразделения) (код 33)	33
+50	Чтение информации о персонале (код 34)	34
+51	Редактирование даты трудоустройства (код 35)	35
+52	Редактирование времени работы (код 36)	36
+53	Редактирование принадлежности к НИИСЭС (код 37)	37
+54	Редактирование принадлежности к группам (код 38)	38
+55	Редактирование заметок (код 39)	39
+56	Редактирование чужих подразделений (код 40)	40
+57	Редактирование допустимого времени опоздания (код 50)	50
+58	Просмотр структуры подразделений (код 41)	41
+59	Просмотр тестов и аналитики (код 42)	42
+60	Создание и редактирование тестов, запуск опросов (код 43)	43
+61	Заполнение чужих опросов (код 46)	46
+62	Работа с заявками (код 51)	51
+63	Просмотр чужих заявок (код 52)	52
+64	Доступ к назначенным заявкам (код 53)	53
+65	Управление диспетчерами (код 54)	54
+66	Чтение отчетов (код 55)	55
+67	Выгрузка общего отчета в Word (код 56)	56
+11	Доступ в администраторский раздел (код 2)	2
 \.
 
 
@@ -1632,7 +1685,7 @@ COPY public.cabinet_department (id, department_code, department_name, subdepartm
 -- Data for Name: cabinet_direction; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.cabinet_direction (id, direction_name, subdepartment_id, direction_code) FROM stdin;
+COPY public.cabinet_direction (id, name, subdepartment_id, code) FROM stdin;
 1	Administrating	\N	
 2	Development	\N	
 3	Maintenance	\N	
@@ -1644,14 +1697,14 @@ COPY public.cabinet_direction (id, direction_name, subdepartment_id, direction_c
 --
 
 COPY public.cabinet_group (id, name, description) FROM stdin;
-7	111111111111111111111	dsfd
-4	People	вавывыавыа
-5	ghjgвывыаавы	ввыавыавыыва
-3	Adminsdasdas	Топ группаfffff
 6	dfddfa	fdsdsfdf
 8	выавываывавывыа	
 2	Defaultfsfd	dsfsdf
-1	Godsfsdfds	вавывыавыа
+7	111111111111111111111	dsfd
+4	People	вавывыавыа
+3	Adminsdasdas12	Топ группаfffff
+1	Godsf2	вавывыавыа
+5	ghjgвывы1	ввыавыавыыва21
 \.
 
 
@@ -1660,14 +1713,6 @@ COPY public.cabinet_group (id, name, description) FROM stdin;
 --
 
 COPY public.cabinet_group_actions (id, group_id, action_id) FROM stdin;
-1	8	8
-2	8	9
-3	8	7
-4	2	8
-6	1	7
-7	1	8
-8	7	6
-9	5	8
 \.
 
 
@@ -1705,8 +1750,24 @@ COPY public.cabinet_group_participants (id, group_id, profile_id) FROM stdin;
 --
 
 COPY public.cabinet_groupaction (id, name) FROM stdin;
-1	личные
-2	
+3	1 Пользовательский раздел
+4	2 Администраторский раздел
+5	3 Список отчетов
+6	4 Сводная таблица
+7	5 Карточка проектов
+8	6 Реестр проектов
+9	7 Сводный отчет
+10	8 График отпусков
+11	9 Таблица зарплат
+12	10 Отчет конструкторского отдела
+13	11 Система учета времени
+14	12 Список логов
+15	13 Управление группами пользователей
+16	14 Управление персоналом
+17	15 Структура подразделений
+18	16 Опросы и тесты
+19	17 Заявка диспетчеру
+20	18 Годовой отчет
 \.
 
 
@@ -1715,9 +1776,64 @@ COPY public.cabinet_groupaction (id, name) FROM stdin;
 --
 
 COPY public.cabinet_groupaction_available_actions (id, groupaction_id, action_id) FROM stdin;
-1	1	8
-2	1	6
-3	1	7
+4	3	10
+5	4	11
+6	4	12
+7	4	13
+8	5	14
+9	5	15
+10	5	16
+11	5	17
+12	5	18
+13	5	19
+14	5	20
+15	5	21
+16	6	22
+17	7	23
+18	8	24
+19	8	25
+20	8	26
+21	9	27
+22	10	28
+23	10	29
+24	10	30
+25	10	31
+26	11	32
+27	11	33
+28	11	34
+29	11	35
+30	11	36
+31	11	37
+32	11	38
+33	11	39
+34	11	40
+35	11	41
+36	12	42
+37	13	43
+38	13	44
+39	14	45
+40	14	46
+41	15	48
+42	15	47
+43	16	49
+44	16	50
+45	16	51
+46	16	52
+47	16	53
+48	16	54
+49	16	55
+50	16	56
+51	16	57
+52	17	58
+53	18	59
+54	18	60
+55	18	61
+56	19	64
+57	19	65
+58	19	62
+59	19	63
+60	20	66
+61	20	67
 \.
 
 
@@ -1756,6 +1872,7 @@ COPY public.cabinet_logging (id, "IP", login, action, status, date) FROM stdin;
 31	31.173.243.7	admin	login	t	2020-09-18 15:37:46.357067+00
 32	185.210.141.11	admin	login	t	2020-09-22 16:10:41.363154+00
 33	31.173.243.42	admin	login	t	2020-09-28 15:52:21.46123+00
+34	31.173.242.186	admin	login	t	2020-10-01 03:46:14.100917+00
 \.
 
 
@@ -2006,6 +2123,92 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 164	2020-09-16 13:29:53.356282+00	1	личные	1	[{"added": {}}]	21	1
 165	2020-09-16 13:39:54.771187+00	2		1	[{"added": {}}]	21	1
 166	2020-09-18 17:08:49.49113+00	8	fddd	2	[{"changed": {"fields": ["Actions", "Participants"]}}]	18	1
+167	2020-10-05 05:52:30.33863+00	9	13	3		7	1
+168	2020-10-05 05:52:30.35506+00	8	12	3		7	1
+169	2020-10-05 05:52:30.357042+00	7	11	3		7	1
+170	2020-10-05 05:52:30.358954+00	6	100	3		7	1
+171	2020-10-05 05:52:30.362284+00	5	101	3		7	1
+172	2020-10-05 05:54:40.092968+00	10	Доступ в пользовательский раздел(код 1)	1	[{"added": {}}]	7	1
+173	2020-10-05 05:55:11.836011+00	11	Доступ в администраторский отдел(код 2)	1	[{"added": {}}]	7	1
+174	2020-10-05 05:55:38.917041+00	12	Доступ ко всем департаментам(код 44)	1	[{"added": {}}]	7	1
+175	2020-10-05 05:56:01.839529+00	13	Доступ ко всему своему департаменту(код 45)	1	[{"added": {}}]	7	1
+176	2020-10-05 05:56:18.756454+00	14	Чтение отчетов(код 3)	1	[{"added": {}}]	7	1
+177	2020-10-05 05:56:42.455977+00	15	Редактирование отчетов своего подразделения	1	[{"added": {}}]	7	1
+178	2020-10-05 05:57:01.917651+00	15	Редактирование отчетов своего подразделения(код 4)	2	[{"changed": {"fields": ["Action"]}}]	7	1
+179	2020-10-05 05:57:23.537677+00	16	Проверка отчетов(код 5)	1	[{"added": {}}]	7	1
+180	2020-10-05 05:57:37.150791+00	17	Блокирование отчетов(код 6)	1	[{"added": {}}]	7	1
+181	2020-10-05 05:59:58.652577+00	18	Выбор подразделения в списке отчетов(показывать чужие подразделения)(код 7))	1	[{"added": {}}]	7	1
+182	2020-10-05 06:00:42.029625+00	18	Выбор подразделения в списке отчетов(показывать чужие подразделения)(код 7)	2	[{"changed": {"fields": ["Action"]}}]	7	1
+183	2020-10-05 06:01:14.378603+00	19	Редактирование отчетов чужих подразделений(код 28)	1	[{"added": {}}]	7	1
+184	2020-10-05 06:01:35.406673+00	20	Разблокирование отчетов(код 31)	1	[{"added": {}}]	7	1
+185	2020-10-05 06:01:58.457503+00	21	Блокирование своего отчета (код 49)	1	[{"added": {}}]	7	1
+186	2020-10-05 06:02:31.07471+00	22	Чтение сводной таблицы (код 8)	1	[{"added": {}}]	7	1
+187	2020-10-05 06:03:04.596213+00	23	Чтение карточки проектов (код 9)	1	[{"added": {}}]	7	1
+188	2020-10-05 06:03:41.287237+00	24	Чтение реестра проектов (код 10)	1	[{"added": {}}]	7	1
+189	2020-10-05 06:04:14.519652+00	25	Редактирование реестра проектов (код 11)	1	[{"added": {}}]	7	1
+190	2020-10-05 06:04:58.772053+00	26	Выгрузка реестра проектов в Excel (код 47)	1	[{"added": {}}]	7	1
+191	2020-10-05 06:05:21.381667+00	27	Чтение сводного отчета (код 12)	1	[{"added": {}}]	7	1
+192	2020-10-05 06:05:41.221542+00	28	Чтение графика отпусков (код 13)	1	[{"added": {}}]	7	1
+193	2020-10-05 06:06:08.34179+00	29	Редактирование сроков отпусков (код 14)	1	[{"added": {}}]	7	1
+194	2020-10-05 06:06:42.707649+00	30	Выбор подразделения (показывать чужие подразделения) (код 15)	1	[{"added": {}}]	7	1
+195	2020-10-05 06:07:15.977461+00	31	Редактирование событий в заблокированные периоды (код 59)	1	[{"added": {}}]	7	1
+196	2020-10-05 06:07:48.661474+00	32	Чтение зарплатной таблицы (код 16)	1	[{"added": {}}]	7	1
+197	2020-10-05 06:08:25.789817+00	33	Редактирование зарплатных коэффициентов своего подразделения (код 17)	1	[{"added": {}}]	7	1
+198	2020-10-05 06:09:13.363445+00	34	Выбор подразделения (показывать чужие подразделения) (код 18)	1	[{"added": {}}]	7	1
+199	2020-10-05 06:09:49.25566+00	35	Блокирование таблицы (код 19)	1	[{"added": {}}]	7	1
+200	2020-10-05 06:10:08.474452+00	36	Экспорт таблицы (код 20)	1	[{"added": {}}]	7	1
+201	2020-10-05 06:10:27.875345+00	37	Изменение базовой ставки (код 21)	1	[{"added": {}}]	7	1
+202	2020-10-05 06:11:00.61706+00	38	Редактирование зарплатных коэффициентов чужого подразделения (код 32)	1	[{"added": {}}]	7	1
+203	2020-10-05 06:11:54.444851+00	39	Редактирование своей зарплаты (код 48)	1	[{"added": {}}]	7	1
+204	2020-10-05 06:12:43.544233+00	40	Доступ в раздел окладной СОТ (код 57)	1	[{"added": {}}]	7	1
+205	2020-10-05 06:13:03.480125+00	41	Редактирование оклада (код 58)	1	[{"added": {}}]	7	1
+206	2020-10-05 06:13:20.283741+00	42	Чтение конструкторского отчета (код 22)	1	[{"added": {}}]	7	1
+207	2020-10-05 06:13:41.891405+00	43	Чтение таблицы учета времени (код 24)	1	[{"added": {}}]	7	1
+208	2020-10-05 06:14:01.083323+00	44	Выгрузка часов из Ориона (код 25)	1	[{"added": {}}]	7	1
+209	2020-10-05 06:14:16.482272+00	45	Чтение логов (код 26)	1	[{"added": {}}]	7	1
+210	2020-10-05 06:14:36.901422+00	46	Очистка таблицы с логами (код 27)	1	[{"added": {}}]	7	1
+211	2020-10-05 06:15:08.504704+00	47	Чтение прав групп пользователей (код 29)	1	[{"added": {}}]	7	1
+212	2020-10-05 06:15:27.798702+00	48	Редактирование прав групп пользователей (код 30)	1	[{"added": {}}]	7	1
+213	2020-10-05 06:16:03.064437+00	49	Выбор подразделения (показывать чужие подразделения) (код 33)	1	[{"added": {}}]	7	1
+214	2020-10-05 06:16:27.077346+00	50	Чтение информации о персонале (код 34)	1	[{"added": {}}]	7	1
+215	2020-10-05 06:16:56.045702+00	51	Редактирование даты трудоустройства (код 35)	1	[{"added": {}}]	7	1
+216	2020-10-05 06:17:19.619745+00	52	Редактирование времени работы (код 36)	1	[{"added": {}}]	7	1
+217	2020-10-05 06:17:48.370331+00	53	Редактирование принадлежности к НИИСЭС (код 37)	1	[{"added": {}}]	7	1
+218	2020-10-05 06:18:13.784421+00	54	Редактирование принадлежности к группам (код 38)	1	[{"added": {}}]	7	1
+219	2020-10-05 06:18:26.739178+00	55	Редактирование заметок (код 39)	1	[{"added": {}}]	7	1
+220	2020-10-05 06:18:53.465864+00	56	Редактирование чужих подразделений (код 40)	1	[{"added": {}}]	7	1
+221	2020-10-05 06:19:20.592197+00	57	Редактирование допустимого времени опоздания (код 50)	1	[{"added": {}}]	7	1
+222	2020-10-05 06:19:58.419799+00	58	Просмотр структуры подразделений (код 41)	1	[{"added": {}}]	7	1
+223	2020-10-05 06:20:19.640055+00	59	Просмотр тестов и аналитики (код 42)	1	[{"added": {}}]	7	1
+224	2020-10-05 06:20:53.845893+00	60	Создание и редактирование тестов, запуск опросов (код 43)	1	[{"added": {}}]	7	1
+225	2020-10-05 06:21:18.518522+00	61	Заполнение чужих опросов (код 46)	1	[{"added": {}}]	7	1
+226	2020-10-05 06:21:41.441965+00	62	Работа с заявками (код 51)	1	[{"added": {}}]	7	1
+227	2020-10-05 06:21:58.187354+00	63	Просмотр чужих заявок (код 52)	1	[{"added": {}}]	7	1
+228	2020-10-05 06:22:40.492814+00	64	Доступ к назначенным заявкам (код 53)	1	[{"added": {}}]	7	1
+229	2020-10-05 06:22:55.800953+00	65	Управление диспетчерами (код 54)	1	[{"added": {}}]	7	1
+230	2020-10-05 06:23:15.206153+00	66	Чтение отчетов (код 55)	1	[{"added": {}}]	7	1
+231	2020-10-05 06:23:43.097294+00	67	Выгрузка общего отчета в Word (код 56)	1	[{"added": {}}]	7	1
+232	2020-10-05 06:24:09.611955+00	2		3		21	1
+233	2020-10-05 06:24:09.613975+00	1	личные	3		21	1
+234	2020-10-05 06:24:42.261537+00	3	1 Пользовательский раздел	1	[{"added": {}}]	21	1
+235	2020-10-05 06:25:29.502021+00	11	Доступ в администраторский раздел (код 2)	2	[{"changed": {"fields": ["Action"]}}]	7	1
+236	2020-10-05 06:26:02.326249+00	4	2 Администраторский раздел	1	[{"added": {}}]	21	1
+237	2020-10-05 06:26:33.587988+00	5	3 Список отчетов	1	[{"added": {}}]	21	1
+238	2020-10-05 06:26:53.267858+00	6	4 Сводная таблица	1	[{"added": {}}]	21	1
+239	2020-10-05 06:27:08.098497+00	7	5 Карточка проектов	1	[{"added": {}}]	21	1
+240	2020-10-05 06:27:26.814047+00	8	6 Реестр проектов	1	[{"added": {}}]	21	1
+241	2020-10-05 06:27:46.514745+00	9	7 Сводный отчет	1	[{"added": {}}]	21	1
+242	2020-10-05 06:28:19.289006+00	10	8 График отпусков	1	[{"added": {}}]	21	1
+243	2020-10-05 06:28:58.032707+00	11	9 Таблица зарплат	1	[{"added": {}}]	21	1
+244	2020-10-05 06:30:23.867662+00	12	10 Отчет конструкторского отдела	1	[{"added": {}}]	21	1
+245	2020-10-05 06:30:48.15257+00	13	11 Система учета времени	1	[{"added": {}}]	21	1
+246	2020-10-05 06:31:04.976052+00	14	12 Список логов	1	[{"added": {}}]	21	1
+247	2020-10-05 06:31:26.015459+00	15	13 Управление группами пользователей	1	[{"added": {}}]	21	1
+248	2020-10-05 06:32:18.342096+00	16	14 Управление персоналом	1	[{"added": {}}]	21	1
+249	2020-10-05 06:32:40.459939+00	17	15 Структура подразделений	1	[{"added": {}}]	21	1
+250	2020-10-05 06:32:56.85319+00	18	16 Опросы и тесты	1	[{"added": {}}]	21	1
+251	2020-10-05 06:33:26.302522+00	19	17 Заявка диспетчеру	1	[{"added": {}}]	21	1
+252	2020-10-05 06:33:44.00402+00	20	18 Годовой отчет	1	[{"added": {}}]	21	1
 \.
 
 
@@ -2088,6 +2291,13 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 43	cabinet	0024_auto_20200915_0827	2020-09-16 10:33:12.181682+00
 44	cabinet	0025_remove_groupaction_description	2020-09-16 10:33:12.262407+00
 45	cabinet	0026_auto_20200916_0321	2020-09-16 10:33:12.628689+00
+46	cabinet	0027_auto_20200916_0453	2020-09-30 04:22:50.199875+00
+47	cabinet	0028_auto_20200917_0317	2020-09-30 04:22:50.225366+00
+48	cabinet	0029_auto_20200917_0401	2020-09-30 04:22:50.258099+00
+49	cabinet	0030_auto_20200930_0909	2020-09-30 09:09:48.348576+00
+50	cabinet	0031_auto_20201005_0317	2020-10-05 03:17:46.78487+00
+51	cabinet	0032_auto_20201005_0554	2020-10-05 05:54:04.401935+00
+52	cabinet	0033_auto_20201005_0629	2020-10-05 06:29:50.382114+00
 \.
 
 
@@ -2101,6 +2311,7 @@ fqeooe0d9riq0vjhmrkwd9jo532itgz4	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZ
 w14rmqid0fqixs5ecl5w5roebx7j2mpd	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZmZTA3OTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmMDVmY2ZhOWRlM2ExMzBiYjEzYTQ5NzkyMmUzM2NiMGRmODI0NTE4In0=	2020-09-22 06:40:20.991824+00
 ggqjt06b8uex10i3xbcoz79us63dkd9d	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZmZTA3OTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmMDVmY2ZhOWRlM2ExMzBiYjEzYTQ5NzkyMmUzM2NiMGRmODI0NTE4In0=	2020-09-23 10:05:58.382354+00
 kspt2t4su6n82pa443giq2dmjmv24xcf	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZmZTA3OTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmMDVmY2ZhOWRlM2ExMzBiYjEzYTQ5NzkyMmUzM2NiMGRmODI0NTE4In0=	2020-09-30 11:45:42.750881+00
+c4i5f5ztrm6ksuprlcku1anixldttmz2	NTE3YWM1MjE1MGNmMzI5MjVmNTJjNDY0NTE1MWUwM2U4MGZmZTA3OTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJmMDVmY2ZhOWRlM2ExMzBiYjEzYTQ5NzkyMmUzM2NiMGRmODI0NTE4In0=	2020-10-14 04:22:34.183875+00
 \.
 
 
@@ -2150,7 +2361,7 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: cabinet_action_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_action_id_seq', 9, true);
+SELECT pg_catalog.setval('public.cabinet_action_id_seq', 67, true);
 
 
 --
@@ -2199,21 +2410,21 @@ SELECT pg_catalog.setval('public.cabinet_group_participants_id_seq', 21, true);
 -- Name: cabinet_groupaction_available_actions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_groupaction_available_actions_id_seq', 3, true);
+SELECT pg_catalog.setval('public.cabinet_groupaction_available_actions_id_seq', 61, true);
 
 
 --
 -- Name: cabinet_groupaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_groupaction_id_seq', 2, true);
+SELECT pg_catalog.setval('public.cabinet_groupaction_id_seq', 20, true);
 
 
 --
 -- Name: cabinet_logging_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_logging_id_seq', 33, true);
+SELECT pg_catalog.setval('public.cabinet_logging_id_seq', 34, true);
 
 
 --
@@ -2227,7 +2438,7 @@ SELECT pg_catalog.setval('public.cabinet_project_id_seq', 4, true);
 -- Name: cabinet_report_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.cabinet_report_id_seq', 43, true);
+SELECT pg_catalog.setval('public.cabinet_report_id_seq', 48, true);
 
 
 --
@@ -2255,7 +2466,7 @@ SELECT pg_catalog.setval('public.cabinet_timecard_id_seq', 2, true);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 166, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 252, true);
 
 
 --
@@ -2269,7 +2480,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 21, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 45, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 52, true);
 
 
 --
@@ -2382,6 +2593,22 @@ ALTER TABLE ONLY public.authtoken_token
 
 ALTER TABLE ONLY public.authtoken_token
     ADD CONSTRAINT authtoken_token_user_id_key UNIQUE (user_id);
+
+
+--
+-- Name: cabinet_action cabinet_action_action_37f0ce29_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_action
+    ADD CONSTRAINT cabinet_action_action_37f0ce29_uniq UNIQUE (action);
+
+
+--
+-- Name: cabinet_action cabinet_action_num_ae7d9e16_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_action
+    ADD CONSTRAINT cabinet_action_num_ae7d9e16_uniq UNIQUE (num);
 
 
 --
@@ -2510,6 +2737,14 @@ ALTER TABLE ONLY public.cabinet_logging
 
 ALTER TABLE ONLY public.cabinet_profile
     ADD CONSTRAINT cabinet_profile_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: cabinet_project cabinet_project_name_37d52188_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cabinet_project
+    ADD CONSTRAINT cabinet_project_name_37d52188_uniq UNIQUE (name);
 
 
 --
@@ -2671,6 +2906,13 @@ CREATE INDEX authtoken_token_key_10f0b77e_like ON public.authtoken_token USING b
 
 
 --
+-- Name: cabinet_action_action_37f0ce29_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX cabinet_action_action_37f0ce29_like ON public.cabinet_action USING btree (action varchar_pattern_ops);
+
+
+--
 -- Name: cabinet_calendarmark_person_id_670a308e; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2780,6 +3022,13 @@ CREATE INDEX cabinet_project_direction_id_25b3bbd8 ON public.cabinet_project USI
 --
 
 CREATE INDEX cabinet_project_manager_id_8b33a4c4 ON public.cabinet_project USING btree (manager_id);
+
+
+--
+-- Name: cabinet_project_name_37d52188_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX cabinet_project_name_37d52188_like ON public.cabinet_project USING btree (name varchar_pattern_ops);
 
 
 --
