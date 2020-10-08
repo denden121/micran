@@ -11,7 +11,9 @@ class Payroll extends React.Component{
         allSalary:[],
         norm:{},
         departments:[],
-        subdepartments:[{label:1,value:1}],
+        subdepartments:[],
+        department:{},
+        subdepartment:{},
         hideSalary:false,
         hideNormTime:false,
         hideZeroReport:false,
@@ -21,6 +23,86 @@ class Payroll extends React.Component{
     componentDidMount() {
         this.loadNorm()
         this.loadDepartments()
+        this.loadCheckBox()
+    }
+    loadCheckBox = () =>{
+        let defaultValue = localStorage.getItem('payroll')
+        if (defaultValue){
+            defaultValue = JSON.parse(defaultValue)
+            if(defaultValue.department.label){
+                let token = localStorage.getItem('token')
+                let myHeaders = new Headers()
+                myHeaders.append("Authorization", token)
+                let requestOptions = {
+                    method: 'GET',
+                    headers: myHeaders,
+                    redirect: 'follow'
+                }
+                const date = localStorage.getItem('date').replace(' ','-')
+                fetch(`http://127.0.0.1:8000/salary/new/${defaultValue.department.value}/?date=${date}`, requestOptions)
+                    .then(response =>  response.json())
+                    .then(result => {
+                        let subdepartment = []
+                        console.log(result)
+                        let temp = []
+                        for (let i = 0;i < result.length; i++){
+                            subdepartment.push({label:result[i].code +' '+ result[i].name,value:result[i].pk})
+                            temp.push({name:result[i].name,code:result[i].code})
+                            temp.push(result[i].users)
+                        }
+                        this.setState({allSalary:temp,
+                            // department:defaultValue.department,
+                            subdepartments:subdepartment})
+                    })
+                    .catch(error => console.log('error', error))
+            }
+            if (defaultValue.subdepartment.label){
+                let token = localStorage.getItem('token')
+                let myHeaders = new Headers()
+                myHeaders.append("Authorization", token)
+                let requestOptions = {
+                    method: 'GET',
+                    headers: myHeaders,
+                    redirect: 'follow'
+                }
+                const date = localStorage.getItem('date').replace(' ','-')
+                fetch(`http://127.0.0.1:8000/salary/new/${defaultValue.subdepartment.value}/?date=${date}`, requestOptions)
+                    .then(response =>  response.json())
+                    .then(result => {
+                        let subdepartment = []
+                        console.log(result)
+                        let temp = []
+                        for (let i = 0;i < result.length; i++){
+                            // subdepartment.push({label:result[i].name,value:result[i].pk})
+                            temp.push({name:result[i].name,code:result[i].code})
+                            temp.push(result[i].users)
+                        }
+                        this.setState({
+                            // subdepartment:name,
+                            allSalary:temp})
+                    })
+                    .catch(error => console.log('error', error))
+            }
+            this.setState({
+                hideSalary:defaultValue.salary,
+                hideNormTime:defaultValue.timeNorm,
+                hideZeroReport:defaultValue.zeroReport,
+                hideTechnician:defaultValue.technician,
+                hideAnotherPeople:defaultValue.anotherPeople,
+                department:defaultValue.department,
+                subdepartment:defaultValue.subdepartment
+            })
+        }else {
+            defaultValue = {}
+            defaultValue.salary = false
+            defaultValue.timeNorm = false
+            defaultValue.zeroReport = false
+            defaultValue.technician = false
+            defaultValue.anotherPeople = false
+            defaultValue.department = {}
+            defaultValue.subdepartment = {}
+            localStorage.setItem('payroll',JSON.stringify(defaultValue))
+        }
     }
     loadNativeDepartment = () => {
         let token = localStorage.getItem('token')
@@ -58,7 +140,10 @@ class Payroll extends React.Component{
                 this.setState({departments: actions})})
             .catch(error => console.log('error', error))
     }
-    onChangeSelectDepartments=(e)=>{
+    onChangeSelectDepartments=(e,name)=>{
+        let filter = JSON.parse(localStorage.getItem('payroll'))
+        filter.department = name
+        localStorage.setItem('payroll',JSON.stringify(filter))
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -80,12 +165,16 @@ class Payroll extends React.Component{
                     temp.push(result[i].users)
                 }
                 this.setState({allSalary:temp,
+                                    department:name,
                                     subdepartments:subdepartment})
                 })
             .catch(error => console.log('error', error))
 
     }
-    onChangeSelectSubDepartments=(e)=>{
+    onChangeSelectSubDepartments=(e,name)=>{
+        let filter = JSON.parse(localStorage.getItem('payroll'))
+        filter.subdepartment = name
+        localStorage.setItem('payroll',JSON.stringify(filter))
         let token = localStorage.getItem('token')
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
@@ -106,8 +195,9 @@ class Payroll extends React.Component{
                     temp.push({name:result[i].name,code:result[i].code})
                     temp.push(result[i].users)
                 }
-                this.setState({allSalary:temp})
-
+                this.setState({
+                    subdepartment:name,
+                    allSalary:temp})
             })
             .catch(error => console.log('error', error))
     }
@@ -275,49 +365,31 @@ class Payroll extends React.Component{
         }
     }
     onChangeFilter=(event)=>{
+        let temp = event.target.checked
+        let filter = JSON.parse(localStorage.getItem('payroll'))
         switch (event.target.value){
             case 'hide-salary':
-                if (this.state.hideSalary){
-                    this.setState({hideSalary:false})
-                }
-                else{
-                    this.setState({hideSalary:true})
-                }
+                this.setState({hideSalary:temp})
+                filter.salary = temp
                 break;
             case 'hide-norm-time':
-                if (this.state.hideNormTime){
-                    this.setState({hideNormTime:false})
-                    let temp = this.state.allSalary
-                }
-                else{
-                    this.setState({hideNormTime:true})
-                }
+                this.setState({hideNormTime:temp})
+                filter.timeNorm = temp
                 break;
             case 'hide-zero-report':
-                if (this.state.hideZeroReport){
-                    this.setState({hideZeroReport:false})
-                }
-                else{
-                    this.setState({hideZeroReport:true})
-                }
+                this.setState({hideZeroReport:temp})
+                filter.zeroReport = temp
                 break;
             case 'hide-technician':
-                if (this.state.hideTechnician){
-                    this.setState({hideTechnician:false})
-                }
-                else{
-                    this.setState({hideTechnician:true})
-                }
+                this.setState({hideTechnician:temp})
+                filter.technician = temp
                 break;
             case 'hide-another-people':
-                if (this.state.hideAnotherPeople){
-                    this.setState({hideAnotherPeople:false})
-                }
-                else{
-                    this.setState({hideAnotherPeople:true})
-                }
+                this.setState({hideAnotherPeople:temp})
+                filter.anotherPeople = temp
                 break;
         }
+        localStorage.setItem('payroll',JSON.stringify(filter))
     }
     render(){
         return(
@@ -332,6 +404,7 @@ class Payroll extends React.Component{
                                 <div className="col-md-12 col-lg-12 card">
                                      <div className="card-body">
                                         <PayrollCheck
+                                            filter = {this.state}
                                             selectDepartment={this.state.selectDepartment}
                                             departments = {this.state.departments}
                                             onChangeFilter={this.onChangeFilter}

@@ -31,6 +31,7 @@ class Register extends React.Component{
             .then(result => this.setState({projects:result}))
         console.log('state',this.state)
     }
+
     onClickNewProject = () =>{
         document.location='/cabinet/admin/new_project'
     }
@@ -51,7 +52,7 @@ class Register extends React.Component{
                         <h3 className="text-left">Реестр проектов</h3>
                         <div className="buttons text-left">
                             <button type="button" className="btn btn-success btn-sm" onClick={this.onClickNewProject}>Добавить новый</button>
-                            <button type="button" className="btn btn-primary btn-sm" style={{marginLeft:"5px"}}>Экспорт результатов</button>
+                                <button type="button" className="btn btn-primary btn-sm" style={{marginLeft:"5px"}}>Экспорт результатов</button>
                         </div>
                         <hr className="normal"/>
 
