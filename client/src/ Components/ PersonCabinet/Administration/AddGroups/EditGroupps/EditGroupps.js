@@ -19,19 +19,33 @@ const Fields =(props)=>{
     console.log(props)
     let temp = props.items ? props.items.map((item)=>{
         let checkBoxes = item.actions
-        return <div className="form-group row">
-            <label className="col-sm-2" name="checkbox-group">{item.name}</label>  
-                <div className="col-sm-10" >
-                    {checkBoxes.map((box)=>{
-                        return <div className="col-sm-2 text-left" style={{paddingLeft:"0px"}}>
-                            <Checkbox  value={box.pk} defaultChecked={box.checked} onChange={props.onChangeCheckBox} >
-                               {box.name}, {box.code}
-                            </Checkbox>
+        // return <div className="form-group row">
+        //     <label className="col-sm-2" name="checkbox-group">{item.name}</label>  
+        //         <div className="col-sm-10" >
+        //             {checkBoxes.map((box)=>{
+        //                 return <div className="col-sm-2 text-left" style={{paddingLeft:"0px"}}>
+        //                     <Checkbox  value={box.pk} defaultChecked={box.checked} onChange={props.onChangeCheckBox} >
+        //                        {box.name}, {box.code}
+        //                     </Checkbox>
+        //                 </div>
+        //             })}
+        //         </div>
+        //     </div>
+        return <Form labelCol={{span:7}}
+                     wrapperCol={{span:12}}
+                     layout="horizontal">
+                    <Form.Item label={item.name} name="checkbox-group">
+                        <div className="text-left">
+                            {checkBoxes.map((box)=>{
+                                return <div>
+                                    <Checkbox value={box.pk} defaultChecked={box.checked} onChange={props.onChangeCheckBox}>
+                                        {box.name}, {box.code}
+                                    </Checkbox>
+                                </div>
+                            })}
                         </div>
-                    })}
-                </div>
-            </div>
-        
+                    </Form.Item>
+                </Form>
     }):''
     return temp
 }
@@ -113,26 +127,41 @@ class  EditGroups extends React.Component{
                     <div className="col-lg-12">
                     <Card>
                     <div className="form">
-                    <div className="form-group row">
-                        <label for="input-name" className="col-sm-2 col-form-label">Название</label>
-                        <div className="col-sm-9">
+                        <Form 
+                        labelCol={{span:7}}
+                        wrapperCol={{span:12}}
+                        layout="horizontal">
+                            <Form.Item label="Название">
                             <input defaultValue={this.state.group.name} type="text" id={'input-name'} className="form-control form-control-sm"/>
+                            </Form.Item>
+                            <Form.Item label="Описание">
+                                <textarea className="form-control" 
+                                    defaultValue={this.state.group.description}
+                                    id={"description"}
+                                    autoSize={{minRows: 1, maxRows: 8}} Default>
+                                </textarea>
+                            </Form.Item>
+                        </Form>
+                        {/* <div className="form-group row text-center">
+                            <label for="input-name" className="col-sm-2 col-form-label text-center">Название</label>
+                            <div className="col-sm-9" text-center>
+                                <input defaultValue={this.state.group.name} type="text" id={'input-name'} className="form-control form-control-sm"/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="description" className="col-sm-2 col-form-label">Описание</label>
-                        <div class="col-sm-9">
-                            <textarea className="form-control" 
-                                defaultValue={this.state.group.description}
-                                id={"description"}
-                                autoSize={{minRows: 1, maxRows: 8}} Default>
-                            </textarea>
-                        </div>
-                    </div>
-                    <Fields
+                        <div class="form-group row">
+                            <label for="description" className="col-sm-2 col-form-label">Описание</label>
+                            <div class="col-sm-9">
+                                <textarea className="form-control" 
+                                    defaultValue={this.state.group.description}
+                                    id={"description"}
+                                    autoSize={{minRows: 1, maxRows: 8}} Default>
+                                </textarea>
+                            </div>
+                        </div> */}
+                        <Fields
                         onChangeCheckBox={this.onChangeCheckBox}
                         items={this.state.group.groups_actions}/>
-                </div>
+                    </div>
                 <br/>
                 <div className="error-edit-group text-right">Введите все поля</div>
                 <div className="text-center">
