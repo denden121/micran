@@ -25,16 +25,15 @@ class Logging(models.Model):
 
 
 class Action(models.Model):
-    action = models.CharField(max_length=30, blank=True)
-    num = models.IntegerField()
+    action = models.CharField(max_length=100, blank=True, unique=True)
+    num = models.IntegerField(unique=True)
 
     def __str__(self):
         return self.action
 
 
 class GroupAction(models.Model):
-    name = models.CharField(max_length=30, blank=True, unique=True)
-    description = models.CharField(max_length=500, blank=True)
+    name = models.CharField(max_length=100, blank=True, unique=True)
     available_actions = models.ManyToManyField(Action, blank=True)
 
     def __str__(self):
@@ -43,11 +42,11 @@ class GroupAction(models.Model):
 
 class Direction(models.Model):
     subdepartment = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
-    direction_name = models.CharField(max_length=30, blank=True)
-    direction_code = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=30, blank=True)
+    code = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return self.direction_name
+        return self.name
 
 
 class Profile(models.Model):
@@ -64,9 +63,9 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     experience = models.FloatField(blank=False, default='0.0')
-    fine_late = models.TimeField(blank=False, default='09:15:00')
-    shift = models.CharField(max_length=30, blank=True)
-    part_time_job = models.CharField(max_length=30, blank=True)
+    fine_late = models.TimeField(blank=True, default='09:15:00')
+    shift = models.BooleanField(blank=True, default='False') #False in half-day, True is full-day
+    part_time_job = models.BooleanField(blank=True, default='False') #False in night, True is day
     lateness = models.CharField(max_length=30, blank=True)
     SRI_SAS = models.BooleanField(blank=True, default='False')
     oklad = models.BooleanField(blank=True, default='False')
@@ -78,7 +77,7 @@ class Profile(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=30, blank=True, unique=True)
     description = models.CharField(max_length=500, blank=True)
-    actions = models.ManyToManyField(GroupAction, blank=True)
+    actions = models.ManyToManyField(Action, blank=True)
     participants = models.ManyToManyField(Profile, blank=True)
 
     def __str__(self):
@@ -86,7 +85,7 @@ class Group(models.Model):
 
 
 class Project(models.Model):
-    name = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True, unique=True)
     direction = models.ForeignKey('Direction', related_name='direction_id', on_delete=models.SET_NULL, blank=True,
                                   null=True)
     manager = models.ForeignKey('Profile', related_name='manager_id', on_delete=models.SET_NULL, null=True)
@@ -108,7 +107,7 @@ class Project(models.Model):
 
 
 class Report(models.Model):
-    status = models.BooleanField(blank=True)
+    status = models.BooleanField(default=False)
     creator_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True,
                                    related_name='creator')
     ban_id = models.ForeignKey('Profile', on_delete=models.SET_NULL, to_field='user', null=True, default=None,

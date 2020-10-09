@@ -1,0 +1,21 @@
+/* .roow{
+    display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.left-column {
+	display: inline-block;
+	
+}
+
+.right-column {
+    display: inline-block;
+	margin-left: 1em;
+  padding: .5em;
+  margin-bottom: .5em;
+} */
+.error-edit-group{
+    display: none;
+    color: red;
+}

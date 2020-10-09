@@ -52,6 +52,8 @@ class  App extends Component {
             document.querySelector(".error-label-1").style.display = 'block'
             return
         }
+        localStorage.setItem('key','0')
+        localStorage.setItem('menu','true')
         //проверка прав
         myHeaders = new Headers();
         myHeaders.append("Authorization",localStorage.getItem('token'));

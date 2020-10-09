@@ -1,10 +1,11 @@
 import React from "react"
 import "./NewProject.css"
 import Register from "../Register"
-import {Select} from "antd";
+import {Select,Modal} from "antd";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
 import { Radio,Input,Button } from 'antd';
 import { Checkbox } from 'antd';
+import ModalEmpl from ".//ModalEmpl"
 
 
 const { TextArea } = Input;
@@ -20,7 +21,8 @@ class NewProject extends React.Component{
         type:'',
         state_project:'',
         availability:'',
-        vp:''
+        vp:'',
+        
     }
     loadDate = async () =>{
         let myHeaders = new Headers();
@@ -148,7 +150,7 @@ class NewProject extends React.Component{
     componentDidMount() {
         this.loadDate()
     }
-
+    
     render() {
         const animatedComponents = makeAnimated();
         // console.log(this.state)
@@ -175,13 +177,12 @@ class NewProject extends React.Component{
                                     </div>
                                     <br/>
                                     <div className="input-group mb-3 input-group-sm">
-                                        <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Новый
-                                            проект</label>
+                                        <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Название проекта</label>
                                         <TextArea
                                             // value={value}
                                             id={'name-project-new-project'}
                                             onChange={this.onChange}
-                                            placeholder="Введите описание"
+                                            placeholder="Введите название проекта"
                                             autoSize={{ minRows: 3, maxRows: 5 }}
                                             style={{width:"50%"}}
                                         />
@@ -197,7 +198,7 @@ class NewProject extends React.Component{
                                             closeMenuOnSelect={true}
                                             components={animatedComponents}
                                             options={this.state.directors.length ? this.state.directors :''}
-                                            placeholder="Выбрать"
+                                            placeholder="Выбрать руководителя"
                                             style={{width:"50%"}}
                                         />
                                     </div>
@@ -209,19 +210,19 @@ class NewProject extends React.Component{
                                             closeMenuOnSelect={true}
                                             components={animatedComponents}
                                             options={this.state.directors.length ? this.state.directors :''}
-                                            placeholder="Выбрать"
+                                            placeholder="Выбрать главного конструктора"
                                             style={{width:"50%"}}
                                         />
                                     </div>
-                                    <div className="input-group mb-3 input-group-sm">
-                                        <label className="napr col-sm-4 text-right" style={{fontSize: "16px"}}>Зам.главного
+                                    <div className="input-group mb-3 input-group-sm ">
+                                        <label className="napr col-sm-4" style={{fontSize: "16px"}}>Зам.главного
                                             конструктора</label>
                                         <Select
                                             onChange = {this.onChangeSelectDeputyDesigner}
                                             closeMenuOnSelect={true}
                                             components={animatedComponents}
                                             options={this.state.people.length ? this.state.people :''}
-                                            placeholder="Выбрать"
+                                            placeholder="Выбрать зам.главного конструктора"
                                             style={{width:"50%"}}
                                         />
                                     </div>
@@ -235,7 +236,7 @@ class NewProject extends React.Component{
                                             // value={value}
                                             id={'number-contract-new-project'}
                                             onChange={this.onChange}
-                                            placeholder="Введите описание"
+                                            placeholder="Введите номер договора"
                                             autoSize={{ minRows: 3, maxRows: 5 }}
                                             style={{width:"50%"}}
                                             />
@@ -247,7 +248,7 @@ class NewProject extends React.Component{
                                             // value={value}
                                             id={'order-new-project'}
                                             onChange={this.onChange}
-                                            placeholder="Введите описание"
+                                            placeholder="Введите заказчика"
                                             autoSize={{ minRows: 3, maxRows: 5 }}
                                             style={{width:"50%"}}
                                             />
@@ -259,7 +260,7 @@ class NewProject extends React.Component{
                                             // value={value}
                                             id={'production-order-new-project'}
                                             onChange={this.onChange}
-                                            placeholder="Введите описание"
+                                            placeholder="Введите заказ на производство"
                                             autoSize={{ minRows: 3, maxRows: 5 }}
                                             style={{width:"50%"}}
                                             />
@@ -271,7 +272,7 @@ class NewProject extends React.Component{
                                             // value={value}
                                             id={'comment-to-co-workers-new-project'}
                                             onChange={this.onChange}
-                                            placeholder="Введите описание"
+                                            placeholder="Введите комментатор"
                                             autoSize={{ minRows: 3, maxRows: 5 }}
                                             style={{width:"50%"}}
                                             />
@@ -379,7 +380,7 @@ class NewProject extends React.Component{
                                             onClick={() => document.location = '/cabinet/admin/register'}>Отмена
                                     </Button>
                                 </div>
-
+                                
                             </div>
                         </div>
                     </div>

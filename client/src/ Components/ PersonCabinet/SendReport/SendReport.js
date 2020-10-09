@@ -23,7 +23,6 @@ class SendReport extends React.Component{
         let token = localStorage.getItem('token');
         let project = document.querySelector('#name_project').value;
         const date = localStorage.getItem('date').split(' ');
-        // console.log(time,body,token,project,date,this.state)
         let myHeaders = new Headers()
         myHeaders.append("Authorization", token)
         let formdata = new FormData();
@@ -38,18 +37,15 @@ class SendReport extends React.Component{
             redirect: 'follow'
         };
         if(this.state.select_report){
-            let url = `http://127.0.0.1:8000/cabinet/report/${this.state.select_report}`
+            let url = `http://127.0.0.1:8000/cabinet/report/${this.state.select_report}/`
             fetch(url, requestOptions)
                 .then(response => response.json())
                 .then(result => {
                     let report  = result;
                     let temp = [...this.state.reports]
                     console.log('dssffs',temp,this.state.select_report)
-
                     for(let i = 0;i<temp.length;i++ ){
-                        // console.log(temp[o])
                         if(temp[i].pk == this.state.select_report){
-
                             temp[i]=report;
                             break;
                         }
@@ -72,9 +68,14 @@ class SendReport extends React.Component{
                 })
                 .catch(error => console.log('error', error));
         }
+        this.setState({select_report:''})
+        document.querySelector('#time_project').value = ''
+        document.querySelector('#body_report').value = ''
+        document.querySelector('#name_project').value = ''
         console.log(this.state)
     }
-    loadReport = () =>{
+    loadReport = () =>
+    {
         const token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -106,7 +107,6 @@ class SendReport extends React.Component{
             document.querySelector('#time_project').value = this.state.reports[temp - 1].fields.hour
             document.querySelector('#body_report').value = this.state.reports[temp - 1].fields.text
             document.querySelector('#name_project').value = this.state.reports[temp - 1].fields.project_pk
-            // console.log(this.state)
             for (let i of this.state.reports) {
                 total += i.fields.hour
             }
@@ -126,7 +126,7 @@ class SendReport extends React.Component{
         const url = 'http://127.0.0.1:8000/cabinet/projects_for_reports'
         fetch(url, requestOptions)
             .then(response => response.json())
-            .then(result => this.setState({name_projects:result}))
+            .then(result =>{this.setState({name_projects:result})})
             .catch(error => console.log('error', error));
     }
     onClickCard = (index) =>{
@@ -145,7 +145,6 @@ class SendReport extends React.Component{
         this.setState({select_report:''})
     }
     onClickDeleteCard =(pk, index) =>{
-        // console.log('index',index)
         let token = localStorage.getItem('token')
         let myHeaders = new Headers();
         myHeaders.append("Authorization", token);
@@ -161,22 +160,19 @@ class SendReport extends React.Component{
             .then(result => {
                 if (result === 'Success') {
                     let reports = [...this.state.reports]
-                    // console.log(reports)
-                    // console.log(index)
                     let time = this.state.timeReport - reports[index].fields.hour
                     reports.splice(index, 1)
-                    // console.log(reports)
+                    this.setState({select_report:''})
+                    document.querySelector('#time_project').value = ''
+                    document.querySelector('#body_report').value = ''
+                    document.querySelector('#name_project').value = ''
                     this.setState({reports: reports,timeReport:time})
                 }else{
                     alert('не удалось удалить')
                 }
             })
             .catch(error => console.log('error', error));
-        this.loadReport()
-        this.setState({select_report:''})
-        document.querySelector('#time_project').value = ''
-        document.querySelector('#body_report').value = ''
-        document.querySelector('#name_project').value = ''
+
         // console.log('state',this.state.report)
         // console.log('id',this.state.id)
     }
@@ -198,7 +194,7 @@ class SendReport extends React.Component{
                         listNameFrojects = {this.state.name_projects}
                         OnClickSaveReport = {this.OnClickSaveReport}
                         onClickNewProject = {this.onClickNewProject}
-                        onChangeSelect = {this.onChangeSelect}
+                        // onChangeSelect = {this.onChangeSelect}
                         timeReport = {this.state.timeReport}
                         timeSystem = {this.state.timeSystem}
                         timeNorm = {this.state.timeNorm}

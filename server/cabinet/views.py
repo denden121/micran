@@ -1,125 +1,90 @@
 import simplejson as json
 from datetime import datetime
-from datetime import date
 from django.contrib.auth import authenticate
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from .project_export import export
+from .departaments_scripts import get_endpoint_department, build_level_with_user
 
-from .forms import ProjectForm, ReportForm, ProfileForm, ActionForm, \
-    GroupForm, SalaryCommonForm, SalaryIndividualForm, RegisterForm
+from .cabinet_scripts.cabinet import get_info_about_user
+from .cabinet_scripts.reports import get_reports, get_reports_for_worker, create_reports
+from .cabinet_scripts.projects import get_project, get_projects
+from .cabinet_scripts.calendar import get_calendar
+from .cabinet_scripts.groups import get_group, get_groups
+from .cabinet_scripts.salary import change_salary_common
+from django.contrib.auth.models import User
+
+from .forms import ProjectForm, ReportForm, ActionForm, ProfileForm, \
+    GroupForm, SalaryIndividualForm, RegisterForm
 from .models import Profile, Project, Report, Action, Group, Logging, \
-    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, CalendarMark, GroupAction
+    SalaryCommon, SalaryIndividual, Department, Direction, TimeCard, GroupAction
 
 
 def get_user_jwt(request):
     token = request.headers.get('Authorization')
     validated_token = JWTAuthentication().get_validated_token(token)
     user = JWTAuthentication().get_user(validated_token)
+    # user = User.objects.get(username="admin")
     return user
 
 
 def export_projects(request):
     export(1)
-    print('fddfs')
-    return HttpResponse('Success')
+    return FileResponse(open('test.xls', 'rb'))
 
 
-def get_endpoint_department(data, output):
-    if 'subdepartments' in data:
-        for i in range(len(data['subdepartments'])):
-            get_endpoint_department(data['subdepartments'][i], output)
-        return output
+def get_department(subdepartment):
+    if subdepartment.subdepartment_code != '0':
+        print(subdepartment.subdepartment_code)
+        department = Department.objects.get(department_code=subdepartment.subdepartment_code)
+        return get_department(department)
     else:
-        output.append(data)
-        return output
-
-
-def build_level(subdepartment_id, lvl):
-    department = Department.objects.get(pk=subdepartment_id)
-    data = {'lvl': lvl, 'name': department.department_name, 'code': department.department_code}
-    subdepartments_objects = []
-    subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-    if subdepartments:
-        for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level(subdepartment.pk, lvl + 1))
-        data['subdepartments'] = subdepartments_objects
-        return data
-    else:
-        return data
-
-
-def build_level_with_user(subdepartment_id, lvl, date, only_user=0):
-    department = Department.objects.get(pk=subdepartment_id)
-    if int(department.subdepartment_code) > 0:
-        lvl += 1
-    if lvl == 0:
-        data = {}
-    else:
-        data = {'name': department.department_name, 'code': department.department_code, 'pk': department.pk}
-    subdepartments_objects = []
-    users = []
-    month, year = date.split('-')
-    subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-    profiles = Profile.objects.filter(department=department)
-    for worker in profiles:
-        users_field = {'name': ' '.join([worker.first_name, worker.last_name, worker.middle_name]),
-                       'SRI_SAS': worker.SRI_SAS, 'pk': worker.pk}
-        if only_user:
-            continue
-        reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
-        if reports:
-            users_field['has_report'] = True
-        else:
-            users_field['has_report'] = False
-        report_time = 0
-        flag = 0
-        for report in reports:
-            if report.status and flag != 2:
-                flag = 1
-            if flag == 1:
-                users_field[
-                    'banned'] = ' '.join([report.ban_id.first_name,
-                                          report.ban_id.last_name, report.ban_id.middle_name])
-                users_field['report_status'] = report.status
-                users_field[
-                    'checker'] = ' '.join([report.check_id.first_name,
-                                           report.check_id.last_name, report.check_id.middle_name])
-                flag = 1
-            report_time += report.hour
-        if flag == 0:
-            users_field['banned'] = ''
-            users_field['checker'] = ''
-        times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=worker.user.pk)
-        time_system = 0
-        for time_card in times_cards:
-            time_system += time_card.hours_worked.hour
-        salary = SalaryIndividual.objects.get(date__month=month, date__year=year, person=worker)
-        users_field['time_report'] = report_time
-        users_field['time_norm'] = salary.time_norm
-        users_field['time_system'] = time_system
-        users.append(users_field)
-    data['users'] = users
-    if subdepartments:
-        for subdepartment in subdepartments:
-            subdepartments_objects.append(build_level_with_user(subdepartment.pk, lvl + 1, date))
-        data['subdepartments'] = subdepartments_objects
-        return data
-    else:
-        return data
+        return subdepartment
 
 
 def departament_new_view(request):
-    departments = Department.objects.filter(subdepartment_code='0')
-    data = []
-    date = f'{datetime.now().month}-{datetime.now().year}'
-    for department in departments:
-        data.append(build_level_with_user(department.id, 1, date, 1))
-    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+    user = get_user_jwt(request)
+    if user:
+        departments = Department.objects.filter(subdepartment_code='0')
+        data = []
+        date = f'{datetime.now().month}-{datetime.now().year}'
+        for department in departments:
+            data.append(build_level_with_user(department.id, 1, date, 1, 0))
+        return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+
+
+def department_workers(request, department_id):
+    user = get_user_jwt(request)
+    if user:
+        department = Department.objects.get(pk=department_id)
+        data = build_level_with_user(department.id, 0, only_user=1)
+        output = get_endpoint_department(data, [], 1)
+        return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
+
+
+def salary_new_view(request, department_id):
+    user = get_user_jwt(request)
+    if user:
+        department = Department.objects.get(pk=department_id)
+        if department.subdepartment_code == "0":
+            date = request.GET.get("date")
+            salary_flag = 1
+            data = build_level_with_user(department.id, 0, date, 1, salary_flag)
+            output = get_endpoint_department(data, [])
+        else:
+            date = request.GET.get("date")
+            salary_flag = 1
+            data = build_level_with_user(department.id, 0, date, 1, salary_flag)
+            try:
+                del data['subdepartments']
+            except KeyError:
+                pass
+            output = get_endpoint_department(data, [])
+        return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
 
 def get_time_from_reports(profile):
@@ -161,8 +126,6 @@ def token(request):
         status = True
         token_json = get_tokens_for_user(user)
         logging(request, username=username, status=status, action=action)
-        print(json.dumps(token_json))
-        print(HttpResponse(json.dumps(token_json)))
         return HttpResponse(json.dumps(token_json))
     else:
         status = False
@@ -195,38 +158,20 @@ def check_admin_view(request):
 def cabinet_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
-        profile = user.profile
-        data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
-                'last_name': profile.last_name, 'first_name': profile.first_name, 'middle_name': profile.middle_name,
-                'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
-                'experience': profile.experience, 'position': profile.position, 'department': profile.department.department_name,
-                'employment_date': str(profile.employment_date)}
+        data = get_info_about_user(user.id)
         return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
     else:
         if user:
-            profile = Profile.objects.get(user=user_id)
             if request.method == "GET":
-                data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
-                        'last_name': profile.last_name, 'first_name': profile.first_name,
-                        'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
-                        'experience': profile.experience, 'position': profile.position,
-                        'department': profile.department.department_name,
-                        'employment_date': str(profile.employment_date)}
+                data = get_info_about_user(user_id)
                 return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
             if request.method == "POST":
+                profile = Profile.objects.get(user=user_id)
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save(commit=False)
-                    update.user = user
-                    update.save()
-                data = {'pk': profile.pk, 'fine_late': str(profile.fine_late), 'oklad': profile.oklad,
-                        'last_name': profile.last_name, 'first_name': profile.first_name,
-                        'middle_name': profile.middle_name,
-                        'SRI_SAS': profile.SRI_SAS, 'sex': profile.sex, 'birth_date': str(profile.birth_date),
-                        'experience': profile.experience, 'position': profile.position,
-                        'department': profile.department.department_name,'employment_date': str(profile.employment_date)}
+                    form.save()
+                data = get_info_about_user(user_id)
                 return HttpResponse(json.dumps(data, ensure_ascii=False).encode('-utf8'))
         return HttpResponse("Permission denied")
 
@@ -250,51 +195,12 @@ def register_view(request):
 def all_report_view(request, user_id='default'):
     user = get_user_jwt(request)
     if user_id == 'default':
-        profile = Profile.objects.get(user=user)
         if user:
             if request.method == "GET":
-                reports = Report.objects.filter(creator_id=user.id, date__month=request.GET['month'],
-                                                date__year=request.GET['year'])
-                salary = SalaryCommon.objects.filter(date__year=request.GET['year'], date__month=request.GET['month'])
-                data = []
-                status = False
-                time_report = 0
-                for report in reports:
-                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
-                    status = report.status
-                    time_report += report.hour
-                    data.append({'pk': report.pk, 'fields': fields})
-                times_cards = TimeCard.objects.filter(date__month=request.GET['month'], date__year=request.GET['year'],
-                                                      user=user.id)
-                time_system = 0
-                for time_card in times_cards:
-                    time_system += time_card.hours_worked.hour
-                if salary:
-                    return HttpResponse(json.dumps({'time_norm': salary[0].time_norm_common, 'time_system':time_system,
-                                                    'reports': data, 'status': status, 'time_report': time_report}))
-                return HttpResponse(json.dumps({'time_norm': '', 'reports': data,
-                                                'status': status, 'time_system':time_system, 'time_report': time_report}))
+                data = get_reports(request.GET.get('month'), request.GET.get('year'), user.id)
+                return HttpResponse(json.dumps(data))
             elif request.method == "POST":
-                project_pk = request.POST.get('project')
-                date = request.POST.get('date')
-                year, month, day = date.split('-')
-                reports = Report.objects.filter(creator_id=user.id, date__year=year,
-                                                date__month=month, project=project_pk)
-                if reports:
-                    return HttpResponse("Already have a report")
-                form = ReportForm(request.POST)
-                print(form.errors)
-                if form.is_valid():
-                    report = form.save(commit=False)
-                    report.creator_id = profile
-                    report.save()
-                    data = []
-                    fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
-                              'project_pk': report.project.pk}
-                    data.append({'pk': report.pk, 'fields': fields, 'status': report.status})
-                    return HttpResponse(json.dumps(data[0], ensure_ascii=False).encode('utf8'))
-                return HttpResponse("Fail")
+                return create_reports(request, user)
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:
@@ -315,7 +221,7 @@ def all_report_view(request, user_id='default'):
                     report.creator_id = profile
                     report.save()
                     data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hours': report.hour,
-                              'status': report.status, 'project_pk': report.project.pk}
+                            'status': report.status, 'project_pk': report.project.pk}
                     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
                 return HttpResponse("Fail")
             return HttpResponse("Method not allowed")
@@ -344,7 +250,7 @@ def report_view(request, report_id, user_id='default'):
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save()
+                    form.save()
                     data = []
                     fields = {'project_name': report.project.name, 'text': report.text, 'hour': report.hour,
                               'status': report.status, 'project_pk': report.project.pk}
@@ -380,7 +286,7 @@ def report_view(request, report_id, user_id='default'):
                 form = ReportForm(request.POST, request.FILES, instance=report)
                 print(form.errors)
                 if form.is_valid():
-                    update = form.save()
+                    form.save()
                     data = {'pk': report.pk, 'project': report.project.name, 'text': report.text, 'hours': report.hour,
                             'status': report.status, 'project_pk': report.project.pk}
                     return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
@@ -394,24 +300,7 @@ def all_projects_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            projects = Project.objects.all()
-            data = []
-            for project in projects:
-                manager = Profile.objects.get(pk=project.manager)
-                manager_name = manager.last_name + ' ' + manager.first_name + ' ' + manager.middle_name
-                chief_designer = Profile.objects.get(pk=project.chief_designer)
-                chief_designer_name = chief_designer.last_name + ' ' + chief_designer.first_name + ' ' + chief_designer.middle_name
-                deputy_chief_designer = Profile.objects.get(pk=project.deputy_chief_designer)
-                deputy_chief_designer_name = deputy_chief_designer.last_name + ' ' + deputy_chief_designer.first_name + ' ' + deputy_chief_designer.middle_name
-                direction = Direction.objects.get(pk=project.direction.pk)
-                field = {'name': project.name, 'direction': direction.direction_name, 'manager': manager_name,
-                         'deputy_chief_designer': deputy_chief_designer_name, 'chief_designer': chief_designer_name,
-                         'production_order': project.production_order,
-                         'comment_for_employees': project.comment_for_employees,
-                         'contract': project.contract, 'type': project.type, 'status': project.status,
-                         'client': project.client,
-                         'report_availability': project.report_availability, 'acceptance_vp': project.acceptance_vp}
-                data.append({'pk': project.pk, 'fields': field})
+            data = get_projects()
             return HttpResponse(json.dumps(data))
         if request.method == "POST":  # 13 is create projects
             form = ProjectForm(request.POST)
@@ -430,59 +319,92 @@ def project_view(request, project_id, user_id='default'):
         user = get_user_jwt(request)
         if user:
             if request.method == "GET":
-                project = Project.objects.filter(id=project_id)
-                data = serializers.serialize('json', project)
-                return HttpResponse(data)
+                data = get_project(project_id)
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             elif request.method == "POST" and get_access(13, user):
                 project = Project.objects.get(id=project_id)
                 form = ProjectForm(request.POST, request.FILES, instance=project)
                 if form.is_valid():
                     form.save()
-                    return HttpResponse("Success")
+                    data = get_project(project_id)
+                    return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
     else:
         user = get_user_jwt(request)
         if user:
             if request.method == "GET" or get_access(12, user):
-                project = Project.objects.filter(id=project_id)
-                data = serializers.serialize('json', project)
-                return HttpResponse(data)
+                data = get_project(project_id)
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
             return HttpResponse("Method not allowed")
         return HttpResponse("Authentication error")
 
 
 @csrf_exempt
-def group_view(request):
+def group_view(request, group_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            pk = request.GET.get('pk')
-            group = Group.objects.get(pk=pk)
-            actions = group.actions.available_actions.all()
-            participants = group.participants.all()
-            users = []
-            actions_output = []
-            for profile in participants:
-                users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-            for action in actions:
-                actions_output.append(action.action + ' ' + str(action.num))
-            data = {'name': group.name, 'description': group.description, 'users': users, 'actions': actions_output}
+            data = get_group(group_id)
             return HttpResponse(json.dumps(data))
         if request.method == "POST":
             group = GroupForm(request.POST)
             if group.is_valid():
-                update = group.save(commit=False)
-                actions = request.POST['actions'].split()
-                actions = [Action.objects.get(pk=int(action)) for action in actions]
-                if actions and group.is_valid():
-                    group = group.save()
-                    [group.available_actions.add(actions[i]) for i in range(len(actions))]
-                participants = request.POST['participants'].split()
-                participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
-                if participants:
-                    [group.participants.add(participants[i]) for i in range(len(participants))]
-                return HttpResponse("Success")
+                group.save(commit=False)
+                if request.POST['actions']:
+                    actions = request.POST['actions'].split()
+                    actions = [Action.objects.get(pk=int(action)) for action in actions]
+                    if actions and group.is_valid():
+                        group = group.save()
+                        [group.actions.add(actions[i]) for i in range(len(actions))]
+                if request.POST['participants']:
+                    participants = request.POST['participants'].split()
+                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                    if participants:
+                        [group.participants.add(participants[i]) for i in range(len(participants))]
+                data = get_group(group_id)
+                return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def change_group_view(request, group_id):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "POST":
+            group_obj = Group.objects.get(pk=group_id)
+            group = GroupForm(request.POST, instance=group_obj)
+            if group.is_valid():
+                group.save()
+                if 'actions' in request.POST:
+                    print(request.POST.get('actions'))
+                    actions = json.loads(request.POST.get('actions'))
+                    for key, value in actions.items():
+                        if value:
+                            action = Action.objects.get(pk=int(key))
+                            group_obj.actions.add(action)
+                        if not value:
+                            action = Action.objects.get(pk=int(key))
+                            group_obj.actions.remove(action)
+                # if 'participants' in request.POST:
+                #     participants = request.POST['participants'].split()
+                #     participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
+                #     if participants:
+                #         group_obj.participants.clear()
+                #         [group_obj.participants.add(participants[i]) for i in range(participants)]
+                # else:
+                #     group_obj.participants.clear()
+                actions_group = group_obj.actions.all()
+                participants = group_obj.participants.all()
+                users = []
+                actions = []
+                for action in actions_group:
+                    actions.append(action.action + ' ' + str(action.num))
+                for profile in participants:
+                    users.append({'name': profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name})
+                fields = {'name': group_obj.name, 'description': group_obj.description,
+                          'users': users, 'actions': actions}
+                data = {'pk': group_obj.pk, 'fields': fields}
+                return HttpResponse(json.dumps(data, ensure_ascii=False).encode("utf8"))
 
 
 @csrf_exempt
@@ -517,22 +439,7 @@ def groups_with_permission(request):
     user = get_user_jwt(request)
     if request.method == "GET":
         if user and get_access(101, user):
-            groups = Group.objects.all()
-            data = []
-            for group in groups:
-                profiles = group.participants.all()
-                users = []
-                groups_actions = group.actions.all()
-                actions_output = []
-                for profile in profiles:
-                    users.append(profile.first_name + ' ' + profile.last_name + ' ' + profile.middle_name)
-                for groups_action in groups_actions:
-                    actions = groups_action.available_actions.all()
-                    for action in actions:
-                        actions_output.append(action.action + ' ' + str(action.num))
-                fields = {'name': group.name, 'users': users, 'description': group.description,
-                          'actions': actions_output}
-                data.append({'model': 'cabinet.group', 'pk': group.pk, 'fields': fields})
+            data = get_groups()
             return HttpResponse(json.dumps(data))
     if request.method == "POST":
         pk = request.POST.get('pk')
@@ -548,14 +455,6 @@ def groups_with_permission(request):
                     pass
                 if actions:
                     [group_obj.available_actions.add(actions[i]) for i in range(len(actions))]
-            if request.POST.get('participants'):
-                participants = request.POST['participants'].split()
-                try:
-                    participants = [Profile.objects.get(pk=int(participant)) for participant in participants]
-                except Profile.DoesNotExist:
-                    pass
-                if participants:
-                    [group_obj.participants.add(participants[i]) for i in range(len(participants))]
             if group.is_valid():
                 group.save()
                 return HttpResponse("Success")
@@ -588,45 +487,30 @@ def logs(request):
 
 
 @csrf_exempt
-def salary(request):
+def salary_norm(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            workers = Profile.objects.all()
-            data = []
-            output = []
-            year = request.GET.get('year')
-            month = request.GET.get('month')
+            date = request.GET.get('date')
+            month, year = date.split('-')
             salary_common, cr = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
-            for worker in workers:
-                reports = Report.objects.filter(date__month=month, date__year=year, creator_id=worker.pk)
-                report_time = 0
-                for report in reports:
-                    report_time += report.hour
-                salary, cr = SalaryIndividual.objects.get_or_create(person=worker, date=f'{year}-{month}-1',
-                                                                    common_part=salary_common)
-                direction = worker.direction.direction_code
-                salary.time_from_report = report_time
-                field = {'full_name': worker.last_name + ' ' + worker.first_name + ' ' + worker.middle_name,
-                         'position': worker.position, 'SRI_SAS': worker.SRI_SAS,
-                         'work_days': salary.days_worked, 'hours_worked': salary.time_from_report,
-                         'time_norm': salary.time_norm, 'penalty': salary.penalty,
-                         'is_penalty': salary.is_penalty, 'department': worker.department.department_name,
-                         'direction': direction,
-                         'time_off': salary.time_off, 'plan_salary': salary.plan_salary,
-                         'award': salary.award, 'salary_hand': salary.salary_hand}
-                data.append({'pk': worker.pk, 'person': field})
-            output.append({'fields': {'days_norm': salary_common.days_norm_common,
-                                      'time_norm': salary_common.time_norm_common, 'persons': data}})
-            return HttpResponse(json.dumps(output))
+            data = {'days_norm': salary_common.days_norm_common, 'time_norm': salary_common.time_norm_common}
+            return HttpResponse(json.dumps(data))
+
+
+@csrf_exempt
+def change_salary(request):
+    user = get_user_jwt(request)
+    if user:
         if request.method == "POST":
             person = request.POST.get('person')
             person = Profile.objects.get(pk=person)
             year = request.POST.get('year')
             month = request.POST.get('month')
             hour = get_time_from_reports(person)
-            salary_common = SalaryCommon.objects.get(date__year=year, date__month=month)
-            salary = SalaryIndividual.objects.get(person=person, date__year=year, date__month=month)
+            date = f'{year}-{month}-1'
+            salary_common, created = SalaryCommon.objects.get_or_create(date=date)
+            salary, created = SalaryIndividual.objects.get_or_create(person=person, date=date)
             form = SalaryIndividualForm(request.POST, instance=salary)
             if form.is_valid():
                 form.save()
@@ -686,7 +570,7 @@ def workers_info(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            persons = Profile.objects.all()
+            persons = Profile.objects.all().order_by('pk')
             data = []
             group_field = []
             for person in persons:
@@ -696,13 +580,15 @@ def workers_info(request):
                 field = {'full_name': person.last_name + ' ' + person.first_name + ' ' + person.middle_name,
                          'position': person.position, 'SRI_SAS': person.SRI_SAS,
                          'shift': person.shift, 'date': "2009-01-01",
+                         'part_time_job': person.part_time_job,
                          'experience': person.experience, 'lateness': person.lateness,
                          '№ db': "321", '№ 1c': "3059", "sex": person.sex,
                          'birth_date': str(person.birth_date),
-                         'ockladnaya': "ne_ponyal",
+                         'oklad': person.oklad,
                          'groups': group_field}
                 group_field = []
                 data.append({'pk': person.pk, 'person': field})
+            print(data)
             return HttpResponse(json.dumps(data))
 
 
@@ -745,21 +631,7 @@ def projects_for_reports(request):
 def change_common_salary(request):
     user = get_user_jwt(request)
     if user:
-        year = request.POST.get('year')
-        month = request.POST.get('month')
-        days = request.POST.get('days_norm_common')
-        salary, created = SalaryCommon.objects.get_or_create(date=f'{year}-{month}-1')
-        salary.time_norm_common = int(days) * 8
-        salary.days_norm_common = days
-        salary.save()
-        form = SalaryCommonForm(request.POST, instance=salary)
-        if form.is_valid():
-            form.save()
-            salaries = SalaryIndividual.objects.filter(date=salary.date)
-            for salary in salaries:
-                salary.time_norm = int(days) * 8
-                salary.days_worked = int(days)
-                salary.save()
+        if change_salary_common(request):
             return HttpResponse("Success")
         return HttpResponse("Fail")
 
@@ -797,16 +669,12 @@ def subdepartment_view(request):
 @csrf_exempt
 def subdepartment_from_departments_view(request, department_id):
     user = get_user_jwt(request)
+    date = 'default'
     if user:
         if request.method == "GET":
-            department = Department.objects.get(pk=department_id)
-            subdepartments = Department.objects.filter(subdepartment_code=department.department_code)
-            data = []
-            for subdepartment in subdepartments:
-                data.append({'pk': subdepartment.pk, 'fields': {'code': subdepartment.department_code,
-                                                                'name': subdepartment.department_name}})
-            print(data)
-            return HttpResponse(json.dumps(data))
+            data = build_level_with_user(department_id, 0, date, only_user=0, salary_flag=0)
+            data = get_endpoint_department(data, [])
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
 
 
 @csrf_exempt
@@ -852,86 +720,9 @@ def calendar_control_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            subdepartment = request.GET.get('subdepartment')
-            current_date = request.GET.get('current_date')
-            month, year = current_date.split('-')
-            interval = request.GET.get('range')
-            profiles = Profile.objects.filter(department=subdepartment)
-            if interval == "month":
-                output = []
-                for profile in profiles:
-                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
-                                                            start_date__year=year)
-                    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                    for calendar in calendars:
-                        if calendar.type == 'undefined':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [1] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                        if calendar.type == 'paid_holiday':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [2] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                        if calendar.type == 'unpaid_holiday':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [3] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                        if calendar.type == 'sick_leave':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [4] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                        if calendar.type == 'hooky':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [5] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                        if calendar.type == 'event':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [6] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                        if calendar.type == 'study_holiday':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [7] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                        if calendar.type == 'planned_holiday':
-                            data[calendar.start_date.day - 1:calendar.end_date.day] = [8] * (
-                                    (calendar.end_date.day - calendar.start_date.day) + 1)
-                    output.append({'pk': profile.pk,
-                                   'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
-                                   'fields': data})
-                return HttpResponse(json.dumps(output))
-            if interval == "year":
-                output = []
-                for profile in profiles:
-                    calendars = CalendarMark.objects.filter(person=profile, start_date__month=month,
-                                                            start_date__year=year)
-                    data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                    for calendar in calendars:
-                        start_week = date(calendar.start_date.year, calendar.start_date.month,
-                                          calendar.start_date.day).isocalendar()[1]
-                        end_week = date(calendar.end_date.year, calendar.end_date.month,
-                                        calendar.end_date.day).isocalendar()[1]
-                        if calendar.type == 'undefined':
-                            data[start_week - 1:end_week] = [1] * (
-                                    (end_week - start_week) + 1)
-                        if calendar.type == 'paid_holiday':
-                            data[start_week - 1:end_week] = [2] * (
-                                    (end_week - start_week) + 1)
-                        if calendar.type == 'unpaid_holiday':
-                            data[start_week - 1:end_week] = [3] * (
-                                    (end_week - start_week) + 1)
-                        if calendar.type == 'sick_leave':
-                            data[start_week - 1:end_week] = [4] * (
-                                    (end_week - start_week) + 1)
-                        if calendar.type == 'hooky':
-                            data[start_week - 1:end_week] = [5] * (
-                                    (end_week - start_week) + 1)
-                        if calendar.type == 'event':
-                            data[start_week - 1:end_week] = [6] * (
-                                    (end_week - start_week) + 1)
-                        if calendar.type == 'study_holiday':
-                            data[start_week - 1:end_week] = [7] * (
-                                    (end_week - start_week) + 1)
-                        if calendar.type == 'planned_holiday':
-                            data[start_week - 1:end_week] = [8] * (
-                                    (end_week - start_week) + 1)
-                    output.append({'pk': profile.pk,
-                                   'name': ' '.join([profile.first_name, profile.last_name, profile.middle_name]),
-                                   'fields': data})
-                return HttpResponse(json.dumps(output))
+            data = get_calendar(request.GET.get('subdepartment'),
+                                request.GET.get('current_date'), request.GET.get('range'))
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
@@ -946,12 +737,11 @@ def workers_subdepartment(request, subdepartment_id):
 
 @csrf_exempt
 def workers_for_reports(request, department_id):
-    # user = get_user_jwt(request)
-    user = True
+    user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             date = request.GET.get('date')
-            data = build_level_with_user(department_id, 0, date)
+            data = build_level_with_user(department_id, 0, date, 1)
             output = get_endpoint_department(data, [])
             return HttpResponse(json.dumps(output, ensure_ascii=False).encode('utf8'))
 
@@ -961,41 +751,14 @@ def all_reports_for_person(request, person_id):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
-            date = request.GET.get('date')
-            month, year = date.split('-')
-            data = []
-            time_report = 0
-            output = {}
-            status = False
-            profile = Profile.objects.get(pk=person_id)
-            reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
-            for report in reports:
-                data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'project_pk': report.project.pk})
-                time_report += report.hour
-                status = report.status
-            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
-            time_system = 0
-            for time_card in times_cards:
-                time_system += time_card.hours_worked.hour
-            output['time_report'] = time_report
-            output['status'] = status
-            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
-            output['time_system'] = time_system
-            output['date'] = date
-            output['pk'] = profile.pk
-            output['reports'] = data
-            return HttpResponse(json.dumps(output))
+            data = get_reports_for_worker(request.GET.get('date'), person_id)
+            return HttpResponse(json.dumps(data))
         elif request.method == "POST":
             date = request.POST.get('date')
             action = request.POST.get('action')
             month, year = date.split('-')
             profile = Profile.objects.get(pk=person_id)
             reports = Report.objects.filter(creator_id=profile, date__month=month, date__year=year)
-            data = []
-            output = {}
-            time_report = 0
-            status = False
             for report in reports:
                 if action == 'ban':
                     report.status = True
@@ -1010,24 +773,8 @@ def all_reports_for_person(request, person_id):
                     report.check = False
                     report.check_id = None
                 report.save()
-                data.append({'pk': report.pk, 'hours': report.hour, 'project': report.project.name,
-                             'text': report.text, 'project_pk': report.project.pk})
-                time_report += report.hour
-                status = report.status
-                check = report.check
-            times_cards = TimeCard.objects.filter(date__month=month, date__year=year, user=person_id)
-            time_system = 0
-            for time_card in times_cards:
-                time_system += time_card.hours_worked.hour
-            output['time_report'] = time_report
-            output['name'] = ' '.join([profile.first_name, profile.last_name, profile.middle_name])
-            output['time_system'] = time_system
-            output['date'] = date
-            output['status'] = status
-            output['pk'] = profile.pk
-            output['check'] = check
-            output['reports'] = data
-            return HttpResponse(json.dumps(output))
+            data = get_reports_for_worker(request.GET.get('date'), person_id)
+            return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
@@ -1038,15 +785,32 @@ def all_projects_simple_view(request):
             projects = Project.objects.all()
             data = []
             for project in projects:
-                data.append({'pk': project.pk, 'name': project.name,})
+                data.append({'pk': project.pk, 'name': project.name})
             return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
-def get_department(request):
+def get_department_view(request):
     user = get_user_jwt(request)
     if user:
         if request.method == "GET":
             department = user.profile.department
-            data = {'department_name': department.department_name, 'department_code': department.department_code, 'pk': department.pk}
+            department = get_department(department)
+            data = {'pk': department.pk, 'name': department.department_name, 'code': department.department_code}
+            return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
+
+
+@csrf_exempt
+def action_with_group_view(request):
+    user = get_user_jwt(request)
+    if user:
+        if request.method == "GET":
+            action_groups = GroupAction.objects.all()
+            data = []
+            for action_group in action_groups:
+                fields = []
+                actions = action_group.available_actions.all()
+                for action in actions:
+                    fields.append({'action': action.action, 'code': action.num, 'pk': action.pk})
+                data.append({'pk': action_group.pk, 'group_name': action_group.name, 'actions': fields})
             return HttpResponse(json.dumps(data, ensure_ascii=False).encode('utf8'))
